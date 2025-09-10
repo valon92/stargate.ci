@@ -9,23 +9,29 @@
     "contact": "Contact"
   },
   "home": {
-    "title": "Welcome to Stargate.ci",
-    "subtitle": "Exploring the Future of AI and Advanced Computing",
-    "description": "An independent educational platform dedicated to informing the public about the Stargate project and Crystal Intelligence, created by SoftBank, OpenAI, and Arms.",
-    "cta": "Learn More",
+    "title": "Stargate.ci",
+    "subtitle": "Where Stargate Meets Crystal Intelligence",
+    "description": "Stargate represents the revolutionary AI project by OpenAI, SoftBank, and Arm. The .ci extension symbolizes Crystal Intelligence - a new paradigm of crystalline computing that transcends traditional boundaries. We bridge the gap between cutting-edge technology and ethical implementation.",
+    "domainExplanation": {
+      "title": "Understanding Stargate.ci",
+      "stargate": "The groundbreaking AI project by OpenAI, SoftBank, and Arm",
+      "ci": "Crystal Intelligence - A new frontier in crystalline computing",
+      "mission": "Guiding companies toward Stargate while preserving intellectual property rights"
+    },
+    "cta": "Explore Crystal Intelligence",
     "features": {
-      "title": "Key Technologies",
+      "title": "Crystal Intelligence Technologies",
       "ai": {
-        "title": "Artificial Intelligence",
-        "description": "Advanced AI systems and machine learning capabilities"
+        "title": "Crystalline AI",
+        "description": "AI systems with crystal-like precision and clarity"
       },
       "cloud": {
-        "title": "Cloud Computing",
-        "description": "Scalable cloud infrastructure and services"
+        "title": "Quantum Cloud",
+        "description": "Next-generation cloud infrastructure with quantum capabilities"
       },
       "data": {
-        "title": "Big Data",
-        "description": "Advanced data processing and analytics"
+        "title": "Crystal Data Processing",
+        "description": "Transparent, ethical data processing with crystal clarity"
       },
       "computing": {
         "title": "Advanced Computing",
