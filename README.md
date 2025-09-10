@@ -1,10 +1,16 @@
-# Stargate.ci - Educational Platform
+# Stargate.ci - Cristal Intelligence Platform
 
-An independent educational platform dedicated to informing the public about the Stargate project and Crystal Intelligence, created by SoftBank, OpenAI, and Arms.
+An independent educational platform dedicated to informing the public about the Stargate project and Cristal Intelligence, created by SoftBank, OpenAI, and Arm. Where Stargate meets Cristal Intelligence to guide companies toward ethical AI implementation while preserving intellectual property rights.
 
 ## 🚀 Project Overview
 
 This project provides transparent, accessible information about cutting-edge technologies in AI, cloud computing, and advanced data processing. It serves as an educational resource for understanding the transformative power of technology and its ethical implications.
+
+### 🎯 Mission
+- **Stargate**: The groundbreaking AI project by OpenAI, SoftBank, and Arm
+- **Cristal Intelligence**: A new paradigm of cristalline computing that transcends traditional boundaries
+- **Ethical Guidance**: Guiding companies toward Stargate while preserving intellectual property rights
+- **Innovation**: Pioneering the future where technology meets transparency, ethics, and cristalline clarity
 
 ## 🏗️ Architecture
 
@@ -14,6 +20,8 @@ This project provides transparent, accessible information about cutting-edge tec
 - **Build Tool**: Vite
 - **Internationalization**: Vue i18n (English & French)
 - **State Management**: Pinia
+- **Meta Management**: @unhead/vue for dynamic SEO
+- **Deployment**: Surge.sh with custom domain support
 
 ### Backend (Laravel)
 - **Framework**: Laravel 12
@@ -146,6 +154,22 @@ Both frontend and backend are configured for Vercel deployment:
 - No official affiliation claims
 - Respect for intellectual property
 - International digital law compliance
+
+## 🌐 Live Deployment
+
+### Current Status
+- **Frontend**: ✅ Live at https://stargate-ci-preview.surge.sh
+- **Domain**: ⏳ stargate.ci (DNS configuration pending)
+- **Backend**: 🔄 Development phase
+- **Last Update**: January 2025
+
+### Features Live
+- ✅ Cristal Intelligence concept implementation
+- ✅ Domain explanation section
+- ✅ Multi-language support (EN/FR)
+- ✅ Responsive design
+- ✅ SEO optimization
+- ✅ Modern UI/UX with TailwindCSS
 
 ## 🤝 Contributing
 
