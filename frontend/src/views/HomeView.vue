@@ -53,7 +53,7 @@
                 <div class="w-12 h-12 bg-gradient-to-r from-secondary-500 to-primary-500 rounded-lg flex items-center justify-center mr-4">
                   <span class="text-white font-bold text-xl">.ci</span>
                 </div>
-                <h3 class="text-2xl font-bold text-white">Crystal Intelligence</h3>
+                <h3 class="text-2xl font-bold text-white">Cristal Intelligence</h3>
               </div>
               <p class="text-gray-300 leading-relaxed">{{ $t('home.domainExplanation.ci') }}</p>
             </div>
@@ -95,15 +95,15 @@
       </div>
     </section>
 
-    <!-- Crystal Intelligence Vision Section -->
+    <!-- Cristal Intelligence Vision Section -->
     <section class="py-24 bg-gradient-to-br from-primary-900/20 to-secondary-900/20">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-16">
           <h2 class="text-3xl md:text-4xl font-bold mb-4">
-            <span class="gradient-text">Crystal Intelligence Vision</span>
+            <span class="gradient-text">Cristal Intelligence Vision</span>
           </h2>
           <p class="text-xl text-gray-300 max-w-3xl mx-auto">
-            Pioneering the future where technology meets transparency, ethics, and crystalline clarity
+            Pioneering the future where technology meets transparency, ethics, and cristalline clarity
           </p>
         </div>
         
@@ -115,7 +115,7 @@
               </svg>
             </div>
             <h3 class="text-xl font-semibold mb-3 text-white">Transparency</h3>
-            <p class="text-gray-400">Crystal-clear processes and ethical AI implementation</p>
+            <p class="text-gray-400">Cristal-clear processes and ethical AI implementation</p>
           </div>
           
           <div class="card text-center group hover:scale-105 transition-transform duration-300">
@@ -135,7 +135,7 @@
               </svg>
             </div>
             <h3 class="text-xl font-semibold mb-3 text-white">Innovation</h3>
-            <p class="text-gray-400">Lightning-fast advancement in crystalline computing</p>
+            <p class="text-gray-400">Lightning-fast advancement in cristalline computing</p>
           </div>
         </div>
       </div>
@@ -147,7 +147,7 @@
         <div class="grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
           <div class="card">
             <div class="text-4xl md:text-5xl font-bold gradient-text mb-2">∞</div>
-            <div class="text-gray-400">Crystal Clarity</div>
+            <div class="text-gray-400">Cristal Clarity</div>
           </div>
           <div class="card">
             <div class="text-4xl md:text-5xl font-bold gradient-text mb-2">100%</div>
@@ -155,7 +155,7 @@
           </div>
           <div class="card">
             <div class="text-4xl md:text-5xl font-bold gradient-text mb-2">.ci</div>
-            <div class="text-gray-400">Crystal Intelligence</div>
+            <div class="text-gray-400">Cristal Intelligence</div>
           </div>
           <div class="card">
             <div class="text-4xl md:text-5xl font-bold gradient-text mb-2">⚡</div>
@@ -169,17 +169,17 @@
     <section class="py-24 bg-gradient-to-br from-primary-900/30 to-secondary-900/30">
       <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <h2 class="text-3xl md:text-4xl font-bold mb-6">
-          <span class="gradient-text">Join the Crystal Intelligence Revolution</span>
+          <span class="gradient-text">Join the Cristal Intelligence Revolution</span>
         </h2>
         <p class="text-xl text-gray-300 mb-8">
-          Be part of the future where Stargate meets Crystal Intelligence. Guide your company toward ethical AI implementation while preserving intellectual property rights.
+          Be part of the future where Stargate meets Cristal Intelligence. Guide your company toward ethical AI implementation while preserving intellectual property rights.
         </p>
         <div class="flex flex-col sm:flex-row gap-4 justify-center">
           <RouterLink to="/contact" class="btn-primary">
-            Start Your Crystal Journey
+            Start Your Cristal Journey
           </RouterLink>
           <RouterLink to="/insights" class="btn-secondary">
-            Explore Crystal Intelligence
+            Explore Cristal Intelligence
           </RouterLink>
         </div>
       </div>
