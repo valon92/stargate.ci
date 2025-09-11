@@ -258,8 +258,32 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { RouterLink } from 'vue-router'
+import { useHead } from '@unhead/vue'
+import { stargateApi, type StargateProjectData, type CristalIntelligenceData } from '../services/stargateApi'
+
+// Official data
+const stargateData = ref<StargateProjectData | null>(null)
+const cristalData = ref<CristalIntelligenceData | null>(null)
+const isLoading = ref(true)
+
+// Load official data
+onMounted(async () => {
+  try {
+    const [stargate, cristal] = await Promise.all([
+      stargateApi.getStargateProjectData(),
+      stargateApi.getCristalIntelligenceData()
+    ])
+    
+    stargateData.value = stargate
+    cristalData.value = cristal
+  } catch (error) {
+    console.error('Error loading official data:', error)
+  } finally {
+    isLoading.value = false
+  }
+})
 
 const showModal = ref(false)
 const selectedProject = ref<any>({})
@@ -278,22 +302,24 @@ const projects = {
       '24/7 Technical Support'
     ],
     industries: ['Technology', 'Finance', 'Healthcare', 'Manufacturing', 'Retail'],
-    investment: '$500K - $5M+ depending on scale and requirements'
+    investment: '$500K - $5M+ depending on scale and requirements',
+    officialSource: 'https://stargateprojects.net/'
   },
   'cristal-intelligence': {
     id: 'cristal-intelligence',
     title: 'Cristal Intelligence Platform',
-    overview: 'Next-generation cristalline computing platform that provides transparent, ethical, and efficient AI implementation. Built on the principles of crystal clarity and ethical AI practices.',
+    overview: 'Advanced Enterprise AI that securely integrates the systems and data of individual enterprises in a way that is customized specifically for each company. Powered by OpenAI, SoftBank, and ARM partnership.',
     features: [
-      'Cristalline Data Processing',
-      'Ethical AI Framework',
-      'Transparent Algorithms',
-      'Real-time Analytics',
-      'Privacy-First Design',
-      'Compliance Automation'
+      'Secure enterprise data integration',
+      'Customized AI solutions for each company',
+      'AI agents for knowledge work automation',
+      'Advanced reasoning capabilities',
+      'Independent task execution',
+      'Financial report generation'
     ],
-    industries: ['Government', 'Education', 'Healthcare', 'Finance', 'Legal'],
-    investment: '$200K - $2M+ based on implementation scope'
+    industries: ['Enterprise', 'Finance', 'Healthcare', 'Manufacturing', 'Technology'],
+    investment: '$3B annually (SoftBank investment)',
+    officialSource: 'https://group.softbank/en/news/press/20250203_0'
   },
   'quantum-cloud': {
     id: 'quantum-cloud',
@@ -308,7 +334,8 @@ const projects = {
       'Scalable Quantum Networks'
     ],
     industries: ['Research', 'Cryptography', 'Pharmaceuticals', 'Finance', 'Defense'],
-    investment: '$1M - $10M+ for full quantum implementation'
+    investment: '$1M - $10M+ for full quantum implementation',
+    officialSource: 'https://stargateprojects.net/'
   }
 }
 
@@ -336,4 +363,14 @@ const contactProject = (projectId: string) => {
   // Redirect to contact page
   window.location.href = '/contact'
 }
+
+useHead({
+  title: 'Partnership Portal - Stargate Cristal Intelligence',
+  meta: [
+    {
+      name: 'description',
+      content: 'Connect directly with official Stargate and Cristal Intelligence projects. Find the perfect AI solution for your company.'
+    }
+  ]
+})
 </script>

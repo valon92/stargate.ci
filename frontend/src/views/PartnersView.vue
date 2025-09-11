@@ -16,9 +16,54 @@
       </div>
     </section>
 
+    <!-- Official Partners Section -->
+    <section class="py-24 bg-gray-800/30" v-if="officialPartners.length > 0 && !isLoading">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+          <h2 class="text-3xl md:text-4xl font-bold mb-4">
+            <span class="gradient-text">Official Stargate Project Partners</span>
+          </h2>
+          <p class="text-lg text-gray-300 mb-4">
+            World-leading technology companies advancing AI infrastructure
+          </p>
+          <p class="text-sm text-gray-400">
+            Source: <a href="https://stargateprojects.net/" target="_blank" class="text-primary-400 hover:text-primary-300 underline">Official Stargate Project</a>
+          </p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div v-for="partner in officialPartners" :key="partner.name" class="card group hover:scale-105 transition-transform duration-300">
+            <div class="flex items-center mb-6">
+              <div class="w-16 h-16 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-xl flex items-center justify-center mr-4">
+                <span class="text-lg font-bold text-white">{{ partner.name.charAt(0) }}</span>
+              </div>
+              <div>
+                <h3 class="text-xl font-bold text-white">{{ partner.name }}</h3>
+                <p class="text-primary-400 text-sm">{{ partner.role }}</p>
+              </div>
+            </div>
+            <p class="text-gray-300 mb-4 text-sm leading-relaxed">
+              {{ partner.description }}
+            </p>
+            <a :href="partner.website" target="_blank" class="text-primary-400 hover:text-primary-300 text-sm font-medium">
+              Visit Official Website →
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- Partners Grid -->
     <section class="py-24 bg-gray-800/50">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+          <h2 class="text-3xl md:text-4xl font-bold mb-4">
+            <span class="gradient-text">Technology Ecosystem</span>
+          </h2>
+          <p class="text-lg text-gray-300">
+            Supporting the Stargate and Cristal Intelligence vision
+          </p>
+        </div>
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
           <!-- SoftBank -->
           <div class="card group hover:scale-105 transition-transform duration-300">
@@ -253,6 +298,35 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
 import { useI18n } from 'vue-i18n'
+import { useHead } from '@unhead/vue'
+import { ref, onMounted } from 'vue'
+import { stargateApi, type PartnerInfo } from '../services/stargateApi'
 
 const { t } = useI18n()
+
+// Reactive data
+const officialPartners = ref<PartnerInfo[]>([])
+const isLoading = ref(true)
+
+// Load official partners data
+onMounted(async () => {
+  try {
+    const partners = await stargateApi.getOfficialPartners()
+    officialPartners.value = partners
+  } catch (error) {
+    console.error('Error loading official partners:', error)
+  } finally {
+    isLoading.value = false
+  }
+})
+
+useHead({
+  title: 'Official Partners - Stargate Cristal Intelligence',
+  meta: [
+    {
+      name: 'description',
+      content: 'Official partners of the Stargate Project and Cristal Intelligence: OpenAI, SoftBank, ARM, NVIDIA, Oracle, Microsoft.'
+    }
+  ]
+})
 </script>
