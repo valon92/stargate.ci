@@ -12,9 +12,16 @@
           <p class="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto">
             {{ $t('home.subtitle') }}
           </p>
-          <p class="text-lg text-gray-400 mb-12 max-w-4xl mx-auto leading-relaxed">
+          <p class="text-lg text-gray-400 mb-8 max-w-4xl mx-auto leading-relaxed">
             {{ $t('home.description') }}
           </p>
+          <div class="bg-yellow-900/20 border border-yellow-500/30 rounded-lg p-4 max-w-4xl mx-auto mb-8">
+            <p class="text-yellow-200 text-sm">
+              <strong>Legal Notice:</strong> This is an independent educational platform. We are not affiliated with OpenAI, SoftBank, or Arm. 
+              We provide information only and do not charge fees or receive commissions. 
+              <RouterLink to="/legal-disclaimer" class="text-yellow-400 hover:text-yellow-300 underline">Read full legal disclaimer</RouterLink>
+            </p>
+          </div>
           <div class="flex flex-col sm:flex-row gap-4 justify-center">
             <RouterLink to="/about" class="btn-primary">
               {{ $t('home.cta') }}

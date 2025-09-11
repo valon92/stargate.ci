@@ -91,6 +91,7 @@ const currentYear = computed(() => new Date().getFullYear())
 const quickLinks = [
   { name: 'About Stargate', href: '/about' },
   { name: 'Technology', href: '/services' },
+  { name: 'Partnership', href: '/partnership' },
   { name: 'Partners', href: '/partners' },
   { name: 'Insights', href: '/insights' },
   { name: 'FAQ', href: '/faq' },
@@ -98,9 +99,9 @@ const quickLinks = [
 ]
 
 const resources = [
-  { name: 'AI Ethics Guide', href: '/resources/ai-ethics' },
-  { name: 'Cloud Computing Basics', href: '/resources/cloud-basics' },
-  { name: 'Data Security', href: '/resources/data-security' },
-  { name: 'Community Forum', href: '/forum' },
+  { name: 'Legal Disclaimer', href: '/legal-disclaimer' },
+  { name: 'Privacy Policy', href: '/privacy' },
+  { name: 'Terms of Service', href: '/terms' },
+  { name: 'Disclaimer', href: '/disclaimer' },
 ]
 </script>

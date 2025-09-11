@@ -12,6 +12,13 @@
           <p class="text-xl text-gray-300 max-w-3xl mx-auto mb-8">
             Connect directly with Stargate and Cristal Intelligence projects. Find the perfect solution for your company's needs.
           </p>
+          <div class="bg-yellow-900/20 border border-yellow-500/30 rounded-lg p-4 max-w-4xl mx-auto mb-8">
+            <p class="text-yellow-200 text-sm">
+              <strong>Legal Notice:</strong> This is an educational platform. We are not affiliated with OpenAI, SoftBank, or Arm. 
+              We provide information only and do not charge fees or receive commissions. 
+              <RouterLink to="/legal-disclaimer" class="text-yellow-400 hover:text-yellow-300 underline">Read full legal disclaimer</RouterLink>
+            </p>
+          </div>
           <div class="flex flex-col sm:flex-row gap-4 justify-center">
             <RouterLink to="#projects" class="btn-primary">
               Explore Projects
