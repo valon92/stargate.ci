@@ -172,7 +172,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
@@ -182,6 +182,22 @@ const form = ref({
   email: '',
   subject: '',
   message: ''
+})
+
+// Check for pre-filled project information
+onMounted(() => {
+  const selectedProject = localStorage.getItem('selectedProject')
+  if (selectedProject) {
+    try {
+      const project = JSON.parse(selectedProject)
+      form.value.subject = `Inquiry about ${project.title}`
+      form.value.message = project.message
+      // Clear the stored project info
+      localStorage.removeItem('selectedProject')
+    } catch (error) {
+      console.error('Error parsing selected project:', error)
+    }
+  }
 })
 
 const isSubmitting = ref(false)
