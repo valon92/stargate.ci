@@ -1,5 +1,6 @@
 // Stargate API Service
 // Integrates with official Stargate Project and Cristal Intelligence data sources
+// Forms the foundation of stargate.ci platform
 
 export interface StargateProjectData {
   totalInvestment: string;
@@ -11,6 +12,30 @@ export interface StargateProjectData {
   description: string;
   source: string;
   lastUpdated: string;
+  status: 'active' | 'planning' | 'development';
+  phases: ProjectPhase[];
+  technologies: string[];
+  benefits: string[];
+}
+
+export interface ProjectPhase {
+  name: string;
+  description: string;
+  timeline: string;
+  investment: string;
+  status: 'completed' | 'in-progress' | 'planned';
+}
+
+export interface InvestmentOpportunity {
+  id: string;
+  title: string;
+  description: string;
+  investmentRange: string;
+  requirements: string[];
+  benefits: string[];
+  timeline: string;
+  contactInfo: string;
+  officialSource: string;
 }
 
 export interface CristalIntelligenceData {
@@ -45,7 +70,49 @@ export const stargateProjectData: StargateProjectData = {
   partners: 7,
   description: "Stargate Project will invest $500 billion over the next four years, with an immediate deployment of $100 billion, starting from Texas to build next-generation AI computing infrastructure, advancing American leadership in AI and generating massive economic benefits.",
   source: "https://stargateprojects.net/",
-  lastUpdated: "2025-01-11"
+  lastUpdated: "2025-01-11",
+  status: 'active',
+  phases: [
+    {
+      name: "Phase 1: Infrastructure Foundation",
+      description: "Building the core AI computing infrastructure in Texas",
+      timeline: "2025-2026",
+      investment: "$100B",
+      status: 'in-progress'
+    },
+    {
+      name: "Phase 2: National Expansion",
+      description: "Expanding AI infrastructure across the United States",
+      timeline: "2026-2027",
+      investment: "$200B",
+      status: 'planned'
+    },
+    {
+      name: "Phase 3: Global Integration",
+      description: "Integrating with global AI ecosystems and partners",
+      timeline: "2027-2028",
+      investment: "$200B",
+      status: 'planned'
+    }
+  ],
+  technologies: [
+    "Advanced AI Computing",
+    "Quantum Computing",
+    "Edge Computing",
+    "Cloud Infrastructure",
+    "Machine Learning",
+    "Deep Learning",
+    "Neural Networks",
+    "Data Processing"
+  ],
+  benefits: [
+    "100K+ American Jobs",
+    "Economic Growth",
+    "National Security",
+    "AI Leadership",
+    "Innovation Hub",
+    "Global Competitiveness"
+  ]
 };
 
 // Official Cristal Intelligence Data from SoftBank Partnership
@@ -118,6 +185,73 @@ export const officialPartners: PartnerInfo[] = [
   }
 ];
 
+// Investment Opportunities Data
+export const investmentOpportunities: InvestmentOpportunity[] = [
+  {
+    id: 'stargate-infrastructure',
+    title: 'Stargate AI Infrastructure Investment',
+    description: 'Invest in the next-generation AI computing infrastructure that will power the future of artificial intelligence.',
+    investmentRange: '$1M - $100M+',
+    requirements: [
+      'Minimum $1M investment',
+      'Technology sector experience',
+      'Long-term commitment (5+ years)',
+      'Compliance with US regulations'
+    ],
+    benefits: [
+      'Access to cutting-edge AI technology',
+      'Partnership with leading tech companies',
+      'High growth potential',
+      'National security contribution'
+    ],
+    timeline: '2025-2028',
+    contactInfo: 'investment@stargateprojects.net',
+    officialSource: 'https://stargateprojects.net/'
+  },
+  {
+    id: 'cristal-enterprise',
+    title: 'Cristal Intelligence Enterprise Solutions',
+    description: 'Partner with OpenAI, SoftBank, and ARM to implement Cristal Intelligence in your enterprise.',
+    investmentRange: '$500K - $50M+',
+    requirements: [
+      'Enterprise-level company',
+      'Data security compliance',
+      'AI transformation readiness',
+      'Partnership commitment'
+    ],
+    benefits: [
+      'Customized AI solutions',
+      'Advanced reasoning capabilities',
+      'Knowledge work automation',
+      'Competitive advantage'
+    ],
+    timeline: '2025-2027',
+    contactInfo: 'partnerships@openai.com',
+    officialSource: 'https://group.softbank/en/news/press/20250203_0'
+  },
+  {
+    id: 'quantum-computing',
+    title: 'Quantum Computing Infrastructure',
+    description: 'Invest in quantum computing infrastructure that will revolutionize computational capabilities.',
+    investmentRange: '$10M - $500M+',
+    requirements: [
+      'Significant capital investment',
+      'Research and development focus',
+      'Quantum technology expertise',
+      'Long-term vision'
+    ],
+    benefits: [
+      'Breakthrough computational power',
+      'Revolutionary problem-solving',
+      'Future technology leadership',
+      'Scientific advancement'
+    ],
+    timeline: '2025-2030',
+    contactInfo: 'quantum@stargateprojects.net',
+    officialSource: 'https://stargateprojects.net/'
+  }
+];
+
 // API Service Class
 export class StargateApiService {
   private static instance: StargateApiService;
@@ -162,6 +296,97 @@ export class StargateApiService {
     };
   }
 
+  // Get investment opportunities
+  public async getInvestmentOpportunities(): Promise<InvestmentOpportunity[]> {
+    return Promise.resolve(investmentOpportunities);
+  }
+
+  // Get investment opportunity by ID
+  public async getInvestmentOpportunity(id: string): Promise<InvestmentOpportunity | null> {
+    const opportunities = await this.getInvestmentOpportunities();
+    return opportunities.find(opp => opp.id === id) || null;
+  }
+
+  // Match user profile with investment opportunities
+  public async matchUserWithOpportunities(userProfile: {
+    companySize: 'startup' | 'small' | 'medium' | 'large' | 'enterprise';
+    industry: string;
+    investmentCapacity: 'low' | 'medium' | 'high' | 'enterprise';
+    interests: string[];
+  }): Promise<InvestmentOpportunity[]> {
+    const opportunities = await this.getInvestmentOpportunities();
+    
+    return opportunities.filter(opportunity => {
+      // Match based on investment capacity
+      const capacityMatch = this.matchInvestmentCapacity(userProfile.investmentCapacity, opportunity.investmentRange);
+      
+      // Match based on company size
+      const sizeMatch = this.matchCompanySize(userProfile.companySize, opportunity.requirements);
+      
+      // Match based on interests
+      const interestMatch = this.matchInterests(userProfile.interests, opportunity.benefits);
+      
+      return capacityMatch && sizeMatch && interestMatch;
+    });
+  }
+
+  // Helper method to match investment capacity
+  private matchInvestmentCapacity(capacity: string, range: string): boolean {
+    const capacityMap = {
+      'low': ['$100K', '$500K', '$1M'],
+      'medium': ['$1M', '$5M', '$10M'],
+      'high': ['$10M', '$50M', '$100M'],
+      'enterprise': ['$100M', '$500M', '$1B']
+    };
+    
+    const userRanges = capacityMap[capacity as keyof typeof capacityMap] || [];
+    return userRanges.some(userRange => range.includes(userRange));
+  }
+
+  // Helper method to match company size
+  private matchCompanySize(size: string, requirements: string[]): boolean {
+    const sizeMap = {
+      'startup': ['startup', 'small', 'minimum'],
+      'small': ['small', 'medium', 'minimum'],
+      'medium': ['medium', 'large', 'enterprise'],
+      'large': ['large', 'enterprise'],
+      'enterprise': ['enterprise', 'large']
+    };
+    
+    const userSizes = sizeMap[size as keyof typeof sizeMap] || [];
+    return requirements.some(req => 
+      userSizes.some(size => req.toLowerCase().includes(size))
+    );
+  }
+
+  // Helper method to match interests
+  private matchInterests(interests: string[], benefits: string[]): boolean {
+    return interests.some(interest => 
+      benefits.some(benefit => 
+        benefit.toLowerCase().includes(interest.toLowerCase()) ||
+        interest.toLowerCase().includes(benefit.toLowerCase())
+      )
+    );
+  }
+
+  // Get project phases
+  public async getProjectPhases(): Promise<ProjectPhase[]> {
+    const stargateData = await this.getStargateProjectData();
+    return stargateData.phases;
+  }
+
+  // Get technologies
+  public async getTechnologies(): Promise<string[]> {
+    const stargateData = await this.getStargateProjectData();
+    return stargateData.technologies;
+  }
+
+  // Get benefits
+  public async getBenefits(): Promise<string[]> {
+    const stargateData = await this.getStargateProjectData();
+    return stargateData.benefits;
+  }
+
   // Get source attribution
   public getSourceAttribution(): { sources: string[]; copyright: string } {
     return {
@@ -172,6 +397,26 @@ export class StargateApiService {
       ],
       copyright: "All information sourced from official project announcements and press releases. Copyright belongs to respective organizations: OpenAI, SoftBank Group, ARM, NVIDIA, Oracle, Microsoft."
     };
+  }
+
+  // Platform foundation methods
+  public getPlatformMission(): string {
+    return "stargate.ci serves as the bridge between companies and the revolutionary Stargate Project and Cristal Intelligence initiatives. We provide accurate information, facilitate connections, and guide organizations toward ethical AI implementation while preserving intellectual property rights.";
+  }
+
+  public getPlatformVision(): string {
+    return "To become the premier platform connecting businesses with the future of AI through Stargate and Cristal Intelligence, fostering innovation while maintaining transparency and legal compliance.";
+  }
+
+  public getPlatformValues(): string[] {
+    return [
+      "Transparency and Accuracy",
+      "Legal Compliance",
+      "Ethical AI Implementation",
+      "Intellectual Property Respect",
+      "Educational Excellence",
+      "Innovation Facilitation"
+    ];
   }
 }
 

@@ -324,6 +324,13 @@
       </div>
     </section>
 
+    <!-- Investment Opportunities Section -->
+    <section class="py-24 bg-gray-800/30">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <InvestmentOpportunities />
+      </div>
+    </section>
+
     <!-- CTA Section -->
     <section class="py-24 bg-gradient-to-br from-primary-900/30 to-secondary-900/30">
       <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -352,6 +359,7 @@ import { useI18n } from 'vue-i18n'
 import { useHead } from '@vueuse/head'
 import { ref, onMounted } from 'vue'
 import { stargateApi, type StargateProjectData, type CristalIntelligenceData } from '../services/stargateApi'
+import InvestmentOpportunities from '../components/InvestmentOpportunities.vue'
 
 const { t } = useI18n()
 
