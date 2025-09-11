@@ -349,7 +349,7 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { useHead } from '@unhead/vue'
+import { useHead } from '@vueuse/head'
 import { ref, onMounted } from 'vue'
 import { stargateApi, type StargateProjectData, type CristalIntelligenceData } from '../services/stargateApi'
 
