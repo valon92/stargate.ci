@@ -107,6 +107,7 @@ const navigation = computed(() => [
   { name: t('nav.about'), href: '/about' },
   { name: t('nav.services'), href: '/services' },
   { name: t('nav.partners'), href: '/partnership' },
+  { name: t('nav.assessment'), href: '/assessment' },
   { name: t('nav.insights'), href: '/insights' },
   { name: t('nav.faq'), href: '/faq' },
   { name: t('nav.contact'), href: '/contact' },

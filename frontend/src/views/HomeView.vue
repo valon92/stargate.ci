@@ -365,11 +365,11 @@
           {{ platformMission }}
         </p>
         <div class="flex flex-col sm:flex-row gap-4 justify-center">
-          <RouterLink to="/contact" class="btn-primary">
-            Connect with Platform
+          <RouterLink to="/assessment" class="btn-primary">
+            Take Readiness Assessment
           </RouterLink>
-          <RouterLink to="/insights" class="btn-secondary">
-            Learn More
+          <RouterLink to="/contact" class="btn-secondary">
+            Connect with Platform
           </RouterLink>
         </div>
       </div>
