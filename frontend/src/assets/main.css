@@ -6,6 +6,13 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Custom height for larger header */
+@layer utilities {
+  .h-18 {
+    height: 4.5rem;
+  }
+}
+
 @layer base {
   html {
     font-family: 'Inter', system-ui, sans-serif;
