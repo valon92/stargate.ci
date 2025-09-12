@@ -11,35 +11,49 @@
             <span class="text-xl font-bold gradient-text">Stargate.ci</span>
           </div>
           <p class="text-gray-400 mb-4 max-w-md">
-            An independent educational platform dedicated to informing the public about the Stargate project and Crystal Intelligence, created by SoftBank, OpenAI, and Arms.
+            {{ platformMission }}
           </p>
+          <div class="space-y-2 mb-4">
+            <div class="flex items-center text-sm text-gray-500">
+              <span class="w-2 h-2 bg-primary-500 rounded-full mr-2"></span>
+              Independent Educational Platform
+            </div>
+            <div class="flex items-center text-sm text-gray-500">
+              <span class="w-2 h-2 bg-secondary-500 rounded-full mr-2"></span>
+              Not affiliated with OpenAI, SoftBank, or ARM
+            </div>
+            <div class="flex items-center text-sm text-gray-500">
+              <span class="w-2 h-2 bg-accent-500 rounded-full mr-2"></span>
+              Information only - No fees or commissions
+            </div>
+          </div>
           <div class="flex space-x-4">
-            <a href="#" class="text-gray-400 hover:text-white transition-colors duration-200">
-              <span class="sr-only">Twitter</span>
+            <a href="https://stargateprojects.net/" target="_blank" class="text-gray-400 hover:text-white transition-colors duration-200">
+              <span class="sr-only">Official Stargate Project</span>
               <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" />
+                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
               </svg>
             </a>
-            <a href="#" class="text-gray-400 hover:text-white transition-colors duration-200">
-              <span class="sr-only">GitHub</span>
+            <a href="https://group.softbank/en/news/press/20250203_0" target="_blank" class="text-gray-400 hover:text-white transition-colors duration-200">
+              <span class="sr-only">SoftBank Press Release</span>
               <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
-                <path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd" />
+                <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
               </svg>
             </a>
-            <a href="#" class="text-gray-400 hover:text-white transition-colors duration-200">
-              <span class="sr-only">LinkedIn</span>
+            <a href="https://openai.com/index/announcing-the-stargate-project/" target="_blank" class="text-gray-400 hover:text-white transition-colors duration-200">
+              <span class="sr-only">OpenAI Stargate Announcement</span>
               <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
-                <path fill-rule="evenodd" d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" clip-rule="evenodd" />
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
               </svg>
             </a>
           </div>
         </div>
 
-        <!-- Quick Links -->
+        <!-- Platform Links -->
         <div>
-          <h3 class="text-white font-semibold mb-4">Quick Links</h3>
+          <h3 class="text-white font-semibold mb-4">Platform</h3>
           <ul class="space-y-2">
-            <li v-for="link in quickLinks" :key="link.name">
+            <li v-for="link in platformLinks" :key="link.name">
               <RouterLink :to="link.href" class="text-gray-400 hover:text-white transition-colors duration-200">
                 {{ link.name }}
               </RouterLink>
@@ -47,13 +61,13 @@
           </ul>
         </div>
 
-        <!-- Resources -->
+        <!-- Official Sources -->
         <div>
-          <h3 class="text-white font-semibold mb-4">Resources</h3>
+          <h3 class="text-white font-semibold mb-4">Official Sources</h3>
           <ul class="space-y-2">
-            <li v-for="resource in resources" :key="resource.name">
-              <a :href="resource.href" class="text-gray-400 hover:text-white transition-colors duration-200">
-                {{ resource.name }}
+            <li v-for="source in officialSources" :key="source.name">
+              <a :href="source.href" target="_blank" class="text-gray-400 hover:text-white transition-colors duration-200">
+                {{ source.name }}
               </a>
             </li>
           </ul>
@@ -61,19 +75,22 @@
       </div>
 
       <!-- Bottom Section -->
-        <div class="mt-8 pt-8 border-t border-gray-700">
+      <div class="mt-8 pt-8 border-t border-gray-700">
         <div class="flex flex-col md:flex-row justify-between items-center">
           <div class="text-gray-400 text-sm">
             <p>&copy; {{ currentYear }} Stargate.ci. All rights reserved.</p>
             <p class="mt-1">
-              This site is an independent educational initiative, not an official representative of the Stargate project.
+              Independent educational platform. Not affiliated with OpenAI, SoftBank, or ARM.
+            </p>
+            <p class="mt-1 text-xs text-gray-500">
+              All information sourced from official project announcements and press releases.
             </p>
           </div>
           <div class="mt-4 md:mt-0">
             <div class="flex space-x-6 text-sm">
-              <a href="/privacy" class="text-gray-400 hover:text-white transition-colors duration-200">Privacy Policy</a>
-              <a href="/terms" class="text-gray-400 hover:text-white transition-colors duration-200">Terms of Service</a>
-              <a href="/disclaimer" class="text-gray-400 hover:text-white transition-colors duration-200">Disclaimer</a>
+              <RouterLink to="/legal-disclaimer" class="text-gray-400 hover:text-white transition-colors duration-200">Legal Disclaimer</RouterLink>
+              <RouterLink to="/privacy" class="text-gray-400 hover:text-white transition-colors duration-200">Privacy Policy</RouterLink>
+              <RouterLink to="/terms" class="text-gray-400 hover:text-white transition-colors duration-200">Terms of Service</RouterLink>
             </div>
           </div>
         </div>
@@ -83,25 +100,31 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref, onMounted } from 'vue'
 import { RouterLink } from 'vue-router'
+import { stargateApi } from '../../services/stargateApi'
 
 const currentYear = computed(() => new Date().getFullYear())
+const platformMission = ref('')
 
-const quickLinks = [
-  { name: 'About Stargate', href: '/about' },
-  { name: 'Technology', href: '/services' },
+// Load platform mission from API
+onMounted(() => {
+  platformMission.value = stargateApi.getPlatformMission()
+})
+
+const platformLinks = [
+  { name: 'About Platform', href: '/about' },
+  { name: 'Services', href: '/services' },
   { name: 'Partnership', href: '/partnership' },
-  { name: 'Partners', href: '/partners' },
   { name: 'Insights', href: '/insights' },
   { name: 'FAQ', href: '/faq' },
   { name: 'Contact', href: '/contact' },
 ]
 
-const resources = [
-  { name: 'Legal Disclaimer', href: '/legal-disclaimer' },
-  { name: 'Privacy Policy', href: '/privacy' },
-  { name: 'Terms of Service', href: '/terms' },
-  { name: 'Disclaimer', href: '/disclaimer' },
+const officialSources = [
+  { name: 'Stargate Project', href: 'https://stargateprojects.net/' },
+  { name: 'SoftBank Press Release', href: 'https://group.softbank/en/news/press/20250203_0' },
+  { name: 'OpenAI Announcement', href: 'https://openai.com/index/announcing-the-stargate-project/' },
+  { name: 'ARM Technology', href: 'https://arm.com' },
 ]
 </script>
