@@ -1,0 +1,127 @@
+export default {
+  "nav": {
+    "home": "Accueil",
+    "about": "À propos",
+    "services": "Services",
+    "partners": "Partenaires",
+    "insights": "Insights",
+    "faq": "FAQ",
+    "contact": "Contact"
+  },
+  "home": {
+    "title": "Bienvenue sur Stargate.ci",
+    "subtitle": "Explorer l'avenir de l'IA et du calcul avancé",
+    "description": "Une plateforme éducative indépendante dédiée à informer le public sur le projet Stargate et Crystal Intelligence, créé par SoftBank, OpenAI et Arms.",
+    "cta": "En savoir plus",
+    "features": {
+      "title": "Technologies clés",
+      "ai": {
+        "title": "Intelligence Artificielle",
+        "description": "Systèmes d'IA avancés et capacités d'apprentissage automatique"
+      },
+      "cloud": {
+        "title": "Cloud Computing",
+        "description": "Infrastructure cloud évolutive et services"
+      },
+      "data": {
+        "title": "Big Data",
+        "description": "Traitement et analyse de données avancés"
+      },
+      "computing": {
+        "title": "Calcul Avancé",
+        "description": "Solutions de calcul haute performance"
+      }
+    }
+  },
+  "about": {
+    "title": "À propos de Stargate",
+    "mission": "Notre Mission",
+    "missionText": "Éduquer et informer le public sur les technologies de pointe en IA, cloud computing et traitement de données avancé grâce à un contenu transparent et accessible.",
+    "vision": "Notre Vision",
+    "visionText": "Construire une communauté mondiale d'innovateurs et d'apprenants qui comprennent le pouvoir transformateur de la technologie et ses implications éthiques.",
+    "disclaimer": "Avertissement",
+    "disclaimerText": "Ce site est une initiative éducative indépendante, pas un représentant officiel du projet Stargate. Tout le contenu est basé sur des informations publiquement disponibles."
+  },
+  "services": {
+    "title": "Technologies et Services",
+    "subtitle": "Explorer les technologies de base derrière l'innovation moderne",
+    "ai": {
+      "title": "Intelligence Artificielle",
+      "description": "Découvrez les systèmes d'IA, l'apprentissage automatique et leurs applications dans la résolution de problèmes complexes.",
+      "features": ["Apprentissage Automatique", "Réseaux de Neurones", "Traitement du Langage Naturel", "Vision par Ordinateur"]
+    },
+    "cloud": {
+      "title": "Cloud Computing",
+      "description": "Comprenez l'infrastructure cloud, l'évolutivité et les systèmes de calcul distribué.",
+      "features": ["Infrastructure as a Service", "Platform as a Service", "Software as a Service", "Edge Computing"]
+    },
+    "security": {
+      "title": "Sécurité et Confidentialité",
+      "description": "Explorez la protection des données, la cybersécurité et les technologies de préservation de la vie privée.",
+      "features": ["Chiffrement des Données", "Contrôle d'Accès", "Protection de la Vie Privée", "Surveillance de la Sécurité"]
+    },
+    "data": {
+      "title": "Big Data et Analytique",
+      "description": "Découvrez comment le traitement de données à grande échelle permet des insights et la prise de décision.",
+      "features": ["Traitement des Données", "Analytique en Temps Réel", "Visualisation des Données", "Modélisation Prédictive"]
+    }
+  },
+  "partners": {
+    "title": "Nos Partenaires",
+    "subtitle": "Organisations leaders qui stimulent l'innovation technologique",
+    "softbank": {
+      "name": "SoftBank",
+      "description": "Une société mondiale d'investissement technologique axée sur l'IA et les solutions de calcul avancé."
+    },
+    "openai": {
+      "name": "OpenAI",
+      "description": "Une société de recherche en IA dédiée à s'assurer que l'intelligence artificielle générale profite à toute l'humanité."
+    },
+    "arms": {
+      "name": "Arm",
+      "description": "Une société leader en conception de semi-conducteurs et de logiciels qui alimente les dispositifs de calcul les plus avancés au monde."
+    },
+    "crystal": {
+      "name": "Crystal Intelligence",
+      "description": "Une société d'IA innovante axée sur le développement de solutions d'intelligence artificielle de pointe."
+    }
+  },
+  "insights": {
+    "title": "Insights et Blog",
+    "subtitle": "Articles éducatifs sur l'IA, la technologie et l'innovation",
+    "readMore": "Lire la suite",
+    "categories": {
+      "all": "Tout",
+      "ai": "Intelligence Artificielle",
+      "cloud": "Cloud Computing",
+      "ethics": "Éthique de l'IA",
+      "security": "Sécurité"
+    }
+  },
+  "faq": {
+    "title": "Questions Fréquemment Posées",
+    "subtitle": "Questions courantes sur Stargate et les technologies connexes"
+  },
+  "contact": {
+    "title": "Contactez-nous",
+    "subtitle": "Entrez en contact avec notre communauté",
+    "form": {
+      "name": "Nom",
+      "email": "Email",
+      "subject": "Sujet",
+      "message": "Message",
+      "submit": "Envoyer le Message",
+      "success": "Merci pour votre message ! Nous vous répondrons bientôt.",
+      "error": "Une erreur s'est produite lors de l'envoi de votre message. Veuillez réessayer."
+    }
+  },
+  "common": {
+    "learnMore": "En savoir plus",
+    "readMore": "Lire la suite",
+    "getStarted": "Commencer",
+    "contact": "Contact",
+    "loading": "Chargement...",
+    "error": "Une erreur s'est produite",
+    "retry": "Réessayer"
+  }
+} as const

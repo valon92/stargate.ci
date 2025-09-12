@@ -28,13 +28,21 @@
         </div>
 
         <!-- Language Switcher -->
-        <div class="hidden md:flex items-center space-x-4">
-          <button
-            @click="toggleLanguage"
-            class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200"
-          >
-            {{ currentLanguage === 'en' ? 'FR' : 'EN' }}
-          </button>
+        <div class="hidden md:flex items-center space-x-2">
+          <div class="relative">
+            <select
+              v-model="currentLanguage"
+              @change="changeLanguage"
+              class="bg-gray-800 text-gray-300 border border-gray-600 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+            >
+              <option value="en">🇺🇸 EN</option>
+              <option value="fr">🇫🇷 FR</option>
+              <option value="de">🇩🇪 DE</option>
+              <option value="es">🇪🇸 ES</option>
+              <option value="it">🇮🇹 IT</option>
+              <option value="ar">🇸🇦 AR</option>
+            </select>
+          </div>
         </div>
 
         <!-- Mobile menu button -->
@@ -64,12 +72,20 @@
           >
             {{ item.name }}
           </RouterLink>
-          <button
-            @click="toggleLanguage"
-            class="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200 w-full text-left"
-          >
-            {{ currentLanguage === 'en' ? 'Français' : 'English' }}
-          </button>
+          <div class="px-3 py-2">
+            <select
+              v-model="currentLanguage"
+              @change="changeLanguage"
+              class="bg-gray-800 text-gray-300 border border-gray-600 rounded-md px-3 py-2 text-sm w-full focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+            >
+              <option value="en">🇺🇸 English</option>
+              <option value="fr">🇫🇷 Français</option>
+              <option value="de">🇩🇪 Deutsch</option>
+              <option value="es">🇪🇸 Español</option>
+              <option value="it">🇮🇹 Italiano</option>
+              <option value="ar">🇸🇦 العربية</option>
+            </select>
+          </div>
         </div>
       </div>
     </nav>
@@ -77,28 +93,56 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { RouterLink } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 
-const { locale } = useI18n()
+const { locale, t } = useI18n()
 
 const mobileMenuOpen = ref(false)
+const currentLanguage = ref(locale.value)
 
-const currentLanguage = computed(() => locale.value)
+const navigation = computed(() => [
+  { name: t('nav.home'), href: '/' },
+  { name: t('nav.about'), href: '/about' },
+  { name: t('nav.services'), href: '/services' },
+  { name: t('nav.partners'), href: '/partnership' },
+  { name: t('nav.insights'), href: '/insights' },
+  { name: t('nav.faq'), href: '/faq' },
+  { name: t('nav.contact'), href: '/contact' },
+])
 
-const navigation = [
-  { name: 'Home', href: '/' },
-  { name: 'About', href: '/about' },
-  { name: 'Services', href: '/services' },
-  { name: 'Partnership', href: '/partnership' },
-  { name: 'Partners', href: '/partners' },
-  { name: 'Insights', href: '/insights' },
-  { name: 'FAQ', href: '/faq' },
-  { name: 'Contact', href: '/contact' },
-]
-
-const toggleLanguage = () => {
-  locale.value = locale.value === 'en' ? 'fr' : 'en'
+const changeLanguage = () => {
+  locale.value = currentLanguage.value
+  
+  // Set RTL for Arabic
+  if (currentLanguage.value === 'ar') {
+    document.documentElement.setAttribute('dir', 'rtl')
+    document.documentElement.setAttribute('lang', 'ar')
+  } else {
+    document.documentElement.setAttribute('dir', 'ltr')
+    document.documentElement.setAttribute('lang', currentLanguage.value)
+  }
+  
+  // Save to localStorage
+  localStorage.setItem('selectedLanguage', currentLanguage.value)
 }
+
+// Load saved language on mount
+onMounted(() => {
+  const savedLanguage = localStorage.getItem('selectedLanguage')
+  if (savedLanguage) {
+    currentLanguage.value = savedLanguage
+    locale.value = savedLanguage
+    
+    // Set RTL for Arabic
+    if (savedLanguage === 'ar') {
+      document.documentElement.setAttribute('dir', 'rtl')
+      document.documentElement.setAttribute('lang', 'ar')
+    } else {
+      document.documentElement.setAttribute('dir', 'ltr')
+      document.documentElement.setAttribute('lang', savedLanguage)
+    }
+  }
+})
 </script>

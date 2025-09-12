@@ -1,0 +1,133 @@
+export default {
+  "nav": {
+    "home": "Startseite",
+    "about": "Über uns",
+    "services": "Dienstleistungen",
+    "partners": "Partner",
+    "insights": "Einblicke",
+    "faq": "FAQ",
+    "contact": "Kontakt"
+  },
+  "home": {
+    "title": "Stargate.ci",
+    "subtitle": "Wo Stargate auf Cristal Intelligence trifft",
+    "description": "Stargate repräsentiert das revolutionäre KI-Projekt von OpenAI, SoftBank und Arm. Die .ci-Erweiterung symbolisiert Cristal Intelligence - ein neues Paradigma des kristallinen Rechnens, das traditionelle Grenzen überschreitet. Wir überbrücken die Lücke zwischen modernster Technologie und ethischer Umsetzung.",
+    "domainExplanation": {
+      "title": "Stargate.ci verstehen",
+      "stargate": "Das bahnbrechende KI-Projekt von OpenAI, SoftBank und Arm",
+      "ci": "Cristal Intelligence - Eine neue Grenze im kristallinen Rechnen",
+      "mission": "Unternehmen zu Stargate führen und dabei geistige Eigentumsrechte wahren"
+    },
+    "cta": "Cristal Intelligence erkunden",
+    "features": {
+      "title": "Cristal Intelligence Technologien",
+      "ai": {
+        "title": "Kristalline KI",
+        "description": "KI-Systeme mit kristalliner Präzision und Klarheit"
+      },
+      "cloud": {
+        "title": "Quanten-Cloud",
+        "description": "Cloud-Infrastruktur der nächsten Generation mit Quantenfunktionen"
+      },
+      "data": {
+        "title": "Kristalline Datenverarbeitung",
+        "description": "Transparente, ethische Datenverarbeitung mit kristalliner Klarheit"
+      },
+      "computing": {
+        "title": "Erweiterte Datenverarbeitung",
+        "description": "Hochleistungsrechenlösungen"
+      }
+    }
+  },
+  "about": {
+    "title": "Über Stargate",
+    "mission": "Unsere Mission",
+    "missionText": "Die Öffentlichkeit über modernste Technologien in KI, Cloud Computing und erweiterte Datenverarbeitung durch transparente, zugängliche Inhalte zu bilden und zu informieren.",
+    "vision": "Unsere Vision",
+    "visionText": "Aufbau einer globalen Gemeinschaft von Innovatoren und Lernenden, die die transformative Kraft der Technologie und ihre ethischen Implikationen verstehen.",
+    "disclaimer": "Haftungsausschluss",
+    "disclaimerText": "Diese Website ist eine unabhängige Bildungsinitiative und kein offizieller Vertreter des Stargate-Projekts. Alle Inhalte basieren auf öffentlich verfügbaren Informationen."
+  },
+  "services": {
+    "title": "Technologien & Dienstleistungen",
+    "subtitle": "Erkundung der Kerntechnologien hinter moderner Innovation",
+    "ai": {
+      "title": "Künstliche Intelligenz",
+      "description": "Erfahren Sie mehr über KI-Systeme, maschinelles Lernen und ihre Anwendungen bei der Lösung komplexer Probleme.",
+      "features": ["Maschinelles Lernen", "Neuronale Netze", "Natürliche Sprachverarbeitung", "Computersehen"]
+    },
+    "cloud": {
+      "title": "Cloud Computing",
+      "description": "Verstehen Sie Cloud-Infrastruktur, Skalierbarkeit und verteilte Rechnersysteme.",
+      "features": ["Infrastructure as a Service", "Platform as a Service", "Software as a Service", "Edge Computing"]
+    },
+    "security": {
+      "title": "Sicherheit & Datenschutz",
+      "description": "Erkunden Sie Datenschutz, Cybersicherheit und datenschutzschützende Technologien.",
+      "features": ["Datenverschlüsselung", "Zugangskontrolle", "Datenschutz", "Sicherheitsüberwachung"]
+    },
+    "data": {
+      "title": "Big Data & Analytics",
+      "description": "Entdecken Sie, wie groß angelegte Datenverarbeitung Einblicke und Entscheidungsfindung ermöglicht.",
+      "features": ["Datenverarbeitung", "Echtzeit-Analytics", "Datenvisualisierung", "Vorhersagemodellierung"]
+    }
+  },
+  "partners": {
+    "title": "Unsere Partner",
+    "subtitle": "Führende Organisationen, die technologische Innovation vorantreiben",
+    "softbank": {
+      "name": "SoftBank",
+      "description": "Ein globales Technologie-Investmentunternehmen, das sich auf KI und erweiterte Rechenlösungen konzentriert."
+    },
+    "openai": {
+      "name": "OpenAI",
+      "description": "Ein KI-Forschungsunternehmen, das sich dafür einsetzt, dass künstliche allgemeine Intelligenz der gesamten Menschheit zugute kommt."
+    },
+    "arms": {
+      "name": "Arm",
+      "description": "Ein führendes Halbleiter- und Software-Design-Unternehmen, das die fortschrittlichsten Rechengeräte der Welt antreibt."
+    },
+    "crystal": {
+      "name": "Cristal Intelligence",
+      "description": "Ein innovatives KI-Unternehmen, das sich auf die Entwicklung modernster künstlicher Intelligenzlösungen konzentriert."
+    }
+  },
+  "insights": {
+    "title": "Einblicke & Blog",
+    "subtitle": "Bildungsartikel über KI, Technologie und Innovation",
+    "readMore": "Mehr lesen",
+    "categories": {
+      "all": "Alle",
+      "ai": "Künstliche Intelligenz",
+      "cloud": "Cloud Computing",
+      "ethics": "KI-Ethik",
+      "security": "Sicherheit"
+    }
+  },
+  "faq": {
+    "title": "Häufig gestellte Fragen",
+    "subtitle": "Häufige Fragen zu Stargate und verwandten Technologien"
+  },
+  "contact": {
+    "title": "Kontaktieren Sie uns",
+    "subtitle": "Treten Sie mit unserer Gemeinschaft in Kontakt",
+    "form": {
+      "name": "Name",
+      "email": "E-Mail",
+      "subject": "Betreff",
+      "message": "Nachricht",
+      "submit": "Nachricht senden",
+      "success": "Vielen Dank für Ihre Nachricht! Wir werden uns bald bei Ihnen melden.",
+      "error": "Beim Senden Ihrer Nachricht ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut."
+    }
+  },
+  "common": {
+    "learnMore": "Mehr erfahren",
+    "readMore": "Mehr lesen",
+    "getStarted": "Loslegen",
+    "contact": "Kontakt",
+    "loading": "Laden...",
+    "error": "Ein Fehler ist aufgetreten",
+    "retry": "Erneut versuchen"
+  }
+} as const
