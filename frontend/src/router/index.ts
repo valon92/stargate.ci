@@ -50,6 +50,11 @@ const router = createRouter({
       component: () => import('../views/AssessmentView.vue'),
     },
     {
+      path: '/learning',
+      name: 'learning',
+      component: () => import('../views/LearningPathsView.vue'),
+    },
+    {
       path: '/privacy',
       name: 'privacy',
       component: () => import('../views/PrivacyView.vue'),

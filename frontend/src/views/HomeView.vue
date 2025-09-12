@@ -364,14 +364,17 @@
         <p class="text-xl text-gray-300 mb-8">
           {{ platformMission }}
         </p>
-        <div class="flex flex-col sm:flex-row gap-4 justify-center">
-          <RouterLink to="/assessment" class="btn-primary">
-            Take Readiness Assessment
-          </RouterLink>
-          <RouterLink to="/contact" class="btn-secondary">
-            Connect with Platform
-          </RouterLink>
-        </div>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                  <RouterLink to="/assessment" class="btn-primary">
+                    Take Readiness Assessment
+                  </RouterLink>
+                  <RouterLink to="/learning" class="btn-secondary">
+                    Start Learning Paths
+                  </RouterLink>
+                  <RouterLink to="/contact" class="btn-outline">
+                    Connect with Platform
+                  </RouterLink>
+                </div>
       </div>
     </section>
   </div>
