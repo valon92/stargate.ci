@@ -60,6 +60,11 @@ const router = createRouter({
       component: () => import('../views/DashboardView.vue'),
     },
     {
+      path: '/templates',
+      name: 'templates',
+      component: () => import('../views/TemplatesView.vue'),
+    },
+    {
       path: '/privacy',
       name: 'privacy',
       component: () => import('../views/PrivacyView.vue'),

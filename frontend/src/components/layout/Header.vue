@@ -105,6 +105,7 @@ const currentLanguage = ref(locale.value)
 const navigation = computed(() => [
   { name: t('nav.home'), href: '/' },
   { name: t('nav.dashboard'), href: '/dashboard' },
+  { name: t('nav.templates'), href: '/templates' },
   { name: t('nav.about'), href: '/about' },
   { name: t('nav.services'), href: '/services' },
   { name: t('nav.partners'), href: '/partnership' },

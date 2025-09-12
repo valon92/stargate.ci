@@ -368,11 +368,11 @@
                   <RouterLink to="/dashboard" class="btn-primary">
                     Go to Dashboard
                   </RouterLink>
-                  <RouterLink to="/assessment" class="btn-secondary">
-                    Take Readiness Assessment
+                  <RouterLink to="/templates" class="btn-secondary">
+                    Browse Templates
                   </RouterLink>
-                  <RouterLink to="/learning" class="btn-outline">
-                    Start Learning Paths
+                  <RouterLink to="/assessment" class="btn-outline">
+                    Take Assessment
                   </RouterLink>
                 </div>
       </div>
