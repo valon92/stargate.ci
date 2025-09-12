@@ -178,7 +178,6 @@ const currentLanguage = ref(locale.value)
 // Primary Navigation - Main features
 const primaryNavigation = computed(() => [
   { name: t('nav.home'), href: '/' },
-  { name: t('nav.dashboard'), href: '/dashboard' },
   { name: t('nav.templates'), href: '/templates' },
   { name: t('nav.assessment'), href: '/assessment' },
   { name: t('nav.learning'), href: '/learning' },
