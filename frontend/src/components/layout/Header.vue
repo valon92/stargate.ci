@@ -8,9 +8,9 @@
             <div class="w-8 h-8 lg:w-10 lg:h-10 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-lg">
               <span class="text-white font-bold text-lg lg:text-xl">S</span>
             </div>
-            <div class="hidden sm:block">
-              <span class="text-xl lg:text-2xl font-bold gradient-text">Stargate.ci</span>
-              <div class="text-xs text-gray-400 -mt-1">Cristal Intelligence</div>
+            <div class="block">
+              <span class="text-lg sm:text-xl lg:text-2xl font-bold gradient-text">Stargate.ci</span>
+              <div class="text-xs text-gray-400 -mt-1 hidden sm:block">Cristal Intelligence</div>
             </div>
           </RouterLink>
         </div>
