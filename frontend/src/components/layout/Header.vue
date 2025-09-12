@@ -10,7 +10,7 @@
             </div>
             <div class="block">
               <span class="text-lg sm:text-xl lg:text-2xl font-bold gradient-text">Stargate.ci</span>
-              <div class="text-xs text-gray-400 -mt-1 hidden sm:block">Cristal Intelligence</div>
+              <div class="text-xs text-gray-400 -mt-1">Cristal Intelligence</div>
             </div>
           </RouterLink>
         </div>
