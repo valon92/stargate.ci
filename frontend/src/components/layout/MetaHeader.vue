@@ -3,7 +3,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex items-center justify-between h-10">
         <!-- Left: Navigation Links -->
-        <div class="flex items-center space-x-1">
+        <div class="flex items-center space-x-1 flex-1">
           <RouterLink
             v-for="item in navigationItems"
             :key="item.name"
@@ -18,7 +18,7 @@
         </div>
 
         <!-- Center: Language Switcher -->
-        <div class="hidden sm:block">
+        <div class="flex-shrink-0">
           <select 
             v-model="currentLanguage" 
             @change="changeLanguage"
@@ -33,8 +33,8 @@
           </select>
         </div>
 
-        <!-- Right: Quick Actions -->
-        <div class="flex items-center space-x-2">
+        <!-- Right: Quick Actions (Desktop only) -->
+        <div class="hidden sm:flex items-center space-x-2 flex-shrink-0">
           <RouterLink
             to="/dashboard"
             class="text-xs text-gray-400 hover:text-white transition-colors duration-200"
