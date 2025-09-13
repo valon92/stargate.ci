@@ -3,7 +3,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex items-center justify-between h-10">
         <!-- Left: Navigation Links -->
-        <div class="flex items-center space-x-1 flex-1">
+        <div class="flex items-center space-x-1">
           <RouterLink
             v-for="item in navigationItems"
             :key="item.name"
@@ -17,7 +17,7 @@
           </RouterLink>
         </div>
 
-        <!-- Center: Language Switcher -->
+        <!-- Right: Language Switcher -->
         <div class="flex-shrink-0">
           <select 
             v-model="currentLanguage" 
@@ -31,23 +31,6 @@
             <option value="it">🇮🇹 IT</option>
             <option value="ar">🇸🇦 AR</option>
           </select>
-        </div>
-
-        <!-- Right: Quick Actions (Desktop only) -->
-        <div class="hidden sm:flex items-center space-x-2 flex-shrink-0">
-          <RouterLink
-            to="/dashboard"
-            class="text-xs text-gray-400 hover:text-white transition-colors duration-200"
-          >
-            Dashboard
-          </RouterLink>
-          <span class="text-gray-600">|</span>
-          <RouterLink
-            to="/admin/login"
-            class="text-xs text-gray-400 hover:text-white transition-colors duration-200"
-          >
-            Admin
-          </RouterLink>
         </div>
       </div>
     </div>
