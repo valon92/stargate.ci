@@ -1,5 +1,5 @@
 <template>
-  <header class="sticky top-10 z-40 bg-gray-900/90 backdrop-blur-sm border-b border-gray-700/30 shadow-sm">
+  <header class="sticky top-0 z-40 bg-gray-900/90 backdrop-blur-sm border-b border-gray-700/30 shadow-sm">
     <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between items-center h-14">
         <!-- Logo Section - Optimized -->

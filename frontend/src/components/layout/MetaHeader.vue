@@ -88,9 +88,6 @@ onMounted(() => {
 
 <style scoped>
 .meta-header {
-  position: sticky;
-  top: 0;
-  z-index: 40;
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
 }
