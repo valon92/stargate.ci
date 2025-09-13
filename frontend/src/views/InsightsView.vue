@@ -10,8 +10,50 @@
             <span class="gradient-text">Stargate & Cristal Intelligence Insights</span>
           </h1>
           <p class="text-xl text-gray-300 max-w-3xl mx-auto">
-            Comprehensive insights, analysis, and educational content about the official Stargate Project and Cristal Intelligence initiatives. Stay informed about the future of AI infrastructure and enterprise solutions.
+            Comprehensive insights, analysis, and educational content about AI infrastructure, machine learning, and the future of technology.
           </p>
+          
+          <!-- Search Bar -->
+          <div class="mt-8 max-w-2xl mx-auto">
+            <div class="relative">
+              <input
+                v-model="searchQuery"
+                @input="handleSearch"
+                type="text"
+                placeholder="Search articles, topics, and insights..."
+                class="w-full px-6 py-4 bg-gray-800/50 border border-gray-600 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+              >
+              <div class="absolute inset-y-0 right-0 flex items-center pr-6">
+                <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="py-16 bg-gray-800/30">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div class="text-center">
+            <div class="text-3xl font-bold text-primary-400">{{ articles.length }}</div>
+            <div class="text-gray-400 mt-2">Expert Articles</div>
+          </div>
+          <div class="text-center">
+            <div class="text-3xl font-bold text-secondary-400">{{ categories.length - 1 }}</div>
+            <div class="text-gray-400 mt-2">Technology Categories</div>
+          </div>
+          <div class="text-center">
+            <div class="text-3xl font-bold text-primary-400">{{ totalReadTime }}</div>
+            <div class="text-gray-400 mt-2">Minutes of Content</div>
+          </div>
+          <div class="text-center">
+            <div class="text-3xl font-bold text-secondary-400">{{ newsItems.length }}</div>
+            <div class="text-gray-400 mt-2">Latest Updates</div>
+          </div>
         </div>
       </div>
     </section>
@@ -35,158 +77,207 @@
       </div>
     </section>
 
-    <!-- Official Project Data Section -->
-    <section class="py-24 bg-gradient-to-r from-primary-900/20 to-secondary-900/20">
+    <!-- Search Results -->
+    <section v-if="searchMode && searchQuery" class="py-16">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-16">
-          <h2 class="text-3xl md:text-4xl font-bold mb-4">
-            <span class="gradient-text">Official Project Data</span>
-          </h2>
-          <p class="text-xl text-gray-300 max-w-3xl mx-auto">
-            Real-time information from official Stargate Project and Cristal Intelligence sources
-          </p>
-        </div>
-        
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <!-- Stargate Project Data -->
-          <div v-if="stargateData" class="card">
-            <div class="flex items-center mb-6">
-              <div class="w-12 h-12 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-lg flex items-center justify-center mr-4">
-                <span class="text-2xl">🚀</span>
-              </div>
-              <h3 class="text-2xl font-bold text-white">Stargate Project</h3>
-            </div>
-            <p class="text-gray-300 mb-6">{{ stargateData.description }}</p>
-            <div class="grid grid-cols-2 gap-4">
-              <div class="p-4 bg-primary-500/10 rounded-lg">
-                <div class="text-primary-400 font-semibold">Total Investment</div>
-                <div class="text-white text-lg">{{ stargateData.totalInvestment }}</div>
-              </div>
-              <div class="p-4 bg-primary-500/10 rounded-lg">
-                <div class="text-primary-400 font-semibold">Timeline</div>
-                <div class="text-white text-lg">{{ stargateData.projectTimeline }}</div>
-              </div>
-              <div class="p-4 bg-primary-500/10 rounded-lg">
-                <div class="text-primary-400 font-semibold">Jobs Created</div>
-                <div class="text-white text-lg">{{ stargateData.jobs }}</div>
-              </div>
-              <div class="p-4 bg-primary-500/10 rounded-lg">
-                <div class="text-primary-400 font-semibold">Partners</div>
-                <div class="text-white text-lg">{{ stargateData.partners }}</div>
-              </div>
-            </div>
-            <div class="mt-4 text-xs text-gray-500">
-              Source: <a :href="stargateData.source" target="_blank" class="text-primary-400 hover:text-primary-300 underline">Official Project</a>
-            </div>
-          </div>
-
-          <!-- Cristal Intelligence Data -->
-          <div v-if="cristalData" class="card">
-            <div class="flex items-center mb-6">
-              <div class="w-12 h-12 bg-gradient-to-r from-secondary-500 to-primary-500 rounded-lg flex items-center justify-center mr-4">
-                <span class="text-2xl">💎</span>
-              </div>
-              <h3 class="text-2xl font-bold text-white">Cristal Intelligence</h3>
-            </div>
-            <p class="text-gray-300 mb-6">{{ cristalData.description }}</p>
-            <div class="space-y-4">
-              <div class="p-4 bg-secondary-500/10 rounded-lg">
-                <div class="text-secondary-400 font-semibold mb-2">Partnership Investment</div>
-                <div class="text-white">{{ cristalData.partnership.investment }}</div>
-              </div>
-              <div class="p-4 bg-secondary-500/10 rounded-lg">
-                <div class="text-secondary-400 font-semibold mb-2">Key Features</div>
-                <ul class="text-gray-300 text-sm space-y-1">
-                  <li v-for="feature in cristalData.features.slice(0, 3)" :key="feature">• {{ feature }}</li>
-                  <li class="text-gray-500">+{{ cristalData.features.length - 3 }} more features</li>
-                </ul>
-              </div>
-            </div>
-            <div class="mt-4 text-xs text-gray-500">
-              Source: <a :href="cristalData.source" target="_blank" class="text-secondary-400 hover:text-secondary-300 underline">Official Partnership</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Articles Grid -->
-    <section class="py-24 bg-gray-800/50">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-16">
-          <h2 class="text-3xl md:text-4xl font-bold mb-4">
-            <span class="gradient-text">Platform Insights & Analysis</span>
-          </h2>
-          <p class="text-xl text-gray-300 max-w-3xl mx-auto">
-            Comprehensive analysis and insights about Stargate and Cristal Intelligence projects
-          </p>
-        </div>
-        
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          <article
-            v-for="article in filteredArticles"
-            :key="article.id"
-            class="card group hover:scale-105 transition-transform duration-300"
-          >
-            <div class="aspect-w-16 aspect-h-9 mb-6">
-              <div class="w-full h-48 bg-gradient-to-br from-primary-500/20 to-secondary-500/20 rounded-lg flex items-center justify-center">
-                <div class="text-4xl">{{ article.icon }}</div>
-              </div>
-            </div>
-            
-            <div class="flex items-center space-x-2 mb-4">
-              <span class="px-3 py-1 bg-gradient-to-r from-primary-500/20 to-secondary-500/20 text-primary-400 text-sm rounded-full">
-                {{ article.category }}
-              </span>
-              <span class="text-gray-400 text-sm">{{ article.date }}</span>
-            </div>
-            
-            <h2 class="text-xl font-semibold text-white mb-3 group-hover:text-primary-400 transition-colors duration-200">
-              {{ article.title }}
-            </h2>
-            
-            <p class="text-gray-400 mb-4 leading-relaxed">
-              {{ article.excerpt }}
-            </p>
-            
-            <div class="space-y-3">
-              <div class="flex items-center justify-between">
-                <span class="text-sm text-gray-500">{{ article.readTime }} min read</span>
-                <span class="text-xs text-gray-600 bg-gray-700 px-2 py-1 rounded">{{ article.source }}</span>
-              </div>
-              <RouterLink
-                :to="`/insights/${article.slug}`"
-                class="text-primary-400 hover:text-primary-300 font-medium transition-colors duration-200"
-              >
-                Read Analysis →
-              </RouterLink>
-            </div>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <!-- Official Project Updates -->
-    <section class="py-24 bg-gradient-to-r from-primary-900/20 to-secondary-900/20">
-      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <h2 class="text-3xl md:text-4xl font-bold mb-6">
-          <span class="gradient-text">Stay Connected</span>
+        <h2 class="text-2xl font-bold mb-8">
+          Search Results for "{{ searchQuery }}"
+          <span class="text-gray-400 text-lg font-normal">
+            ({{ searchResults.articles.length + searchResults.faqs.length }} results)
+          </span>
         </h2>
-        <p class="text-xl text-gray-300 mb-8">
-          Get the latest updates on official Stargate Project and Cristal Intelligence developments. Connect with us to stay informed about investment opportunities and project milestones.
-        </p>
-        <div class="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto">
-          <input
-            type="email"
-            placeholder="Enter your email"
-            class="flex-1 px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-          />
-          <button class="btn-primary">
-            Get Updates
-          </button>
+
+        <!-- Search Results Articles -->
+        <div v-if="searchResults.articles.length > 0" class="mb-12">
+          <h3 class="text-xl font-semibold mb-6 text-primary-400">Articles</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div
+              v-for="article in searchResults.articles"
+              :key="article.id"
+              class="bg-gray-800/50 backdrop-blur-sm rounded-xl overflow-hidden hover:bg-gray-800/70 transition-all duration-200 group"
+            >
+              <div class="p-6">
+                <div class="flex items-center justify-between mb-4">
+                  <span class="text-2xl">{{ article.icon }}</span>
+                  <span class="px-3 py-1 text-xs rounded-full bg-primary-500/20 text-primary-400">
+                    {{ article.category }}
+                  </span>
+                </div>
+                <h3 class="text-xl font-semibold mb-3 group-hover:text-primary-400 transition-colors">
+                  {{ article.title }}
+                </h3>
+                <p class="text-gray-400 mb-4 line-clamp-3">{{ article.excerpt }}</p>
+                <div class="flex items-center justify-between text-sm text-gray-500">
+                  <span>{{ article.author }}</span>
+                  <span>{{ article.read_time }} min read</span>
+                </div>
+                <RouterLink
+                  :to="`/insights/${article.slug}`"
+                  class="inline-block mt-4 text-primary-400 hover:text-primary-300 font-medium"
+                >
+                  Read More →
+                </RouterLink>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="mt-6 text-sm text-gray-400">
-          <p>We respect your privacy and only share official project information from verified sources.</p>
+
+        <!-- Search Results FAQs -->
+        <div v-if="searchResults.faqs.length > 0">
+          <h3 class="text-xl font-semibold mb-6 text-secondary-400">Related FAQs</h3>
+          <div class="space-y-4">
+            <div
+              v-for="faq in searchResults.faqs"
+              :key="faq.id"
+              class="bg-gray-800/50 backdrop-blur-sm rounded-xl p-6"
+            >
+              <h4 class="text-lg font-medium mb-2 text-white">{{ faq.question }}</h4>
+              <p class="text-gray-400">{{ faq.answer }}</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- No Results -->
+        <div v-if="searchResults.articles.length === 0 && searchResults.faqs.length === 0" class="text-center py-12">
+          <div class="text-6xl mb-4">🔍</div>
+          <h3 class="text-xl font-semibold mb-2">No results found</h3>
+          <p class="text-gray-400">Try different keywords or browse our categories above.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Main Content -->
+    <section v-else class="py-16">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Featured Article -->
+        <div v-if="filteredArticles.length > 0" class="mb-16">
+          <h2 class="text-2xl font-bold mb-8">Featured Article</h2>
+          <div class="bg-gradient-to-br from-gray-800/80 to-gray-900/80 backdrop-blur-sm rounded-2xl overflow-hidden border border-gray-700/50">
+            <div class="md:flex">
+              <div class="md:w-2/3 p-8">
+                <div class="flex items-center gap-4 mb-4">
+                  <span class="text-3xl">{{ filteredArticles[0].icon }}</span>
+                  <span class="px-3 py-1 text-sm rounded-full bg-primary-500/20 text-primary-400">
+                    {{ filteredArticles[0].category }}
+                  </span>
+                </div>
+                <h3 class="text-3xl font-bold mb-4">{{ filteredArticles[0].title }}</h3>
+                <p class="text-xl text-gray-300 mb-6">{{ filteredArticles[0].excerpt }}</p>
+                <div class="flex items-center gap-6 text-sm text-gray-400 mb-6">
+                  <span>By {{ filteredArticles[0].author }}</span>
+                  <span>{{ filteredArticles[0].read_time }} min read</span>
+                  <span>{{ formatDate(filteredArticles[0].published_at) }}</span>
+                </div>
+                <RouterLink
+                  :to="`/insights/${filteredArticles[0].slug}`"
+                  class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-primary-500 to-secondary-500 text-white rounded-lg font-medium hover:from-primary-600 hover:to-secondary-600 transition-all duration-200"
+                >
+                  Read Full Article
+                  <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                  </svg>
+                </RouterLink>
+              </div>
+              <div class="md:w-1/3 bg-gradient-to-br from-primary-500/20 to-secondary-500/20 p-8 flex items-center justify-center">
+                <div class="text-center">
+                  <div class="text-6xl mb-4">{{ filteredArticles[0].icon }}</div>
+                  <div class="text-lg font-medium text-gray-300">{{ filteredArticles[0].category }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Articles Grid -->
+        <div class="mb-16">
+          <div class="flex items-center justify-between mb-8">
+            <h2 class="text-2xl font-bold">
+              {{ selectedCategory === 'all' ? 'All Articles' : `${selectedCategory.toUpperCase()} Articles` }}
+              <span class="text-gray-400 text-lg font-normal">({{ filteredArticles.length }})</span>
+            </h2>
+          </div>
+
+          <div v-if="loading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div v-for="i in 6" :key="i" class="bg-gray-800/50 rounded-xl p-6 animate-pulse">
+              <div class="h-4 bg-gray-700 rounded mb-4"></div>
+              <div class="h-6 bg-gray-700 rounded mb-3"></div>
+              <div class="h-20 bg-gray-700 rounded mb-4"></div>
+              <div class="h-4 bg-gray-700 rounded w-1/2"></div>
+            </div>
+          </div>
+
+          <div v-else-if="filteredArticles.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div
+              v-for="article in filteredArticles.slice(1)"
+              :key="article.id"
+              class="bg-gray-800/50 backdrop-blur-sm rounded-xl overflow-hidden hover:bg-gray-800/70 transition-all duration-200 group border border-gray-700/50 hover:border-primary-500/30"
+            >
+              <div class="p-6">
+                <div class="flex items-center justify-between mb-4">
+                  <span class="text-2xl">{{ article.icon }}</span>
+                  <span class="px-3 py-1 text-xs rounded-full bg-primary-500/20 text-primary-400">
+                    {{ article.category }}
+                  </span>
+                </div>
+                <h3 class="text-xl font-semibold mb-3 group-hover:text-primary-400 transition-colors">
+                  {{ article.title }}
+                </h3>
+                <p class="text-gray-400 mb-4 line-clamp-3">{{ article.excerpt }}</p>
+                <div class="flex items-center justify-between text-sm text-gray-500 mb-4">
+                  <span>{{ article.author }}</span>
+                  <span>{{ article.read_time }} min read</span>
+                </div>
+                <RouterLink
+                  :to="`/insights/${article.slug}`"
+                  class="inline-flex items-center text-primary-400 hover:text-primary-300 font-medium group"
+                >
+                  Read More
+                  <svg class="ml-1 w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                  </svg>
+                </RouterLink>
+              </div>
+            </div>
+          </div>
+
+          <div v-else class="text-center py-12">
+            <div class="text-6xl mb-4">📄</div>
+            <h3 class="text-xl font-semibold mb-2">No articles found</h3>
+            <p class="text-gray-400">Try selecting a different category or check back later.</p>
+          </div>
+        </div>
+
+        <!-- Latest News -->
+        <div v-if="newsItems.length > 0" class="mb-16">
+          <h2 class="text-2xl font-bold mb-8">Latest News & Updates</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div
+              v-for="news in newsItems"
+              :key="news.id"
+              class="bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700/50 hover:border-primary-500/30 transition-all duration-200"
+            >
+              <div class="flex items-center justify-between mb-3">
+                <span class="px-3 py-1 text-xs rounded-full bg-secondary-500/20 text-secondary-400">
+                  {{ news.category }}
+                </span>
+                <span class="text-sm text-gray-500">{{ formatDate(news.date) }}</span>
+              </div>
+              <h3 class="text-lg font-semibold mb-2">{{ news.title }}</h3>
+              <p class="text-gray-400 mb-4">{{ news.summary }}</p>
+              <div class="flex items-center justify-between">
+                <span class="text-sm text-gray-500">{{ news.source }}</span>
+                <a
+                  v-if="news.url"
+                  :href="news.url"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="text-primary-400 hover:text-primary-300 text-sm font-medium"
+                >
+                  Read More →
+                </a>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -194,170 +285,103 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
+import { contentApi, type Article } from '../services/contentApi'
 import { RouterLink } from 'vue-router'
-import { useI18n } from 'vue-i18n'
-import { useHead } from '@vueuse/head'
-import { stargateApi, type StargateProjectData, type CristalIntelligenceData } from '../services/stargateApi'
 
-const { t } = useI18n()
-
+// Reactive data
 const selectedCategory = ref('all')
+const articles = ref<Article[]>([])
+const searchQuery = ref('')
+const searchResults = ref<{ articles: Article[]; faqs: any[] }>({ articles: [], faqs: [] })
+const newsItems = ref<any[]>([])
+const loading = ref(true)
+const searchMode = ref(false)
+const categories = ref<{ key: string; name: string }[]>([
+  { key: 'all', name: 'All Articles' }
+])
 
-// Platform-specific categories
-const categories = [
-  { key: 'all', name: 'All Insights' },
-  { key: 'stargate', name: 'Stargate Project' },
-  { key: 'cristal', name: 'Cristal Intelligence' },
-  { key: 'investment', name: 'Investment Opportunities' },
-  { key: 'technology', name: 'Technology Analysis' },
-  { key: 'partnership', name: 'Partnership Insights' },
-]
-
-// Official project data
-const stargateData = ref<StargateProjectData | null>(null)
-const cristalData = ref<CristalIntelligenceData | null>(null)
-const isLoading = ref(true)
-
-// Platform-specific insights articles
-const articles = [
-  {
-    id: 1,
-    title: "Stargate Project: $500B Investment in Next-Generation AI Infrastructure",
-    excerpt: "Deep dive into the official Stargate Project announcement, analyzing the $500B investment, 4-year timeline, and its impact on American AI leadership and job creation.",
-    category: "Stargate",
-    date: "Jan 11, 2025",
-    readTime: 12,
-    slug: "stargate-project-500b-investment-analysis",
-    icon: "🚀",
-    source: "Official Project Data"
-  },
-  {
-    id: 2,
-    title: "Cristal Intelligence: Advanced Enterprise AI Solutions",
-    excerpt: "Comprehensive analysis of Cristal Intelligence partnership between OpenAI, SoftBank, and ARM, exploring the $3B annual investment and enterprise AI capabilities.",
-    category: "Cristal",
-    date: "Feb 3, 2025",
-    readTime: 10,
-    slug: "cristal-intelligence-enterprise-ai-solutions",
-    icon: "💎",
-    source: "Official Partnership Data"
-  },
-  {
-    id: 3,
-    title: "Investment Opportunities in Stargate AI Infrastructure",
-    excerpt: "Detailed guide to investment opportunities in Stargate AI Infrastructure, including requirements, benefits, and direct connection to official project teams.",
-    category: "Investment",
-    date: "Jan 15, 2025",
-    readTime: 8,
-    slug: "investment-opportunities-stargate-ai-infrastructure",
-    icon: "💰",
-    source: "Investment Analysis"
-  },
-  {
-    id: 4,
-    title: "Quantum Computing in Stargate: Revolutionary Computational Power",
-    excerpt: "Exploring the quantum computing infrastructure within the Stargate Project, analyzing its potential to revolutionize AI processing capabilities.",
-    category: "Technology",
-    date: "Jan 20, 2025",
-    readTime: 15,
-    slug: "quantum-computing-stargate-revolutionary-power",
-    icon: "🔬",
-    source: "Technology Analysis"
-  },
-  {
-    id: 5,
-    title: "OpenAI, SoftBank, ARM Partnership: Strategic Analysis",
-    excerpt: "In-depth analysis of the strategic partnership between OpenAI, SoftBank, and ARM, examining their roles in the Stargate and Cristal Intelligence projects.",
-    category: "Partnership",
-    date: "Feb 5, 2025",
-    readTime: 11,
-    slug: "openai-softbank-arm-partnership-analysis",
-    icon: "🤝",
-    source: "Partnership Analysis"
-  },
-  {
-    id: 6,
-    title: "Cristal Intelligence: Enterprise Data Integration & Security",
-    excerpt: "Technical deep dive into Cristal Intelligence's enterprise data integration capabilities, security measures, and customized AI solutions for companies.",
-    category: "Cristal",
-    date: "Feb 8, 2025",
-    readTime: 13,
-    slug: "cristal-intelligence-data-integration-security",
-    icon: "🔐",
-    source: "Technical Analysis"
-  },
-  {
-    id: 7,
-    title: "Stargate Project Phases: Infrastructure Development Timeline",
-    excerpt: "Detailed breakdown of Stargate Project phases, from Texas infrastructure foundation to national expansion and global integration over 4 years.",
-    category: "Stargate",
-    date: "Jan 25, 2025",
-    readTime: 9,
-    slug: "stargate-project-phases-infrastructure-timeline",
-    icon: "📅",
-    source: "Project Timeline"
-  },
-  {
-    id: 8,
-    title: "AI Agents & Knowledge Work Automation in Cristal Intelligence",
-    excerpt: "Exploring Cristal Intelligence's AI agents capabilities, knowledge work automation, and advanced reasoning features for enterprise applications.",
-    category: "Technology",
-    date: "Feb 10, 2025",
-    readTime: 14,
-    slug: "ai-agents-knowledge-work-automation-cristal",
-    icon: "🤖",
-    source: "AI Technology Analysis"
-  }
-]
-
-// Load official data on component mount
-onMounted(async () => {
-  try {
-    const [stargate, cristal] = await Promise.all([
-      stargateApi.getStargateProjectData(),
-      stargateApi.getCristalIntelligenceData()
-    ])
-
-    stargateData.value = stargate
-    cristalData.value = cristal
-  } catch (error) {
-    console.error('Error loading official data:', error)
-  } finally {
-    isLoading.value = false
-  }
-})
-
+// Computed properties
 const filteredArticles = computed(() => {
   if (selectedCategory.value === 'all') {
-    return articles
+    return articles.value
   }
-  return articles.filter(article => 
+  return articles.value.filter(article => 
     article.category.toLowerCase() === selectedCategory.value.toLowerCase()
   )
 })
 
-useHead({
-  title: 'Insights - Stargate & Cristal Intelligence Analysis',
-  meta: [
-    {
-      name: 'description',
-      content: 'Comprehensive insights and analysis about the official Stargate Project and Cristal Intelligence initiatives. Stay informed about AI infrastructure investments and enterprise solutions.'
-    }
-  ]
+const totalReadTime = computed(() => {
+  return articles.value.reduce((total, article) => total + article.read_time, 0)
+})
+
+// Methods
+const formatDate = (dateString: string) => {
+  return new Date(dateString).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric'
+  })
+}
+
+const handleSearch = async () => {
+  if (searchQuery.value.trim().length > 2) {
+    searchMode.value = true
+    searchResults.value = await contentApi.searchContent(searchQuery.value)
+  } else {
+    searchMode.value = false
+    searchResults.value = { articles: [], faqs: [] }
+  }
+}
+
+const loadData = async () => {
+  try {
+    loading.value = true
+    
+    // Load articles
+    const articlesData = await contentApi.getArticles()
+    articles.value = articlesData.data
+    
+    // Load categories from articles
+    const uniqueCategories = [...new Set(articles.value.map(article => article.category))]
+    categories.value = [
+      { key: 'all', name: 'All Articles' },
+      ...uniqueCategories.map(cat => ({ key: cat.toLowerCase(), name: cat }))
+    ]
+    
+    // Load news
+    newsItems.value = await contentApi.getNews(4)
+  } catch (error) {
+    console.error('Error loading data:', error)
+  } finally {
+    loading.value = false
+  }
+}
+
+// Watch for category changes
+watch(selectedCategory, () => {
+  searchMode.value = false
+  searchQuery.value = ''
+})
+
+// Initialize
+onMounted(() => {
+  loadData()
 })
 </script>
 
 <style scoped>
-.card {
-  @apply bg-gray-800/50 border border-gray-700 rounded-lg p-6 hover:border-primary-500/50 transition-all duration-300;
-}
-
-.btn-primary {
-  @apply bg-gradient-to-r from-primary-500 to-secondary-500 text-white px-6 py-3 rounded-lg font-medium hover:from-primary-600 hover:to-secondary-600 transition-all duration-300;
-}
-
 .gradient-text {
-  @apply bg-gradient-to-r from-primary-400 to-secondary-400 bg-clip-text text-transparent;
+  background: linear-gradient(135deg, #0ea5e9 0%, #a855f7 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 </style>
