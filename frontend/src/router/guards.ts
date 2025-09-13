@@ -20,3 +20,13 @@ export const guestGuard = (to: any, from: any, next: any) => {
     next()
   }
 }
+
+export const userGuard = (to: any, from: any, next: any) => {
+  if (authService.isAuthenticated()) {
+    // User is authenticated, allow access to dashboard
+    next()
+  } else {
+    // User is not authenticated, redirect to login
+    next('/admin/login')
+  }
+}
