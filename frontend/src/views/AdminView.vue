@@ -8,7 +8,18 @@
             <h1 class="text-2xl font-bold gradient-text">Stargate.ci Admin</h1>
           </div>
           <div class="flex items-center space-x-4">
-            <span class="text-gray-400">Admin Panel</span>
+            <div class="flex items-center space-x-3">
+              <div class="text-right">
+                <div class="text-sm text-gray-300">{{ currentUser?.username }}</div>
+                <div class="text-xs text-gray-500">{{ currentUser?.role }}</div>
+              </div>
+              <div class="w-8 h-8 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full flex items-center justify-center">
+                <span class="text-white text-sm font-bold">{{ currentUser?.username?.charAt(0).toUpperCase() }}</span>
+              </div>
+            </div>
+            <button @click="handleLogout" class="btn-outline text-sm">
+              Logout
+            </button>
             <RouterLink to="/" class="btn-outline text-sm">
               Back to Site
             </RouterLink>
@@ -33,6 +44,23 @@
             ]"
           >
             {{ tab.name }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Session Warning -->
+    <div v-if="sessionWarning" class="bg-yellow-500/10 border-b border-yellow-500/20">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center">
+            <svg class="h-5 w-5 text-yellow-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <span class="text-yellow-400 text-sm">Your session will expire in {{ sessionTimeLeft }} minutes</span>
+          </div>
+          <button @click="refreshSession" class="text-yellow-400 hover:text-yellow-300 text-sm font-medium">
+            Extend Session
           </button>
         </div>
       </div>
@@ -372,8 +400,17 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import { RouterLink } from 'vue-router'
+import { ref, onMounted, onUnmounted } from 'vue'
+import { RouterLink, useRouter } from 'vue-router'
+import { authService, type AdminUser } from '../services/authService'
+
+const router = useRouter()
+
+// Authentication
+const currentUser = ref<AdminUser | null>(null)
+const sessionWarning = ref(false)
+const sessionTimeLeft = ref(0)
+let sessionTimer: number | null = null
 
 // Tab Management
 const activeTab = ref('articles')
@@ -617,11 +654,71 @@ const deleteContact = async (id: number) => {
   }
 }
 
+// Authentication Functions
+const handleLogout = () => {
+  authService.logout()
+  router.push('/admin/login')
+}
+
+const checkAuthentication = () => {
+  const user = authService.getCurrentUser()
+  if (!user) {
+    router.push('/admin/login')
+    return false
+  }
+  currentUser.value = user
+  startSessionTimer()
+  return true
+}
+
+const startSessionTimer = () => {
+  if (sessionTimer) {
+    window.clearInterval(sessionTimer)
+  }
+  
+  sessionTimer = window.setInterval(() => {
+    const sessionInfo = authService.getSessionInfo()
+    if (!sessionInfo) {
+      handleLogout()
+      return
+    }
+    
+    const minutesLeft = Math.floor(sessionInfo.expiresIn / (1000 * 60))
+    sessionTimeLeft.value = minutesLeft
+    
+    // Show warning when 5 minutes left
+    sessionWarning.value = minutesLeft <= 5 && minutesLeft > 0
+    
+    // Auto logout when session expires
+    if (minutesLeft <= 0) {
+      handleLogout()
+    }
+  }, 1000)
+}
+
+const refreshSession = () => {
+  if (authService.refreshSession()) {
+    sessionWarning.value = false
+    startSessionTimer()
+  } else {
+    handleLogout()
+  }
+}
+
 // Initialize
 onMounted(() => {
-  fetchArticles()
-  fetchFaqs()
-  fetchContacts()
+  if (checkAuthentication()) {
+    fetchArticles()
+    fetchFaqs()
+    fetchContacts()
+  }
+})
+
+// Cleanup
+onUnmounted(() => {
+  if (sessionTimer) {
+    window.clearInterval(sessionTimer)
+  }
 })
 </script>
 

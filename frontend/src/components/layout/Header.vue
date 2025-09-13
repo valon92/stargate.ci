@@ -75,15 +75,21 @@
             </div>
           </div>
 
-          <!-- CTA Button -->
-          <div class="hidden md:block">
-            <RouterLink 
-              to="/dashboard" 
-              class="bg-gradient-to-r from-primary-500 to-secondary-500 text-white px-4 py-2 rounded-lg text-sm font-medium hover:from-primary-600 hover:to-secondary-600 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105"
-            >
-              Dashboard
-            </RouterLink>
-          </div>
+                      <!-- CTA Buttons -->
+                      <div class="hidden md:flex items-center space-x-3">
+                        <RouterLink
+                          to="/dashboard"
+                          class="bg-gradient-to-r from-primary-500 to-secondary-500 text-white px-4 py-2 rounded-lg text-sm font-medium hover:from-primary-600 hover:to-secondary-600 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105"
+                        >
+                          Dashboard
+                        </RouterLink>
+                        <RouterLink
+                          to="/admin/login"
+                          class="text-gray-400 hover:text-white px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-gray-800/50"
+                        >
+                          Admin
+                        </RouterLink>
+                      </div>
 
           <!-- Mobile menu button -->
           <div class="lg:hidden">
@@ -133,16 +139,23 @@
             </RouterLink>
           </div>
 
-          <!-- Mobile CTA -->
-          <div class="pt-4 border-t border-gray-700/50">
-            <RouterLink 
-              to="/dashboard" 
-              class="bg-gradient-to-r from-primary-500 to-secondary-500 text-white block px-3 py-3 rounded-lg text-base font-medium text-center hover:from-primary-600 hover:to-secondary-600 transition-all duration-200"
-              @click="mobileMenuOpen = false"
-            >
-              Go to Dashboard
-            </RouterLink>
-          </div>
+                      <!-- Mobile CTA -->
+                      <div class="pt-4 border-t border-gray-700/50 space-y-2">
+                        <RouterLink
+                          to="/dashboard"
+                          class="bg-gradient-to-r from-primary-500 to-secondary-500 text-white block px-3 py-3 rounded-lg text-base font-medium text-center hover:from-primary-600 hover:to-secondary-600 transition-all duration-200"
+                          @click="mobileMenuOpen = false"
+                        >
+                          Go to Dashboard
+                        </RouterLink>
+                        <RouterLink
+                          to="/admin/login"
+                          class="text-gray-400 hover:text-white block px-3 py-2 rounded-lg text-base font-medium text-center transition-all duration-200 hover:bg-gray-800/50"
+                          @click="mobileMenuOpen = false"
+                        >
+                          Admin Access
+                        </RouterLink>
+                      </div>
 
           <!-- Language Switcher Mobile -->
           <div class="px-3 py-2">

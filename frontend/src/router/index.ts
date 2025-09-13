@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import { adminGuard, guestGuard } from './guards'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -85,9 +86,16 @@ const router = createRouter({
       component: () => import('../views/LegalDisclaimerView.vue'),
     },
     {
+      path: '/admin/login',
+      name: 'admin-login',
+      component: () => import('../views/AdminLoginView.vue'),
+      beforeEnter: guestGuard,
+    },
+    {
       path: '/admin',
       name: 'admin',
       component: () => import('../views/AdminView.vue'),
+      beforeEnter: adminGuard,
     },
     {
       path: '/:pathMatch(.*)*',
