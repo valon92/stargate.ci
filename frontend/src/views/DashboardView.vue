@@ -9,9 +9,32 @@
           <h1 class="text-4xl md:text-5xl font-bold mb-4">
             <span class="gradient-text">Your Stargate Dashboard</span>
           </h1>
-          <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+          <p class="text-xl text-gray-300 max-w-3xl mx-auto mb-8">
             Track your progress, discover opportunities, and stay connected with the Stargate ecosystem.
           </p>
+          
+          <!-- User Info & Logout -->
+          <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <div class="flex items-center gap-3 bg-gray-800/50 backdrop-blur-sm rounded-lg px-4 py-2 border border-gray-700/50">
+              <div class="w-8 h-8 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full flex items-center justify-center">
+                <span class="text-white font-bold text-sm">{{ userInitials }}</span>
+              </div>
+              <div class="text-left">
+                <p class="text-white font-medium">{{ currentUser?.username }}</p>
+                <p class="text-gray-400 text-sm">{{ currentUser?.email }}</p>
+              </div>
+            </div>
+            
+            <button 
+              @click="handleLogout"
+              class="flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition-colors duration-200 font-medium"
+            >
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+              </svg>
+              Logout
+            </button>
+          </div>
         </div>
       </div>
     </section>
@@ -180,9 +203,48 @@
 </template>
 
 <script setup lang="ts">
-import { RouterLink } from 'vue-router'
+import { ref, computed, onMounted } from 'vue'
+import { RouterLink, useRouter } from 'vue-router'
 import { useHead } from '@vueuse/head'
+import { authService, type AdminUser } from '../services/authService'
 import UserDashboard from '../components/UserDashboard.vue'
+
+const router = useRouter()
+
+// User state
+const currentUser = ref<AdminUser | null>(null)
+
+// Computed properties
+const userInitials = computed(() => {
+  if (!currentUser.value) return 'U'
+  const username = currentUser.value.username
+  return username.charAt(0).toUpperCase()
+})
+
+// Logout function
+const handleLogout = () => {
+  // Show confirmation dialog
+  if (confirm('Are you sure you want to logout?')) {
+    // Clear authentication
+    authService.logout()
+    
+    // Redirect to home page
+    router.push('/')
+    
+    // Show success message (optional)
+    console.log('Logged out successfully')
+  }
+}
+
+// Initialize user data
+onMounted(() => {
+  currentUser.value = authService.getCurrentUser()
+  
+  // If no user is found, redirect to login
+  if (!currentUser.value) {
+    router.push('/admin/login')
+  }
+})
 
 useHead({
   title: 'User Dashboard - Stargate.ci',
