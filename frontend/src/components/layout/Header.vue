@@ -34,8 +34,8 @@
                 </RouterLink>
               </div>
               
-              <!-- Separator -->
-              <div class="w-px h-4 bg-gray-600 mx-1.5"></div>
+              <!-- Separator (only if there are items in both sections) -->
+              <div v-if="primaryNavigation.length > 0 && secondaryNavigation.length > 0" class="w-px h-4 bg-gray-600 mx-1.5"></div>
               
               <!-- Secondary Navigation -->
               <div class="flex items-center space-x-0.5">
@@ -92,7 +92,7 @@
       <div v-if="isMenuOpen" class="lg:hidden">
         <div class="px-2 pt-2 pb-3 space-y-1 border-t border-gray-700/30">
           <!-- Primary Navigation Mobile -->
-          <div class="space-y-0.5">
+          <div v-if="primaryNavigation.length > 0" class="space-y-0.5">
             <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider px-2 py-1">Main</div>
             <RouterLink
               v-for="item in primaryNavigation"
@@ -107,7 +107,7 @@
           </div>
 
           <!-- Secondary Navigation Mobile -->
-          <div class="space-y-0.5 pt-1">
+          <div class="space-y-0.5" :class="{ 'pt-1': primaryNavigation.length > 0 }">
             <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider px-2 py-1">Resources</div>
             <RouterLink
               v-for="item in secondaryNavigation"
@@ -162,16 +162,12 @@ const currentLanguage = ref(locale.value)
 // Memoized navigation - computed for performance
 const primaryNavigation = computed(() => [
   { name: t('nav.home'), href: '/' },
-  { name: t('nav.templates'), href: '/templates' },
-  { name: t('nav.assessment'), href: '/assessment' },
-  { name: t('nav.learning'), href: '/learning' },
 ])
 
 const secondaryNavigation = computed(() => [
   { name: t('nav.about'), href: '/about' },
   { name: t('nav.services'), href: '/services' },
   { name: t('nav.partners'), href: '/partnership' },
-  { name: t('nav.insights'), href: '/insights' },
   { name: t('nav.faq'), href: '/faq' },
   { name: t('nav.contact'), href: '/contact' },
 ])
