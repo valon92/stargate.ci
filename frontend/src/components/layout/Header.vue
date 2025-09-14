@@ -100,6 +100,16 @@
       <!-- Mobile Navigation - Optimized -->
       <div v-if="isMenuOpen" class="lg:hidden">
         <div class="px-2 pt-2 pb-3 space-y-1 border-t border-gray-700/30">
+          <!-- Mobile Search Bar -->
+          <div class="px-2 py-2">
+            <SearchInput 
+              placeholder="Search..."
+              size="sm"
+              variant="minimal"
+              @search="handleSearch"
+            />
+          </div>
+
           <!-- Primary Navigation Mobile -->
           <div v-if="primaryNavigation.length > 0" class="space-y-0.5">
             <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider px-2 py-1">Main</div>
