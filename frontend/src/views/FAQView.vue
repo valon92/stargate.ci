@@ -16,80 +16,6 @@
       </div>
     </section>
 
-    <!-- Official Project Data Section -->
-    <section class="py-24 bg-gradient-to-r from-primary-900/20 to-secondary-900/20">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-16">
-          <h2 class="text-3xl md:text-4xl font-bold mb-4">
-            <span class="gradient-text">Official Project Information</span>
-          </h2>
-          <p class="text-xl text-gray-300 max-w-3xl mx-auto">
-            Real-time data from official Stargate Project and Cristal Intelligence sources
-          </p>
-        </div>
-        
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <!-- Stargate Project Data -->
-          <div v-if="stargateData" class="card">
-            <div class="flex items-center mb-6">
-              <div class="w-12 h-12 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-lg flex items-center justify-center mr-4">
-                <span class="text-2xl">🚀</span>
-              </div>
-              <h3 class="text-2xl font-bold text-white">Stargate Project</h3>
-            </div>
-            <p class="text-gray-300 mb-6">{{ stargateData.description }}</p>
-            <div class="grid grid-cols-2 gap-4">
-              <div class="p-4 bg-primary-500/10 rounded-lg">
-                <div class="text-primary-400 font-semibold">Total Investment</div>
-                <div class="text-white text-lg">{{ stargateData.totalInvestment }}</div>
-              </div>
-              <div class="p-4 bg-primary-500/10 rounded-lg">
-                <div class="text-primary-400 font-semibold">Timeline</div>
-                <div class="text-white text-lg">{{ stargateData.projectTimeline }}</div>
-              </div>
-              <div class="p-4 bg-primary-500/10 rounded-lg">
-                <div class="text-primary-400 font-semibold">Jobs Created</div>
-                <div class="text-white text-lg">{{ stargateData.jobs }}</div>
-              </div>
-              <div class="p-4 bg-primary-500/10 rounded-lg">
-                <div class="text-primary-400 font-semibold">Partners</div>
-                <div class="text-white text-lg">{{ stargateData.partners }}</div>
-              </div>
-            </div>
-            <div class="mt-4 text-xs text-gray-500">
-              Source: <a :href="stargateData.source" target="_blank" class="text-primary-400 hover:text-primary-300 underline">Official Project</a>
-            </div>
-          </div>
-
-          <!-- Cristal Intelligence Data -->
-          <div v-if="cristalData" class="card">
-            <div class="flex items-center mb-6">
-              <div class="w-12 h-12 bg-gradient-to-r from-secondary-500 to-primary-500 rounded-lg flex items-center justify-center mr-4">
-                <span class="text-2xl">💎</span>
-              </div>
-              <h3 class="text-2xl font-bold text-white">Cristal Intelligence</h3>
-            </div>
-            <p class="text-gray-300 mb-6">{{ cristalData.description }}</p>
-            <div class="space-y-4">
-              <div class="p-4 bg-secondary-500/10 rounded-lg">
-                <div class="text-secondary-400 font-semibold mb-2">Partnership Investment</div>
-                <div class="text-white">{{ cristalData.partnership.investment }}</div>
-              </div>
-              <div class="p-4 bg-secondary-500/10 rounded-lg">
-                <div class="text-secondary-400 font-semibold mb-2">Key Features</div>
-                <ul class="text-gray-300 text-sm space-y-1">
-                  <li v-for="feature in cristalData.features.slice(0, 3)" :key="feature">• {{ feature }}</li>
-                  <li class="text-gray-500">+{{ cristalData.features.length - 3 }} more features</li>
-                </ul>
-              </div>
-            </div>
-            <div class="mt-4 text-xs text-gray-500">
-              Source: <a :href="cristalData.source" target="_blank" class="text-secondary-400 hover:text-secondary-300 underline">Official Partnership</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
 
     <!-- FAQ Section -->
     <section class="py-24 bg-gray-800/50">
@@ -197,20 +123,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 import { RouterLink } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useHead } from '@vueuse/head'
-import { stargateApi, type StargateProjectData, type CristalIntelligenceData } from '../services/stargateApi'
 
 const { t } = useI18n()
 
 const openFAQs = ref<number[]>([])
-
-// Official project data
-const stargateData = ref<StargateProjectData | null>(null)
-const cristalData = ref<CristalIntelligenceData | null>(null)
-const isLoading = ref(true)
 
 const toggleFAQ = (index: number) => {
   const isOpen = openFAQs.value.includes(index)
@@ -221,22 +141,6 @@ const toggleFAQ = (index: number) => {
   }
 }
 
-// Load official data on component mount
-onMounted(async () => {
-  try {
-    const [stargate, cristal] = await Promise.all([
-      stargateApi.getStargateProjectData(),
-      stargateApi.getCristalIntelligenceData()
-    ])
-
-    stargateData.value = stargate
-    cristalData.value = cristal
-  } catch (error) {
-    console.error('Error loading official data:', error)
-  } finally {
-    isLoading.value = false
-  }
-})
 
 const faqs = [
   {
