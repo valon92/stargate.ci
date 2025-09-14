@@ -3,30 +3,34 @@ import { authService } from '../services/authService'
 
 export const adminGuard = (to: any, from: any, next: any) => {
   if (authService.isAuthenticated()) {
-    // User is authenticated, allow access
+    // Admin is authenticated, allow access
     next()
   } else {
-    // User is not authenticated, redirect to login
-    next('/admin/login')
+    // Admin is not authenticated, redirect to unified login
+    next('/login')
   }
 }
 
 export const guestGuard = (to: any, from: any, next: any) => {
   if (authService.isAuthenticated()) {
-    // User is already authenticated, redirect to admin panel
+    // Admin is already authenticated, redirect to admin panel
     next('/admin')
+  } else if (authService.isUserAuthenticated()) {
+    // User is already authenticated, redirect to dashboard
+    next('/dashboard')
   } else {
-    // User is not authenticated, allow access to login page
+    // No one is authenticated, allow access to login page
     next()
   }
 }
 
 export const userGuard = (to: any, from: any, next: any) => {
-  if (authService.isAuthenticated()) {
+  // Check for both user and admin authentication
+  if (authService.isUserAuthenticated() || authService.isAuthenticated()) {
     // User is authenticated, allow access to dashboard
     next()
   } else {
-    // User is not authenticated, redirect to login
-    next('/admin/login')
+    // User is not authenticated, redirect to unified login
+    next('/login')
   }
 }

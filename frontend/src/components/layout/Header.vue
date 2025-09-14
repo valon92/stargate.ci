@@ -60,16 +60,10 @@
           <!-- CTA Buttons - Compact -->
           <div class="hidden md:flex items-center space-x-2">
             <RouterLink
-              to="/dashboard"
+              to="/login"
               class="bg-gradient-to-r from-primary-500 to-secondary-500 text-white px-3 py-1.5 rounded-md text-sm font-medium hover:from-primary-600 hover:to-secondary-600 transition-all duration-150 shadow-md hover:shadow-lg"
             >
-              Dashboard
-            </RouterLink>
-            <RouterLink
-              to="/admin/login"
-              class="text-gray-400 hover:text-white px-2.5 py-1.5 rounded-md text-sm font-medium transition-colors duration-150 hover:bg-gray-800/40"
-            >
-              Admin
+              Sign In
             </RouterLink>
           </div>
 
@@ -124,25 +118,11 @@
           <!-- Mobile CTA - Compact -->
           <div class="pt-2 border-t border-gray-700/30 space-y-1">
             <RouterLink
-              to="/auth"
+              to="/login"
               class="bg-gradient-to-r from-primary-500 to-secondary-500 text-white block px-2 py-2 rounded-md text-sm font-medium text-center hover:from-primary-600 hover:to-secondary-600 transition-all duration-150"
               @click="closeMenu"
             >
               Sign In
-            </RouterLink>
-            <RouterLink
-              to="/dashboard"
-              class="text-gray-300 hover:text-white block px-2 py-1.5 rounded-md text-sm font-medium text-center transition-colors duration-150 hover:bg-gray-800/40"
-              @click="closeMenu"
-            >
-              Dashboard
-            </RouterLink>
-            <RouterLink
-              to="/admin/login"
-              class="text-gray-400 hover:text-white block px-2 py-1.5 rounded-md text-sm font-medium text-center transition-colors duration-150 hover:bg-gray-800/40"
-              @click="closeMenu"
-            >
-              Admin
             </RouterLink>
           </div>
         </div>

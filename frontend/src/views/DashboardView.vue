@@ -225,8 +225,9 @@ const userInitials = computed(() => {
 const handleLogout = () => {
   // Show confirmation dialog
   if (confirm('Are you sure you want to logout?')) {
-    // Clear authentication
+    // Clear authentication (both user and admin)
     authService.logout()
+    authService.logoutUser()
     
     // Redirect to home page
     router.push('/')

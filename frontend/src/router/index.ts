@@ -87,6 +87,12 @@ const router = createRouter({
       component: () => import('../views/LegalDisclaimerView.vue'),
     },
     {
+      path: '/login',
+      name: 'unified-login',
+      component: () => import('../views/UnifiedLoginView.vue'),
+      beforeEnter: guestGuard,
+    },
+    {
       path: '/auth',
       name: 'user-auth',
       component: () => import('../views/UserAuthView.vue'),
