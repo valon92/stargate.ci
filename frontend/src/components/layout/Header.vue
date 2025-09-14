@@ -1,5 +1,5 @@
 <template>
-  <header class="sticky top-0 z-40 bg-gray-900/90 backdrop-blur-sm border-b border-gray-700/30 shadow-sm">
+  <header class="sticky top-0 z-50 bg-gray-900/90 backdrop-blur-sm border-b border-gray-700/30 shadow-sm">
     <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between items-center h-14">
         <!-- Logo Section - Optimized -->
@@ -61,7 +61,7 @@
           <div class="hidden md:flex items-center space-x-2">
             <RouterLink
               to="/login"
-              class="bg-gradient-to-r from-primary-500 to-secondary-500 text-white px-3 py-1.5 rounded-md text-sm font-medium hover:from-primary-600 hover:to-secondary-600 transition-all duration-150 shadow-md hover:shadow-lg"
+              class="bg-gradient-to-r from-primary-500 to-secondary-500 text-white px-3 py-1.5 rounded-md text-sm font-medium hover:from-primary-600 hover:to-secondary-600 transition-all duration-150 shadow-md hover:shadow-lg pointer-events-auto relative z-10"
             >
               Sign In
             </RouterLink>
