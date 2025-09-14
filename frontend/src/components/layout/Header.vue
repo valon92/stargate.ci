@@ -158,7 +158,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, watch } from 'vue'
-import { RouterLink, useRoute } from 'vue-router'
+import { RouterLink, useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useLanguagePerformance, useNavigationPerformance } from '../../composables/usePerformance'
 import NotificationCenter from '../NotificationCenter.vue'
@@ -166,6 +166,7 @@ import SearchInput from '../SearchInput.vue'
 
 const { locale, t } = useI18n()
 const route = useRoute()
+const router = useRouter()
 
 // Performance optimized state
 const { isChangingLanguage, changeLanguage: optimizedChangeLanguage } = useLanguagePerformance()
@@ -205,8 +206,10 @@ const changeLanguage = () => {
 // Search handler
 const handleSearch = (query: string) => {
   if (query.trim()) {
-    // Navigate to search page with query
-    window.location.href = `/search?q=${encodeURIComponent(query)}`
+    // Close mobile menu if open
+    closeMenu()
+    // Navigate to search page with query using Vue Router
+    router.push(`/search?q=${encodeURIComponent(query)}`)
   }
 }
 
