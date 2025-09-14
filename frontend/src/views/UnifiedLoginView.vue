@@ -6,14 +6,7 @@
       
       <!-- Header -->
       <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div class="flex items-center justify-between">
-          <RouterLink to="/" class="flex items-center space-x-2">
-            <div class="w-8 h-8 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-lg flex items-center justify-center">
-              <span class="text-white font-bold text-lg">S</span>
-            </div>
-            <span class="text-xl font-bold gradient-text">Stargate.ci</span>
-          </RouterLink>
-          
+        <div class="flex items-center justify-end">
           <RouterLink to="/" class="text-gray-400 hover:text-white transition-colors duration-200">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
