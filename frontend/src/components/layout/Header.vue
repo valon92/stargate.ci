@@ -124,8 +124,15 @@
           <!-- Mobile CTA - Compact -->
           <div class="pt-2 border-t border-gray-700/30 space-y-1">
             <RouterLink
-              to="/dashboard"
+              to="/auth"
               class="bg-gradient-to-r from-primary-500 to-secondary-500 text-white block px-2 py-2 rounded-md text-sm font-medium text-center hover:from-primary-600 hover:to-secondary-600 transition-all duration-150"
+              @click="closeMenu"
+            >
+              Sign In
+            </RouterLink>
+            <RouterLink
+              to="/dashboard"
+              class="text-gray-300 hover:text-white block px-2 py-1.5 rounded-md text-sm font-medium text-center transition-colors duration-150 hover:bg-gray-800/40"
               @click="closeMenu"
             >
               Dashboard

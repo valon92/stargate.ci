@@ -206,13 +206,13 @@
 import { ref, computed, onMounted } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
 import { useHead } from '@vueuse/head'
-import { authService, type AdminUser } from '../services/authService'
+import { authService, type AdminUser, type User } from '../services/authService'
 import UserDashboard from '../components/UserDashboard.vue'
 
 const router = useRouter()
 
 // User state
-const currentUser = ref<AdminUser | null>(null)
+const currentUser = ref<AdminUser | User | null>(null)
 
 // Computed properties
 const userInitials = computed(() => {
@@ -238,11 +238,12 @@ const handleLogout = () => {
 
 // Initialize user data
 onMounted(() => {
-  currentUser.value = authService.getCurrentUser()
+  // Check for regular user first, then admin
+  currentUser.value = authService.getCurrentUser() || authService.getCurrentAdminUser()
   
-  // If no user is found, redirect to login
+  // If no user is found, redirect to auth page
   if (!currentUser.value) {
-    router.push('/admin/login')
+    router.push('/auth')
   }
 })
 

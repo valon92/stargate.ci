@@ -661,7 +661,7 @@ const handleLogout = () => {
 }
 
 const checkAuthentication = () => {
-  const user = authService.getCurrentUser()
+  const user = authService.getCurrentAdminUser()
   if (!user) {
     router.push('/admin/login')
     return false
