@@ -60,6 +60,13 @@ class AuthService {
     role: 'super-admin' as const
   };
 
+  private readonly DEMO_USER_CREDENTIALS = {
+    username: 'demo',
+    password: 'demo123', // Demo credentials for testing
+    email: 'demo@stargate.ci',
+    role: 'user' as const
+  };
+
   // Check if user is authenticated
   isAuthenticated(): boolean {
     const authData = this.getAuthData();
@@ -258,6 +265,37 @@ class AuthService {
       // Simulate API delay
       await new Promise(resolve => setTimeout(resolve, 1000));
 
+      // Check demo credentials first
+      if (credentials.username === this.DEMO_USER_CREDENTIALS.username && 
+          credentials.password === this.DEMO_USER_CREDENTIALS.password) {
+        const demoUser: User = {
+          id: 'demo-user-1',
+          username: this.DEMO_USER_CREDENTIALS.username,
+          email: this.DEMO_USER_CREDENTIALS.email,
+          role: this.DEMO_USER_CREDENTIALS.role,
+          createdAt: new Date().toISOString(),
+          lastLogin: new Date().toISOString(),
+          preferences: {
+            language: 'en',
+            theme: 'dark',
+            notifications: true,
+            emailUpdates: false
+          }
+        };
+
+        // Create user session
+        const token = this.generateUserToken(demoUser);
+        const authData = {
+          user: demoUser,
+          token,
+          expiresAt: Date.now() + (24 * 60 * 60 * 1000) // 24 hours
+        };
+
+        this.setUserAuthData(authData);
+        return { success: true, user: demoUser };
+      }
+
+      // Check registered users
       const users = this.getStoredUsers();
       const user = users.find(u => 
         (u.username === credentials.username || u.email === credentials.username) &&
