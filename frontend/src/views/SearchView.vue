@@ -1,7 +1,7 @@
 <template>
-  <div class="min-h-screen bg-gray-50">
+  <div class="min-h-screen bg-gray-50 relative z-20">
     <!-- Header -->
-    <div class="bg-white shadow">
+    <div class="bg-white shadow relative z-20">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <div class="flex items-center justify-between">
           <div>
@@ -28,11 +28,11 @@
       </div>
     </div>
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-20">
       <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
         <!-- Search Filters Sidebar -->
         <div class="lg:col-span-1">
-          <div class="bg-white rounded-lg shadow p-6 sticky top-8">
+          <div class="bg-white rounded-lg shadow p-6 sticky top-8 z-30">
             <h3 class="text-lg font-medium text-gray-900 mb-4">{{ t('search.filters') }}</h3>
             
             <!-- Search Type Filter -->
@@ -152,7 +152,7 @@
 
             <!-- Clear Filters -->
             <button
-              @click="clearFilters"
+              @click="clearFiltersHandler"
               class="w-full px-4 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors"
             >
               {{ t('search.clearFilters') }}
@@ -161,31 +161,19 @@
         </div>
 
         <!-- Main Content -->
-        <div class="lg:col-span-3">
+        <div class="lg:col-span-3 relative z-20">
           <!-- Search Input -->
           <div class="bg-white rounded-lg shadow p-6 mb-6">
-            <div class="flex space-x-4">
-              <div class="flex-1">
-                <input
-                  v-model="searchQuery"
-                  type="text"
-                  :placeholder="t('search.placeholder')"
-                  class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
-                  @keydown.enter="performSearch"
-                />
-              </div>
-              <button
-                @click="performSearch"
-                :disabled="isSearching"
-                class="px-6 py-2 bg-primary-500 text-white rounded-md hover:bg-primary-600 disabled:opacity-50 transition-colors"
-              >
-                {{ isSearching ? t('search.searching') : t('search.search') }}
-              </button>
-            </div>
+            <SearchInput 
+              :placeholder="t('search.placeholder')"
+              size="lg"
+              variant="default"
+              @search="performSearch"
+            />
           </div>
 
           <!-- Search Results -->
-          <div v-if="hasSearched" class="bg-white rounded-lg shadow">
+          <div v-if="hasSearched" class="bg-white rounded-lg shadow relative z-20">
             <!-- Results Header -->
             <div class="px-6 py-4 border-b border-gray-200">
               <div class="flex items-center justify-between">
@@ -203,7 +191,6 @@
                   <label class="text-sm text-gray-700">{{ t('search.sortBy') }}:</label>
                   <select
                     v-model="sortBy"
-                    @change="performSearch"
                     class="border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
                   >
                     <option value="relevance">{{ t('search.sort.relevance') }}</option>
@@ -227,7 +214,7 @@
                 v-for="result in searchResults"
                 :key="result.id"
                 class="px-6 py-4 hover:bg-gray-50 cursor-pointer"
-                @click="navigateToResult(result)"
+                @click="navigateToResultHandler(result)"
               >
                 <div class="flex items-start justify-between">
                   <div class="flex-1">
@@ -297,10 +284,10 @@
             </div>
 
             <!-- Pagination -->
-            <div v-if="totalResults > searchLimit" class="px-6 py-4 border-t border-gray-200">
+            <div v-if="totalResults > searchResults.length" class="px-6 py-4 border-t border-gray-200">
               <div class="flex items-center justify-between">
                 <button
-                  @click="loadMoreResults"
+                  @click="loadMoreResultsHandler"
                   :disabled="isLoadingMore"
                   class="px-4 py-2 bg-primary-500 text-white rounded-md hover:bg-primary-600 disabled:opacity-50"
                 >
@@ -343,7 +330,7 @@
     <!-- Saved Searches Modal -->
     <div
       v-if="showSavedSearches"
-      class="fixed inset-0 z-50 overflow-y-auto"
+      class="fixed inset-0 z-[9999] overflow-y-auto"
       @click="showSavedSearches = false"
     >
       <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
@@ -404,106 +391,56 @@
 import { ref, computed, onMounted, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
+import { useSearch } from '../composables/useSearch'
+import SearchInput from '../components/SearchInput.vue'
 import { searchService, type SearchResult, type SearchFilters, type SavedSearch } from '../services/searchService'
 
 // Composables
 const router = useRouter()
 const route = useRoute()
 const { t } = useI18n()
+const { 
+  searchQuery,
+  isSearching,
+  searchResults,
+  totalResults,
+  searchFacets,
+  filters,
+  sortBy,
+  hasSearched,
+  searchTypes,
+  performSearch: performSearchQuery,
+  loadMoreResults,
+  clearFilters,
+  navigateToResult
+} = useSearch()
 
 // Reactive data
-const searchQuery = ref('')
-const isSearching = ref(false)
 const isLoadingMore = ref(false)
-const hasSearched = ref(false)
 const showSavedSearches = ref(false)
-
-const searchResults = ref<SearchResult[]>([])
-const totalResults = ref(0)
-const searchOffset = ref(0)
-const searchLimit = ref(20)
-const sortBy = ref<'relevance' | 'date' | 'title' | 'author'>('relevance')
-
-const filters = ref<SearchFilters>({
-  type: [],
-  category: [],
-  author: [],
-  tags: [],
-  dateRange: {
-    from: '',
-    to: ''
-  }
-})
-
-const searchFacets = ref<Record<string, Array<{ value: string; count: number }>>>({
-  type: [],
-  category: [],
-  author: [],
-  tags: []
-})
-
 const savedSearches = ref<SavedSearch[]>([])
 
-// Computed
-const searchTypes = computed(() => [
-  { value: 'post', label: t('search.types.post'), count: searchFacets.value.type.find(t => t.value === 'post')?.count || 0 },
-  { value: 'user', label: t('search.types.user'), count: searchFacets.value.type.find(t => t.value === 'user')?.count || 0 },
-  { value: 'article', label: t('search.types.article'), count: searchFacets.value.type.find(t => t.value === 'article')?.count || 0 },
-  { value: 'faq', label: t('search.types.faq'), count: searchFacets.value.type.find(t => t.value === 'faq')?.count || 0 }
-])
-
 // Methods
-const performSearch = async () => {
-  if (!searchQuery.value.trim()) return
-
-  isSearching.value = true
-  hasSearched.value = true
-  searchOffset.value = 0
-
-  try {
-    const result = await searchService.search({
-      query: searchQuery.value,
-      filters: filters.value,
-      sortBy: sortBy.value,
-      limit: searchLimit.value,
-      offset: searchOffset.value
-    })
-
-    searchResults.value = result.results
-    totalResults.value = result.totalCount
-    searchFacets.value = result.facets
-  } catch (error) {
-    console.error('Search error:', error)
-  } finally {
-    isSearching.value = false
+const performSearch = async (query?: string) => {
+  if (query) {
+    searchQuery.value = query
   }
+  await performSearchQuery()
 }
 
-const loadMoreResults = async () => {
+const loadMoreResultsHandler = async () => {
   if (isLoadingMore.value) return
 
   isLoadingMore.value = true
-  searchOffset.value += searchLimit.value
-
   try {
-    const result = await searchService.search({
-      query: searchQuery.value,
-      filters: filters.value,
-      sortBy: sortBy.value,
-      limit: searchLimit.value,
-      offset: searchOffset.value
-    })
-
-    searchResults.value = [...searchResults.value, ...result.results]
-  } catch (error) {
-    console.error('Load more error:', error)
+    await loadMoreResults()
   } finally {
     isLoadingMore.value = false
   }
 }
 
-const navigateToResult = (result: SearchResult) => {
-  router.push(result.url)
+const navigateToResultHandler = (result: SearchResult) => {
+  navigateToResult(result)
 }
 
 const saveSearch = async (result: SearchResult) => {
@@ -545,20 +482,8 @@ const deleteSavedSearch = async (id: string) => {
   }
 }
 
-const clearFilters = () => {
-  filters.value = {
-    type: [],
-    category: [],
-    author: [],
-    tags: [],
-    dateRange: {
-      from: '',
-      to: ''
-    }
-  }
-  if (hasSearched.value) {
-    performSearch()
-  }
+const clearFiltersHandler = () => {
+  clearFilters()
 }
 
 const clearSearchHistory = async () => {
@@ -584,8 +509,7 @@ watch(filters, () => {
 onMounted(async () => {
   // Check for query parameter
   if (route.query.q) {
-    searchQuery.value = route.query.q as string
-    performSearch()
+    await performSearch(route.query.q as string)
   }
   
   await loadSavedSearches()

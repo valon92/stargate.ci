@@ -17,7 +17,12 @@
 
         <!-- Search Bar - Desktop -->
         <div class="hidden lg:block flex-1 max-w-md mx-8">
-          <ModernSearch />
+          <SearchInput 
+            placeholder="Search posts, users, articles, FAQs..."
+            size="md"
+            variant="default"
+            @search="handleSearch"
+          />
         </div>
 
         <!-- Desktop Navigation - Optimized -->
@@ -147,7 +152,7 @@ import { RouterLink, useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useLanguagePerformance, useNavigationPerformance } from '../../composables/usePerformance'
 import NotificationCenter from '../NotificationCenter.vue'
-import ModernSearch from '../ModernSearch.vue'
+import SearchInput from '../SearchInput.vue'
 
 const { locale, t } = useI18n()
 const route = useRoute()
@@ -185,6 +190,14 @@ const changeLanguage = () => {
     // Save to localStorage
     localStorage.setItem('selectedLanguage', currentLanguage.value)
   })
+}
+
+// Search handler
+const handleSearch = (query: string) => {
+  if (query.trim()) {
+    // Navigate to search page with query
+    window.location.href = `/search?q=${encodeURIComponent(query)}`
+  }
 }
 
 // Close mobile menu on route change
