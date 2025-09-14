@@ -66,6 +66,21 @@ const router = createRouter({
       name: 'templates',
       component: () => import('../views/TemplatesView.vue'),
     },
+  {
+    path: '/community',
+    name: 'community',
+    component: () => import('../views/CommunityView.vue'),
+  },
+  {
+    path: '/search',
+    name: 'search',
+    component: () => import('../views/SearchView.vue'),
+  },
+    {
+      path: '/profile/:userId?',
+      name: 'profile',
+      component: () => import('../components/UserProfile.vue'),
+    },
     {
       path: '/privacy',
       name: 'privacy',

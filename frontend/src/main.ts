@@ -8,6 +8,7 @@ import App from './App.vue'
 import router from './router'
 import i18n from './i18n'
 import { analyticsService } from './services/analyticsService'
+import { searchService } from './services/searchService'
 
 const app = createApp(App)
 const head = createHead()
@@ -17,7 +18,8 @@ app.use(router)
 app.use(i18n)
 app.use(head)
 
-// Initialize analytics
+// Initialize services
 analyticsService.initialize()
+searchService.initialize()
 
 app.mount('#app')

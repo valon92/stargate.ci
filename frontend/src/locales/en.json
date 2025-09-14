@@ -10,7 +10,8 @@
     "learning": "Learning",
     "insights": "Insights",
     "faq": "FAQ",
-    "contact": "Contact"
+    "contact": "Contact",
+    "search": "Search"
   },
   "home": {
     "title": "Stargate.ci",
@@ -40,9 +41,69 @@
       "computing": {
         "title": "Advanced Computing",
         "description": "High-performance computing solutions"
-      }
     }
   },
+  "search": {
+    "title": "Advanced Search",
+    "subtitle": "Find exactly what you're looking for across all content",
+    "placeholder": "Search posts, users, articles, FAQs...",
+    "search": "Search",
+    "searching": "Searching...",
+    "loading": "Loading...",
+    "loadMore": "Load More",
+    "results": "Results",
+    "found": "Found {count} results",
+    "noResults": "No results found",
+    "tryDifferent": "Try different keywords or filters",
+    "relevance": "relevance",
+    "suggestions": "Suggestions",
+    "recent": "Recent Searches",
+    "filters": "Filters",
+    "filterByType": "Filter by Type",
+    "filterByCategory": "Filter by Category",
+    "filterByAuthor": "Filter by Author",
+    "filterByTags": "Filter by Tags",
+    "filterByDate": "Filter by Date",
+    "clearFilters": "Clear Filters",
+    "sortBy": "Sort by",
+    "sort": {
+      "relevance": "Relevance",
+      "date": "Date",
+      "title": "Title",
+      "author": "Author"
+    },
+    "types": {
+      "post": "Post",
+      "user": "User",
+      "article": "Article",
+      "faq": "FAQ",
+      "template": "Template",
+      "insight": "Insight"
+    },
+    "by": "by",
+    "save": "Save",
+    "savedSearches": "Saved Searches",
+    "clearHistory": "Clear History",
+    "load": "Load",
+    "delete": "Delete",
+    "noSavedSearches": "No saved searches yet",
+    "tips": "Search Tips",
+    "tips": {
+      "basic": "Basic Search",
+      "quotes": "Use quotes for exact phrases",
+      "operators": "Use AND, OR, NOT operators",
+      "wildcards": "Use * for wildcard searches",
+      "advanced": "Advanced Features",
+      "filters": "Use filters to narrow results",
+      "sorting": "Sort by relevance, date, or title",
+      "saved": "Save searches for quick access"
+    },
+    "keyboardHint": "Use keyboard to navigate",
+    "justNow": "Just now",
+    "hoursAgo": "{count} hours ago",
+    "daysAgo": "{count} days ago"
+  }
+},
   "about": {
     "title": "About Stargate",
     "mission": "Our Mission",

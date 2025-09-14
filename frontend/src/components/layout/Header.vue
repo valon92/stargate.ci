@@ -15,8 +15,13 @@
           </RouterLink>
         </div>
 
+        <!-- Search Bar - Desktop -->
+        <div class="hidden lg:block flex-1 max-w-md mx-8">
+          <ModernSearch />
+        </div>
+
         <!-- Desktop Navigation - Optimized -->
-        <div class="hidden lg:block flex-1">
+        <div class="hidden lg:block">
           <div class="flex justify-center">
             <div class="flex items-center space-x-0.5">
               <!-- Primary Navigation -->
@@ -142,6 +147,7 @@ import { RouterLink, useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useLanguagePerformance, useNavigationPerformance } from '../../composables/usePerformance'
 import NotificationCenter from '../NotificationCenter.vue'
+import ModernSearch from '../ModernSearch.vue'
 
 const { locale, t } = useI18n()
 const route = useRoute()
@@ -161,6 +167,7 @@ const secondaryNavigation = computed(() => [
   { name: t('nav.about'), href: '/about' },
   { name: t('nav.services'), href: '/services' },
   { name: t('nav.partners'), href: '/partnership' },
+  { name: 'Community', href: '/community' },
   { name: t('nav.faq'), href: '/faq' },
   { name: t('nav.contact'), href: '/contact' },
 ])
