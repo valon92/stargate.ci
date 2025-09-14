@@ -44,6 +44,17 @@
       <UserDashboard />
     </section>
 
+    <!-- Live Updates Section -->
+    <section class="py-8 bg-gray-800/20">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-8">
+          <h2 class="text-2xl font-bold text-white mb-2">Live Updates</h2>
+          <p class="text-gray-400">Stay connected with real-time platform activity</p>
+        </div>
+        <LiveUpdates />
+      </div>
+    </section>
+
     <!-- Dashboard Features -->
     <section class="py-24 bg-gray-800/30">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -208,6 +219,7 @@ import { RouterLink, useRouter } from 'vue-router'
 import { useHead } from '@vueuse/head'
 import { authService, type AdminUser, type User } from '../services/authService'
 import UserDashboard from '../components/UserDashboard.vue'
+import LiveUpdates from '../components/LiveUpdates.vue'
 
 const router = useRouter()
 

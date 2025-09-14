@@ -57,6 +57,11 @@
 
         <!-- Right Section - Optimized -->
         <div class="flex items-center space-x-2">
+          <!-- Notification Center -->
+          <div class="hidden md:block">
+            <NotificationCenter />
+          </div>
+          
           <!-- CTA Buttons - Compact -->
           <div class="hidden md:flex items-center space-x-2">
             <RouterLink
@@ -136,6 +141,7 @@ import { ref, computed, onMounted, watch } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useLanguagePerformance, useNavigationPerformance } from '../../composables/usePerformance'
+import NotificationCenter from '../NotificationCenter.vue'
 
 const { locale, t } = useI18n()
 const route = useRoute()
