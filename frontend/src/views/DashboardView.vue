@@ -44,6 +44,17 @@
       <UserDashboard />
     </section>
 
+    <!-- Security Settings Section -->
+    <section class="py-8 bg-gray-800/20">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-8">
+          <h2 class="text-2xl font-bold text-white mb-2">Security Settings</h2>
+          <p class="text-gray-400">Manage your account security and authentication preferences</p>
+        </div>
+        <SecuritySettings />
+      </div>
+    </section>
+
     <!-- Live Updates Section -->
     <section class="py-8 bg-gray-800/20">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -220,6 +231,7 @@ import { useHead } from '@vueuse/head'
 import { authService, type AdminUser, type User } from '../services/authService'
 import UserDashboard from '../components/UserDashboard.vue'
 import LiveUpdates from '../components/LiveUpdates.vue'
+import SecuritySettings from '../components/SecuritySettings.vue'
 
 const router = useRouter()
 
