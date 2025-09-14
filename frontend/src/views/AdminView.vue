@@ -73,6 +73,11 @@
         <ContentManagementDashboard />
       </div>
 
+      <!-- Analytics Dashboard -->
+      <div v-if="activeTab === 'analytics'">
+        <AnalyticsDashboard />
+      </div>
+
       <!-- Articles Management -->
       <div v-if="activeTab === 'articles'" class="space-y-6">
         <div class="flex justify-between items-center">
@@ -409,6 +414,7 @@ import { ref, onMounted, onUnmounted } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
 import { authService, type AdminUser } from '../services/authService'
 import ContentManagementDashboard from '../components/ContentManagementDashboard.vue'
+import AnalyticsDashboard from '../components/AnalyticsDashboard.vue'
 
 const router = useRouter()
 
@@ -422,6 +428,7 @@ let sessionTimer: number | null = null
 const activeTab = ref('content')
 const tabs = [
   { id: 'content', name: 'Content Management' },
+  { id: 'analytics', name: 'Analytics' },
   { id: 'articles', name: 'Articles' },
   { id: 'faqs', name: 'FAQs' },
   { id: 'contacts', name: 'Contact Messages' }
