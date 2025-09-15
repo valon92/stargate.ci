@@ -4,7 +4,7 @@
     <div class="relative group">
       <!-- Search Icon -->
       <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-        <svg class="h-5 w-5 text-gray-500 group-focus-within:text-primary-600 transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg class="h-5 w-5 text-gray-400 group-focus-within:text-primary-400 transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
         </svg>
       </div>
@@ -27,7 +27,7 @@
       <div v-if="searchQuery" class="absolute inset-y-0 right-0 pr-3 flex items-center">
         <button
           @click="clearSearch"
-          class="text-gray-500 hover:text-gray-700 focus:outline-none p-1 rounded-full hover:bg-gray-200 transition-colors duration-200"
+          class="text-gray-400 hover:text-white focus:outline-none p-1 rounded-full hover:bg-gray-700/50 transition-colors duration-200"
         >
           <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -197,9 +197,9 @@ const inputClasses = computed(() => {
   }
   
   const variantClasses = {
-    default: 'border border-gray-300 rounded-xl bg-white/90 backdrop-blur-sm placeholder-gray-500 text-gray-900 focus:ring-2 focus:ring-primary-500/30 focus:border-primary-500 hover:bg-white hover:border-primary-400 shadow-sm',
-    minimal: 'border border-gray-200 rounded-lg bg-gray-50/80 placeholder-gray-600 text-gray-900 focus:ring-2 focus:ring-primary-500/30 focus:bg-white focus:border-primary-400 shadow-sm',
-    filled: 'border border-gray-300 rounded-lg bg-gray-100/90 placeholder-gray-600 text-gray-900 focus:ring-2 focus:ring-primary-500/30 focus:border-primary-500 focus:bg-white shadow-md'
+    default: 'border border-gray-600/50 rounded-xl bg-gray-800/90 backdrop-blur-sm placeholder-gray-400 text-white focus:ring-2 focus:ring-primary-500/30 focus:border-primary-500 hover:bg-gray-800 hover:border-primary-400 shadow-sm',
+    minimal: 'border border-gray-600/30 rounded-lg bg-gray-800/80 placeholder-gray-400 text-white focus:ring-2 focus:ring-primary-500/30 focus:bg-gray-800 focus:border-primary-400 shadow-sm',
+    filled: 'border border-gray-600/50 rounded-lg bg-gray-800/90 placeholder-gray-400 text-white focus:ring-2 focus:ring-primary-500/30 focus:border-primary-500 focus:bg-gray-800 shadow-md'
   }
   
   return `${baseClasses} ${sizeClasses[props.size]} ${variantClasses[props.variant]}`
