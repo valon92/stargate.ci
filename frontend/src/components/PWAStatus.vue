@@ -176,8 +176,8 @@ const updateApp = async () => {
 
 const dismissInstallBanner = () => {
   showInstallBanner.value = false
-  // Don't store dismissal permanently - let it show again on next visit
-  // localStorage.setItem('pwa-install-dismissed', 'true')
+  // Don't store dismissal - let it show again on page refresh
+  // sessionStorage.setItem('pwa-install-dismissed', 'true')
 }
 
 const dismissUpdateBanner = () => {
