@@ -62,6 +62,12 @@ const router = createRouter({
       beforeEnter: userGuard,
     },
     {
+      path: '/billing',
+      name: 'billing',
+      component: () => import('../views/BillingView.vue'),
+      beforeEnter: userGuard,
+    },
+    {
       path: '/templates',
       name: 'templates',
       component: () => import('../views/TemplatesView.vue'),

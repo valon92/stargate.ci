@@ -184,6 +184,7 @@ const secondaryNavigation = computed(() => [
   { name: t('nav.services'), href: '/services' },
   { name: t('nav.partners'), href: '/partnership' },
   { name: 'Community', href: '/community' },
+  { name: 'Billing', href: '/billing' },
   { name: t('nav.faq'), href: '/faq' },
   { name: t('nav.contact'), href: '/contact' },
 ])
