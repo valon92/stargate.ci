@@ -1,38 +1,56 @@
 <template>
   <div class="pwa-status">
-    <!-- Install Banner -->
-    <div v-if="showInstallBanner" class="fixed bottom-4 left-4 right-4 z-50">
-      <div class="bg-gray-800 border border-gray-700 rounded-lg p-4 shadow-lg">
-        <div class="flex items-center justify-between">
-          <div class="flex items-center space-x-3">
-            <div class="w-10 h-10 bg-primary-500/20 rounded-lg flex items-center justify-center">
-              <svg class="w-6 h-6 text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
-              </svg>
-            </div>
-            <div>
-              <h3 class="text-white font-medium">Install Stargate.ci</h3>
-              <p class="text-gray-400 text-sm">Get quick access and offline functionality</p>
-            </div>
+    <!-- Install Banner - Compact Version -->
+    <div v-if="showInstallBanner" class="fixed bottom-4 left-4 z-50">
+      <div class="bg-gray-800/90 backdrop-blur-sm border border-gray-700/50 rounded-xl p-3 shadow-xl">
+        <div class="flex items-center space-x-3">
+          <!-- Logo -->
+          <div class="w-8 h-8 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-lg flex items-center justify-center">
+            <span class="text-white font-bold text-sm">S</span>
           </div>
-          <div class="flex space-x-2">
+          
+          <!-- Install Button with Arrow and Tooltip -->
+          <div class="relative group">
             <button
               @click="installApp"
               :disabled="isInstalling"
-              class="bg-primary-500 hover:bg-primary-600 disabled:opacity-50 disabled:cursor-not-allowed text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200"
+              class="flex items-center space-x-2 bg-primary-500/20 hover:bg-primary-500/30 disabled:opacity-50 disabled:cursor-not-allowed text-primary-400 hover:text-primary-300 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 border border-primary-500/30 hover:border-primary-500/50"
             >
-              <span v-if="isInstalling">Installing...</span>
-              <span v-else>Install</span>
+              <span v-if="isInstalling" class="flex items-center space-x-2">
+                <svg class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <span>Installing...</span>
+              </span>
+              <span v-else class="flex items-center space-x-2">
+                <span>Install</span>
+                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                </svg>
+              </span>
             </button>
-            <button
-              @click="dismissInstallBanner"
-              class="text-gray-400 hover:text-white"
-            >
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-              </svg>
-            </button>
+            
+            <!-- Tooltip -->
+            <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-900 text-white text-xs rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-10">
+              <div class="text-center">
+                <div class="font-semibold">Install Stargate.ci</div>
+                <div class="text-gray-300">Get quick access and offline functionality</div>
+              </div>
+              <!-- Tooltip arrow -->
+              <div class="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-900"></div>
+            </div>
           </div>
+          
+          <!-- Dismiss Button -->
+          <button
+            @click="dismissInstallBanner"
+            class="text-gray-400 hover:text-white p-1 rounded-full hover:bg-gray-700/50 transition-colors duration-200"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </button>
         </div>
       </div>
     </div>
