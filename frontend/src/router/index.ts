@@ -74,6 +74,12 @@ const router = createRouter({
       beforeEnter: adminGuard,
     },
     {
+      path: '/regional-content',
+      name: 'regional-content',
+      component: () => import('../views/RegionalContentView.vue'),
+      beforeEnter: adminGuard,
+    },
+    {
       path: '/templates',
       name: 'templates',
       component: () => import('../views/TemplatesView.vue'),

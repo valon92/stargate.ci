@@ -83,6 +83,11 @@
         <UserManagementDashboard />
       </div>
 
+      <!-- Regional Content -->
+      <div v-if="activeTab === 'regional-content'">
+        <RegionalContentDashboard />
+      </div>
+
       <!-- Articles Management -->
       <div v-if="activeTab === 'articles'" class="space-y-6">
         <div class="flex justify-between items-center">
@@ -421,6 +426,7 @@ import { authService, type AdminUser } from '../services/authService'
 import ContentManagementDashboard from '../components/ContentManagementDashboard.vue'
 import AnalyticsDashboard from '../components/AnalyticsDashboard.vue'
 import UserManagementDashboard from '../components/UserManagementDashboard.vue'
+import RegionalContentDashboard from '../components/RegionalContentDashboard.vue'
 
 const router = useRouter()
 
@@ -436,6 +442,7 @@ const tabs = [
   { id: 'content', name: 'Content Management' },
   { id: 'analytics', name: 'Analytics' },
   { id: 'user-management', name: 'User Management' },
+  { id: 'regional-content', name: 'Regional Content' },
   { id: 'articles', name: 'Articles' },
   { id: 'faqs', name: 'FAQs' },
   { id: 'contacts', name: 'Contact Messages' }
