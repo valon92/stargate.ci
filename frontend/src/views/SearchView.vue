@@ -163,25 +163,32 @@
         <!-- Main Content -->
         <div class="lg:col-span-3 relative z-20">
           <!-- Search Input -->
-          <div class="bg-white rounded-lg shadow p-6 mb-6">
+          <div class="bg-gradient-to-r from-primary-50 to-secondary-50 rounded-xl shadow-lg border border-primary-200/50 p-6 mb-6">
+            <div class="text-center mb-4">
+              <h1 class="text-2xl font-bold text-gray-900 mb-2">{{ t('search.title') }}</h1>
+              <p class="text-gray-600">{{ t('search.subtitle') }}</p>
+            </div>
             <SearchInput 
               :placeholder="t('search.placeholder')"
               size="lg"
-              variant="default"
+              variant="filled"
               @search="performSearch"
             />
           </div>
 
           <!-- Search Results -->
-          <div v-if="hasSearched" class="bg-white rounded-lg shadow relative z-20">
+          <div v-if="hasSearched" class="bg-white rounded-xl shadow-lg border border-gray-200/50 relative z-20">
             <!-- Results Header -->
-            <div class="px-6 py-4 border-b border-gray-200">
+            <div class="px-6 py-5 border-b border-gray-200 bg-gradient-to-r from-gray-50 to-gray-100/50 rounded-t-xl">
               <div class="flex items-center justify-between">
                 <div>
-                  <h2 class="text-lg font-medium text-gray-900">
+                  <h2 class="text-xl font-bold text-gray-900 flex items-center">
+                    <svg class="h-6 w-6 text-primary-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
                     {{ t('search.results') }}
                   </h2>
-                  <p class="text-sm text-gray-600">
+                  <p class="text-sm text-gray-600 mt-1">
                     {{ t('search.found', { count: totalResults }) }}
                   </p>
                 </div>
@@ -209,23 +216,23 @@
             </div>
 
             <!-- Results List -->
-            <div v-else-if="searchResults.length > 0" class="divide-y divide-gray-200">
+            <div v-else-if="searchResults.length > 0" class="divide-y divide-gray-100">
               <div
                 v-for="result in searchResults"
                 :key="result.id"
-                class="px-6 py-4 hover:bg-gray-50 cursor-pointer"
+                class="px-6 py-5 hover:bg-gradient-to-r hover:from-primary-50/30 hover:to-secondary-50/30 cursor-pointer transition-all duration-200 group"
                 @click="navigateToResultHandler(result)"
               >
                 <div class="flex items-start justify-between">
                   <div class="flex-1">
-                    <div class="flex items-center mb-2">
-                      <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary-100 text-primary-800 mr-2">
+                    <div class="flex items-center mb-3">
+                      <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-gradient-to-r from-primary-100 to-primary-200 text-primary-800 mr-3 shadow-sm">
                         {{ t(`search.types.${result.type}`) }}
                       </span>
-                      <h3 class="text-lg font-medium text-gray-900">{{ result.title }}</h3>
+                      <h3 class="text-lg font-bold text-gray-900 group-hover:text-primary-700 transition-colors">{{ result.title }}</h3>
                     </div>
                     
-                    <p class="text-gray-600 text-sm mb-3">{{ result.excerpt }}</p>
+                    <p class="text-gray-600 text-sm mb-4 leading-relaxed">{{ result.excerpt }}</p>
                     
                     <div class="flex items-center text-xs text-gray-500 space-x-4">
                       <span v-if="result.author">
@@ -275,27 +282,44 @@
             </div>
 
             <!-- No Results -->
-            <div v-else class="text-center py-12">
-              <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
-              <h3 class="mt-2 text-sm font-medium text-gray-900">{{ t('search.noResults') }}</h3>
-              <p class="mt-1 text-sm text-gray-500">{{ t('search.tryDifferent') }}</p>
+            <div v-else class="text-center py-16">
+              <div class="mx-auto w-20 h-20 bg-gradient-to-r from-gray-100 to-gray-200 rounded-full flex items-center justify-center mb-4">
+                <svg class="h-10 w-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+              </div>
+              <h3 class="text-lg font-semibold text-gray-900 mb-2">{{ t('search.noResults') }}</h3>
+              <p class="text-gray-600 mb-4">{{ t('search.tryDifferent') }}</p>
+              <div class="text-sm text-gray-500">
+                <p>💡 Try different keywords or check your spelling</p>
+              </div>
             </div>
 
             <!-- Pagination -->
-            <div v-if="totalResults > searchResults.length" class="px-6 py-4 border-t border-gray-200">
+            <div v-if="totalResults > searchResults.length" class="px-6 py-5 border-t border-gray-200 bg-gradient-to-r from-gray-50 to-gray-100/50 rounded-b-xl">
               <div class="flex items-center justify-between">
                 <button
                   @click="loadMoreResultsHandler"
                   :disabled="isLoadingMore"
-                  class="px-4 py-2 bg-primary-500 text-white rounded-md hover:bg-primary-600 disabled:opacity-50"
+                  class="px-6 py-3 bg-gradient-to-r from-primary-500 to-primary-600 text-white rounded-lg hover:from-primary-600 hover:to-primary-700 disabled:opacity-50 shadow-md hover:shadow-lg transition-all duration-200 font-medium"
                 >
-                  {{ isLoadingMore ? t('search.loading') : t('search.loadMore') }}
+                  <span v-if="isLoadingMore" class="flex items-center">
+                    <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
+                      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    {{ t('search.loading') }}
+                  </span>
+                  <span v-else class="flex items-center">
+                    {{ t('search.loadMore') }}
+                    <svg class="ml-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </span>
                 </button>
                 
-                <div class="text-sm text-gray-600">
-                  {{ searchResults.length }} / {{ totalResults }} {{ t('search.results') }}
+                <div class="text-sm text-gray-600 bg-white px-3 py-2 rounded-lg shadow-sm">
+                  <span class="font-medium">{{ searchResults.length }}</span> / <span class="font-medium">{{ totalResults }}</span> {{ t('search.results') }}
                 </div>
               </div>
             </div>
