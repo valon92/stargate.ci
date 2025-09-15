@@ -1,25 +1,25 @@
 <template>
-  <div class="min-h-screen bg-gray-50 relative z-20">
+  <div class="min-h-screen bg-gray-900 relative z-20">
     <!-- Header -->
-    <div class="bg-white shadow relative z-20">
+    <div class="bg-gray-800 shadow relative z-20">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <div class="flex items-center justify-between">
           <div>
-            <h1 class="text-3xl font-bold text-gray-900">{{ t('search.title') }}</h1>
-            <p class="mt-2 text-gray-600">{{ t('search.subtitle') }}</p>
+            <h1 class="text-3xl font-bold text-white">{{ t('search.title') }}</h1>
+            <p class="mt-2 text-gray-300">{{ t('search.subtitle') }}</p>
           </div>
           
           <!-- Quick Actions -->
           <div class="flex space-x-3">
             <button
               @click="showSavedSearches = !showSavedSearches"
-              class="px-4 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors"
+              class="px-4 py-2 bg-gray-700 text-gray-200 rounded-md hover:bg-gray-600 transition-colors"
             >
               {{ t('search.savedSearches') }}
             </button>
             <button
               @click="clearSearchHistory"
-              class="px-4 py-2 bg-red-100 text-red-700 rounded-md hover:bg-red-200 transition-colors"
+              class="px-4 py-2 bg-red-600/20 text-red-400 rounded-md hover:bg-red-600/30 transition-colors"
             >
               {{ t('search.clearHistory') }}
             </button>
@@ -32,12 +32,12 @@
       <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
         <!-- Search Filters Sidebar -->
         <div class="lg:col-span-1">
-          <div class="bg-white rounded-lg shadow p-6 sticky top-8 z-30">
-            <h3 class="text-lg font-medium text-gray-900 mb-4">{{ t('search.filters') }}</h3>
+          <div class="bg-gray-800 rounded-lg shadow p-6 sticky top-8 z-30">
+            <h3 class="text-lg font-medium text-white mb-4">{{ t('search.filters') }}</h3>
             
             <!-- Search Type Filter -->
             <div class="mb-6">
-              <label class="block text-sm font-medium text-gray-700 mb-2">
+              <label class="block text-sm font-medium text-gray-300 mb-2">
                 {{ t('search.filterByType') }}
               </label>
               <div class="space-y-2">
@@ -52,7 +52,7 @@
                     type="checkbox"
                     class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
                   />
-                  <span class="ml-2 text-sm text-gray-700">
+                  <span class="ml-2 text-sm text-gray-300">
                     {{ type.label }} ({{ type.count }})
                   </span>
                 </label>
@@ -61,7 +61,7 @@
 
             <!-- Category Filter -->
             <div class="mb-6">
-              <label class="block text-sm font-medium text-gray-700 mb-2">
+              <label class="block text-sm font-medium text-gray-300 mb-2">
                 {{ t('search.filterByCategory') }}
               </label>
               <div class="space-y-2 max-h-40 overflow-y-auto">
@@ -76,7 +76,7 @@
                     type="checkbox"
                     class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
                   />
-                  <span class="ml-2 text-sm text-gray-700">
+                  <span class="ml-2 text-sm text-gray-300">
                     {{ category.value }} ({{ category.count }})
                   </span>
                 </label>
@@ -85,7 +85,7 @@
 
             <!-- Author Filter -->
             <div class="mb-6">
-              <label class="block text-sm font-medium text-gray-700 mb-2">
+              <label class="block text-sm font-medium text-gray-300 mb-2">
                 {{ t('search.filterByAuthor') }}
               </label>
               <div class="space-y-2 max-h-40 overflow-y-auto">
@@ -100,7 +100,7 @@
                     type="checkbox"
                     class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
                   />
-                  <span class="ml-2 text-sm text-gray-700">
+                  <span class="ml-2 text-sm text-gray-300">
                     {{ author.value }} ({{ author.count }})
                   </span>
                 </label>
@@ -109,7 +109,7 @@
 
             <!-- Tags Filter -->
             <div class="mb-6">
-              <label class="block text-sm font-medium text-gray-700 mb-2">
+              <label class="block text-sm font-medium text-gray-300 mb-2">
                 {{ t('search.filterByTags') }}
               </label>
               <div class="space-y-2 max-h-40 overflow-y-auto">
@@ -124,7 +124,7 @@
                     type="checkbox"
                     class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
                   />
-                  <span class="ml-2 text-sm text-gray-700">
+                  <span class="ml-2 text-sm text-gray-300">
                     #{{ tag.value }} ({{ tag.count }})
                   </span>
                 </label>
@@ -133,19 +133,19 @@
 
             <!-- Date Range Filter -->
             <div class="mb-6">
-              <label class="block text-sm font-medium text-gray-700 mb-2">
+              <label class="block text-sm font-medium text-gray-300 mb-2">
                 {{ t('search.filterByDate') }}
               </label>
               <div class="space-y-2">
                 <input
                   v-model="filters.dateRange!.from"
                   type="date"
-                  class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
+                  class="block w-full border-gray-600 bg-gray-700 text-white rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
                 />
                 <input
                   v-model="filters.dateRange!.to"
                   type="date"
-                  class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
+                  class="block w-full border-gray-600 bg-gray-700 text-white rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
                 />
               </div>
             </div>
@@ -153,7 +153,7 @@
             <!-- Clear Filters -->
             <button
               @click="clearFiltersHandler"
-              class="w-full px-4 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors"
+              class="w-full px-4 py-2 bg-gray-700 text-gray-200 rounded-md hover:bg-gray-600 transition-colors"
             >
               {{ t('search.clearFilters') }}
             </button>
@@ -163,10 +163,10 @@
         <!-- Main Content -->
         <div class="lg:col-span-3 relative z-20">
           <!-- Search Input -->
-          <div class="bg-gradient-to-r from-primary-50 to-secondary-50 rounded-xl shadow-lg border border-primary-200/50 p-6 mb-6">
+          <div class="bg-gradient-to-r from-gray-800 to-gray-700 rounded-xl shadow-lg border border-gray-600/50 p-6 mb-6">
             <div class="text-center mb-4">
-              <h1 class="text-2xl font-bold text-gray-900 mb-2">{{ t('search.title') }}</h1>
-              <p class="text-gray-600">{{ t('search.subtitle') }}</p>
+              <h1 class="text-2xl font-bold text-white mb-2">{{ t('search.title') }}</h1>
+              <p class="text-gray-300">{{ t('search.subtitle') }}</p>
             </div>
             <SearchInput 
               :placeholder="t('search.placeholder')"
@@ -177,28 +177,28 @@
           </div>
 
           <!-- Search Results -->
-          <div v-if="hasSearched" class="bg-white rounded-xl shadow-lg border border-gray-200/50 relative z-20">
+          <div v-if="hasSearched" class="bg-gray-800 rounded-xl shadow-lg border border-gray-600/50 relative z-20">
             <!-- Results Header -->
-            <div class="px-6 py-5 border-b border-gray-200 bg-gradient-to-r from-gray-50 to-gray-100/50 rounded-t-xl">
+            <div class="px-6 py-5 border-b border-gray-600 bg-gradient-to-r from-gray-700 to-gray-600/50 rounded-t-xl">
               <div class="flex items-center justify-between">
                 <div>
-                  <h2 class="text-xl font-bold text-gray-900 flex items-center">
-                    <svg class="h-6 w-6 text-primary-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <h2 class="text-xl font-bold text-white flex items-center">
+                    <svg class="h-6 w-6 text-primary-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                     </svg>
                     {{ t('search.results') }}
                   </h2>
-                  <p class="text-sm text-gray-600 mt-1">
+                  <p class="text-sm text-gray-300 mt-1">
                     {{ t('search.found', { count: totalResults }) }}
                   </p>
                 </div>
                 
                 <!-- Sort Options -->
                 <div class="flex items-center space-x-4">
-                  <label class="text-sm text-gray-700">{{ t('search.sortBy') }}:</label>
+                  <label class="text-sm text-gray-300">{{ t('search.sortBy') }}:</label>
                   <select
                     v-model="sortBy"
-                    class="border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
+                    class="border-gray-600 bg-gray-700 text-white rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
                   >
                     <option value="relevance">{{ t('search.sort.relevance') }}</option>
                     <option value="date">{{ t('search.sort.date') }}</option>
@@ -212,29 +212,29 @@
             <!-- Loading State -->
             <div v-if="isSearching" class="flex items-center justify-center py-12">
               <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500"></div>
-              <span class="ml-2 text-gray-600">{{ t('search.searching') }}</span>
+              <span class="ml-2 text-gray-300">{{ t('search.searching') }}</span>
             </div>
 
             <!-- Results List -->
-            <div v-else-if="searchResults.length > 0" class="divide-y divide-gray-100">
+            <div v-else-if="searchResults.length > 0" class="divide-y divide-gray-600">
               <div
                 v-for="result in searchResults"
                 :key="result.id"
-                class="px-6 py-5 hover:bg-gradient-to-r hover:from-primary-50/30 hover:to-secondary-50/30 cursor-pointer transition-all duration-200 group"
+                class="px-6 py-5 hover:bg-gradient-to-r hover:from-gray-700/30 hover:to-gray-600/30 cursor-pointer transition-all duration-200 group"
                 @click="navigateToResultHandler(result)"
               >
                 <div class="flex items-start justify-between">
                   <div class="flex-1">
                     <div class="flex items-center mb-3">
-                      <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-gradient-to-r from-primary-100 to-primary-200 text-primary-800 mr-3 shadow-sm">
+                      <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-gradient-to-r from-primary-500/20 to-primary-600/20 text-primary-300 mr-3 shadow-sm">
                         {{ t(`search.types.${result.type}`) }}
                       </span>
-                      <h3 class="text-lg font-bold text-gray-900 group-hover:text-primary-700 transition-colors">{{ result.title }}</h3>
+                      <h3 class="text-lg font-bold text-white group-hover:text-primary-400 transition-colors">{{ result.title }}</h3>
                     </div>
                     
-                    <p class="text-gray-600 text-sm mb-4 leading-relaxed">{{ result.excerpt }}</p>
+                    <p class="text-gray-300 text-sm mb-4 leading-relaxed">{{ result.excerpt }}</p>
                     
-                    <div class="flex items-center text-xs text-gray-500 space-x-4">
+                    <div class="flex items-center text-xs text-gray-400 space-x-4">
                       <span v-if="result.author">
                         <svg class="inline h-3 w-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
                           <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
@@ -259,7 +259,7 @@
                       <span
                         v-for="tag in result.tags.slice(0, 5)"
                         :key="tag"
-                        class="inline-block bg-gray-100 text-gray-800 text-xs px-2 py-1 rounded mr-1 mb-1"
+                        class="inline-block bg-gray-700 text-gray-300 text-xs px-2 py-1 rounded mr-1 mb-1"
                       >
                         #{{ tag }}
                       </span>
@@ -272,7 +272,7 @@
                     </div>
                     <button
                       @click.stop="saveSearch(result)"
-                      class="text-xs text-primary-600 hover:text-primary-800"
+                      class="text-xs text-primary-400 hover:text-primary-300"
                     >
                       {{ t('search.save') }}
                     </button>
@@ -283,20 +283,20 @@
 
             <!-- No Results -->
             <div v-else class="text-center py-16">
-              <div class="mx-auto w-20 h-20 bg-gradient-to-r from-gray-100 to-gray-200 rounded-full flex items-center justify-center mb-4">
+              <div class="mx-auto w-20 h-20 bg-gradient-to-r from-gray-700 to-gray-600 rounded-full flex items-center justify-center mb-4">
                 <svg class="h-10 w-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
               </div>
-              <h3 class="text-lg font-semibold text-gray-900 mb-2">{{ t('search.noResults') }}</h3>
-              <p class="text-gray-600 mb-4">{{ t('search.tryDifferent') }}</p>
-              <div class="text-sm text-gray-500">
+              <h3 class="text-lg font-semibold text-white mb-2">{{ t('search.noResults') }}</h3>
+              <p class="text-gray-300 mb-4">{{ t('search.tryDifferent') }}</p>
+              <div class="text-sm text-gray-400">
                 <p>💡 Try different keywords or check your spelling</p>
               </div>
             </div>
 
             <!-- Pagination -->
-            <div v-if="totalResults > searchResults.length" class="px-6 py-5 border-t border-gray-200 bg-gradient-to-r from-gray-50 to-gray-100/50 rounded-b-xl">
+            <div v-if="totalResults > searchResults.length" class="px-6 py-5 border-t border-gray-600 bg-gradient-to-r from-gray-700 to-gray-600/50 rounded-b-xl">
               <div class="flex items-center justify-between">
                 <button
                   @click="loadMoreResultsHandler"
@@ -318,7 +318,7 @@
                   </span>
                 </button>
                 
-                <div class="text-sm text-gray-600 bg-white px-3 py-2 rounded-lg shadow-sm">
+                <div class="text-sm text-gray-300 bg-gray-700 px-3 py-2 rounded-lg shadow-sm">
                   <span class="font-medium">{{ searchResults.length }}</span> / <span class="font-medium">{{ totalResults }}</span> {{ t('search.results') }}
                 </div>
               </div>
@@ -326,20 +326,20 @@
           </div>
 
           <!-- Search Tips -->
-          <div v-else class="bg-white rounded-lg shadow p-6">
-            <h3 class="text-lg font-medium text-gray-900 mb-4">{{ t('search.tips') }}</h3>
+          <div v-else class="bg-gray-800 rounded-lg shadow p-6">
+            <h3 class="text-lg font-medium text-white mb-4">{{ t('search.tips') }}</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div class="space-y-2">
-                <h4 class="font-medium text-gray-700">{{ t('search.tips.basic') }}</h4>
-                <ul class="text-sm text-gray-600 space-y-1">
+                <h4 class="font-medium text-gray-300">{{ t('search.tips.basic') }}</h4>
+                <ul class="text-sm text-gray-400 space-y-1">
                   <li>• {{ t('search.tips.quotes') }}</li>
                   <li>• {{ t('search.tips.operators') }}</li>
                   <li>• {{ t('search.tips.wildcards') }}</li>
                 </ul>
               </div>
               <div class="space-y-2">
-                <h4 class="font-medium text-gray-700">{{ t('search.tips.advanced') }}</h4>
-                <ul class="text-sm text-gray-600 space-y-1">
+                <h4 class="font-medium text-gray-300">{{ t('search.tips.advanced') }}</h4>
+                <ul class="text-sm text-gray-400 space-y-1">
                   <li>• {{ t('search.tips.filters') }}</li>
                   <li>• {{ t('search.tips.sorting') }}</li>
                   <li>• {{ t('search.tips.saved') }}</li>
@@ -360,13 +360,13 @@
       <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
         <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
         
-        <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-          <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+        <div class="inline-block align-bottom bg-gray-800 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+          <div class="bg-gray-800 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
             <div class="flex items-center justify-between mb-4">
-              <h3 class="text-lg font-medium text-gray-900">{{ t('search.savedSearches') }}</h3>
+              <h3 class="text-lg font-medium text-white">{{ t('search.savedSearches') }}</h3>
               <button
                 @click="showSavedSearches = false"
-                class="text-gray-400 hover:text-gray-600"
+                class="text-gray-400 hover:text-gray-200"
               >
                 <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -378,22 +378,22 @@
               <div
                 v-for="savedSearch in savedSearches"
                 :key="savedSearch.id"
-                class="flex items-center justify-between p-3 border border-gray-200 rounded-md"
+                class="flex items-center justify-between p-3 border border-gray-600 rounded-md"
               >
                 <div>
-                  <h4 class="font-medium text-gray-900">{{ savedSearch.name }}</h4>
-                  <p class="text-sm text-gray-600">{{ savedSearch.query }}</p>
+                  <h4 class="font-medium text-white">{{ savedSearch.name }}</h4>
+                  <p class="text-sm text-gray-300">{{ savedSearch.query }}</p>
                 </div>
                 <div class="flex space-x-2">
                   <button
                     @click="loadSavedSearch(savedSearch)"
-                    class="text-primary-600 hover:text-primary-800 text-sm"
+                    class="text-primary-400 hover:text-primary-300 text-sm"
                   >
                     {{ t('search.load') }}
                   </button>
                   <button
                     @click="deleteSavedSearch(savedSearch.id)"
-                    class="text-red-600 hover:text-red-800 text-sm"
+                    class="text-red-400 hover:text-red-300 text-sm"
                   >
                     {{ t('search.delete') }}
                   </button>
@@ -402,7 +402,7 @@
             </div>
             
             <div v-else class="text-center py-4">
-              <p class="text-gray-500">{{ t('search.noSavedSearches') }}</p>
+              <p class="text-gray-400">{{ t('search.noSavedSearches') }}</p>
             </div>
           </div>
         </div>
