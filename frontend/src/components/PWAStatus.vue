@@ -176,8 +176,8 @@ const updateApp = async () => {
 
 const dismissInstallBanner = () => {
   showInstallBanner.value = false
-  // Store dismissal in localStorage
-  localStorage.setItem('pwa-install-dismissed', 'true')
+  // Don't store dismissal permanently - let it show again on next visit
+  // localStorage.setItem('pwa-install-dismissed', 'true')
 }
 
 const dismissUpdateBanner = () => {
@@ -187,9 +187,8 @@ const dismissUpdateBanner = () => {
 const updateStatus = () => {
   pwaStatus.value = pwaService.getStatus()
   
-  // Show install banner if installable and not dismissed
-  const installDismissed = localStorage.getItem('pwa-install-dismissed')
-  if (pwaStatus.value.isInstallable && !pwaStatus.value.isInstalled && !installDismissed) {
+  // Show install banner if installable and not installed
+  if (pwaStatus.value.isInstallable && !pwaStatus.value.isInstalled) {
     showInstallBanner.value = true
   }
   
