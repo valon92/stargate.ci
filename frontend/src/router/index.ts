@@ -68,6 +68,12 @@ const router = createRouter({
       beforeEnter: userGuard,
     },
     {
+      path: '/user-management',
+      name: 'user-management',
+      component: () => import('../views/UserManagementView.vue'),
+      beforeEnter: adminGuard,
+    },
+    {
       path: '/templates',
       name: 'templates',
       component: () => import('../views/TemplatesView.vue'),
