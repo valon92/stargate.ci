@@ -110,7 +110,28 @@ class PWAService {
 
   // Check if app is installable
   isInstallable(): boolean {
-    return this.installPrompt !== null;
+    // Check if we have the install prompt
+    if (this.installPrompt !== null) {
+      return true;
+    }
+    
+    // Additional checks for mobile devices
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    const isAndroid = /Android/.test(navigator.userAgent);
+    
+    // For iOS, check if it's not already installed and not in standalone mode
+    if (isIOS) {
+      return !this.isInstalled() && !(window.navigator as any).standalone;
+    }
+    
+    // For Android, check if it's not already installed
+    if (isAndroid) {
+      return !this.isInstalled();
+    }
+    
+    // For other devices, check if service worker is registered and not installed
+    return !this.isInstalled() && this.swRegistration !== null;
   }
 
   // Check if app is installed

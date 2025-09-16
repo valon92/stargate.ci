@@ -152,6 +152,21 @@ const installApp = async () => {
     const success = await pwaService.showInstallPrompt()
     if (success) {
       showInstallBanner.value = false
+    } else {
+      // For mobile devices, show instructions
+      const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent)
+      const isAndroid = /Android/.test(navigator.userAgent)
+      
+      if (isMobile) {
+        if (isIOS) {
+          alert('To install this app on iOS:\n1. Tap the Share button\n2. Scroll down and tap "Add to Home Screen"\n3. Tap "Add"')
+        } else if (isAndroid) {
+          alert('To install this app on Android:\n1. Tap the menu button (⋮)\n2. Tap "Add to Home screen" or "Install app"\n3. Tap "Add" or "Install"')
+        } else {
+          alert('To install this app:\n1. Look for the install option in your browser menu\n2. Or add this page to your home screen')
+        }
+      }
     }
   } catch (error) {
     console.error('Install failed:', error)
@@ -188,7 +203,11 @@ const updateStatus = () => {
   pwaStatus.value = pwaService.getStatus()
   
   // Show install banner if installable and not installed
-  if (pwaStatus.value.isInstallable && !pwaStatus.value.isInstalled) {
+  // Also check for mobile devices specifically
+  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+  const shouldShowInstall = pwaStatus.value.isInstallable && !pwaStatus.value.isInstalled
+  
+  if (shouldShowInstall || (isMobile && !pwaStatus.value.isInstalled)) {
     showInstallBanner.value = true
   }
   
@@ -235,6 +254,14 @@ onMounted(async () => {
   window.addEventListener('pwa-installed', handleInstalled)
   window.addEventListener('pwa-online-status', handleOnlineStatus as EventListener)
   window.addEventListener('pwa-update-available', handleUpdateAvailable)
+  
+  // For mobile devices, show install banner after a delay
+  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+  if (isMobile && !pwaStatus.value.isInstalled) {
+    setTimeout(() => {
+      updateStatus()
+    }, 3000) // Show after 3 seconds
+  }
   
   // Update status periodically
   const statusInterval = setInterval(updateStatus, 5000)
