@@ -80,6 +80,12 @@ const router = createRouter({
       beforeEnter: adminGuard,
     },
     {
+      path: '/mobile-app',
+      name: 'mobile-app',
+      component: () => import('../views/MobileAppView.vue'),
+      beforeEnter: adminGuard,
+    },
+    {
       path: '/templates',
       name: 'templates',
       component: () => import('../views/TemplatesView.vue'),

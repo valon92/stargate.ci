@@ -30,6 +30,10 @@
             <option value="es">🇪🇸 ES</option>
             <option value="it">🇮🇹 IT</option>
             <option value="ar">🇸🇦 AR</option>
+            <option value="pt">🇵🇹 PT</option>
+            <option value="ru">🇷🇺 RU</option>
+            <option value="ja">🇯🇵 JA</option>
+            <option value="zh">🇨🇳 ZH</option>
           </select>
         </div>
       </div>

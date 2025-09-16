@@ -5,6 +5,10 @@ import de from './locales/de.json'
 import es from './locales/es.json'
 import it from './locales/it.json'
 import ar from './locales/ar.json'
+import pt from './locales/pt.json'
+import ru from './locales/ru.json'
+import ja from './locales/ja.json'
+import zh from './locales/zh.json'
 
 const messages = {
   en,
@@ -12,7 +16,11 @@ const messages = {
   de,
   es,
   it,
-  ar
+  ar,
+  pt,
+  ru,
+  ja,
+  zh
 }
 
 const i18n = createI18n({
