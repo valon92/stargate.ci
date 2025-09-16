@@ -88,10 +88,15 @@
         <RegionalContentDashboard />
       </div>
 
-      <!-- Mobile App -->
-      <div v-if="activeTab === 'mobile-app'">
-        <MobileAppDashboard />
-      </div>
+        <!-- Mobile App -->
+        <div v-if="activeTab === 'mobile-app'">
+          <MobileAppDashboard />
+        </div>
+
+        <!-- External Integrations -->
+        <div v-if="activeTab === 'external-integrations'">
+          <IntegrationDashboard />
+        </div>
 
       <!-- Advanced Content -->
       <div v-if="activeTab === 'advanced-content'">
@@ -438,6 +443,7 @@ import AnalyticsDashboard from '../components/AnalyticsDashboard.vue'
 import UserManagementDashboard from '../components/UserManagementDashboard.vue'
 import RegionalContentDashboard from '../components/RegionalContentDashboard.vue'
 import MobileAppDashboard from '../components/MobileAppDashboard.vue'
+import IntegrationDashboard from '../components/IntegrationDashboard.vue'
 import AdvancedContentDashboard from '../components/AdvancedContentDashboard.vue'
 
 const router = useRouter()
@@ -456,6 +462,7 @@ const tabs = [
   { id: 'user-management', name: 'User Management' },
   { id: 'regional-content', name: 'Regional Content' },
   { id: 'mobile-app', name: 'Mobile App' },
+  { id: 'external-integrations', name: 'External Integrations' },
   { id: 'advanced-content', name: 'Advanced Content' },
   { id: 'articles', name: 'Articles' },
   { id: 'faqs', name: 'FAQs' },
