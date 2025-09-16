@@ -92,6 +92,12 @@ const router = createRouter({
       beforeEnter: adminGuard,
     },
     {
+      path: '/advanced-performance',
+      name: 'advanced-performance',
+      component: () => import('../views/AdvancedPerformanceView.vue'),
+      beforeEnter: adminGuard,
+    },
+    {
       path: '/advanced-content',
       name: 'advanced-content',
       component: () => import('../views/AdvancedContentView.vue'),

@@ -98,6 +98,11 @@
           <IntegrationDashboard />
         </div>
 
+        <!-- Advanced Performance -->
+        <div v-if="activeTab === 'advanced-performance'">
+          <PerformanceDashboard />
+        </div>
+
       <!-- Advanced Content -->
       <div v-if="activeTab === 'advanced-content'">
         <AdvancedContentDashboard />
@@ -444,6 +449,7 @@ import UserManagementDashboard from '../components/UserManagementDashboard.vue'
 import RegionalContentDashboard from '../components/RegionalContentDashboard.vue'
 import MobileAppDashboard from '../components/MobileAppDashboard.vue'
 import IntegrationDashboard from '../components/IntegrationDashboard.vue'
+import PerformanceDashboard from '../components/PerformanceDashboard.vue'
 import AdvancedContentDashboard from '../components/AdvancedContentDashboard.vue'
 
 const router = useRouter()
@@ -463,6 +469,7 @@ const tabs = [
   { id: 'regional-content', name: 'Regional Content' },
   { id: 'mobile-app', name: 'Mobile App' },
   { id: 'external-integrations', name: 'External Integrations' },
+  { id: 'advanced-performance', name: 'Advanced Performance' },
   { id: 'advanced-content', name: 'Advanced Content' },
   { id: 'articles', name: 'Articles' },
   { id: 'faqs', name: 'FAQs' },
