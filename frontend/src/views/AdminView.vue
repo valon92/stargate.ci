@@ -93,6 +93,11 @@
         <MobileAppDashboard />
       </div>
 
+      <!-- Advanced Content -->
+      <div v-if="activeTab === 'advanced-content'">
+        <AdvancedContentDashboard />
+      </div>
+
       <!-- Articles Management -->
       <div v-if="activeTab === 'articles'" class="space-y-6">
         <div class="flex justify-between items-center">
@@ -433,6 +438,7 @@ import AnalyticsDashboard from '../components/AnalyticsDashboard.vue'
 import UserManagementDashboard from '../components/UserManagementDashboard.vue'
 import RegionalContentDashboard from '../components/RegionalContentDashboard.vue'
 import MobileAppDashboard from '../components/MobileAppDashboard.vue'
+import AdvancedContentDashboard from '../components/AdvancedContentDashboard.vue'
 
 const router = useRouter()
 
@@ -450,6 +456,7 @@ const tabs = [
   { id: 'user-management', name: 'User Management' },
   { id: 'regional-content', name: 'Regional Content' },
   { id: 'mobile-app', name: 'Mobile App' },
+  { id: 'advanced-content', name: 'Advanced Content' },
   { id: 'articles', name: 'Articles' },
   { id: 'faqs', name: 'FAQs' },
   { id: 'contacts', name: 'Contact Messages' }

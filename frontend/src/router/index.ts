@@ -86,6 +86,12 @@ const router = createRouter({
       beforeEnter: adminGuard,
     },
     {
+      path: '/advanced-content',
+      name: 'advanced-content',
+      component: () => import('../views/AdvancedContentView.vue'),
+      beforeEnter: adminGuard,
+    },
+    {
       path: '/templates',
       name: 'templates',
       component: () => import('../views/TemplatesView.vue'),
