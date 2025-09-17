@@ -59,6 +59,8 @@ const navigationItems = computed(() => [
   { name: t('nav.assessment'), href: '/assessment' },
   { name: t('nav.learning'), href: '/learning' },
   { name: t('nav.insights'), href: '/insights' },
+  { name: 'Community', href: '/community' },
+  { name: 'Billing', href: '/billing' },
 ])
 
 // Optimized language switching
