@@ -10,7 +10,8 @@
             :to="item.href"
             class="text-gray-400 hover:text-white px-2 py-1 rounded text-xs font-medium transition-colors duration-150 hover:bg-gray-800/40"
             :class="{ 
-              'text-white bg-primary-500/20': $route.path === item.href 
+              'text-white bg-primary-500/20': $route.path === item.href,
+              'hidden md:block': item.name === 'Community' || item.name === 'Billing'
             }"
           >
             {{ item.name }}
@@ -59,6 +60,8 @@ const navigationItems = computed(() => [
   { name: t('nav.assessment'), href: '/assessment' },
   { name: t('nav.learning'), href: '/learning' },
   { name: t('nav.insights'), href: '/insights' },
+  { name: 'Community', href: '/community' },
+  { name: 'Billing', href: '/billing' },
 ])
 
 // Optimized language switching
