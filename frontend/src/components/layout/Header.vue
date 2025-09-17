@@ -138,6 +138,24 @@
             >
               {{ item.name }}
             </RouterLink>
+            
+            <!-- Community and Billing for Mobile Only -->
+            <RouterLink
+              to="/community"
+              class="text-gray-400 hover:text-white block px-2 py-1.5 rounded-md text-sm font-medium transition-colors duration-150 hover:bg-gray-800/40 md:hidden"
+              :class="{ 'text-white bg-gray-800/40': $route.path === '/community' }"
+              @click="closeMenu"
+            >
+              Community
+            </RouterLink>
+            <RouterLink
+              to="/billing"
+              class="text-gray-400 hover:text-white block px-2 py-1.5 rounded-md text-sm font-medium transition-colors duration-150 hover:bg-gray-800/40 md:hidden"
+              :class="{ 'text-white bg-gray-800/40': $route.path === '/billing' }"
+              @click="closeMenu"
+            >
+              Billing
+            </RouterLink>
           </div>
 
           <!-- Mobile CTA - Compact -->
@@ -183,8 +201,6 @@ const secondaryNavigation = computed(() => [
   { name: t('nav.about'), href: '/about' },
   { name: t('nav.services'), href: '/services' },
   { name: t('nav.partners'), href: '/partnership' },
-  { name: 'Community', href: '/community' },
-  { name: 'Billing', href: '/billing' },
   { name: t('nav.faq'), href: '/faq' },
   { name: t('nav.contact'), href: '/contact' },
 ])
