@@ -9,18 +9,18 @@
       </div>
 
       <form @submit.prevent="handleSubmit" class="space-y-6">
-        <!-- Username/Email -->
+        <!-- Email -->
         <div>
-          <label for="username" class="block text-sm font-medium text-gray-300 mb-2">
-            Username or Email *
+          <label for="email" class="block text-sm font-medium text-gray-300 mb-2">
+            Email Address *
           </label>
           <input
-            id="username"
-            v-model="form.username"
-            type="text"
+            id="email"
+            v-model="form.email"
+            type="email"
             required
             class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-white placeholder-gray-400"
-            placeholder="Enter your username or email"
+            placeholder="Enter your email address"
           />
         </div>
 
@@ -98,7 +98,7 @@
 
 <script setup lang="ts">
 import { ref, reactive } from 'vue'
-import { authService, type LoginCredentials } from '../services/authService'
+import { useAuthStore } from '@/stores/auth'
 
 // Emits
 const emit = defineEmits<{
@@ -106,9 +106,12 @@ const emit = defineEmits<{
   'login-success': [user: any]
 }>()
 
+// Auth store
+const authStore = useAuthStore()
+
 // Form data
-const form = reactive<LoginCredentials & { rememberMe: boolean }>({
-  username: '',
+const form = reactive({
+  email: '',
   password: '',
   rememberMe: false
 })
@@ -123,15 +126,15 @@ const handleSubmit = async () => {
   isSubmitting.value = true
   
   try {
-    const result = await authService.loginUser({
-      username: form.username,
+    const result = await authStore.login({
+      email: form.email,
       password: form.password
     })
     
-    if (result.success && result.user) {
-      emit('login-success', result.user)
+    if (result.success && result.data?.user) {
+      emit('login-success', result.data.user)
     } else {
-      errorMessage.value = result.error || 'Login failed. Please try again.'
+      errorMessage.value = result.message || 'Login failed. Please try again.'
     }
   } catch (error) {
     errorMessage.value = 'An unexpected error occurred. Please try again.'

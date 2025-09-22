@@ -1,0 +1,31 @@
+# 📦 Namecheap SSL Package Instructions
+
+## FILES INCLUDED:
+1. `.htaccess-namecheap` - SSL redirect configuration
+2. `NAMECHEAP_SSL_GUIDE.md` - Complete SSL setup guide
+
+## UPLOAD INSTRUCTIONS:
+
+### 1. Upload .htaccess:
+- Download `.htaccess-namecheap` from this project
+- Rename to `.htaccess`
+- Upload to `/public_html/` via cPanel File Manager
+- Replace existing .htaccess file
+
+### 2. Follow SSL Guide:
+- Read `NAMECHEAP_SSL_GUIDE.md` 
+- Find SSL options in cPanel Security section
+- Enable AutoSSL or Let's Encrypt
+- Wait 5-15 minutes for certificate installation
+
+### 3. Test Results:
+- Visit https://www.stargate.ci
+- Check for green lock icon in browser
+- Test https://stargate.ci (should work or redirect)
+- Run SSL test at ssllabs.com
+
+## SUPPORT:
+If SSL options are missing from cPanel, contact Namecheap Support:
+- Live Chat in Namecheap dashboard
+- Ask: "Please enable AutoSSL for domain stargate.ci"
+- Stellar package includes free SSL via Let's Encrypt

@@ -1,4 +1,11 @@
-// Backend API Service - Simulated until Laravel backend is fully functional
+// Backend API Service - Real Laravel API Integration
+export interface LaravelApiResponse<T> {
+  success: boolean;
+  data: T;
+  message?: string;
+  errors?: Record<string, string[]>;
+}
+
 export interface ApiResponse<T> {
   data: T;
   message?: string;
@@ -43,7 +50,12 @@ export interface ContactMessage {
 }
 
 class BackendApiService {
-  private baseUrl = 'http://localhost:8000/api/v1';
+  private baseUrl = 'http://localhost:8003/api/v1';
+  
+  getApiBaseUrl(): string {
+    return this.baseUrl;
+  }
+  private authToken: string | null = null;
   private fallbackData = {
     articles: [
       {
@@ -99,24 +111,52 @@ class BackendApiService {
     ]
   };
 
+  // Set authentication token
+  setAuthToken(token: string | null) {
+    this.authToken = token;
+    if (token) {
+      localStorage.setItem('auth_token', token);
+    } else {
+      localStorage.removeItem('auth_token');
+    }
+  }
+
+  // Get authentication token
+  getAuthToken(): string | null {
+    if (!this.authToken) {
+      this.authToken = localStorage.getItem('auth_token');
+    }
+    return this.authToken;
+  }
+
   private async makeRequest<T>(endpoint: string, options: RequestInit = {}): Promise<ApiResponse<T>> {
     try {
+      const headers: Record<string, string> = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        ...options.headers as Record<string, string>,
+      };
+
+      // Add auth token if available
+      const token = this.getAuthToken();
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
+
       const response = await fetch(`${this.baseUrl}${endpoint}`, {
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          ...options.headers,
-        },
+        headers,
         ...options,
       });
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+      const data: LaravelApiResponse<T> = await response.json();
+
+      if (!response.ok || !data.success) {
+        throw new Error(data.message || `HTTP error! status: ${response.status}`);
       }
 
-      const data = await response.json();
       return {
-        data,
+        data: data.data,
+        message: data.message,
         status: 'success'
       };
     } catch (error) {
@@ -124,6 +164,8 @@ class BackendApiService {
       return this.getFallbackData<T>(endpoint);
     }
   }
+
+  // File Upload API methods
 
   private getFallbackData<T>(endpoint: string): ApiResponse<T> {
     if (endpoint === '/articles') {
@@ -151,7 +193,7 @@ class BackendApiService {
 
   // Articles API
   async getArticles(category?: string): Promise<ApiResponse<Article[]>> {
-    const endpoint = category && category !== 'all' ? `/articles?category=${category}` : '/articles';
+    const endpoint = category && category !== 'all' ? `/content/articles?category=${category}` : '/content/articles';
     return this.makeRequest<Article[]>(endpoint);
   }
 
@@ -168,6 +210,153 @@ class BackendApiService {
     return this.makeRequest<FAQ>(`/faqs/${id}`);
   }
 
+  // Authentication API
+  async register(userData: {
+    name: string;
+    email: string;
+    password: string;
+    password_confirmation: string;
+  }): Promise<ApiResponse<{ user: any; token: string; token_type: string }>> {
+    try {
+      const response = await fetch(`${this.baseUrl}/auth/register`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify(userData),
+      });
+
+      const data: LaravelApiResponse<{ user: any; token: string; token_type: string }> = await response.json();
+      
+      if (!response.ok || !data.success) {
+        throw new Error(data.message || 'Registration failed');
+      }
+
+      // Store token automatically
+      this.setAuthToken(data.data.token);
+
+      return {
+        data: data.data,
+        message: data.message,
+        status: 'success'
+      };
+    } catch (error) {
+      return {
+        data: null as any,
+        message: error instanceof Error ? error.message : 'Registration failed',
+        status: 'error'
+      };
+    }
+  }
+
+  async login(credentials: {
+    email: string;
+    password: string;
+  }): Promise<ApiResponse<{ user: any; token: string; token_type: string }>> {
+    try {
+      const response = await fetch(`${this.baseUrl}/auth/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify(credentials),
+      });
+
+      const data: LaravelApiResponse<{ user: any; token: string; token_type: string }> = await response.json();
+      
+      if (!response.ok || !data.success) {
+        throw new Error(data.message || 'Login failed');
+      }
+
+      // Store token automatically
+      this.setAuthToken(data.data.token);
+
+      return {
+        data: data.data,
+        message: data.message,
+        status: 'success'
+      };
+    } catch (error) {
+      return {
+        data: null as any,
+        message: error instanceof Error ? error.message : 'Login failed',
+        status: 'error'
+      };
+    }
+  }
+
+  async logout(): Promise<ApiResponse<null>> {
+    try {
+      const response = await fetch(`${this.baseUrl}/auth/logout`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': `Bearer ${this.getAuthToken()}`,
+        },
+      });
+
+      const data: LaravelApiResponse<null> = await response.json();
+      
+      // Clear token regardless of response
+      this.setAuthToken(null);
+
+      return {
+        data: null,
+        message: data.message || 'Logged out successfully',
+        status: 'success'
+      };
+    } catch (error) {
+      // Clear token even if request fails
+      this.setAuthToken(null);
+      return {
+        data: null,
+        message: 'Logged out successfully',
+        status: 'success'
+      };
+    }
+  }
+
+  async getMe(): Promise<ApiResponse<{ user: any }>> {
+    return this.makeRequest<{ user: any }>('/user/profile');
+  }
+
+  // Content API (updated endpoints)
+  async getContentCategories(): Promise<ApiResponse<any[]>> {
+    return this.makeRequest<any[]>('/content/categories');
+  }
+
+  async getCommunityPosts(params?: { category?: string; search?: string }): Promise<ApiResponse<any>> {
+    const queryParams = new URLSearchParams();
+    if (params?.category) queryParams.append('category', params.category);
+    if (params?.search) queryParams.append('search', params.search);
+    
+    const query = queryParams.toString();
+    return this.makeRequest<any>(`/community/posts${query ? '?' + query : ''}`);
+  }
+
+  async getCommunityCategories(): Promise<ApiResponse<any[]>> {
+    return this.makeRequest<any[]>('/community/categories');
+  }
+
+  // Search API
+  async search(query: string, filters?: any): Promise<ApiResponse<any>> {
+    const params = new URLSearchParams({ q: query });
+    if (filters) {
+      Object.entries(filters).forEach(([key, value]) => {
+        if (value) params.append(key, String(value));
+      });
+    }
+    return this.makeRequest<any>(`/search?${params.toString()}`);
+  }
+
+  // Analytics API
+  async getPublicStats(): Promise<ApiResponse<any>> {
+    return this.makeRequest<any>('/analytics/stats');
+  }
+
   // Contact API
   async sendContactMessage(message: Omit<ContactMessage, 'id' | 'read' | 'created_at' | 'updated_at'>): Promise<ApiResponse<ContactMessage>> {
     return this.makeRequest<ContactMessage>('/contact', {
@@ -179,7 +368,7 @@ class BackendApiService {
   // Health check
   async healthCheck(): Promise<ApiResponse<{ status: string; timestamp: string }>> {
     try {
-      const response = await fetch(`${this.baseUrl}/health`);
+      const response = await fetch(`${this.baseUrl.replace('/v1', '')}/health`);
       if (response.ok) {
         const data = await response.json();
         return {

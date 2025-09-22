@@ -9,12 +9,20 @@ use App\Models\SearchFilter;
 use App\Models\SearchSuggestion;
 use App\Models\SearchHistory;
 use App\Models\SavedSearch;
+use App\Services\SearchService;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Validator;
 
 class SearchController extends Controller
 {
+    protected $searchService;
+
+    public function __construct(SearchService $searchService)
+    {
+        $this->searchService = $searchService;
+    }
+
     /**
      * Global search
      */
@@ -40,63 +48,28 @@ class SearchController extends Controller
         $type = $request->type ?? 'all';
         $filters = $request->filters ?? [];
         $perPage = $request->per_page ?? 20;
+        $page = $request->page ?? 1;
+        $offset = ($page - 1) * $perPage;
 
-        // Build search query
-        $searchQuery = SearchIndex::where('status', 'active');
-
-        // Apply search term
-        $searchQuery->where(function ($q) use ($query) {
-            $q->where('title', 'like', '%' . $query . '%')
-              ->orWhere('content', 'like', '%' . $query . '%')
-              ->orWhere('excerpt', 'like', '%' . $query . '%');
-        });
-
-        // Apply type filter
-        if ($type !== 'all') {
-            $searchQuery->where('searchable_type', 'like', '%' . ucfirst($type) . '%');
-        }
-
-        // Apply additional filters
-        if (isset($filters['category'])) {
-            $searchQuery->where('category', $filters['category']);
-        }
-
-        if (isset($filters['author'])) {
-            $searchQuery->where('author', $filters['author']);
-        }
-
-        if (isset($filters['tags'])) {
-            $searchQuery->whereJsonContains('tags', $filters['tags']);
-        }
-
-        // Order by relevance score
-        $searchQuery->orderBy('relevance_score', 'desc');
-
-        $results = $searchQuery->paginate($perPage);
-
-        // Log search query if user is authenticated
-        if ($request->user()) {
-            SearchQuery::create([
-                'user_id' => $request->user()->id,
-                'query' => $query,
-                'search_type' => $type,
-                'results_count' => $results->total(),
-                'filters_used' => $filters,
-                'searched_at' => now(),
-            ]);
-        }
-
-        return response()->json([
-            'success' => true,
-            'data' => [
-                'query' => $query,
+        try {
+            $searchResults = $this->searchService->search($query, [
                 'type' => $type,
                 'filters' => $filters,
-                'results' => $results,
-                'total_results' => $results->total(),
-                'suggestions' => $this->getSearchSuggestions($query),
-            ]
-        ]);
+                'limit' => $perPage,
+                'offset' => $offset
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'data' => $searchResults
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Search failed',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
@@ -105,6 +78,7 @@ class SearchController extends Controller
     public function getSuggestions(Request $request): JsonResponse
     {
         $query = $request->get('q', '');
+        $type = $request->get('type', 'all');
 
         if (strlen($query) < 2) {
             return response()->json([
@@ -115,18 +89,22 @@ class SearchController extends Controller
             ]);
         }
 
-        $suggestions = SearchSuggestion::where('suggestion', 'like', '%' . $query . '%')
-            ->where('is_active', true)
-            ->orderBy('usage_count', 'desc')
-            ->limit(10)
-            ->get();
+        try {
+            $suggestions = $this->searchService->getSuggestions($query, $type);
 
-        return response()->json([
-            'success' => true,
-            'data' => [
-                'suggestions' => $suggestions->pluck('suggestion')
-            ]
-        ]);
+            return response()->json([
+                'success' => true,
+                'data' => [
+                    'suggestions' => $suggestions
+                ]
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to get suggestions',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**

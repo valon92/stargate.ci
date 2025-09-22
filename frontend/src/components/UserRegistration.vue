@@ -37,18 +37,18 @@
           </div>
         </div>
 
-        <!-- Username -->
+        <!-- Full Name -->
         <div>
-          <label for="username" class="block text-sm font-medium text-gray-300 mb-2">
-            Username *
+          <label for="name" class="block text-sm font-medium text-gray-300 mb-2">
+            Full Name *
           </label>
           <input
-            id="username"
-            v-model="form.username"
+            id="name"
+            v-model="form.name"
             type="text"
             required
             class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-white placeholder-gray-400"
-            placeholder="Choose a username"
+            placeholder="Enter your full name"
           />
         </div>
 
@@ -154,7 +154,7 @@
 
 <script setup lang="ts">
 import { ref, reactive } from 'vue'
-import { authService, type RegisterCredentials } from '../services/authService'
+import { useAuthStore } from '@/stores/auth'
 
 // Emits
 const emit = defineEmits<{
@@ -162,9 +162,12 @@ const emit = defineEmits<{
   'registration-success': [user: any]
 }>()
 
+// Auth store
+const authStore = useAuthStore()
+
 // Form data
-const form = reactive<RegisterCredentials & { confirmPassword: string }>({
-  username: '',
+const form = reactive({
+  name: '',
   email: '',
   password: '',
   confirmPassword: '',
@@ -210,22 +213,20 @@ const handleSubmit = async () => {
   isSubmitting.value = true
   
   try {
-    const result = await authService.registerUser({
-      username: form.username,
+    const result = await authStore.register({
+      name: form.name || `${form.firstName} ${form.lastName}`.trim(),
       email: form.email,
       password: form.password,
-      firstName: form.firstName,
-      lastName: form.lastName,
-      company: form.company
+      password_confirmation: form.confirmPassword
     })
     
-    if (result.success && result.user) {
+    if (result.success && result.data?.user) {
       successMessage.value = 'Account created successfully! You can now sign in.'
-      emit('registration-success', result.user)
+      emit('registration-success', result.data.user)
       
       // Clear form
       Object.assign(form, {
-        username: '',
+        name: '',
         email: '',
         password: '',
         confirmPassword: '',
@@ -239,7 +240,7 @@ const handleSubmit = async () => {
         emit('switch-to-login')
       }, 2000)
     } else {
-      errorMessage.value = result.error || 'Registration failed. Please try again.'
+      errorMessage.value = result.message || 'Registration failed. Please try again.'
     }
   } catch (error) {
     errorMessage.value = 'An unexpected error occurred. Please try again.'

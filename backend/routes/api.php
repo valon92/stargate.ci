@@ -80,6 +80,12 @@ Route::prefix('v1')->middleware('auth:sanctum')->group(function () {
     Route::get('/analytics/user', [AnalyticsController::class, 'getUserAnalytics']);
     Route::get('/analytics/content', [AnalyticsController::class, 'getContentAnalytics']);
     Route::post('/analytics/track', [AnalyticsController::class, 'trackEvent']);
+    
+    // File upload routes
+    Route::post('/files/upload', [App\Http\Controllers\Api\FileUploadController::class, 'uploadFile']);
+    Route::post('/files/upload-multiple', [App\Http\Controllers\Api\FileUploadController::class, 'uploadMultiple']);
+    Route::get('/files', [App\Http\Controllers\Api\FileUploadController::class, 'getUserFiles']);
+    Route::delete('/files/{id}', [App\Http\Controllers\Api\FileUploadController::class, 'deleteFile']);
 });
 
 // Admin routes (require admin role)
@@ -99,7 +105,7 @@ Route::prefix('v1/admin')->middleware(['auth:sanctum', 'admin'])->group(function
     Route::post('/content/{id}/publish', [ContentController::class, 'publish']);
     
     // Community management
-    Route::get('/community/posts', [CommunityController::class, 'index']);
+    Route::get('/community/admin/posts', [CommunityController::class, 'index']);
     Route::put('/community/posts/{id}/moderate', [CommunityController::class, 'moderatePost']);
     Route::delete('/community/posts/{id}', [CommunityController::class, 'deletePost']);
     

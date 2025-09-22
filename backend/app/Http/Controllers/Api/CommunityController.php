@@ -18,7 +18,7 @@ class CommunityController extends Controller
      */
     public function getPosts(Request $request): JsonResponse
     {
-        $query = CommunityPost::with(['author', 'category', 'tags'])
+        $query = CommunityPost::with(['author', 'category'])
             ->where('status', 'published');
 
         // Apply filters
@@ -72,7 +72,7 @@ class CommunityController extends Controller
      */
     public function showPost($id): JsonResponse
     {
-        $post = CommunityPost::with(['author', 'category', 'tags', 'comments.author'])
+        $post = CommunityPost::with(['author', 'category', 'comments.author'])
             ->findOrFail($id);
 
         // Increment view count
@@ -109,7 +109,7 @@ class CommunityController extends Controller
             'title' => $request->title,
             'content' => $request->content,
             'category_id' => $request->category_id,
-            'author_id' => $request->user()->id,
+            'user_id' => $request->user()->id,
             'tags' => $request->tags ?? [],
             'is_anonymous' => $request->is_anonymous ?? false,
             'status' => 'published',
@@ -130,7 +130,7 @@ class CommunityController extends Controller
         $post = CommunityPost::findOrFail($id);
 
         // Check if user can edit this post
-        if ($post->author_id !== $request->user()->id && !$request->user()->hasRole('admin')) {
+        if ($post->user_id !== $request->user()->id && !$request->user()->hasRole('admin')) {
             return response()->json([
                 'success' => false,
                 'message' => 'Unauthorized'
@@ -169,7 +169,7 @@ class CommunityController extends Controller
         $post = CommunityPost::findOrFail($id);
 
         // Check if user can delete this post
-        if ($post->author_id !== $request->user()->id && !$request->user()->hasRole('admin')) {
+        if ($post->user_id !== $request->user()->id && !$request->user()->hasRole('admin')) {
             return response()->json([
                 'success' => false,
                 'message' => 'Unauthorized'
@@ -206,7 +206,7 @@ class CommunityController extends Controller
 
         $comment = CommunityComment::create([
             'post_id' => $post->id,
-            'author_id' => $request->user()->id,
+            'user_id' => $request->user()->id,
             'content' => $request->content,
             'parent_id' => $request->parent_id,
             'status' => 'published',

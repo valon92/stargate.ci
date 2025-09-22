@@ -1,4 +1,5 @@
 // Community Service for forum features, user profiles, and social interactions
+import { backendApi } from './backendApi'
 export interface UserProfile {
   id: string;
   username: string;
@@ -167,6 +168,26 @@ class CommunityService {
 
   // Forum Categories
   async getCategories(): Promise<ForumCategory[]> {
+    try {
+      const response = await backendApi.getCommunityCategories();
+      if (response.status === 'success') {
+        // Transform backend data to frontend interface
+        return response.data.map((cat: any) => ({
+          id: cat.id.toString(),
+          name: cat.name,
+          description: cat.description,
+          icon: cat.icon || '💬',
+          color: cat.color || '#3B82F6',
+          order: cat.sort_order || 1,
+          postCount: 0, // TODO: Add post count to backend
+          moderators: [] // TODO: Add moderators to backend
+        }));
+      }
+    } catch (error) {
+      console.warn('Failed to fetch categories from API, using fallback:', error);
+    }
+
+    // Fallback to cached data or defaults
     const stored = localStorage.getItem(this.CATEGORIES_KEY);
     if (stored) {
       return JSON.parse(stored);
@@ -271,6 +292,55 @@ class CommunityService {
   }
 
   async getPosts(categoryId?: string, limit?: number): Promise<ForumPost[]> {
+    try {
+        const response = await backendApi.getCommunityPosts({ 
+          category: categoryId,
+          search: limit?.toString() // Adjust this to a valid parameter
+        });
+      
+      if (response.status === 'success') {
+        const categories = await this.getCategories();
+        
+        // Transform backend data to frontend interface
+        return response.data.data.map((post: any) => ({
+          id: post.id.toString(),
+          title: post.title,
+          content: post.content,
+          author: {
+            id: post.author?.id?.toString() || 'unknown',
+            username: post.author?.name || 'Unknown User',
+            email: post.author?.email || '',
+            displayName: post.author?.name || 'Unknown User',
+            bio: '',
+            avatar: '/api/placeholder/40/40',
+            location: '',
+            website: '',
+            joinDate: post.author?.created_at || new Date().toISOString(),
+            lastActive: new Date().toISOString(),
+            reputation: 0,
+            badges: [],
+            stats: { posts: 0, comments: 0, likes: 0, followers: 0, following: 0 },
+            preferences: { privacy: 'public' as const, notifications: true, emailUpdates: true },
+            socialLinks: {}
+          },
+          category: categories.find(cat => cat.id === post.category_id?.toString()) || categories[0],
+          views: post.view_count || 0,
+          likes: post.like_count || 0,
+          comments: post.comment_count || 0,
+          tags: post.tags || [],
+          isPinned: post.is_pinned === 1,
+          isLocked: post.is_locked === 1,
+          isSolved: false, // TODO: Add solved status to backend
+          createdAt: post.created_at,
+          updatedAt: post.updated_at,
+          lastActivity: post.last_activity_at || post.updated_at
+        }));
+      }
+    } catch (error) {
+      console.warn('Failed to fetch posts from API, using fallback:', error);
+    }
+
+    // Fallback to localStorage
     const stored = localStorage.getItem(this.POSTS_KEY);
     let posts: ForumPost[] = stored ? JSON.parse(stored) : [];
     

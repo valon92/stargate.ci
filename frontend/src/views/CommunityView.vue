@@ -276,6 +276,7 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
 import { communityService, type UserProfile } from '../services/communityService'
+import { backendApi } from '../services/backendApi'
 import CommunityForum from '../components/CommunityForum.vue'
 
 // Reactive data
