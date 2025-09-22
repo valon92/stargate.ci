@@ -1,6 +1,8 @@
 // Enhanced Content API Service for Stargate.ci
 // This service provides comprehensive content management for the platform
 
+import { backendApi, type ApiResponse, type FAQ as BackendFAQ } from './backendApi'
+
 export interface Article {
   id: number;
   title: string;
@@ -49,7 +51,6 @@ export interface NewsItem {
 }
 
 class ContentApiService {
-  private baseUrl = 'http://localhost:8000/api/v1';
 
   // Mock data that mirrors backend structure
   private mockArticles: Article[] = [
@@ -415,9 +416,19 @@ class ContentApiService {
 
   // Articles API
   async getArticles(category?: string): Promise<{ data: Article[]; total: number }> {
-    // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 100));
-    
+    try {
+      const response = await backendApi.getArticles(category);
+      if (response.status === 'success' && response.data) {
+        return {
+          data: response.data as Article[],
+          total: response.data.length
+        };
+      }
+    } catch (error) {
+      console.warn('Failed to fetch articles from API, using fallback:', error);
+    }
+
+    // Fallback to mock data
     let articles = this.mockArticles.filter(article => article.published);
     
     if (category && category !== 'all') {
@@ -452,8 +463,25 @@ class ContentApiService {
 
   // FAQs API
   async getFAQs(): Promise<FAQ[]> {
-    await new Promise(resolve => setTimeout(resolve, 100));
-    
+    try {
+      const response = await backendApi.getFAQs();
+      if (response.status === 'success' && response.data) {
+        // Convert backend FAQ format to local FAQ format
+        return response.data.map((backendFAQ: BackendFAQ): FAQ => ({
+          id: backendFAQ.id,
+          question: backendFAQ.question,
+          answer: backendFAQ.answer,
+          order: backendFAQ.order,
+          active: true, // Assume all FAQs from backend are active
+          created_at: backendFAQ.created_at,
+          updated_at: backendFAQ.updated_at
+        }));
+      }
+    } catch (error) {
+      console.warn('Failed to fetch FAQs from API, using fallback:', error);
+    }
+
+    // Fallback to mock data
     return this.mockFAQs
       .filter(faq => faq.active)
       .sort((a, b) => a.order - b.order);
@@ -487,6 +515,16 @@ class ContentApiService {
 
   // Categories API
   async getCategories(): Promise<string[]> {
+    try {
+      const response = await backendApi.getContentCategories();
+      if (response.status === 'success' && response.data) {
+        return response.data.map((cat: any) => cat.name);
+      }
+    } catch (error) {
+      console.warn('Failed to fetch categories from API, using fallback:', error);
+    }
+
+    // Fallback: get categories from articles
     const articles = await this.getArticles();
     const categories = [...new Set(articles.data.map(article => article.category))];
     return categories.sort();
