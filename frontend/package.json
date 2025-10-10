@@ -16,7 +16,10 @@
     "lint": "eslint . --fix",
     "format": "prettier --write src/",
     "deploy": "npm run build && npm run package && echo '📦 Package ready for upload to stargate.ci'",
-    "package": "tar -czf ../stargate-ci-deploy-$(date +%Y%m%d-%H%M%S).tar.gz -C dist ."
+    "package": "tar -czf ../stargate-ci-deploy-$(date +%Y%m%d-%H%M%S).tar.gz -C dist .",
+    "api:test": "node scripts/test-apis.js",
+    "api:setup": "node scripts/setup-apis.js",
+    "api:health": "node scripts/check-api-health.js"
   },
   "dependencies": {
     "@unhead/vue": "^2.0.14",
