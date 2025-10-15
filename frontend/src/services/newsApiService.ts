@@ -412,7 +412,17 @@ class NewsApiService {
       ]
     }
 
-    return fallbackArticles[category as keyof typeof fallbackArticles] || fallbackArticles.global
+    // If no category specified, return all articles from all categories
+    if (!category || category === 'all') {
+      const allArticles: NewsArticle[] = []
+      Object.values(fallbackArticles).forEach(categoryArticles => {
+        allArticles.push(...categoryArticles)
+      })
+      return allArticles
+    }
+
+    // Return articles for specific category
+    return fallbackArticles[category as keyof typeof fallbackArticles] || []
   }
 
   // Check if cache is valid
