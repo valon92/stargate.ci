@@ -178,14 +178,14 @@
           </RouterLink>
 
           <RouterLink 
-            to="/partnership" 
+            to="/news" 
             class="card text-center group hover:scale-105 transition-all duration-300 hover:shadow-2xl"
           >
             <div class="w-16 h-16 bg-gradient-to-r from-purple-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
-              <span class="text-2xl">🤝</span>
+              <span class="text-2xl">📰</span>
             </div>
-            <h3 class="text-lg font-bold mb-2">Partnerships</h3>
-            <p class="text-gray-400 text-sm">Explore collaboration opportunities</p>
+            <h3 class="text-lg font-bold mb-2">News & Updates</h3>
+            <p class="text-gray-400 text-sm">Latest news and updates</p>
           </RouterLink>
 
           <RouterLink 

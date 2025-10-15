@@ -63,7 +63,7 @@ const currentYear = computed(() => new Date().getFullYear())
 const platformLinks = [
   { name: 'About Platform', href: '/about' },
   { name: 'Services', href: '/services' },
-  { name: 'Partnership', href: '/partnership' },
+  { name: 'News', href: '/news' },
   { name: 'Insights', href: '/insights' },
   { name: 'FAQ', href: '/faq' },
   { name: 'Contact', href: '/contact' },

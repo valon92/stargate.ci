@@ -196,6 +196,41 @@ Always be helpful, accurate, and educational. If you don't know something, say s
     }
   }
 
+  // Generate text using OpenAI
+  public async generateText(prompt: string, options?: {
+    model?: string
+    max_tokens?: number
+    temperature?: number
+  }): Promise<{ success: boolean; content: string; error?: string }> {
+    try {
+      const messages: ChatMessage[] = [
+        { role: 'user', content: prompt }
+      ]
+
+      const request: ChatCompletionRequest = {
+        model: options?.model || apiConfig.openai.model,
+        messages,
+        max_tokens: options?.max_tokens || apiConfig.openai.maxTokens,
+        temperature: options?.temperature || apiConfig.openai.temperature
+      }
+
+      const response = await this.createChatCompletion(request)
+      const content = response.choices[0]?.message?.content || ''
+
+      return {
+        success: true,
+        content
+      }
+    } catch (error) {
+      console.error('Error generating text:', error)
+      return {
+        success: false,
+        content: '',
+        error: error instanceof Error ? error.message : 'Unknown error'
+      }
+    }
+  }
+
   // Generate content for articles, FAQs, etc.
   public async generateContent(type: 'article' | 'faq' | 'summary', topic: string, requirements?: string): Promise<string> {
     const prompts = {

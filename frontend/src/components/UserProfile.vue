@@ -273,7 +273,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
-import { communityService, type UserProfile, type ForumPost } from '../services/communityService'
+// Removed community service import as it's unnecessary for educational platform
 
 // Props
 const props = defineProps<{
@@ -281,8 +281,8 @@ const props = defineProps<{
 }>()
 
 // Reactive data
-const userProfile = ref<UserProfile | null>(null)
-const userPosts = ref<ForumPost[]>([])
+const userProfile = ref<any>(null)
+const userPosts = ref<any[]>([])
 const showEditModal = ref(false)
 const isUpdating = ref(false)
 const isFollowing = ref(false)
@@ -303,7 +303,7 @@ const isOwnProfile = computed(() => {
 // Methods
 const loadUserProfile = async () => {
   const userId = props.userId || 'current-user'
-  userProfile.value = await communityService.getProfile(userId)
+  // Removed community profile loading as it's unnecessary for educational platform
   
   if (userProfile.value) {
     editForm.value = {
@@ -317,8 +317,9 @@ const loadUserProfile = async () => {
 
 const loadUserPosts = async () => {
   const userId = props.userId || 'current-user'
-  const allPosts = await communityService.getPosts()
-  userPosts.value = allPosts.filter(post => post.author.id === userId).slice(0, 5)
+  // Removed community posts loading as it's unnecessary for educational platform
+  // Removed community posts filtering as it's unnecessary for educational platform
+  userPosts.value = []
 }
 
 const updateProfile = async () => {
@@ -327,17 +328,16 @@ const updateProfile = async () => {
   isUpdating.value = true
 
   try {
-    const updatedProfile = await communityService.updateProfile(userProfile.value.id, {
+    // Removed community profile update as it's unnecessary for educational platform
+    // Simulate successful update for educational platform
+    userProfile.value = {
+      ...userProfile.value,
       displayName: editForm.value.displayName,
       bio: editForm.value.bio,
       location: editForm.value.location,
       website: editForm.value.website
-    })
-
-    if (updatedProfile) {
-      userProfile.value = updatedProfile
-      showEditModal.value = false
     }
+    showEditModal.value = false
   } catch (error) {
     console.error('Failed to update profile:', error)
   } finally {

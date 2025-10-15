@@ -1,0 +1,25 @@
+{
+  "name": "stargate-ci",
+  "version": "1.0.0",
+  "description": "Stargate.ci - Cristal Intelligence Platform",
+  "private": true,
+  "scripts": {
+    "dev": "cd frontend && npm run dev",
+    "build": "cd frontend && npm run build",
+    "backend:dev": "cd backend && php artisan serve",
+    "backend:migrate": "cd backend && php artisan migrate",
+    "backend:seed": "cd backend && php artisan db:seed",
+    "install:all": "cd frontend && npm install && cd ../backend && composer install",
+    "deploy": "cd frontend && npm run deploy"
+  },
+  "keywords": [
+    "stargate",
+    "cristal-intelligence",
+    "ai",
+    "openai",
+    "softbank",
+    "arm"
+  ],
+  "author": "Stargate.ci Team",
+  "license": "MIT"
+}

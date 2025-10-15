@@ -14,6 +14,14 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
             'admin' => \App\Http\Middleware\AdminMiddleware::class,
+            'api.error' => \App\Http\Middleware\ApiErrorHandler::class,
+            'api.throttle' => \App\Http\Middleware\ApiRateLimiter::class,
+            'api.cache' => \App\Http\Middleware\ApiResponseCache::class,
+        ]);
+        
+        // Apply error handler to all API routes
+        $middleware->appendToGroup('api', [
+            \App\Http\Middleware\ApiErrorHandler::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

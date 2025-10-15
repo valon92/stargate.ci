@@ -317,7 +317,7 @@
           Start your journey with official Stargate and Cristal Intelligence projects. Let us help you find the perfect match for your organization.
         </p>
         <div class="flex flex-col sm:flex-row gap-4 justify-center">
-          <RouterLink to="/partnership" class="btn-primary">
+          <RouterLink to="/news" class="btn-primary">
             Explore Opportunities
           </RouterLink>
           <RouterLink to="/contact" class="btn-secondary">
@@ -331,12 +331,10 @@
 
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
-import { useI18n } from 'vue-i18n'
 import { useHead } from '@vueuse/head'
 import { ref, onMounted } from 'vue'
 import { stargateApi, type StargateProjectData, type CristalIntelligenceData } from '../services/stargateApi'
 
-const { t } = useI18n()
 
 // Official technologies from Stargate and Cristal Intelligence projects
 const officialTechnologies = [

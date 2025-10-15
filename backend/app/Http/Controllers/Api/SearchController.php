@@ -3,66 +3,88 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\SearchIndex;
+use App\Models\Article;
+use App\Models\FAQ;
+use App\Models\Tutorial;
+use App\Models\CommunityPost;
 use App\Models\SearchQuery;
-use App\Models\SearchFilter;
-use App\Models\SearchSuggestion;
-use App\Models\SearchHistory;
-use App\Models\SavedSearch;
-use App\Services\SearchService;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 
 class SearchController extends Controller
 {
-    protected $searchService;
-
-    public function __construct(SearchService $searchService)
-    {
-        $this->searchService = $searchService;
-    }
-
     /**
-     * Global search
+     * Perform global search across all content types
      */
     public function search(Request $request): JsonResponse
     {
-        $validator = Validator::make($request->all(), [
-            'q' => 'required|string|min:2|max:255',
-            'type' => 'sometimes|string|in:all,content,community,users',
-            'filters' => 'sometimes|array',
-            'page' => 'sometimes|integer|min:1',
-            'per_page' => 'sometimes|integer|min:1|max:100',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Validation error',
-                'errors' => $validator->errors()
-            ], 422);
-        }
-
-        $query = $request->q;
-        $type = $request->type ?? 'all';
-        $filters = $request->filters ?? [];
-        $perPage = $request->per_page ?? 20;
-        $page = $request->page ?? 1;
-        $offset = ($page - 1) * $perPage;
-
         try {
-            $searchResults = $this->searchService->search($query, [
-                'type' => $type,
-                'filters' => $filters,
-                'limit' => $perPage,
-                'offset' => $offset
+            $validator = Validator::make($request->all(), [
+                'q' => 'required|string|min:2|max:100',
+                'type' => 'sometimes|in:all,articles,faqs,tutorials,community',
+                'category' => 'sometimes|string',
+                'limit' => 'sometimes|integer|min:1|max:50'
             ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Validation failed',
+                    'errors' => $validator->errors()
+                ], 422);
+            }
+
+            $query = $request->q;
+            $type = $request->get('type', 'all');
+            $category = $request->get('category');
+            $limit = $request->get('limit', 20);
+
+            // Log search query
+            $this->logSearchQuery($query, $type, $category);
+
+            $results = [];
+
+            // Search Articles
+            if ($type === 'all' || $type === 'articles') {
+                $articles = $this->searchArticles($query, $category, $limit);
+                $results['articles'] = $articles;
+            }
+
+            // Search FAQs
+            if ($type === 'all' || $type === 'faqs') {
+                $faqs = $this->searchFAQs($query, $category, $limit);
+                $results['faqs'] = $faqs;
+            }
+
+            // Search Tutorials
+            if ($type === 'all' || $type === 'tutorials') {
+                $tutorials = $this->searchTutorials($query, $category, $limit);
+                $results['tutorials'] = $tutorials;
+            }
+
+            // Search Community Posts
+            if ($type === 'all' || $type === 'community') {
+                $posts = $this->searchCommunityPosts($query, $category, $limit);
+                $results['community_posts'] = $posts;
+            }
+
+            // Calculate total results
+            $totalResults = array_sum(array_map('count', $results));
 
             return response()->json([
                 'success' => true,
-                'data' => $searchResults
+                'data' => $results,
+                'meta' => [
+                    'query' => $query,
+                    'type' => $type,
+                    'category' => $category,
+                    'total_results' => $totalResults,
+                    'searched_at' => now()->toISOString()
+                ]
             ]);
+
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
@@ -77,27 +99,48 @@ class SearchController extends Controller
      */
     public function getSuggestions(Request $request): JsonResponse
     {
-        $query = $request->get('q', '');
-        $type = $request->get('type', 'all');
-
-        if (strlen($query) < 2) {
-            return response()->json([
-                'success' => true,
-                'data' => [
-                    'suggestions' => []
-                ]
-            ]);
-        }
-
         try {
-            $suggestions = $this->searchService->getSuggestions($query, $type);
+            $query = $request->get('q', '');
+            
+            if (strlen($query) < 2) {
+                return response()->json([
+                    'success' => true,
+                    'data' => []
+                ]);
+            }
+
+            $suggestions = [];
+
+            // Get popular search queries
+            $popularQueries = SearchQuery::where('query', 'LIKE', "%{$query}%")
+                ->orderBy('count', 'desc')
+                ->limit(5)
+                ->pluck('query')
+                ->toArray();
+
+            // Get article titles
+            $articleTitles = Article::where('title', 'LIKE', "%{$query}%")
+                ->where('status', 'published')
+                ->limit(3)
+                ->pluck('title')
+                ->toArray();
+
+            // Get FAQ questions
+            $faqQuestions = FAQ::where('question', 'LIKE', "%{$query}%")
+                ->where('status', 'active')
+                ->limit(3)
+                ->pluck('question')
+                ->toArray();
+
+            $suggestions = array_merge($popularQueries, $articleTitles, $faqQuestions);
+            $suggestions = array_unique($suggestions);
+            $suggestions = array_slice($suggestions, 0, 10);
 
             return response()->json([
                 'success' => true,
-                'data' => [
-                    'suggestions' => $suggestions
-                ]
+                'data' => $suggestions
             ]);
+
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
@@ -108,144 +151,305 @@ class SearchController extends Controller
     }
 
     /**
-     * Get available search filters
+     * Get search filters
      */
     public function getFilters(): JsonResponse
     {
-        $filters = SearchFilter::where('is_active', true)
-            ->orderBy('sort_order')
-            ->get();
+        try {
+            $filters = [
+                'types' => [
+                    ['value' => 'all', 'label' => 'All Content'],
+                    ['value' => 'articles', 'label' => 'Articles'],
+                    ['value' => 'faqs', 'label' => 'FAQs'],
+                    ['value' => 'tutorials', 'label' => 'Tutorials'],
+                    ['value' => 'community', 'label' => 'Community']
+                ],
+                'categories' => $this->getSearchCategories(),
+                'date_ranges' => [
+                    ['value' => 'all', 'label' => 'All Time'],
+                    ['value' => 'today', 'label' => 'Today'],
+                    ['value' => 'week', 'label' => 'This Week'],
+                    ['value' => 'month', 'label' => 'This Month'],
+                    ['value' => 'year', 'label' => 'This Year']
+                ]
+            ];
 
-        return response()->json([
-            'success' => true,
-            'data' => [
-                'filters' => $filters
-            ]
-        ]);
+            return response()->json([
+                'success' => true,
+                'data' => $filters
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to get filters',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
-     * Save search (authenticated)
+     * Save search query (authenticated users)
      */
     public function saveSearch(Request $request): JsonResponse
     {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
-            'query' => 'required|string|max:255',
-            'search_type' => 'required|string',
-            'filters' => 'sometimes|array',
-            'is_public' => 'sometimes|boolean',
-        ]);
+        try {
+            $validator = Validator::make($request->all(), [
+                'query' => 'required|string|max:100',
+                'filters' => 'sometimes|array',
+                'results_count' => 'sometimes|integer'
+            ]);
 
-        if ($validator->fails()) {
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Validation failed',
+                    'errors' => $validator->errors()
+                ], 422);
+            }
+
+            $user = auth()->user();
+            
+            $searchQuery = SearchQuery::create([
+                'user_id' => $user->id,
+                'query' => $request->query,
+                'filters' => $request->filters ?? [],
+                'results_count' => $request->results_count ?? 0,
+                'ip_address' => $request->ip(),
+                'user_agent' => $request->userAgent()
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Search saved successfully',
+                'data' => $searchQuery
+            ]);
+
+        } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Validation error',
-                'errors' => $validator->errors()
-            ], 422);
+                'message' => 'Failed to save search',
+                'error' => $e->getMessage()
+            ], 500);
         }
-
-        $savedSearch = SavedSearch::create([
-            'user_id' => $request->user()->id,
-            'name' => $request->name,
-            'query' => $request->query,
-            'search_type' => $request->search_type,
-            'filters' => $request->filters ?? [],
-            'is_public' => $request->is_public ?? false,
-        ]);
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Search saved successfully',
-            'data' => $savedSearch
-        ], 201);
     }
 
     /**
-     * Get search history (authenticated)
+     * Get user search history
      */
     public function getSearchHistory(Request $request): JsonResponse
     {
-        $history = SearchHistory::where('user_id', $request->user()->id)
-            ->orderBy('searched_at', 'desc')
-            ->limit(50)
-            ->get();
+        try {
+            $user = auth()->user();
+            
+            $history = SearchQuery::where('user_id', $user->id)
+                ->orderBy('created_at', 'desc')
+                ->limit(20)
+                ->get();
 
-        return response()->json([
-            'success' => true,
-            'data' => [
-                'history' => $history
-            ]
-        ]);
+            return response()->json([
+                'success' => true,
+                'data' => $history
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to get search history',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
-     * Delete search history item (authenticated)
+     * Delete search history item
      */
-    public function deleteSearchHistory(Request $request, $id): JsonResponse
+    public function deleteSearchHistory($id): JsonResponse
     {
-        $historyItem = SearchHistory::where('user_id', $request->user()->id)
-            ->findOrFail($id);
+        try {
+            $user = auth()->user();
+            
+            $searchQuery = SearchQuery::where('id', $id)
+                ->where('user_id', $user->id)
+                ->firstOrFail();
+            
+            $searchQuery->delete();
 
-        $historyItem->delete();
+            return response()->json([
+                'success' => true,
+                'message' => 'Search history item deleted'
+            ]);
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Search history item deleted successfully'
-        ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to delete search history',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
-     * Get popular searches
+     * Search articles
      */
-    public function getPopularSearches(): JsonResponse
+    private function searchArticles(string $query, ?string $category, int $limit): array
     {
-        $popularSearches = SearchQuery::selectRaw('query, COUNT(*) as search_count')
-            ->where('searched_at', '>=', now()->subDays(30))
-            ->groupBy('query')
-            ->orderBy('search_count', 'desc')
-            ->limit(10)
-            ->get();
+        $articlesQuery = Article::with(['category', 'author'])
+            ->where('status', 'published')
+            ->where(function ($q) use ($query) {
+                $q->where('title', 'LIKE', "%{$query}%")
+                  ->orWhere('excerpt', 'LIKE', "%{$query}%")
+                  ->orWhere('content', 'LIKE', "%{$query}%")
+                  ->orWhere('tags', 'LIKE', "%{$query}%");
+            });
 
-        return response()->json([
-            'success' => true,
-            'data' => [
-                'popular_searches' => $popularSearches
-            ]
-        ]);
+        if ($category) {
+            $articlesQuery->whereHas('category', function ($q) use ($category) {
+                $q->where('slug', $category);
+            });
+        }
+
+        return $articlesQuery->orderBy('published_at', 'desc')
+            ->limit($limit)
+            ->get()
+            ->toArray();
     }
 
     /**
-     * Get trending searches
+     * Search FAQs
      */
-    public function getTrendingSearches(): JsonResponse
+    private function searchFAQs(string $query, ?string $category, int $limit): array
     {
-        $trendingSearches = SearchQuery::selectRaw('query, COUNT(*) as search_count')
-            ->where('searched_at', '>=', now()->subDays(7))
-            ->groupBy('query')
-            ->orderBy('search_count', 'desc')
-            ->limit(10)
-            ->get();
+        $faqsQuery = FAQ::where('status', 'active')
+            ->where(function ($q) use ($query) {
+                $q->where('question', 'LIKE', "%{$query}%")
+                  ->orWhere('answer', 'LIKE', "%{$query}%")
+                  ->orWhere('tags', 'LIKE', "%{$query}%");
+            });
 
-        return response()->json([
-            'success' => true,
-            'data' => [
-                'trending_searches' => $trendingSearches
-            ]
-        ]);
+        if ($category) {
+            $faqsQuery->where('category', $category);
+        }
+
+        return $faqsQuery->orderBy('order', 'asc')
+            ->limit($limit)
+            ->get()
+            ->toArray();
     }
 
     /**
-     * Get search suggestions based on query
+     * Search tutorials
      */
-    private function getSearchSuggestions(string $query): array
+    private function searchTutorials(string $query, ?string $category, int $limit): array
     {
-        $suggestions = SearchSuggestion::where('suggestion', 'like', '%' . $query . '%')
-            ->where('is_active', true)
-            ->orderBy('usage_count', 'desc')
-            ->limit(5)
+        $tutorialsQuery = Tutorial::with(['author'])
+            ->where('is_published', true)
+            ->where(function ($q) use ($query) {
+                $q->where('title', 'LIKE', "%{$query}%")
+                  ->orWhere('description', 'LIKE', "%{$query}%")
+                  ->orWhere('overview', 'LIKE', "%{$query}%");
+            });
+
+        if ($category) {
+            $tutorialsQuery->whereHas('content', function ($q) use ($category) {
+                $q->whereHas('category', function ($q2) use ($category) {
+                    $q2->where('slug', $category);
+                });
+            });
+        }
+
+        return $tutorialsQuery->orderBy('published_at', 'desc')
+            ->limit($limit)
+            ->get()
+            ->toArray();
+    }
+
+    /**
+     * Search community posts
+     */
+    private function searchCommunityPosts(string $query, ?string $category, int $limit): array
+    {
+        $postsQuery = CommunityPost::with(['author', 'category'])
+            ->where('status', 'published')
+            ->where(function ($q) use ($query) {
+                $q->where('title', 'LIKE', "%{$query}%")
+                  ->orWhere('content', 'LIKE', "%{$query}%")
+                  ->orWhere('tags', 'LIKE', "%{$query}%");
+            });
+
+        if ($category) {
+            $postsQuery->whereHas('category', function ($q) use ($category) {
+                $q->where('slug', $category);
+            });
+        }
+
+        return $postsQuery->orderBy('created_at', 'desc')
+            ->limit($limit)
+            ->get()
+            ->toArray();
+    }
+
+    /**
+     * Get search categories
+     */
+    private function getSearchCategories(): array
+    {
+        $categories = [];
+
+        // Article categories
+        $articleCategories = DB::table('content_categories')
+            ->where('status', 'active')
+            ->select('name', 'slug')
             ->get();
 
-        return $suggestions->pluck('suggestion')->toArray();
+        foreach ($articleCategories as $category) {
+            $categories[] = [
+                'value' => $category->slug,
+                'label' => $category->name,
+                'type' => 'articles'
+            ];
+        }
+
+        // FAQ categories
+        $faqCategories = FAQ::select('category')
+            ->distinct()
+            ->where('status', 'active')
+            ->pluck('category');
+
+        foreach ($faqCategories as $category) {
+            $categories[] = [
+                'value' => $category,
+                'label' => $category,
+                'type' => 'faqs'
+            ];
+        }
+
+        return $categories;
+    }
+
+    /**
+     * Log search query
+     */
+    private function logSearchQuery(string $query, string $type, ?string $category): void
+    {
+        try {
+            $existingQuery = SearchQuery::where('query', $query)->first();
+            
+            if ($existingQuery) {
+                $existingQuery->increment('count');
+            } else {
+                SearchQuery::create([
+                    'query' => $query,
+                    'type' => $type,
+                    'category' => $category,
+                    'count' => 1,
+                    'ip_address' => request()->ip(),
+                    'user_agent' => request()->userAgent()
+                ]);
+            }
+        } catch (\Exception $e) {
+            // Log error but don't fail the search
+            \Log::error('Failed to log search query: ' . $e->getMessage());
+        }
     }
 }

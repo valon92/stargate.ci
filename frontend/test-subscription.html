@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Subscription</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #1a1a1a;
+            color: white;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #333;
+            border-radius: 5px;
+            background-color: #2a2a2a;
+            color: white;
+        }
+        button {
+            background-color: #4f46e5;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #4338ca;
+        }
+        .members {
+            margin-top: 30px;
+        }
+        .member-card {
+            background-color: #2a2a2a;
+            border: 1px solid #333;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        .member-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .avatar {
+            width: 40px;
+            height: 40px;
+            background-color: #4f46e5;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Test Subscription System</h1>
+    
+    <form id="subscriptionForm">
+        <div class="form-group">
+            <label for="username">Username *</label>
+            <input type="text" id="username" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="email">Email *</label>
+            <input type="email" id="email" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="fullName">Full Name</label>
+            <input type="text" id="fullName">
+        </div>
+        
+        <div class="form-group">
+            <label for="organization">Organization</label>
+            <input type="text" id="organization">
+        </div>
+        
+        <div class="form-group">
+            <label for="role">Role</label>
+            <select id="role">
+                <option value="">Select your role</option>
+                <option value="researcher">Researcher</option>
+                <option value="developer">Developer</option>
+                <option value="business">Business Professional</option>
+                <option value="student">Student</option>
+                <option value="investor">Investor</option>
+                <option value="entrepreneur">Entrepreneur</option>
+                <option value="other">Other</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label>Interests:</label>
+            <div>
+                <label><input type="checkbox" value="stargate"> Stargate Project</label><br>
+                <label><input type="checkbox" value="cristal"> Cristal Intelligence</label><br>
+                <label><input type="checkbox" value="ai-ethics"> AI Ethics</label><br>
+                <label><input type="checkbox" value="research"> Research</label>
+            </div>
+        </div>
+        
+        <button type="submit">Subscribe</button>
+    </form>
+    
+    <div class="members">
+        <h2>Current Members (from localStorage)</h2>
+        <div id="membersList"></div>
+        <button onclick="loadMembers()">Refresh Members</button>
+        <button onclick="clearMembers()">Clear All Members</button>
+    </div>
+
+    <script>
+        // Load members on page load
+        loadMembers();
+        
+        // Handle form submission
+        document.getElementById('subscriptionForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = {
+                username: document.getElementById('username').value,
+                email: document.getElementById('email').value,
+                fullName: document.getElementById('fullName').value,
+                organization: document.getElementById('organization').value,
+                role: document.getElementById('role').value,
+                interests: Array.from(document.querySelectorAll('input[type="checkbox"]:checked')).map(cb => cb.value),
+                agreeToTerms: true,
+                subscribedAt: new Date().toISOString(),
+                status: 'active'
+            };
+            
+            // Get existing members
+            const existingMembers = JSON.parse(localStorage.getItem('stargate_subscribers') || '[]');
+            
+            // Add new member
+            const newMember = {
+                id: Date.now(),
+                ...formData
+            };
+            
+            existingMembers.push(newMember);
+            
+            // Save to localStorage
+            localStorage.setItem('stargate_subscribers', JSON.stringify(existingMembers));
+            
+            alert('Subscription successful! Member added to localStorage.');
+            
+            // Clear form
+            this.reset();
+            
+            // Reload members
+            loadMembers();
+        });
+        
+        function loadMembers() {
+            const members = JSON.parse(localStorage.getItem('stargate_subscribers') || '[]');
+            const membersList = document.getElementById('membersList');
+            
+            if (members.length === 0) {
+                membersList.innerHTML = '<p>No members found in localStorage.</p>';
+                return;
+            }
+            
+            membersList.innerHTML = members.map(member => `
+                <div class="member-card">
+                    <div class="member-header">
+                        <div class="avatar">${member.username.charAt(0).toUpperCase()}</div>
+                        <div>
+                            <h3>${member.username}</h3>
+                            <p>${member.role || 'Community Member'}</p>
+                        </div>
+                    </div>
+                    <p><strong>Email:</strong> ${member.email}</p>
+                    ${member.fullName ? `<p><strong>Full Name:</strong> ${member.fullName}</p>` : ''}
+                    ${member.organization ? `<p><strong>Organization:</strong> ${member.organization}</p>` : ''}
+                    <p><strong>Interests:</strong> ${member.interests.join(', ')}</p>
+                    <p><strong>Joined:</strong> ${new Date(member.subscribedAt).toLocaleDateString()}</p>
+                </div>
+            `).join('');
+        }
+        
+        function clearMembers() {
+            if (confirm('Are you sure you want to clear all members?')) {
+                localStorage.removeItem('stargate_subscribers');
+                loadMembers();
+            }
+        }
+    </script>
+</body>
+</html>

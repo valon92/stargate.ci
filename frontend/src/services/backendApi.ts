@@ -328,18 +328,7 @@ class BackendApiService {
     return this.makeRequest<any[]>('/content/categories');
   }
 
-  async getCommunityPosts(params?: { category?: string; search?: string }): Promise<ApiResponse<any>> {
-    const queryParams = new URLSearchParams();
-    if (params?.category) queryParams.append('category', params.category);
-    if (params?.search) queryParams.append('search', params.search);
-    
-    const query = queryParams.toString();
-    return this.makeRequest<any>(`/community/posts${query ? '?' + query : ''}`);
-  }
-
-  async getCommunityCategories(): Promise<ApiResponse<any[]>> {
-    return this.makeRequest<any[]>('/community/categories');
-  }
+  // Removed community API methods as they are unnecessary for educational platform
 
   // Search API
   async search(query: string, filters?: any): Promise<ApiResponse<any>> {

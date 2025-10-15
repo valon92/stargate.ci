@@ -146,31 +146,3 @@ export function useNavigationPerformance() {
   }
 }
 
-// Language switching performance
-export function useLanguagePerformance() {
-  const isChangingLanguage = ref(false)
-  
-  const changeLanguage = async (locale: string, callback: () => void) => {
-    if (isChangingLanguage.value) return
-    
-    isChangingLanguage.value = true
-    
-    // Use requestIdleCallback for non-critical updates
-    if ('requestIdleCallback' in window) {
-      requestIdleCallback(() => {
-        callback()
-        isChangingLanguage.value = false
-      })
-    } else {
-      setTimeout(() => {
-        callback()
-        isChangingLanguage.value = false
-      }, 0)
-    }
-  }
-
-  return {
-    isChangingLanguage,
-    changeLanguage
-  }
-}

@@ -75,10 +75,10 @@
           <!-- CTA Buttons - Compact -->
           <div class="hidden md:flex items-center space-x-2">
             <RouterLink
-              to="/login"
+              to="/subscribe"
               class="bg-gradient-to-r from-primary-500 to-secondary-500 text-white px-3 py-1.5 rounded-md text-sm font-medium hover:from-primary-600 hover:to-secondary-600 transition-all duration-150 shadow-md hover:shadow-lg pointer-events-auto relative z-10"
             >
-              Sign In
+              Subscribe
             </RouterLink>
           </div>
 
@@ -139,23 +139,7 @@
               {{ item.name }}
             </RouterLink>
             
-            <!-- Community and Billing for Mobile Only -->
-            <RouterLink
-              to="/community"
-              class="text-gray-400 hover:text-white block px-2 py-1.5 rounded-md text-sm font-medium transition-colors duration-150 hover:bg-gray-800/40 md:hidden"
-              :class="{ 'text-white bg-gray-800/40': $route.path === '/community' }"
-              @click="closeMenu"
-            >
-              Community
-            </RouterLink>
-            <RouterLink
-              to="/billing"
-              class="text-gray-400 hover:text-white block px-2 py-1.5 rounded-md text-sm font-medium transition-colors duration-150 hover:bg-gray-800/40 md:hidden"
-              :class="{ 'text-white bg-gray-800/40': $route.path === '/billing' }"
-              @click="closeMenu"
-            >
-              Billing
-            </RouterLink>
+            <!-- Removed community link as it's unnecessary for educational platform -->
           </div>
 
           <!-- Mobile CTA - Compact -->
@@ -177,48 +161,29 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, watch } from 'vue'
 import { RouterLink, useRoute, useRouter } from 'vue-router'
-import { useI18n } from 'vue-i18n'
-import { useLanguagePerformance, useNavigationPerformance } from '../../composables/usePerformance'
+import { useNavigationPerformance } from '../../composables/usePerformance'
 import NotificationCenter from '../NotificationCenter.vue'
 import SearchInput from '../SearchInput.vue'
 
-const { locale, t } = useI18n()
 const route = useRoute()
 const router = useRouter()
 
 // Performance optimized state
-const { isChangingLanguage, changeLanguage: optimizedChangeLanguage } = useLanguagePerformance()
 const { isMenuOpen, toggleMenu, closeMenu } = useNavigationPerformance()
-
-const currentLanguage = ref(locale.value)
 
 // Memoized navigation - computed for performance
 const primaryNavigation = computed(() => [
-  { name: t('nav.home'), href: '/' },
+  { name: 'Home', href: '/' },
 ])
 
 const secondaryNavigation = computed(() => [
-  { name: t('nav.about'), href: '/about' },
-  { name: t('nav.services'), href: '/services' },
-  { name: t('nav.partners'), href: '/partnership' },
-  { name: t('nav.faq'), href: '/faq' },
-  { name: t('nav.contact'), href: '/contact' },
+  { name: 'About', href: '/about' },
+  { name: 'Services', href: '/services' },
+  { name: 'News', href: '/news' },
+  { name: 'FAQ', href: '/faq' },
+  { name: 'Contact', href: '/contact' },
 ])
 
-// Optimized language change function
-const changeLanguage = () => {
-  optimizedChangeLanguage(currentLanguage.value, () => {
-    locale.value = currentLanguage.value
-    
-    // Batch DOM updates
-    const isRTL = currentLanguage.value === 'ar'
-    document.documentElement.setAttribute('dir', isRTL ? 'rtl' : 'ltr')
-    document.documentElement.setAttribute('lang', currentLanguage.value)
-    
-    // Save to localStorage
-    localStorage.setItem('selectedLanguage', currentLanguage.value)
-  })
-}
 
 // Search handler
 const handleSearch = (query: string) => {
@@ -237,15 +202,8 @@ watch(() => route.path, () => {
 
 // Initialize on mount
 onMounted(() => {
-  const savedLanguage = localStorage.getItem('selectedLanguage')
-  if (savedLanguage && savedLanguage !== currentLanguage.value) {
-    currentLanguage.value = savedLanguage
-    locale.value = savedLanguage
-    
-    // Set RTL for Arabic
-    const isRTL = savedLanguage === 'ar'
-    document.documentElement.setAttribute('dir', isRTL ? 'rtl' : 'ltr')
-    document.documentElement.setAttribute('lang', savedLanguage)
-  }
+  // Set English as default language
+  document.documentElement.setAttribute('dir', 'ltr')
+  document.documentElement.setAttribute('lang', 'en')
 })
 </script>

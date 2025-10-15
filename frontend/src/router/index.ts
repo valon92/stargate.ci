@@ -21,19 +21,9 @@ const router = createRouter({
       component: () => import('../views/ServicesView.vue'),
     },
     {
-      path: '/partnership',
-      name: 'partnership',
-      component: () => import('../views/PartnershipView.vue'),
-    },
-    {
-      path: '/insights',
-      name: 'insights',
-      component: () => import('../views/InsightsView.vue'),
-    },
-    {
-      path: '/insights/:slug',
-      name: 'insight-detail',
-      component: () => import('../views/InsightDetailView.vue'),
+      path: '/news',
+      name: 'news',
+      component: () => import('../views/NewsView.vue'),
     },
     {
       path: '/faq',
@@ -46,83 +36,11 @@ const router = createRouter({
       component: () => import('../views/ContactView.vue'),
     },
     {
-      path: '/assessment',
-      name: 'assessment',
-      component: () => import('../views/AssessmentView.vue'),
-    },
-    {
-      path: '/learning',
-      name: 'learning',
-      component: () => import('../views/LearningPathsView.vue'),
-    },
-    {
-      path: '/search',
-      name: 'search',
-      component: () => import('../views/SearchView.vue'),
-    },
-    {
       path: '/dashboard',
       name: 'dashboard',
       component: () => import('../views/DashboardView.vue'),
       beforeEnter: userGuard,
     },
-    {
-      path: '/billing',
-      name: 'billing',
-      component: () => import('../views/BillingView.vue'),
-      beforeEnter: userGuard,
-    },
-    {
-      path: '/user-management',
-      name: 'user-management',
-      component: () => import('../views/UserManagementView.vue'),
-      beforeEnter: adminGuard,
-    },
-    {
-      path: '/regional-content',
-      name: 'regional-content',
-      component: () => import('../views/RegionalContentView.vue'),
-      beforeEnter: adminGuard,
-    },
-    {
-      path: '/mobile-app',
-      name: 'mobile-app',
-      component: () => import('../views/MobileAppView.vue'),
-      beforeEnter: adminGuard,
-    },
-    {
-      path: '/external-integrations',
-      name: 'external-integrations',
-      component: () => import('../views/ExternalIntegrationsView.vue'),
-      beforeEnter: adminGuard,
-    },
-    {
-      path: '/advanced-performance',
-      name: 'advanced-performance',
-      component: () => import('../views/AdvancedPerformanceView.vue'),
-      beforeEnter: adminGuard,
-    },
-    {
-      path: '/advanced-content',
-      name: 'advanced-content',
-      component: () => import('../views/AdvancedContentView.vue'),
-      beforeEnter: adminGuard,
-    },
-    {
-      path: '/templates',
-      name: 'templates',
-      component: () => import('../views/TemplatesView.vue'),
-    },
-  {
-    path: '/community',
-    name: 'community',
-    component: () => import('../views/CommunityView.vue'),
-  },
-  {
-    path: '/search',
-    name: 'search',
-    component: () => import('../views/SearchView.vue'),
-  },
     {
       path: '/profile/:userId?',
       name: 'profile',
@@ -149,28 +67,16 @@ const router = createRouter({
       component: () => import('../views/LegalDisclaimerView.vue'),
     },
     {
-      path: '/login',
-      name: 'unified-login',
+      path: '/subscribe',
+      name: 'subscribe',
       component: () => import('../views/UnifiedLoginView.vue'),
-      beforeEnter: guestGuard,
     },
     {
       path: '/auth',
       name: 'user-auth',
       component: () => import('../views/UserAuthView.vue'),
     },
-    {
-      path: '/admin/login',
-      name: 'admin-login',
-      component: () => import('../views/AdminLoginView.vue'),
-      beforeEnter: guestGuard,
-    },
-    {
-      path: '/admin',
-      name: 'admin',
-      component: () => import('../views/AdminView.vue'),
-      beforeEnter: adminGuard,
-    },
+    // Removed admin routes as they are unnecessary for educational platform
     {
       path: '/:pathMatch(.*)*',
       name: 'not-found',

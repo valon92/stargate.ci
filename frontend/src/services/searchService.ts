@@ -121,55 +121,11 @@ class SearchService {
     const index: SearchResult[] = [];
     
     try {
-      // Get posts from community service
-      const { communityService } = await import('./communityService');
-      const posts = await communityService.getPosts();
+      // Removed community search as it's unnecessary for educational platform
       
-      for (const post of posts) {
-        index.push({
-          id: post.id,
-          type: 'post',
-          title: post.title,
-          content: post.content,
-          excerpt: this.generateExcerpt(post.content),
-          author: post.author.displayName,
-          category: post.category.name,
-          tags: post.tags,
-          createdAt: post.createdAt,
-          updatedAt: post.updatedAt,
-          relevanceScore: 0,
-          url: `/community/post/${post.id}`,
-          metadata: {
-            views: post.views,
-            likes: post.likes,
-            comments: post.comments,
-            isPinned: post.isPinned
-          }
-        });
-      }
+      // Removed posts loop as community posts are no longer available
 
-      // Get users from community service
-      const users = await communityService.getProfiles();
-      for (const user of users) {
-        index.push({
-          id: user.id,
-          type: 'user',
-          title: user.displayName,
-          content: user.bio,
-          excerpt: this.generateExcerpt(user.bio),
-          author: user.displayName,
-          tags: [],
-          createdAt: user.joinDate,
-          updatedAt: user.lastActive,
-          relevanceScore: 0,
-          url: `/profile/${user.id}`,
-          metadata: {
-            reputation: user.reputation,
-            posts: user.stats.posts,
-            followers: user.stats.followers
-          }
-        });
-      }
+      // Removed user search as it's unnecessary for educational platform
 
       // Get articles from backend API
       const { backendApi } = await import('./backendApi');
@@ -369,16 +325,8 @@ class SearchService {
       suggestions.push(...popularQueries);
 
       // Get matching categories
-      const { communityService } = await import('./communityService');
-      const categories = await communityService.getCategories();
-      const matchingCategories = categories
-        .filter(cat => cat.name.toLowerCase().includes(queryLower))
-        .slice(0, 2)
-        .map(cat => ({
-          text: cat.name,
-          type: 'category' as const,
-          count: cat.postCount
-        }));
+      // Removed community categories as they are unnecessary for educational platform
+      const matchingCategories: any[] = []
       
       suggestions.push(...matchingCategories);
 

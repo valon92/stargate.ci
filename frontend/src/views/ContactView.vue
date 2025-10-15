@@ -107,7 +107,7 @@
             
             <div>
               <label for="message" class="block text-sm font-medium text-gray-300 mb-2">
-                {{ $t('contact.form.message') }}
+                Message
               </label>
               <textarea
                 id="message"
@@ -115,7 +115,7 @@
                 required
                 rows="6"
                 class="w-full px-4 py-3 bg-gray-700 border border-dark-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none"
-                :placeholder="$t('contact.form.message')"
+                placeholder="Tell us about your project or questions..."
               ></textarea>
             </div>
             
@@ -130,18 +130,18 @@
                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                     <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                   </svg>
-                  {{ $t('common.loading') }}
+                  Loading...
                 </span>
-                <span v-else>{{ $t('contact.form.submit') }}</span>
+                <span v-else>Send Message</span>
               </button>
             </div>
             
             <div v-if="submitMessage" class="text-center">
               <div v-if="submitSuccess" class="text-green-400">
-                {{ $t('contact.form.success') }}
+                Message sent successfully! We'll get back to you soon.
               </div>
               <div v-else class="text-red-400">
-                {{ $t('contact.form.error') }}
+                Failed to send message. Please try again.
               </div>
             </div>
           </form>
@@ -183,12 +183,12 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
               </svg>
             </div>
-            <h3 class="text-xl font-semibold mb-4 text-white">Partnership Opportunities</h3>
+            <h3 class="text-xl font-semibold mb-4 text-white">News & Updates</h3>
             <p class="text-gray-400 mb-4">
-              Connect directly with official project teams and explore investment opportunities
+              Stay updated with the latest news about Stargate Project and Cristal Intelligence
             </p>
-            <RouterLink to="/partnership" class="text-primary-400 hover:text-primary-300 transition-colors duration-200">
-              Explore Projects
+            <RouterLink to="/news" class="text-primary-400 hover:text-primary-300 transition-colors duration-200">
+              View Latest News
             </RouterLink>
           </div>
           
@@ -214,10 +214,8 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { useI18n } from 'vue-i18n'
 import { useHead } from '@vueuse/head'
 
-const { t } = useI18n()
 
 const form = ref({
   name: '',

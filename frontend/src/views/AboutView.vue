@@ -169,6 +169,7 @@
       </div>
     </section>
 
+
     <!-- Legal Disclaimer Section -->
     <section class="py-24 bg-gradient-to-r from-yellow-900/20 to-orange-900/20">
       <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -200,12 +201,9 @@
 </template>
 
 <script setup lang="ts">
-import { useI18n } from 'vue-i18n'
 import { useHead } from '@vueuse/head'
 import { ref, onMounted } from 'vue'
 import { stargateApi, type StargateProjectData, type CristalIntelligenceData } from '../services/stargateApi'
-
-const { t } = useI18n()
 
 // Reactive data
 const stargateData = ref<StargateProjectData | null>(null)

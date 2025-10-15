@@ -59,6 +59,7 @@
       </div>
     </section>
 
+
     <!-- Additional Resources -->
     <section class="py-24 bg-gradient-to-r from-primary-900/20 to-secondary-900/20">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -93,12 +94,12 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
               </svg>
             </div>
-            <h3 class="text-xl font-semibold mb-4 text-white">Partnership Opportunities</h3>
+            <h3 class="text-xl font-semibold mb-4 text-white">News & Updates</h3>
             <p class="text-gray-400 mb-6">
-              Connect directly with official project teams and explore investment opportunities
+              Stay updated with the latest news about Stargate Project and Cristal Intelligence
             </p>
-            <RouterLink to="/partnership" class="btn-secondary">
-              Explore Projects
+            <RouterLink to="/news" class="btn-secondary">
+              View Latest News
             </RouterLink>
           </div>
           
@@ -125,10 +126,8 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { RouterLink } from 'vue-router'
-import { useI18n } from 'vue-i18n'
 import { useHead } from '@vueuse/head'
 
-const { t } = useI18n()
 
 const openFAQs = ref<number[]>([])
 

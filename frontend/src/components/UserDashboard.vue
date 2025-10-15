@@ -181,11 +181,11 @@
               <span class="text-white">Continue Learning</span>
             </RouterLink>
             <RouterLink 
-              to="/partnership" 
+              to="/news" 
               class="flex items-center p-3 bg-gray-800 rounded-lg hover:bg-gray-700 transition-colors"
             >
-              <span class="text-xl mr-3">🤝</span>
-              <span class="text-white">Explore Partnerships</span>
+              <span class="text-xl mr-3">📰</span>
+              <span class="text-white">Latest News</span>
             </RouterLink>
             <RouterLink 
               to="/insights" 
@@ -364,7 +364,7 @@ const executeAction = (action: RecommendedAction) => {
       window.location.href = '/learning'
       break
     case 'partnership':
-      window.location.href = '/partnership'
+      window.location.href = '/news'
       break
     case 'insights':
       window.location.href = '/insights'
@@ -477,8 +477,8 @@ const loadUserData = () => {
     },
     {
       id: '3',
-      title: 'Explore Partnerships',
-      description: 'Discover partnership opportunities with Stargate providers.',
+      title: 'Latest News',
+      description: 'Stay updated with the latest news about Stargate Project and Cristal Intelligence.',
       priority: 'Low',
       estimatedTime: '15 min',
       buttonText: 'Explore',
@@ -513,7 +513,7 @@ const loadUserData = () => {
     },
     {
       id: '2',
-      title: 'SoftBank Partnership',
+      title: 'Stargate News Update',
       summary: 'SoftBank announces new initiatives in AI infrastructure.',
       date: '1 week ago',
       link: 'https://group.softbank/en/news/press/20250203_0'
@@ -536,8 +536,8 @@ const loadUserData = () => {
     },
     {
       id: '3',
-      title: 'Explore 5 Partnerships',
-      description: 'Research and evaluate partnership opportunities',
+      title: 'Read Latest News',
+      description: 'Stay updated with Stargate Project and Cristal Intelligence news',
       progress: 40
     }
   ]

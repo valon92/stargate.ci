@@ -23,7 +23,7 @@
           >
             <option value="all">All Results</option>
             <option value="content">Content</option>
-            <option value="community">Community</option>
+            <!-- Removed community option as it's unnecessary for educational platform -->
             <option value="users">Users</option>
           </select>
         </div>
@@ -151,8 +151,7 @@
                 Level {{ result.difficulty }}
               </span>
 
-              <!-- Community-specific metadata -->
-              <template v-if="result.type === 'community'">
+              <!-- Removed community-specific metadata as it's unnecessary for educational platform -->
                 <span v-if="result.views" class="flex items-center">
                   <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -218,7 +217,7 @@ import { backendApi } from '../../services/backendApi'
 
 interface SearchResult {
   id: number
-  type: 'content' | 'community' | 'user'
+  type: 'content' | 'user'
   title: string
   description?: string
   content?: string
@@ -243,7 +242,7 @@ interface SearchResult {
 
 interface Props {
   query: string
-  searchType?: 'all' | 'content' | 'community' | 'users'
+  searchType?: 'all' | 'content' | 'users'
   showRelevanceScore?: boolean
 }
 
@@ -362,7 +361,7 @@ const getTypeIcon = (type: string) => {
           d: 'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253'
         })
       ])
-    case 'community':
+    // Removed community case as it's unnecessary for educational platform
       return h('svg', {
         fill: 'none',
         stroke: 'currentColor',
@@ -408,7 +407,7 @@ const getTypeIconClass = (type: string) => {
   switch (type) {
     case 'content':
       return 'bg-blue-500/20 text-blue-400'
-    case 'community':
+    // Removed community case as it's unnecessary for educational platform
       return 'bg-green-500/20 text-green-400'
     case 'user':
       return 'bg-purple-500/20 text-purple-400'

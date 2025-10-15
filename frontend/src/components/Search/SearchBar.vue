@@ -125,7 +125,7 @@ import { useRouter } from 'vue-router'
 
 interface Props {
   placeholder?: string
-  searchType?: 'all' | 'content' | 'community' | 'users'
+  searchType?: 'all' | 'content'
   autoFocus?: boolean
   showRecentSearches?: boolean
   debounceDelay?: number
