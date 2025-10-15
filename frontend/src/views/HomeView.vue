@@ -354,28 +354,6 @@
 
 
 
-    <!-- Platform Mission Section -->
-    <section class="py-24 bg-gradient-to-br from-primary-900/30 to-secondary-900/30">
-      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <h2 class="text-3xl md:text-4xl font-bold mb-6">
-          <span class="gradient-text">stargate.ci Platform Mission</span>
-        </h2>
-        <p class="text-xl text-gray-300 mb-8">
-          {{ platformMission }}
-        </p>
-                <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                  <RouterLink to="/dashboard" class="btn-primary">
-                    Go to Dashboard
-                  </RouterLink>
-                  <RouterLink to="/templates" class="btn-secondary">
-                    Browse Templates
-                  </RouterLink>
-                  <RouterLink to="/assessment" class="btn-outline">
-                    Take Assessment
-                  </RouterLink>
-                </div>
-      </div>
-    </section>
   </div>
 </template>
 
@@ -385,8 +363,6 @@ import { RouterLink } from 'vue-router'
 import { useHead } from '@vueuse/head'
 import { emailNotificationService } from '../services/emailNotificationService'
 
-// Platform mission
-const platformMission = 'Our mission is to provide independent, educational information about the Stargate project and Cristal Intelligence, helping individuals and organizations understand these groundbreaking developments in AI infrastructure.'
 
 // Members data
 const allMembers = ref<any[]>([])
