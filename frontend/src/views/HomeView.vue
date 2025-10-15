@@ -190,103 +190,98 @@
       </div>
     </section>
 
-    <!-- Email Test Panel (for development) -->
-    <section v-if="showTestPanel" class="py-12 bg-gray-900/50">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <EmailTestPanel />
-      </div>
-    </section>
 
     <!-- Community Members Section -->
     <section class="py-24 bg-gray-800/30">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-16">
           <h2 class="text-3xl md:text-4xl font-bold mb-4">
-            <span class="gradient-text">Our Community Members</span>
+            <span class="gradient-text">Our Community</span>
           </h2>
-          <p class="text-xl text-gray-300 max-w-3xl mx-auto">
-            Join thousands of innovators, researchers, and technology enthusiasts who are staying updated with the latest developments in Stargate Project and Cristal Intelligence.
+          <p class="text-xl text-gray-300 max-w-3xl mx-auto mb-8">
+            Join our growing community of innovators, researchers, and technology enthusiasts.
           </p>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <div 
-            v-for="member in displayedMembers" 
-            :key="member.id"
-            class="card group hover:scale-105 transition-all duration-300 hover:shadow-2xl"
-          >
-            <div class="p-6">
-              <div class="flex items-center mb-4">
-                <div class="w-12 h-12 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full flex items-center justify-center mr-4">
-                  <span class="text-white font-bold text-lg">{{ member.username.charAt(0).toUpperCase() }}</span>
-                </div>
-                <div>
-                  <h3 class="text-lg font-bold text-white">{{ member.username }}</h3>
-                  <p class="text-sm text-gray-400">{{ member.role || 'Community Member' }}</p>
-                </div>
-              </div>
-              
-              <div class="space-y-2 mb-4">
-                <div v-if="member.fullName" class="flex items-center text-sm text-gray-300">
-                  <svg class="w-4 h-4 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-                  </svg>
-                  {{ member.fullName }}
-                </div>
-                <div v-if="member.organization" class="flex items-center text-sm text-gray-300">
-                  <svg class="w-4 h-4 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
-                  </svg>
-                  {{ member.organization }}
-                </div>
-                <div class="flex items-center text-sm text-gray-300">
-                  <svg class="w-4 h-4 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                  </svg>
-                  Joined {{ formatDate(member.subscribedAt) }}
-                </div>
-              </div>
-
-              <div v-if="member.interests && member.interests.length > 0" class="mb-4">
-                <h4 class="text-sm font-medium text-gray-300 mb-2">Interests:</h4>
-                <div class="flex flex-wrap gap-1">
-                  <span 
-                    v-for="interest in member.interests.slice(0, 3)" 
-                    :key="interest"
-                    class="px-2 py-1 bg-primary-500/20 text-primary-400 text-xs rounded-full"
-                  >
-                    {{ formatInterest(interest) }}
-                  </span>
-                  <span 
-                    v-if="member.interests.length > 3"
-                    class="px-2 py-1 bg-gray-600/20 text-gray-400 text-xs rounded-full"
-                  >
-                    +{{ member.interests.length - 3 }} more
-                  </span>
-                </div>
-              </div>
-
-              <div class="flex items-center justify-between">
-                <span class="text-xs text-gray-500">Member #{{ member.id }}</span>
-                <div class="flex items-center text-xs text-green-400">
-                  <div class="w-2 h-2 bg-green-400 rounded-full mr-1"></div>
-                  Active
-                </div>
-              </div>
+          
+          <!-- Community Stats -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto mb-8">
+            <div class="bg-gray-800/50 border border-gray-700 rounded-lg p-6">
+              <div class="text-3xl font-bold text-primary-400 mb-2">1M+</div>
+              <div class="text-gray-300">Total Members</div>
+            </div>
+            <div class="bg-gray-800/50 border border-gray-700 rounded-lg p-6">
+              <div class="text-3xl font-bold text-secondary-400 mb-2">50K+</div>
+              <div class="text-gray-300">Active This Month</div>
+            </div>
+            <div class="bg-gray-800/50 border border-gray-700 rounded-lg p-6">
+              <div class="text-3xl font-bold text-green-400 mb-2">150+</div>
+              <div class="text-gray-300">Countries</div>
             </div>
           </div>
         </div>
 
-        <div v-if="totalMembers > displayedMembers.length" class="text-center mt-12">
-          <p class="text-gray-400 mb-4">
-            Showing {{ displayedMembers.length }} of {{ totalMembers }} community members
+        <!-- Recent Members -->
+        <div class="mb-12">
+          <h3 class="text-2xl font-bold text-center mb-8">
+            <span class="gradient-text">Recent Members</span>
+          </h3>
+          
+          <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+            <div 
+              v-for="member in displayedMembers.slice(0, 12)" 
+              :key="member.id"
+              class="text-center group hover:scale-105 transition-transform duration-200"
+            >
+              <div class="w-16 h-16 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full flex items-center justify-center mx-auto mb-3 group-hover:shadow-lg">
+                <span class="text-white font-bold text-lg">{{ member.username.charAt(0).toUpperCase() }}</span>
+              </div>
+              <div class="text-sm font-medium text-white truncate">{{ member.username }}</div>
+              <div class="text-xs text-gray-400">{{ member.role || 'Member' }}</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Member Spotlight -->
+        <div class="bg-gray-800/50 border border-gray-700 rounded-lg p-8">
+          <h3 class="text-2xl font-bold text-center mb-8">
+            <span class="gradient-text">Member Spotlight</span>
+          </h3>
+          
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div 
+              v-for="member in displayedMembers.slice(0, 3)" 
+              :key="member.id"
+              class="text-center"
+            >
+              <div class="w-20 h-20 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span class="text-white font-bold text-2xl">{{ member.username.charAt(0).toUpperCase() }}</span>
+              </div>
+              <h4 class="text-lg font-bold text-white mb-2">{{ member.username }}</h4>
+              <p class="text-sm text-gray-400 mb-3">{{ member.role || 'Community Member' }}</p>
+              <div v-if="member.organization" class="text-xs text-gray-500 mb-2">{{ member.organization }}</div>
+              <div class="text-xs text-gray-500">Joined {{ formatDate(member.subscribedAt) }}</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="text-center mt-12">
+          <p class="text-gray-400 mb-6">
+            Join over <span class="text-primary-400 font-bold">1,000,000</span> members worldwide
           </p>
-          <button 
-            @click="loadMoreMembers"
-            class="btn-outline"
-          >
-            Load More Members
-          </button>
+          <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <RouterLink 
+              to="/subscribe"
+              class="btn-primary"
+            >
+              Join Our Community
+            </RouterLink>
+            <button 
+              @click="loadMoreMembers"
+              class="btn-outline"
+              v-if="totalMembers > displayedMembers.length"
+            >
+              View More Members
+            </button>
+          </div>
         </div>
 
         <div v-if="displayedMembers.length === 0" class="text-center py-12">
@@ -389,7 +384,6 @@ import { ref, onMounted, computed } from 'vue'
 import { RouterLink } from 'vue-router'
 import { useHead } from '@vueuse/head'
 import { emailNotificationService } from '../services/emailNotificationService'
-import EmailTestPanel from '../components/EmailTestPanel.vue'
 
 // Platform mission
 const platformMission = 'Our mission is to provide independent, educational information about the Stargate project and Cristal Intelligence, helping individuals and organizations understand these groundbreaking developments in AI infrastructure.'
@@ -400,8 +394,6 @@ const displayedMembers = ref<any[]>([])
 const membersPerPage = 6
 const currentPage = ref(1)
 
-// Test panel (show in development)
-const showTestPanel = ref(true) // Set to false in production
 
 // Computed properties
 const totalMembers = computed(() => allMembers.value.length)

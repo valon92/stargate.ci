@@ -17,26 +17,26 @@
 
       <!-- Main Content -->
       <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div class="text-center mb-12">
-          <h1 class="text-4xl md:text-5xl font-bold mb-4">
-            <span class="gradient-text">Subscribe to Stargate.ci</span>
+        <div class="text-center mb-8">
+          <h1 class="text-3xl md:text-4xl font-bold mb-3">
+            <span class="gradient-text">Subscribe</span>
           </h1>
-          <p class="text-xl text-gray-300 max-w-2xl mx-auto">
-            Join our community of innovators and stay updated with the latest developments in Stargate Project and Cristal Intelligence.
+          <p class="text-lg text-gray-300 max-w-xl mx-auto">
+            Get notified about Stargate Project and Cristal Intelligence updates.
           </p>
         </div>
 
         <!-- Subscription Form -->
         <div class="max-w-2xl mx-auto">
           <div class="card">
-            <div class="text-center mb-6">
-              <div class="w-16 h-16 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span class="text-2xl">📧</span>
+            <div class="text-center mb-4">
+              <div class="w-12 h-12 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full flex items-center justify-center mx-auto mb-3">
+                <span class="text-xl">📧</span>
               </div>
-              <h2 class="text-2xl font-bold mb-2">
-                <span class="gradient-text">Subscribe to Updates</span>
+              <h2 class="text-xl font-bold mb-2">
+                <span class="gradient-text">Stay Updated</span>
               </h2>
-              <p class="text-gray-400">Join our community and receive the latest news and insights</p>
+              <p class="text-gray-400 text-sm">Simple subscription form</p>
             </div>
 
             <form @submit.prevent="handleSubscription" class="space-y-4">
@@ -66,76 +66,6 @@
                   class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-white placeholder-gray-400"
                   placeholder="Enter your email address"
                 />
-              </div>
-
-              <div>
-                <label for="fullName" class="block text-sm font-medium text-gray-300 mb-2">
-                  Full Name
-                </label>
-                <input
-                  id="fullName"
-                  v-model="subscriptionForm.fullName"
-                  type="text"
-                  class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-white placeholder-gray-400"
-                  placeholder="Enter your full name"
-                />
-              </div>
-
-              <div>
-                <label for="organization" class="block text-sm font-medium text-gray-300 mb-2">
-                  Organization/Company
-                </label>
-                <input
-                  id="organization"
-                  v-model="subscriptionForm.organization"
-                  type="text"
-                  class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-white placeholder-gray-400"
-                  placeholder="Your organization or company"
-                />
-              </div>
-
-              <div>
-                <label class="block text-sm font-medium text-gray-300 mb-2">
-                  Areas of Interest
-                </label>
-                <div class="grid grid-cols-2 gap-2">
-                  <label class="flex items-center">
-                    <input
-                      v-model="subscriptionForm.interests"
-                      type="checkbox"
-                      value="stargate"
-                      class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
-                    />
-                    <span class="ml-2 text-sm text-gray-300">Stargate Project</span>
-                  </label>
-                  <label class="flex items-center">
-                    <input
-                      v-model="subscriptionForm.interests"
-                      type="checkbox"
-                      value="cristal"
-                      class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
-                    />
-                    <span class="ml-2 text-sm text-gray-300">Cristal Intelligence</span>
-                  </label>
-                  <label class="flex items-center">
-                    <input
-                      v-model="subscriptionForm.interests"
-                      type="checkbox"
-                      value="ai-ethics"
-                      class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
-                    />
-                    <span class="ml-2 text-sm text-gray-300">AI Ethics</span>
-                  </label>
-                  <label class="flex items-center">
-                    <input
-                      v-model="subscriptionForm.interests"
-                      type="checkbox"
-                      value="research"
-                      class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
-                    />
-                    <span class="ml-2 text-sm text-gray-300">Research</span>
-                  </label>
-                </div>
               </div>
 
               <div>

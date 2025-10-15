@@ -64,7 +64,6 @@ const platformLinks = [
   { name: 'About Platform', href: '/about' },
   { name: 'Services', href: '/services' },
   { name: 'News', href: '/news' },
-  { name: 'Insights', href: '/insights' },
   { name: 'FAQ', href: '/faq' },
   { name: 'Contact', href: '/contact' },
 ]
