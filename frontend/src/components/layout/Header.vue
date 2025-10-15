@@ -145,11 +145,11 @@
           <!-- Mobile CTA - Compact -->
           <div class="pt-2 border-t border-gray-700/30 space-y-1">
             <RouterLink
-              to="/login"
+              to="/subscribe"
               class="bg-gradient-to-r from-primary-500 to-secondary-500 text-white block px-2 py-2 rounded-md text-sm font-medium text-center hover:from-primary-600 hover:to-secondary-600 transition-all duration-150"
               @click="closeMenu"
             >
-              Sign In
+              Subscribe
             </RouterLink>
           </div>
         </div>
