@@ -205,15 +205,15 @@
           <!-- Community Stats -->
           <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto mb-8">
             <div class="bg-gray-800/50 border border-gray-700 rounded-lg p-6">
-              <div class="text-3xl font-bold text-primary-400 mb-2">1M+</div>
+              <div class="text-3xl font-bold text-primary-400 mb-2">{{ totalMembers.toLocaleString() }}</div>
               <div class="text-gray-300">Total Members</div>
             </div>
             <div class="bg-gray-800/50 border border-gray-700 rounded-lg p-6">
-              <div class="text-3xl font-bold text-secondary-400 mb-2">50K+</div>
+              <div class="text-3xl font-bold text-secondary-400 mb-2">{{ activeMembersThisMonth.toLocaleString() }}</div>
               <div class="text-gray-300">Active This Month</div>
             </div>
             <div class="bg-gray-800/50 border border-gray-700 rounded-lg p-6">
-              <div class="text-3xl font-bold text-green-400 mb-2">150+</div>
+              <div class="text-3xl font-bold text-green-400 mb-2">{{ totalCountries }}</div>
               <div class="text-gray-300">Countries</div>
             </div>
           </div>
@@ -397,6 +397,26 @@ const currentPage = ref(1)
 
 // Computed properties
 const totalMembers = computed(() => allMembers.value.length)
+
+// Community statistics
+const activeMembersThisMonth = computed(() => {
+  const thisMonth = new Date()
+  const startOfMonth = new Date(thisMonth.getFullYear(), thisMonth.getMonth(), 1)
+  return allMembers.value.filter(member => {
+    const memberDate = new Date(member.subscribedAt)
+    return memberDate >= startOfMonth
+  }).length
+})
+
+const totalCountries = computed(() => {
+  const countries = new Set()
+  allMembers.value.forEach(member => {
+    if (member.country) {
+      countries.add(member.country)
+    }
+  })
+  return countries.size || 1 // Default to 1 if no countries found
+})
 
 // Methods
 const loadMembers = () => {
