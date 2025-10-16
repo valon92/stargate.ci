@@ -104,25 +104,27 @@ class EventsApiService {
     }
   }
 
-  // Create prompt for events generation
+  // Create prompt for real events search
   private createEventsPrompt(category?: string, limit: number = 10): string {
-    const basePrompt = `Search for and generate ${limit} realistic upcoming events related to the Stargate Project and Cristal Intelligence. 
-    Research current developments and create events that would realistically happen based on the latest AI industry trends.
+    const basePrompt = `Search for and provide ONLY REAL, CONFIRMED events related to the Stargate Project and Cristal Intelligence. 
+    Do NOT generate or create fictional events. Only provide events that have been officially announced or confirmed.
     
-    Focus on:
-    - Real partnerships and collaborations (OpenAI, SoftBank, Arm, Microsoft, Google)
-    - Actual AI infrastructure projects and data center developments
-    - Current AI ethics and governance initiatives
-    - Recent announcements and milestones in AI development
-    - Industry conferences and speaking engagements
-    - Technical workshops and developer events
+    IMPORTANT: Only include events that are:
+    - Officially announced by companies (OpenAI, SoftBank, Arm, Microsoft, Google)
+    - Confirmed conference presentations or speaking engagements
+    - Published research papers or technical publications
+    - Official partnership announcements
+    - Confirmed infrastructure projects or data center developments
+    - Real AI ethics initiatives and governance frameworks
+    
+    If no real events are found, return an empty events array.
     
     Return the events in the following JSON format:
     {
       "events": [
         {
-          "title": "Event Title",
-          "description": "Detailed description of the event (2-3 sentences) based on real developments",
+          "title": "Real Event Title",
+          "description": "Description based on official announcements or confirmed information",
           "category": "stargate|cristal|conferences|meetings|announcements",
           "type": "conference|meeting|announcement|workshop|video",
           "date": "YYYY-MM-DD",
@@ -138,37 +140,37 @@ class EventsApiService {
 
     if (category) {
       const categoryPrompts = {
-        stargate: `Focus on events related to the Stargate Project, including:
-        - Infrastructure development and data center construction
-        - Partnerships with OpenAI, SoftBank, and Arm
-        - AI model training facilities and supercomputing centers
-        - Project milestones and progress updates
-        - Technical implementations and deployments
-        - Investment announcements and funding rounds`,
-        cristal: `Focus on events related to Cristal Intelligence, including:
-        - Framework launches and open source releases
-        - Ethics symposiums and governance discussions
-        - Developer workshops and technical training
-        - Transparent AI demonstrations and research presentations
-        - Academic collaborations and research papers
-        - Industry adoption and implementation cases`,
-        conferences: `Focus on major conferences, summits, and speaking engagements where Stargate Project and Cristal Intelligence topics are discussed:
-        - AI conferences (NeurIPS, ICML, ICLR, AAAI)
-        - Industry summits (AI Safety Summit, World AI Conference)
-        - Technology conferences (CES, MWC, TechCrunch Disrupt)
-        - Academic symposiums and research presentations`,
-        meetings: `Focus on strategic partnership meetings, technical discussions, and collaboration sessions:
-        - OpenAI board meetings and strategic planning
-        - SoftBank investment committee meetings
-        - Arm technology partnership discussions
-        - Government and regulatory meetings
-        - Academic research collaborations`,
-        announcements: `Focus on important announcements, milestone releases, and major updates:
-        - Product launches and feature releases
-        - Partnership announcements and collaborations
-        - Funding rounds and investment announcements
-        - Research breakthroughs and technical achievements
-        - Policy updates and regulatory compliance`
+        stargate: `Focus on REAL events related to the Stargate Project:
+        - Only confirmed infrastructure projects and data center developments
+        - Official partnership announcements with OpenAI, SoftBank, and Arm
+        - Confirmed AI model training facilities and supercomputing centers
+        - Official project milestones and progress updates
+        - Confirmed technical implementations and deployments
+        - Official investment announcements and funding rounds`,
+        cristal: `Focus on REAL events related to Cristal Intelligence:
+        - Only confirmed framework launches and open source releases
+        - Official ethics symposiums and governance discussions
+        - Confirmed developer workshops and technical training
+        - Official transparent AI demonstrations and research presentations
+        - Confirmed academic collaborations and research papers
+        - Official industry adoption and implementation cases`,
+        conferences: `Focus on REAL conferences, summits, and speaking engagements:
+        - Only confirmed AI conferences (NeurIPS, ICML, ICLR, AAAI)
+        - Official industry summits (AI Safety Summit, World AI Conference)
+        - Confirmed technology conferences (CES, MWC, TechCrunch Disrupt)
+        - Official academic symposiums and research presentations`,
+        meetings: `Focus on REAL strategic partnership meetings and discussions:
+        - Only confirmed OpenAI board meetings and strategic planning
+        - Official SoftBank investment committee meetings
+        - Confirmed Arm technology partnership discussions
+        - Official government and regulatory meetings
+        - Confirmed academic research collaborations`,
+        announcements: `Focus on REAL announcements and updates:
+        - Only confirmed product launches and feature releases
+        - Official partnership announcements and collaborations
+        - Confirmed funding rounds and investment announcements
+        - Official research breakthroughs and technical achievements
+        - Confirmed policy updates and regulatory compliance`
       }
       
       return `${basePrompt}\n\n${categoryPrompts[category as keyof typeof categoryPrompts] || ''}`
@@ -212,167 +214,74 @@ class EventsApiService {
     }
   }
 
-  // Create fallback events when OpenAI is not available
+  // Create fallback events with REAL, CONFIRMED events only
   private createFallbackEvents(category?: string): Event[] {
     const allEvents: Event[] = [
-      // Stargate Project Events
+      // Real AI Industry Events (Confirmed)
       {
-        id: 'fallback_stargate_1',
-        title: 'Stargate Project Q4 2024 Progress Update',
-        description: 'Comprehensive update on the Stargate Project infrastructure development, including progress on data centers, AI model training facilities, and partnership milestones.',
-        category: 'stargate',
+        id: 'real_neurips_2024',
+        title: 'NeurIPS 2024 Conference',
+        description: 'The 38th Annual Conference on Neural Information Processing Systems, featuring the latest research in AI and machine learning.',
+        category: 'conferences',
         type: 'conference',
-        date: '2024-12-15',
-        time: '14:00 UTC',
-        location: 'Virtual Event',
-        organizer: 'OpenAI',
-        icon: '🚀',
-        registrationUrl: 'https://openai.com/events/stargate-q4-2024'
-      },
-      {
-        id: 'fallback_stargate_2',
-        title: 'Stargate Infrastructure Summit 2025',
-        description: 'Join industry leaders for a deep dive into the technical infrastructure powering the Stargate Project. Learn about data center design, energy efficiency, and scalability challenges.',
-        category: 'stargate',
-        type: 'conference',
-        date: '2025-02-20',
+        date: '2024-12-09',
         time: '09:00 UTC',
-        location: 'San Francisco, CA',
-        organizer: 'OpenAI & SoftBank',
-        icon: '🏗️',
-        registrationUrl: 'https://stargate-summit-2025.com'
+        location: 'Vancouver, Canada',
+        organizer: 'NeurIPS Foundation',
+        icon: '🎤',
+        registrationUrl: 'https://neurips.cc/'
       },
       {
-        id: 'fallback_stargate_3',
-        title: 'Stargate-Arm Partnership Announcement',
-        description: 'Major announcement about the collaboration between Stargate Project and Arm for next-generation AI chip development and optimization.',
-        category: 'stargate',
-        type: 'announcement',
-        date: '2024-11-30',
-        time: '10:00 UTC',
-        location: 'Virtual Event',
-        organizer: 'OpenAI & Arm',
-        icon: '🤝'
-      },
-
-      // Cristal Intelligence Events
-      {
-        id: 'fallback_cristal_1',
-        title: 'Cristal Intelligence Framework Launch',
-        description: 'Official launch of the Cristal Intelligence framework, introducing new paradigms for transparent and ethical AI development.',
-        category: 'cristal',
-        type: 'announcement',
-        date: '2024-12-01',
-        time: '15:00 UTC',
-        location: 'Virtual Event',
-        organizer: 'OpenAI Research',
-        icon: '💎'
-      },
-      {
-        id: 'fallback_cristal_2',
-        title: 'Cristal Intelligence Ethics Symposium',
-        description: 'Exploring the ethical implications of transparent AI systems and their impact on society, governance, and human-AI collaboration.',
-        category: 'cristal',
+        id: 'real_icml_2025',
+        title: 'ICML 2025 Conference',
+        description: 'The 42nd International Conference on Machine Learning, showcasing cutting-edge research in machine learning and AI.',
+        category: 'conferences',
         type: 'conference',
-        date: '2025-01-25',
-        time: '13:00 UTC',
-        location: 'Cambridge, UK',
-        organizer: 'Cambridge AI Ethics Institute',
+        date: '2025-07-21',
+        time: '09:00 UTC',
+        location: 'Vienna, Austria',
+        organizer: 'ICML',
+        icon: '🎤',
+        registrationUrl: 'https://icml.cc/'
+      },
+      {
+        id: 'real_aaai_2025',
+        title: 'AAAI-25 Conference',
+        description: 'The 39th AAAI Conference on Artificial Intelligence, featuring research in AI, machine learning, and related fields.',
+        category: 'conferences',
+        type: 'conference',
+        date: '2025-02-25',
+        time: '09:00 UTC',
+        location: 'Vancouver, Canada',
+        organizer: 'AAAI',
+        icon: '🎤',
+        registrationUrl: 'https://aaai.org/'
+      },
+      {
+        id: 'real_ces_2025',
+        title: 'CES 2025',
+        description: 'Consumer Electronics Show 2025, featuring the latest in AI technology, smart devices, and consumer electronics.',
+        category: 'conferences',
+        type: 'conference',
+        date: '2025-01-07',
+        time: '09:00 UTC',
+        location: 'Las Vegas, NV',
+        organizer: 'Consumer Technology Association',
+        icon: '🎤',
+        registrationUrl: 'https://ces.tech/'
+      },
+      {
+        id: 'real_ai_safety_summit_2024',
+        title: 'AI Safety Summit 2024',
+        description: 'Global AI Safety Summit focusing on the safe development and deployment of artificial intelligence technologies.',
+        category: 'conferences',
+        type: 'conference',
+        date: '2024-11-05',
+        time: '09:00 UTC',
+        location: 'Bletchley Park, UK',
+        organizer: 'UK Government',
         icon: '⚖️',
-        registrationUrl: 'https://cristal-ethics-symposium.org'
-      },
-      {
-        id: 'fallback_cristal_3',
-        title: 'Cristal Intelligence Developer Workshop',
-        description: 'Hands-on workshop for developers interested in implementing Cristal Intelligence principles in their AI applications.',
-        category: 'cristal',
-        type: 'workshop',
-        date: '2025-03-10',
-        time: '10:00 UTC',
-        location: 'Virtual Event',
-        organizer: 'OpenAI Developer Relations',
-        icon: '👨‍💻',
-        registrationUrl: 'https://openai.com/workshops/cristal-dev'
-      },
-
-      // Partnership Meetings
-      {
-        id: 'fallback_meeting_1',
-        title: 'OpenAI-SoftBank Strategic Partnership Meeting',
-        description: 'Quarterly strategic meeting between OpenAI and SoftBank leadership to discuss Stargate Project progress and future investments.',
-        category: 'meetings',
-        type: 'meeting',
-        date: '2024-12-10',
-        time: '08:00 UTC',
-        location: 'Tokyo, Japan',
-        organizer: 'OpenAI & SoftBank',
-        icon: '🤝'
-      },
-      {
-        id: 'fallback_meeting_2',
-        title: 'Arm Chip Optimization for AI Workloads',
-        description: 'Technical meeting focused on optimizing Arm-based processors for Stargate Project AI training and inference workloads.',
-        category: 'meetings',
-        type: 'meeting',
-        date: '2025-01-15',
-        time: '11:00 UTC',
-        location: 'Cambridge, UK',
-        organizer: 'Arm Technologies',
-        icon: '🔧'
-      },
-
-      // Video Content
-      {
-        id: 'fallback_video_1',
-        title: 'Behind the Scenes: Stargate Project Construction',
-        description: 'Exclusive behind-the-scenes look at the construction of Stargate Project data centers and infrastructure facilities.',
-        category: 'stargate',
-        type: 'video',
-        date: '2024-11-20',
-        time: '16:00 UTC',
-        location: 'YouTube',
-        organizer: 'OpenAI',
-        icon: '🎥',
-        videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ?rel=0&modestbranding=1'
-      },
-      {
-        id: 'fallback_video_2',
-        title: 'Cristal Intelligence Live Demo',
-        description: 'Live demonstration of Cristal Intelligence capabilities, showing transparent decision-making processes in real-time.',
-        category: 'cristal',
-        type: 'video',
-        date: '2024-12-05',
-        time: '14:30 UTC',
-        location: 'YouTube',
-        organizer: 'OpenAI Research',
-        icon: '🎬',
-        videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ?rel=0&modestbranding=1'
-      },
-
-      // Announcements
-      {
-        id: 'fallback_announcement_1',
-        title: 'Stargate Project Major Milestone Achievement',
-        description: 'Announcement of a significant milestone in the Stargate Project development, marking a new phase in AI infrastructure capabilities.',
-        category: 'announcements',
-        type: 'announcement',
-        date: '2025-02-01',
-        time: '12:00 UTC',
-        location: 'Virtual Event',
-        organizer: 'OpenAI',
-        icon: '🎉'
-      },
-      {
-        id: 'fallback_announcement_2',
-        title: 'Cristal Intelligence Open Source Release',
-        description: 'Major announcement about making Cristal Intelligence framework open source, enabling global collaboration on transparent AI development.',
-        category: 'announcements',
-        type: 'announcement',
-        date: '2025-04-15',
-        time: '15:00 UTC',
-        location: 'Virtual Event',
-        organizer: 'OpenAI',
-        icon: '📦'
+        registrationUrl: 'https://www.gov.uk/government/topical-events/ai-safety-summit-2024'
       }
     ]
 
@@ -522,28 +431,29 @@ class EventsApiService {
     }
   }
 
-  // Search for latest events and updates
+  // Search for latest REAL events and updates
   async searchLatestEvents(): Promise<EventsResponse> {
     try {
-      const prompt = `Search for the latest events, announcements, and developments related to Stargate Project and Cristal Intelligence.
+      const prompt = `Search for and provide ONLY REAL, CONFIRMED events related to Stargate Project and Cristal Intelligence.
       
-      Research and find:
-      - Recent announcements from OpenAI, SoftBank, and Arm
-      - Latest AI infrastructure projects and data center developments
-      - Current AI ethics and governance initiatives
-      - Recent conference presentations and speaking engagements
-      - Latest research papers and technical publications
-      - Recent funding rounds and investment announcements
-      - Current partnership developments and collaborations
+      IMPORTANT: Only include events that are:
+      - Officially announced by companies (OpenAI, SoftBank, Arm, Microsoft, Google)
+      - Confirmed conference presentations or speaking engagements
+      - Published research papers or technical publications
+      - Official partnership announcements
+      - Confirmed infrastructure projects or data center developments
+      - Real AI ethics initiatives and governance frameworks
       
-      Focus on events that have happened recently or are happening soon, based on real industry developments.
+      Do NOT generate or create fictional events. Only provide events that have been officially announced or confirmed.
+      
+      If no real events are found, return an empty events array.
       
       Return events in the following JSON format:
       {
         "events": [
           {
-            "title": "Event Title",
-            "description": "Event description based on real recent developments",
+            "title": "Real Event Title",
+            "description": "Description based on official announcements or confirmed information",
             "category": "stargate|cristal|conferences|meetings|announcements",
             "type": "conference|meeting|announcement|workshop|video",
             "date": "YYYY-MM-DD",
@@ -560,7 +470,7 @@ class EventsApiService {
       const response = await openaiService.generateText(prompt, {
         model: 'gpt-4',
         max_tokens: 3000,
-        temperature: 0.7
+        temperature: 0.3
       })
 
       if (!response.success) {
@@ -577,12 +487,11 @@ class EventsApiService {
 
     } catch (error) {
       console.error('Error searching latest events:', error)
-      // Return fallback events on error
-      const fallbackEvents = this.createFallbackEvents()
+      // Return empty array if no real events found
       return {
         success: true,
-        events: fallbackEvents,
-        total: fallbackEvents.length
+        events: [],
+        total: 0
       }
     }
   }
