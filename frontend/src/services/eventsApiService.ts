@@ -59,16 +59,21 @@ class EventsApiService {
       }
 
       const prompt = this.createEventsPrompt(category, limit)
-      const response = await openaiService.getChatCompletion([
-        { 
-          role: 'system', 
-          content: 'You are a helpful assistant that generates realistic upcoming events related to the Stargate Project and Cristal Intelligence. Focus on creating events that would realistically happen in the AI industry, including conferences, meetings, announcements, and workshops.' 
-        },
-        { role: 'user', content: prompt }
-      ])
+      const response = await openaiService.createChatCompletion({
+        model: 'gpt-4',
+        messages: [
+          { 
+            role: 'system', 
+            content: 'You are a helpful assistant that generates realistic upcoming events related to the Stargate Project and Cristal Intelligence. Focus on creating events that would realistically happen in the AI industry, including conferences, meetings, announcements, and workshops.' 
+          },
+          { role: 'user', content: prompt }
+        ],
+        max_tokens: 2000,
+        temperature: 0.7
+      })
 
-      if (response.success && response.data && response.data.choices.length > 0) {
-        const generatedContent = response.data.choices[0].message.content
+      if (response && response.choices && response.choices.length > 0) {
+        const generatedContent = response.choices[0].message.content
         const events = this.parseEventsContent(generatedContent, category)
         const result: EventsResponse = {
           success: true,
