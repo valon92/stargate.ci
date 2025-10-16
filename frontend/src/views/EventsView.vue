@@ -19,6 +19,36 @@
     <!-- Events Filter -->
     <section class="py-16 bg-gray-800/30">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Search Bar -->
+        <div class="mb-8">
+          <div class="max-w-2xl mx-auto">
+            <div class="relative">
+              <input
+                v-model="searchQuery"
+                @keyup.enter="searchEvents(searchQuery)"
+                type="text"
+                placeholder="Search events..."
+                class="w-full px-4 py-3 pl-12 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              >
+              <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+              </div>
+              <button
+                @click="searchEvents(searchQuery)"
+                :disabled="isLoading"
+                class="absolute inset-y-0 right-0 pr-3 flex items-center"
+              >
+                <svg v-if="!isLoading" class="h-5 w-5 text-gray-400 hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+                <div v-else class="animate-spin rounded-full h-5 w-5 border-b-2 border-primary-500"></div>
+              </button>
+            </div>
+          </div>
+        </div>
+
         <div class="flex flex-col md:flex-row gap-4 justify-center items-center mb-12">
           <div class="flex flex-wrap gap-2">
             <button 
@@ -258,6 +288,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 import { useHead } from '@vueuse/head'
+import { eventsApiService, type Event } from '../services/eventsApiService'
 
 // Meta tags
 useHead({
@@ -273,6 +304,7 @@ const selectedTimeframe = ref('upcoming')
 const email = ref('')
 const isSubscribing = ref(false)
 const isLoading = ref(false)
+const searchQuery = ref('')
 
 // Event categories
 const eventCategories = ref([
@@ -315,7 +347,7 @@ const eventCategories = ref([
 ])
 
 // Events data
-const events = ref([
+const events = ref<Event[]>([
   // Stargate Project Events
   {
     id: 'stargate-q4-2024',
@@ -517,12 +549,21 @@ const filteredEvents = computed(() => {
 })
 
 // Methods
-const filterByCategory = (categoryId: string) => {
+const filterByCategory = async (categoryId: string) => {
   selectedCategory.value = categoryId
+  if (categoryId === 'all') {
+    await loadEvents()
+  } else {
+    await loadEvents(categoryId)
+  }
 }
 
-const filterByTimeframe = () => {
-  // Timeframe filter is already applied via computed property
+const filterByTimeframe = async () => {
+  if (selectedTimeframe.value === 'upcoming') {
+    await loadUpcomingEvents()
+  } else {
+    await loadEvents(selectedCategory.value === 'all' ? undefined : selectedCategory.value)
+  }
 }
 
 const getCategoryName = (categoryId: string) => {
@@ -601,13 +642,68 @@ const clearFilters = () => {
   selectedTimeframe.value = 'upcoming'
 }
 
-// Lifecycle
-onMounted(() => {
-  // Simulate loading
+// Load events from API
+const loadEvents = async (category?: string) => {
   isLoading.value = true
-  setTimeout(() => {
+  try {
+    const response = await eventsApiService.generateEvents(category, 15)
+    if (response.success) {
+      events.value = response.events
+      console.log('📅 Loaded events:', response.events.length)
+    } else {
+      console.error('Error loading events:', response.error)
+    }
+  } catch (error) {
+    console.error('Error loading events:', error)
+  } finally {
     isLoading.value = false
-  }, 1000)
+  }
+}
+
+// Load upcoming events
+const loadUpcomingEvents = async () => {
+  isLoading.value = true
+  try {
+    const response = await eventsApiService.getUpcomingEvents()
+    if (response.success) {
+      events.value = response.events
+      console.log('📅 Loaded upcoming events:', response.events.length)
+    } else {
+      console.error('Error loading upcoming events:', response.error)
+    }
+  } catch (error) {
+    console.error('Error loading upcoming events:', error)
+  } finally {
+    isLoading.value = false
+  }
+}
+
+// Search events
+const searchEvents = async (query: string) => {
+  if (!query.trim()) {
+    await loadEvents()
+    return
+  }
+  
+  isLoading.value = true
+  try {
+    const response = await eventsApiService.searchEvents(query, selectedCategory.value)
+    if (response.success) {
+      events.value = response.events
+      console.log('🔍 Search results:', response.events.length)
+    } else {
+      console.error('Error searching events:', response.error)
+    }
+  } catch (error) {
+    console.error('Error searching events:', error)
+  } finally {
+    isLoading.value = false
+  }
+}
+
+// Lifecycle
+onMounted(async () => {
+  await loadEvents()
 })
 </script>
 
