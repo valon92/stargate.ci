@@ -221,6 +221,14 @@
                 <span>{{ article.readTime }} min read</span>
               </div>
               
+              <!-- Interactive Content -->
+              <InteractiveContent
+                :content-id="article.id"
+                content-type="news"
+                :initial-likes="Math.floor(Math.random() * 100) + 20"
+                :initial-comments="[]"
+              />
+
               <div class="flex items-center justify-between">
                 <span class="text-sm text-gray-400">By {{ article.author }}</span>
                 <a 
@@ -333,6 +341,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 import { newsApiService, type NewsArticle } from '../services/newsApiService'
+import InteractiveContent from '../components/InteractiveContent.vue'
 
 // Reactive data
 const selectedCategory = ref('')

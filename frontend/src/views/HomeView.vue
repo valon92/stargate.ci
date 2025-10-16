@@ -73,6 +73,16 @@
                 Watch on YouTube
               </a>
             </div>
+            
+            <!-- Interactive Content -->
+            <div class="p-4 pt-0">
+              <InteractiveContent
+                content-id="stargate-intro-video"
+                content-type="video"
+                :initial-likes="Math.floor(Math.random() * 200) + 50"
+                :initial-comments="[]"
+              />
+            </div>
           </div>
           
           <div class="youtube-video-container">
@@ -100,6 +110,16 @@
                 </svg>
                 Watch on YouTube
               </a>
+            </div>
+            
+            <!-- Interactive Content -->
+            <div class="p-4 pt-0">
+              <InteractiveContent
+                content-id="stargate-deep-dive-video"
+                content-type="video"
+                :initial-likes="Math.floor(Math.random() * 200) + 50"
+                :initial-comments="[]"
+              />
             </div>
           </div>
           
@@ -361,6 +381,7 @@
 import { ref, onMounted, computed } from 'vue'
 import { RouterLink } from 'vue-router'
 import { useHead } from '@vueuse/head'
+import InteractiveContent from '../components/InteractiveContent.vue'
 import { emailNotificationService } from '../services/emailNotificationService'
 
 

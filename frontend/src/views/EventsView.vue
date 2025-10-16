@@ -193,6 +193,14 @@
                 </div>
               </div>
 
+              <!-- Interactive Content -->
+              <InteractiveContent
+                :content-id="event.id"
+                content-type="event"
+                :initial-likes="Math.floor(Math.random() * 50) + 10"
+                :initial-comments="[]"
+              />
+
               <!-- Event Actions -->
               <div class="flex gap-3">
                 <button 
@@ -317,6 +325,7 @@
 import { ref, computed, onMounted } from 'vue'
 import { useHead } from '@vueuse/head'
 import { eventsApiService, type Event } from '../services/eventsApiService'
+import InteractiveContent from '../components/InteractiveContent.vue'
 
 // Meta tags
 useHead({
