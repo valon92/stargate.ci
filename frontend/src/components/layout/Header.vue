@@ -178,7 +178,7 @@ const primaryNavigation = computed(() => [
 
 const secondaryNavigation = computed(() => [
   { name: 'About', href: '/about' },
-  { name: 'Services', href: '/services' },
+  { name: 'Events', href: '/events' },
   { name: 'News', href: '/news' },
   { name: 'FAQ', href: '/faq' },
   { name: 'Contact', href: '/contact' },
