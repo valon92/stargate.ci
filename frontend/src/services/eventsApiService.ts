@@ -106,15 +106,23 @@ class EventsApiService {
 
   // Create prompt for events generation
   private createEventsPrompt(category?: string, limit: number = 10): string {
-    const basePrompt = `Generate ${limit} realistic upcoming events related to the Stargate Project and Cristal Intelligence. 
-    Each event should be informative, well-researched, and relevant to current AI developments.
+    const basePrompt = `Search for and generate ${limit} realistic upcoming events related to the Stargate Project and Cristal Intelligence. 
+    Research current developments and create events that would realistically happen based on the latest AI industry trends.
+    
+    Focus on:
+    - Real partnerships and collaborations (OpenAI, SoftBank, Arm, Microsoft, Google)
+    - Actual AI infrastructure projects and data center developments
+    - Current AI ethics and governance initiatives
+    - Recent announcements and milestones in AI development
+    - Industry conferences and speaking engagements
+    - Technical workshops and developer events
     
     Return the events in the following JSON format:
     {
       "events": [
         {
           "title": "Event Title",
-          "description": "Detailed description of the event (2-3 sentences)",
+          "description": "Detailed description of the event (2-3 sentences) based on real developments",
           "category": "stargate|cristal|conferences|meetings|announcements",
           "type": "conference|meeting|announcement|workshop|video",
           "date": "YYYY-MM-DD",
@@ -130,11 +138,37 @@ class EventsApiService {
 
     if (category) {
       const categoryPrompts = {
-        stargate: `Focus on events related to the Stargate Project, including infrastructure development, partnerships with OpenAI, SoftBank, and Arm, data center construction, AI model training facilities, and project milestones.`,
-        cristal: `Focus on events related to Cristal Intelligence, including framework launches, ethics symposiums, developer workshops, transparent AI demonstrations, and research presentations.`,
-        conferences: `Focus on major conferences, summits, and speaking engagements where Stargate Project and Cristal Intelligence topics are discussed.`,
-        meetings: `Focus on strategic partnership meetings, technical discussions, and collaboration sessions between OpenAI, SoftBank, Arm, and other stakeholders.`,
-        announcements: `Focus on important announcements, milestone releases, open source launches, and major updates about the projects.`
+        stargate: `Focus on events related to the Stargate Project, including:
+        - Infrastructure development and data center construction
+        - Partnerships with OpenAI, SoftBank, and Arm
+        - AI model training facilities and supercomputing centers
+        - Project milestones and progress updates
+        - Technical implementations and deployments
+        - Investment announcements and funding rounds`,
+        cristal: `Focus on events related to Cristal Intelligence, including:
+        - Framework launches and open source releases
+        - Ethics symposiums and governance discussions
+        - Developer workshops and technical training
+        - Transparent AI demonstrations and research presentations
+        - Academic collaborations and research papers
+        - Industry adoption and implementation cases`,
+        conferences: `Focus on major conferences, summits, and speaking engagements where Stargate Project and Cristal Intelligence topics are discussed:
+        - AI conferences (NeurIPS, ICML, ICLR, AAAI)
+        - Industry summits (AI Safety Summit, World AI Conference)
+        - Technology conferences (CES, MWC, TechCrunch Disrupt)
+        - Academic symposiums and research presentations`,
+        meetings: `Focus on strategic partnership meetings, technical discussions, and collaboration sessions:
+        - OpenAI board meetings and strategic planning
+        - SoftBank investment committee meetings
+        - Arm technology partnership discussions
+        - Government and regulatory meetings
+        - Academic research collaborations`,
+        announcements: `Focus on important announcements, milestone releases, and major updates:
+        - Product launches and feature releases
+        - Partnership announcements and collaborations
+        - Funding rounds and investment announcements
+        - Research breakthroughs and technical achievements
+        - Policy updates and regulatory compliance`
       }
       
       return `${basePrompt}\n\n${categoryPrompts[category as keyof typeof categoryPrompts] || ''}`
@@ -429,21 +463,22 @@ class EventsApiService {
       const now = new Date()
       const thirtyDaysFromNow = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000)
       
-      const prompt = `Generate upcoming events for the next 30 days (${now.toISOString().split('T')[0]} to ${thirtyDaysFromNow.toISOString().split('T')[0]}) related to Stargate Project and Cristal Intelligence.
+      const prompt = `Search for and generate upcoming events for the next 30 days (${now.toISOString().split('T')[0]} to ${thirtyDaysFromNow.toISOString().split('T')[0]}) related to Stargate Project and Cristal Intelligence.
       
-      Focus on realistic events that could happen in the near future, including:
-      - Progress updates and milestone announcements
-      - Partnership meetings and strategic discussions
+      Research current developments and create realistic events based on:
+      - Recent AI industry announcements and partnerships
+      - Actual conference schedules and speaking engagements
+      - Real infrastructure projects and data center developments
+      - Current AI ethics and governance initiatives
+      - Recent funding rounds and investment announcements
       - Technical workshops and developer events
-      - Conference presentations and speaking engagements
-      - Video releases and demonstrations
       
       Return events in the following JSON format:
       {
         "events": [
           {
             "title": "Event Title",
-            "description": "Event description",
+            "description": "Event description based on real developments",
             "category": "stargate|cristal|conferences|meetings|announcements",
             "type": "conference|meeting|announcement|workshop|video",
             "date": "YYYY-MM-DD",
@@ -477,6 +512,71 @@ class EventsApiService {
 
     } catch (error) {
       console.error('Error getting upcoming events:', error)
+      // Return fallback events on error
+      const fallbackEvents = this.createFallbackEvents()
+      return {
+        success: true,
+        events: fallbackEvents,
+        total: fallbackEvents.length
+      }
+    }
+  }
+
+  // Search for latest events and updates
+  async searchLatestEvents(): Promise<EventsResponse> {
+    try {
+      const prompt = `Search for the latest events, announcements, and developments related to Stargate Project and Cristal Intelligence.
+      
+      Research and find:
+      - Recent announcements from OpenAI, SoftBank, and Arm
+      - Latest AI infrastructure projects and data center developments
+      - Current AI ethics and governance initiatives
+      - Recent conference presentations and speaking engagements
+      - Latest research papers and technical publications
+      - Recent funding rounds and investment announcements
+      - Current partnership developments and collaborations
+      
+      Focus on events that have happened recently or are happening soon, based on real industry developments.
+      
+      Return events in the following JSON format:
+      {
+        "events": [
+          {
+            "title": "Event Title",
+            "description": "Event description based on real recent developments",
+            "category": "stargate|cristal|conferences|meetings|announcements",
+            "type": "conference|meeting|announcement|workshop|video",
+            "date": "YYYY-MM-DD",
+            "time": "HH:MM UTC",
+            "location": "Location",
+            "organizer": "Organizer",
+            "icon": "🚀|💎|🎤|🤝|📢|👨‍💻|🎥|🏗️|⚖️|🔧|🎉|📦",
+            "registrationUrl": "https://example.com/register (optional)",
+            "videoUrl": "https://youtube.com/embed/VIDEO_ID (optional)"
+          }
+        ]
+      }`
+
+      const response = await openaiService.generateText(prompt, {
+        model: 'gpt-4',
+        max_tokens: 3000,
+        temperature: 0.7
+      })
+
+      if (!response.success) {
+        throw new Error(response.error || 'Failed to search latest events')
+      }
+
+      const events = this.parseEventsContent(response.content)
+      
+      return {
+        success: true,
+        events,
+        total: events.length
+      }
+
+    } catch (error) {
+      console.error('Error searching latest events:', error)
       // Return fallback events on error
       const fallbackEvents = this.createFallbackEvents()
       return {
