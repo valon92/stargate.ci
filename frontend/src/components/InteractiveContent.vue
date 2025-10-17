@@ -907,6 +907,33 @@ onMounted(() => {
           isEdited: false
         }
       ]
+    } else if (props.contentId === 'stargate-technical-video') {
+      testComments = [
+        {
+          id: 'test-7',
+          user: 'System Architect',
+          userAvatar: 'S',
+          text: 'The technical implementation details are fascinating. This will revolutionize how we build AI systems.',
+          date: new Date(Date.now() - 5 * 60 * 60 * 1000).toISOString(),
+          likes: 7,
+          isLiked: false,
+          replies: [],
+          isPinned: false,
+          isEdited: false
+        },
+        {
+          id: 'test-8',
+          user: 'DevOps Engineer',
+          userAvatar: 'D',
+          text: 'The infrastructure requirements are massive but achievable. Exciting times ahead!',
+          date: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
+          likes: 5,
+          isLiked: false,
+          replies: [],
+          isPinned: false,
+          isEdited: false
+        }
+      ]
     } else if (props.contentId === 'cristal-intelligence-video') {
       testComments = [
         {
@@ -928,6 +955,33 @@ onMounted(() => {
           text: 'The transparency and interpretability aspects are revolutionary.',
           date: new Date(Date.now() - 1 * 60 * 60 * 1000).toISOString(),
           likes: 4,
+          isLiked: false,
+          replies: [],
+          isPinned: false,
+          isEdited: false
+        }
+      ]
+    } else if (props.contentId === 'future-ai-video') {
+      testComments = [
+        {
+          id: 'test-9',
+          user: 'Industry Analyst',
+          userAvatar: 'I',
+          text: 'The industry impact will be unprecedented. Every sector will be transformed.',
+          date: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString(),
+          likes: 9,
+          isLiked: false,
+          replies: [],
+          isPinned: false,
+          isEdited: false
+        },
+        {
+          id: 'test-10',
+          user: 'Business Leader',
+          userAvatar: 'B',
+          text: 'This is the future we need to prepare for. The applications are endless.',
+          date: new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString(),
+          likes: 6,
           isLiked: false,
           replies: [],
           isPinned: false,
