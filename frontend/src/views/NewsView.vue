@@ -225,7 +225,7 @@
               <InteractiveContent
                 :content-id="article.id"
                 content-type="news"
-                :initial-likes="Math.floor(Math.random() * 100) + 20"
+                :initial-likes="0"
                 :initial-comments="[]"
               />
 

@@ -68,7 +68,7 @@
               <InteractiveContent
                 content-id="stargate-intro-video"
                 content-type="video"
-                :initial-likes="Math.floor(Math.random() * 200) + 50"
+                :initial-likes="0"
                 :initial-comments="[]"
               />
             </div>
@@ -95,7 +95,7 @@
               <InteractiveContent
                 content-id="stargate-deep-dive-video"
                 content-type="video"
-                :initial-likes="Math.floor(Math.random() * 200) + 50"
+                :initial-likes="0"
                 :initial-comments="[]"
               />
             </div>
@@ -122,7 +122,7 @@
               <InteractiveContent
                 content-id="stargate-technical-video"
                 content-type="video"
-                :initial-likes="Math.floor(Math.random() * 200) + 50"
+                :initial-likes="0"
                 :initial-comments="[]"
               />
             </div>
@@ -149,7 +149,7 @@
               <InteractiveContent
                 content-id="cristal-intelligence-video"
                 content-type="video"
-                :initial-likes="Math.floor(Math.random() * 200) + 50"
+                :initial-likes="0"
                 :initial-comments="[]"
               />
             </div>
@@ -176,7 +176,7 @@
               <InteractiveContent
                 content-id="future-ai-video"
                 content-type="video"
-                :initial-likes="Math.floor(Math.random() * 200) + 50"
+                :initial-likes="0"
                 :initial-comments="[]"
               />
             </div>

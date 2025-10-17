@@ -58,7 +58,7 @@ const formatNumber = (num: number): string => {
 }
 
 const calculateStats = () => {
-  // Calculate total likes from localStorage
+  // Calculate total likes from localStorage (only from subscribed users)
   const likes = JSON.parse(localStorage.getItem('stargate_likes') || '{}')
   totalLikes.value = Object.values(likes).reduce((sum: number, like: any) => {
     return sum + (like.count || 0)
@@ -67,7 +67,13 @@ const calculateStats = () => {
   // Calculate total comments from localStorage
   const comments = JSON.parse(localStorage.getItem('stargate_comments') || '{}')
   totalComments.value = Object.values(comments).reduce((sum: number, commentList: any) => {
-    return sum + (Array.isArray(commentList) ? commentList.length : 0)
+    if (Array.isArray(commentList)) {
+      // Count main comments + replies
+      return sum + commentList.reduce((commentSum: number, comment: any) => {
+        return commentSum + 1 + (comment.replies ? comment.replies.length : 0)
+      }, 0)
+    }
+    return sum
   }, 0)
 
   // Calculate total shares from localStorage
@@ -76,8 +82,9 @@ const calculateStats = () => {
     engagement.action.startsWith('share_')
   ).length
 
-  // Simulate active users (in real app, this would come from backend)
-  activeUsers.value = Math.floor(Math.random() * 50) + 20
+  // Get active users from subscribers count
+  const subscribers = JSON.parse(localStorage.getItem('stargate_subscribers') || '[]')
+  activeUsers.value = subscribers.length
 }
 
 // Update stats every 30 seconds

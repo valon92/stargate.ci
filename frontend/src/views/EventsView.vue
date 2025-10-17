@@ -197,7 +197,7 @@
               <InteractiveContent
                 :content-id="event.id"
                 content-type="event"
-                :initial-likes="Math.floor(Math.random() * 50) + 10"
+                :initial-likes="0"
                 :initial-comments="[]"
               />
 

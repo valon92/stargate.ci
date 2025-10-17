@@ -792,6 +792,9 @@ onMounted(() => {
   if (likes[props.contentId]) {
     isLiked.value = likes[props.contentId].isLiked
     likesCount.value = likes[props.contentId].count
+  } else {
+    // Initialize with zero likes
+    likesCount.value = props.initialLikes
   }
   
   // Load comments
@@ -799,6 +802,62 @@ onMounted(() => {
   if (allComments[props.contentId]) {
     comments.value = allComments[props.contentId]
     commentsCount.value = allComments[props.contentId].length
+  } else {
+    // Initialize with empty comments
+    comments.value = props.initialComments
+    commentsCount.value = props.initialComments.length
+  }
+  
+  // Add some test comments for demonstration (remove in production)
+  if (comments.value.length === 0 && props.contentId === 'stargate-intro-video') {
+    const testComments = [
+      {
+        id: 'test-1',
+        user: 'AI Enthusiast',
+        userAvatar: 'A',
+        text: 'This is amazing! The Stargate Project will revolutionize AI infrastructure.',
+        date: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(), // 2 hours ago
+        likes: 5,
+        isLiked: false,
+        replies: [],
+        isPinned: false,
+        isEdited: false
+      },
+      {
+        id: 'test-2',
+        user: 'Tech Researcher',
+        userAvatar: 'T',
+        text: 'The $500 billion investment shows the scale of this initiative. Exciting times ahead!',
+        date: new Date(Date.now() - 1 * 60 * 60 * 1000).toISOString(), // 1 hour ago
+        likes: 3,
+        isLiked: false,
+        replies: [
+          {
+            id: 'test-reply-1',
+            user: 'Developer',
+            userAvatar: 'D',
+            text: 'I agree! The infrastructure requirements are massive.',
+            date: new Date(Date.now() - 30 * 60 * 1000).toISOString(), // 30 minutes ago
+            likes: 1,
+            isLiked: false,
+            replies: [],
+            isPinned: false,
+            isEdited: false,
+            parentId: 'test-2'
+          }
+        ],
+        isPinned: false,
+        isEdited: false
+      }
+    ]
+    
+    comments.value = testComments
+    commentsCount.value = testComments.length
+    
+    // Save test comments to localStorage
+    const allComments = JSON.parse(localStorage.getItem('stargate_comments') || '{}')
+    allComments[props.contentId] = testComments
+    localStorage.setItem('stargate_comments', JSON.stringify(allComments))
   }
 })
 </script>
