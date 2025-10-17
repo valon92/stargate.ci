@@ -55,26 +55,42 @@
 
     <!-- Comments Section -->
     <div v-if="showComments" class="comments-section mb-6">
-      <div class="bg-gray-800/50 rounded-lg p-4">
-        <h3 class="text-lg font-semibold text-white mb-4">Comments</h3>
+      <div class="bg-gray-800/90 backdrop-blur-sm border border-gray-600/50 rounded-lg p-6 shadow-xl">
+        <div class="flex items-center justify-between mb-6">
+          <h3 class="text-xl font-bold text-white">Comments ({{ commentsCount }})</h3>
+          <div class="flex items-center gap-2 text-sm text-gray-400">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+            </svg>
+            <span>{{ commentsCount }} comments</span>
+          </div>
+        </div>
         
         <!-- Add Comment Form -->
-        <div v-if="isSubscribed" class="mb-4">
-          <div class="flex gap-2">
-            <input
-              v-model="newComment"
-              type="text"
-              placeholder="Write a comment..."
-              class="flex-1 px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500"
-              @keyup.enter="addComment"
-            >
-            <button
-              @click="addComment"
-              :disabled="!newComment.trim()"
-              class="px-4 py-2 bg-primary-500 hover:bg-primary-600 disabled:bg-gray-600 text-white rounded-lg font-medium transition-colors"
-            >
-              Post
-            </button>
+        <div v-if="isSubscribed" class="mb-6 p-4 bg-gray-700/50 rounded-lg border border-gray-600/30">
+          <div class="flex items-start gap-3">
+            <div class="w-10 h-10 bg-primary-500 rounded-full flex items-center justify-center text-white font-semibold text-sm">
+              S
+            </div>
+            <div class="flex-1">
+              <textarea
+                v-model="newComment"
+                placeholder="Share your thoughts about this content..."
+                class="w-full px-4 py-3 bg-gray-600/50 border border-gray-500/50 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none"
+                rows="3"
+                @keyup.ctrl.enter="addComment"
+              ></textarea>
+              <div class="flex items-center justify-between mt-3">
+                <span class="text-xs text-gray-400">Press Ctrl+Enter to post</span>
+                <button
+                  @click="addComment"
+                  :disabled="!newComment.trim()"
+                  class="px-6 py-2 bg-primary-500 hover:bg-primary-600 disabled:bg-gray-600 disabled:cursor-not-allowed text-white rounded-lg font-medium transition-all duration-200 shadow-lg hover:shadow-primary-500/25"
+                >
+                  Post Comment
+                </button>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -89,13 +105,13 @@
         </div>
 
         <!-- Comments List -->
-        <div class="space-y-4">
+        <div class="space-y-4 max-h-96 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800">
           <div
             v-for="comment in comments"
             :key="comment.id"
             :class="[
-              'bg-gray-700/50 rounded-lg p-4 transition-all duration-200',
-              comment.isPinned ? 'border-l-4 border-yellow-500 bg-yellow-900/10' : ''
+              'bg-gray-700/80 backdrop-blur-sm border border-gray-600/40 rounded-lg p-5 transition-all duration-200 hover:bg-gray-700/90 hover:border-gray-500/60 shadow-lg',
+              comment.isPinned ? 'border-l-4 border-yellow-500 bg-yellow-900/20 shadow-yellow-500/20' : ''
             ]"
           >
             <!-- Pinned Badge -->
@@ -194,26 +210,37 @@
                 </div>
 
                 <!-- Reply Form -->
-                <div v-if="replyingTo === comment.id" class="mt-4 p-3 bg-gray-600/50 rounded-lg">
-                  <textarea
-                    v-model="replyText"
-                    class="w-full px-3 py-2 bg-gray-700 border border-gray-500 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 resize-none"
-                    rows="2"
-                    placeholder="Write a reply..."
-                  ></textarea>
-                  <div class="flex gap-2 mt-2">
-                    <button
-                      @click="addReply(comment.id)"
-                      class="px-3 py-1 bg-primary-500 hover:bg-primary-600 text-white text-sm rounded transition-colors"
-                    >
-                      Reply
-                    </button>
-                    <button
-                      @click="replyingTo = null; replyText = ''"
-                      class="px-3 py-1 bg-gray-600 hover:bg-gray-700 text-white text-sm rounded transition-colors"
-                    >
-                      Cancel
-                    </button>
+                <div v-if="replyingTo === comment.id" class="mt-4 p-4 bg-gray-600/70 backdrop-blur-sm border border-gray-500/40 rounded-lg shadow-lg">
+                  <div class="flex items-start gap-3">
+                    <div class="w-8 h-8 bg-secondary-500 rounded-full flex items-center justify-center text-white font-semibold text-xs">
+                      S
+                    </div>
+                    <div class="flex-1">
+                      <textarea
+                        v-model="replyText"
+                        class="w-full px-4 py-3 bg-gray-700/50 border border-gray-500/50 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none"
+                        rows="2"
+                        placeholder="Write a reply..."
+                        @keyup.ctrl.enter="addReply(comment.id)"
+                      ></textarea>
+                      <div class="flex items-center justify-between mt-3">
+                        <span class="text-xs text-gray-400">Press Ctrl+Enter to reply</span>
+                        <div class="flex gap-2">
+                          <button
+                            @click="addReply(comment.id)"
+                            class="px-4 py-2 bg-primary-500 hover:bg-primary-600 text-white text-sm rounded-lg transition-all duration-200 shadow-md hover:shadow-primary-500/25"
+                          >
+                            Reply
+                          </button>
+                          <button
+                            @click="replyingTo = null; replyText = ''"
+                            class="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white text-sm rounded-lg transition-all duration-200"
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
@@ -222,7 +249,7 @@
                   <div
                     v-for="reply in comment.replies"
                     :key="reply.id"
-                    class="bg-gray-600/30 rounded-lg p-3 ml-4"
+                    class="bg-gray-600/60 backdrop-blur-sm border border-gray-500/30 rounded-lg p-4 ml-6 shadow-md hover:bg-gray-600/70 transition-all duration-200"
                   >
                     <div class="flex items-start gap-3">
                       <div class="w-8 h-8 bg-secondary-500 rounded-full flex items-center justify-center text-white font-semibold text-xs">
@@ -809,55 +836,115 @@ onMounted(() => {
   }
   
   // Add some test comments for demonstration (remove in production)
-  if (comments.value.length === 0 && props.contentId === 'stargate-intro-video') {
-    const testComments = [
-      {
-        id: 'test-1',
-        user: 'AI Enthusiast',
-        userAvatar: 'A',
-        text: 'This is amazing! The Stargate Project will revolutionize AI infrastructure.',
-        date: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(), // 2 hours ago
-        likes: 5,
-        isLiked: false,
-        replies: [],
-        isPinned: false,
-        isEdited: false
-      },
-      {
-        id: 'test-2',
-        user: 'Tech Researcher',
-        userAvatar: 'T',
-        text: 'The $500 billion investment shows the scale of this initiative. Exciting times ahead!',
-        date: new Date(Date.now() - 1 * 60 * 60 * 1000).toISOString(), // 1 hour ago
-        likes: 3,
-        isLiked: false,
-        replies: [
-          {
-            id: 'test-reply-1',
-            user: 'Developer',
-            userAvatar: 'D',
-            text: 'I agree! The infrastructure requirements are massive.',
-            date: new Date(Date.now() - 30 * 60 * 1000).toISOString(), // 30 minutes ago
-            likes: 1,
-            isLiked: false,
-            replies: [],
-            isPinned: false,
-            isEdited: false,
-            parentId: 'test-2'
-          }
-        ],
-        isPinned: false,
-        isEdited: false
-      }
-    ]
+  if (comments.value.length === 0) {
+    let testComments = []
     
-    comments.value = testComments
-    commentsCount.value = testComments.length
+    if (props.contentId === 'stargate-intro-video') {
+      testComments = [
+        {
+          id: 'test-1',
+          user: 'AI Enthusiast',
+          userAvatar: 'A',
+          text: 'This is amazing! The Stargate Project will revolutionize AI infrastructure.',
+          date: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
+          likes: 5,
+          isLiked: false,
+          replies: [],
+          isPinned: false,
+          isEdited: false
+        },
+        {
+          id: 'test-2',
+          user: 'Tech Researcher',
+          userAvatar: 'T',
+          text: 'The $500 billion investment shows the scale of this initiative. Exciting times ahead!',
+          date: new Date(Date.now() - 1 * 60 * 60 * 1000).toISOString(),
+          likes: 3,
+          isLiked: false,
+          replies: [
+            {
+              id: 'test-reply-1',
+              user: 'Developer',
+              userAvatar: 'D',
+              text: 'I agree! The infrastructure requirements are massive.',
+              date: new Date(Date.now() - 30 * 60 * 1000).toISOString(),
+              likes: 1,
+              isLiked: false,
+              replies: [],
+              isPinned: false,
+              isEdited: false,
+              parentId: 'test-2'
+            }
+          ],
+          isPinned: false,
+          isEdited: false
+        }
+      ]
+    } else if (props.contentId === 'stargate-deep-dive-video') {
+      testComments = [
+        {
+          id: 'test-3',
+          user: 'Data Scientist',
+          userAvatar: 'D',
+          text: 'The technical analysis is incredible. This will change everything we know about AI.',
+          date: new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString(),
+          likes: 8,
+          isLiked: false,
+          replies: [],
+          isPinned: false,
+          isEdited: false
+        },
+        {
+          id: 'test-4',
+          user: 'ML Engineer',
+          userAvatar: 'M',
+          text: 'The partnership between OpenAI, SoftBank, and Arm is game-changing.',
+          date: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
+          likes: 6,
+          isLiked: false,
+          replies: [],
+          isPinned: false,
+          isEdited: false
+        }
+      ]
+    } else if (props.contentId === 'cristal-intelligence-video') {
+      testComments = [
+        {
+          id: 'test-5',
+          user: 'AI Ethicist',
+          userAvatar: 'E',
+          text: 'Cristal Intelligence represents the future of ethical AI development.',
+          date: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(),
+          likes: 12,
+          isLiked: false,
+          replies: [],
+          isPinned: true,
+          isEdited: false
+        },
+        {
+          id: 'test-6',
+          user: 'Researcher',
+          userAvatar: 'R',
+          text: 'The transparency and interpretability aspects are revolutionary.',
+          date: new Date(Date.now() - 1 * 60 * 60 * 1000).toISOString(),
+          likes: 4,
+          isLiked: false,
+          replies: [],
+          isPinned: false,
+          isEdited: false
+        }
+      ]
+    }
     
-    // Save test comments to localStorage
-    const allComments = JSON.parse(localStorage.getItem('stargate_comments') || '{}')
-    allComments[props.contentId] = testComments
-    localStorage.setItem('stargate_comments', JSON.stringify(allComments))
+    if (testComments.length > 0) {
+      comments.value = testComments
+      commentsCount.value = testComments.length
+      
+      // Save test comments to localStorage
+      const allComments = JSON.parse(localStorage.getItem('stargate_comments') || '{}')
+      allComments[props.contentId] = testComments
+      localStorage.setItem('stargate_comments', JSON.stringify(allComments))
+    }
   }
 })
 </script>
@@ -869,5 +956,37 @@ onMounted(() => {
 
 .share-modal {
   backdrop-filter: blur(4px);
+}
+
+/* Custom scrollbar for comments */
+.scrollbar-thin {
+  scrollbar-width: thin;
+}
+
+.scrollbar-thumb-gray-600::-webkit-scrollbar-thumb {
+  background-color: rgb(75 85 99);
+  border-radius: 0.5rem;
+}
+
+.scrollbar-track-gray-800::-webkit-scrollbar-track {
+  background-color: rgb(31 41 55);
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background-color: rgb(75 85 99);
+  border-radius: 0.5rem;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background-color: rgb(107 114 128);
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background-color: rgb(31 41 55);
+  border-radius: 0.5rem;
 }
 </style>
