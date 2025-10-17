@@ -67,15 +67,15 @@
         </div>
         
         <!-- Add Comment Form -->
-        <div v-if="isSubscribed" class="mb-6 p-4 bg-gray-700/50 rounded-lg border border-gray-600/30">
+        <div class="mb-6 p-4 bg-gray-700/50 rounded-lg border border-gray-600/30">
           <div class="flex items-start gap-3">
             <div class="w-10 h-10 bg-primary-500 rounded-full flex items-center justify-center text-white font-semibold text-sm">
-              S
+              {{ isSubscribed ? 'S' : 'G' }}
             </div>
             <div class="flex-1">
               <textarea
                 v-model="newComment"
-                placeholder="Share your thoughts about this content..."
+                :placeholder="isSubscribed ? 'Share your thoughts about this content...' : 'Share your thoughts... (Subscribe for more features)'"
                 class="w-full px-4 py-3 bg-gray-600/50 border border-gray-500/50 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none"
                 rows="3"
                 @keyup.ctrl.enter="addComment"
@@ -94,13 +94,13 @@
           </div>
         </div>
 
-        <!-- Subscribe to Comment Message -->
-        <div v-else class="mb-4 p-3 bg-blue-900/20 border border-blue-500/30 rounded-lg">
+        <!-- Subscribe Encouragement -->
+        <div v-if="!isSubscribed" class="mb-4 p-3 bg-blue-900/20 border border-blue-500/30 rounded-lg">
           <p class="text-blue-300 text-sm">
             <router-link to="/subscribe" class="text-blue-400 hover:text-blue-300 underline">
               Subscribe to Stargate.ci
             </router-link>
-            to join the conversation and comment on content.
+            for more features and to support our community!
           </p>
         </div>
 
@@ -213,14 +213,14 @@
                 <div v-if="replyingTo === comment.id" class="mt-4 p-4 bg-gray-600/70 backdrop-blur-sm border border-gray-500/40 rounded-lg shadow-lg">
                   <div class="flex items-start gap-3">
                     <div class="w-8 h-8 bg-secondary-500 rounded-full flex items-center justify-center text-white font-semibold text-xs">
-                      S
+                      {{ isSubscribed ? 'S' : 'G' }}
                     </div>
                     <div class="flex-1">
                       <textarea
                         v-model="replyText"
                         class="w-full px-4 py-3 bg-gray-700/50 border border-gray-500/50 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none"
                         rows="2"
-                        placeholder="Write a reply..."
+                        :placeholder="isSubscribed ? 'Write a reply...' : 'Write a reply... (Subscribe for more features)'"
                         @keyup.ctrl.enter="addReply(comment.id)"
                       ></textarea>
                       <div class="flex items-center justify-between mt-3">
@@ -473,12 +473,6 @@ const showToast = (message: string, type: 'success' | 'info' | 'warning' = 'succ
 }
 
 const toggleLike = () => {
-  if (!isSubscribed.value) {
-    showToast('Subscribe to Stargate.ci to like content!', 'info')
-    router.push('/subscribe')
-    return
-  }
-  
   isLiked.value = !isLiked.value
   likesCount.value += isLiked.value ? 1 : -1
   
@@ -496,6 +490,13 @@ const toggleLike = () => {
   
   // Track engagement
   trackEngagement('like', props.contentType)
+  
+  // Encourage subscription if not subscribed
+  if (!isSubscribed.value) {
+    setTimeout(() => {
+      showToast('Subscribe to Stargate.ci for more features!', 'info')
+    }, 1000)
+  }
 }
 
 const toggleComments = () => {
@@ -506,12 +507,6 @@ const toggleComments = () => {
 }
 
 const toggleShare = () => {
-  if (!isSubscribed.value) {
-    showToast('Subscribe to Stargate.ci to share content!', 'info')
-    router.push('/subscribe')
-    return
-  }
-  
   showShare.value = !showShare.value
   if (showShare.value) {
     trackEngagement('view_share', props.contentType)
@@ -524,16 +519,10 @@ const addComment = () => {
     return
   }
   
-  if (!isSubscribed.value) {
-    showToast('Subscribe to Stargate.ci to comment!', 'info')
-    router.push('/subscribe')
-    return
-  }
-  
   const comment: Comment = {
     id: Date.now().toString(),
-    user: 'Subscriber', // In real app, get from user profile
-    userAvatar: 'S', // In real app, get from user profile
+    user: isSubscribed.value ? 'Subscriber' : 'Guest User', // In real app, get from user profile
+    userAvatar: isSubscribed.value ? 'S' : 'G', // In real app, get from user profile
     text: newComment.value,
     date: new Date().toISOString(),
     likes: 0,
@@ -560,6 +549,13 @@ const addComment = () => {
   
   // Track engagement
   trackEngagement('comment', props.contentType)
+  
+  // Encourage subscription if not subscribed
+  if (!isSubscribed.value) {
+    setTimeout(() => {
+      showToast('Subscribe to Stargate.ci for more features!', 'info')
+    }, 1000)
+  }
 }
 
 const toggleCommentLike = (commentId: string) => {
@@ -581,12 +577,6 @@ const toggleCommentLike = (commentId: string) => {
 }
 
 const replyToComment = (commentId: string) => {
-  if (!isSubscribed.value) {
-    showToast('Subscribe to Stargate.ci to reply to comments!', 'info')
-    router.push('/subscribe')
-    return
-  }
-  
   replyingTo.value = commentId
   replyText.value = ''
 }
@@ -602,8 +592,8 @@ const addReply = (parentId: string) => {
   
   const reply: Comment = {
     id: Date.now().toString(),
-    user: 'Subscriber',
-    userAvatar: 'S',
+    user: isSubscribed.value ? 'Subscriber' : 'Guest User',
+    userAvatar: isSubscribed.value ? 'S' : 'G',
     text: replyText.value,
     date: new Date().toISOString(),
     likes: 0,
@@ -630,6 +620,13 @@ const addReply = (parentId: string) => {
   
   showToast('Reply added successfully!', 'success')
   trackEngagement('reply', props.contentType)
+  
+  // Encourage subscription if not subscribed
+  if (!isSubscribed.value) {
+    setTimeout(() => {
+      showToast('Subscribe to Stargate.ci for more features!', 'info')
+    }, 1000)
+  }
 }
 
 const editComment = (commentId: string) => {
