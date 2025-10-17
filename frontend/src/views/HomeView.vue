@@ -61,17 +61,6 @@
             <div class="p-4">
               <h3 class="text-xl font-semibold text-white mb-2">Stargate Project - Introduction Video</h3>
               <p class="text-gray-400 text-sm mb-4">An introduction video that explains the scope and vision of the Stargate Project and Cristal Intelligence, providing users with a comprehensive understanding of these revolutionary AI initiatives.</p>
-              <a
-                href="https://youtu.be/GhIJs4zbH0o" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                class="inline-flex items-center px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-lg transition-colors duration-200 group"
-              >
-                <svg class="w-4 h-4 mr-2 group-hover:scale-110 transition-transform duration-200" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-                </svg>
-                Watch on YouTube
-              </a>
             </div>
             
             <!-- Interactive Content -->
@@ -99,17 +88,6 @@
             <div class="p-4">
               <h3 class="text-xl font-semibold text-white mb-2">Stargate Project - Deep Dive Analysis</h3>
               <p class="text-gray-400 text-sm mb-4">A comprehensive deep dive analysis of the Stargate Project, exploring the technical aspects, partnerships, and future implications of this groundbreaking AI infrastructure initiative.</p>
-              <a
-                href="https://youtu.be/JPcxiWOOj2E" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                class="inline-flex items-center px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-lg transition-colors duration-200 group"
-              >
-                <svg class="w-4 h-4 mr-2 group-hover:scale-110 transition-transform duration-200" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-                </svg>
-                Watch on YouTube
-              </a>
             </div>
             
             <!-- Interactive Content -->
@@ -137,17 +115,16 @@
             <div class="p-4">
               <h3 class="text-xl font-semibold text-white mb-2">Stargate Project - Technical Implementation</h3>
               <p class="text-gray-400 text-sm mb-4">A detailed technical implementation guide for the Stargate Project, covering infrastructure requirements, deployment strategies, and integration approaches for organizations looking to leverage this advanced AI technology.</p>
-              <a
-                href="https://youtu.be/1oYSZ-naJVo" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                class="inline-flex items-center px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-lg transition-colors duration-200 group"
-              >
-                <svg class="w-4 h-4 mr-2 group-hover:scale-110 transition-transform duration-200" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-                </svg>
-                Watch on YouTube
-              </a>
+            </div>
+            
+            <!-- Interactive Content -->
+            <div class="p-4 pt-0">
+              <InteractiveContent
+                content-id="stargate-technical-video"
+                content-type="video"
+                :initial-likes="Math.floor(Math.random() * 200) + 50"
+                :initial-comments="[]"
+              />
             </div>
           </div>
           
@@ -165,17 +142,16 @@
             <div class="p-4">
               <h3 class="text-xl font-semibold text-white mb-2">Cristal Intelligence - Advanced AI Paradigm</h3>
               <p class="text-gray-400 text-sm mb-4">An in-depth exploration of Cristal Intelligence, the revolutionary AI paradigm that emphasizes transparency, interpretability, and ethical alignment in artificial intelligence systems.</p>
-              <a
-                href="https://youtu.be/DHiX4_jetjs" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                class="inline-flex items-center px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-lg transition-colors duration-200 group"
-              >
-                <svg class="w-4 h-4 mr-2 group-hover:scale-110 transition-transform duration-200" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-                </svg>
-                Watch on YouTube
-              </a>
+            </div>
+            
+            <!-- Interactive Content -->
+            <div class="p-4 pt-0">
+              <InteractiveContent
+                content-id="cristal-intelligence-video"
+                content-type="video"
+                :initial-likes="Math.floor(Math.random() * 200) + 50"
+                :initial-comments="[]"
+              />
             </div>
           </div>
           
@@ -193,17 +169,16 @@
             <div class="p-4">
               <h3 class="text-xl font-semibold text-white mb-2">Future of AI - Industry Impact & Applications</h3>
               <p class="text-gray-400 text-sm mb-4">A comprehensive analysis of how the Stargate Project and Cristal Intelligence will transform industries, examining real-world applications, market implications, and the future landscape of artificial intelligence.</p>
-              <a
-                href="https://youtu.be/po3TG3oSsSI" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                class="inline-flex items-center px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-lg transition-colors duration-200 group"
-              >
-                <svg class="w-4 h-4 mr-2 group-hover:scale-110 transition-transform duration-200" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-                </svg>
-                Watch on YouTube
-              </a>
+            </div>
+            
+            <!-- Interactive Content -->
+            <div class="p-4 pt-0">
+              <InteractiveContent
+                content-id="future-ai-video"
+                content-type="video"
+                :initial-likes="Math.floor(Math.random() * 200) + 50"
+                :initial-comments="[]"
+              />
             </div>
           </div>
         </div>

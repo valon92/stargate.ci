@@ -25,6 +25,11 @@
           />
         </div>
 
+        <!-- Engagement Stats - Desktop -->
+        <div class="hidden xl:block">
+          <EngagementStats />
+        </div>
+
         <!-- Desktop Navigation - Optimized -->
         <div class="hidden lg:block">
           <div class="flex justify-center">
@@ -164,6 +169,7 @@ import { RouterLink, useRoute, useRouter } from 'vue-router'
 import { useNavigationPerformance } from '../../composables/usePerformance'
 import NotificationCenter from '../NotificationCenter.vue'
 import SearchInput from '../SearchInput.vue'
+import EngagementStats from '../EngagementStats.vue'
 
 const route = useRoute()
 const router = useRouter()

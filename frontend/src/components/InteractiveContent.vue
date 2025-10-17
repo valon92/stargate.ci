@@ -215,6 +215,30 @@
         </div>
       </div>
     </div>
+
+    <!-- Toast Notification -->
+    <div
+      v-if="showNotification"
+      :class="[
+        'fixed top-4 right-4 z-50 px-6 py-3 rounded-lg shadow-lg transition-all duration-300 transform',
+        notificationType === 'success' ? 'bg-green-600 text-white' : '',
+        notificationType === 'info' ? 'bg-blue-600 text-white' : '',
+        notificationType === 'warning' ? 'bg-yellow-600 text-white' : ''
+      ]"
+    >
+      <div class="flex items-center gap-2">
+        <svg v-if="notificationType === 'success'" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+        </svg>
+        <svg v-else-if="notificationType === 'info'" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        <svg v-else-if="notificationType === 'warning'" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/>
+        </svg>
+        <span class="font-medium">{{ notificationMessage }}</span>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -254,6 +278,9 @@ const comments = ref<Comment[]>(props.initialComments)
 const commentsCount = ref(props.initialComments.length)
 const newComment = ref('')
 const hasMoreComments = ref(false)
+const showNotification = ref(false)
+const notificationMessage = ref('')
+const notificationType = ref<'success' | 'info' | 'warning'>('success')
 
 // Check if user is subscribed
 const isSubscribed = computed(() => {
@@ -262,8 +289,19 @@ const isSubscribed = computed(() => {
 })
 
 // Methods
+const showToast = (message: string, type: 'success' | 'info' | 'warning' = 'success') => {
+  notificationMessage.value = message
+  notificationType.value = type
+  showNotification.value = true
+  
+  setTimeout(() => {
+    showNotification.value = false
+  }, 3000)
+}
+
 const toggleLike = () => {
   if (!isSubscribed.value) {
+    showToast('Subscribe to Stargate.ci to like content!', 'info')
     router.push('/subscribe')
     return
   }
@@ -275,6 +313,9 @@ const toggleLike = () => {
   const likes = JSON.parse(localStorage.getItem('stargate_likes') || '{}')
   likes[props.contentId] = { isLiked: isLiked.value, count: likesCount.value }
   localStorage.setItem('stargate_likes', JSON.stringify(likes))
+  
+  // Show notification
+  showToast(isLiked.value ? 'Liked!' : 'Unliked!', 'success')
   
   // Track engagement
   trackEngagement('like', props.contentType)
@@ -295,7 +336,16 @@ const toggleShare = () => {
 }
 
 const addComment = () => {
-  if (!newComment.value.trim() || !isSubscribed.value) return
+  if (!newComment.value.trim()) {
+    showToast('Please enter a comment!', 'warning')
+    return
+  }
+  
+  if (!isSubscribed.value) {
+    showToast('Subscribe to Stargate.ci to comment!', 'info')
+    router.push('/subscribe')
+    return
+  }
   
   const comment: Comment = {
     id: Date.now().toString(),
@@ -317,6 +367,9 @@ const addComment = () => {
   }
   allComments[props.contentId].push(comment)
   localStorage.setItem('stargate_comments', JSON.stringify(allComments))
+  
+  // Show notification
+  showToast('Comment added successfully!', 'success')
   
   // Track engagement
   trackEngagement('comment', props.contentType)
@@ -353,24 +406,27 @@ const loadMoreComments = () => {
 // Share methods
 const shareToFacebook = () => {
   const url = encodeURIComponent(window.location.href)
-  const text = encodeURIComponent(`Check out this content on Stargate.ci!`)
+  const text = encodeURIComponent(`Check out this amazing content about Stargate Project and Cristal Intelligence on Stargate.ci! 🚀💎`)
   window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${text}`, '_blank')
+  showToast('Shared on Facebook!', 'success')
   trackEngagement('share_facebook', props.contentType)
   showShare.value = false
 }
 
 const shareToX = () => {
   const url = encodeURIComponent(window.location.href)
-  const text = encodeURIComponent(`Check out this content on Stargate.ci!`)
+  const text = encodeURIComponent(`Check out this amazing content about Stargate Project and Cristal Intelligence on Stargate.ci! 🚀💎 #StargateProject #CristalIntelligence #AI`)
   window.open(`https://twitter.com/intent/tweet?url=${url}&text=${text}`, '_blank')
+  showToast('Shared on X!', 'success')
   trackEngagement('share_x', props.contentType)
   showShare.value = false
 }
 
 const shareToWhatsApp = () => {
   const url = encodeURIComponent(window.location.href)
-  const text = encodeURIComponent(`Check out this content on Stargate.ci!`)
+  const text = encodeURIComponent(`Check out this amazing content about Stargate Project and Cristal Intelligence on Stargate.ci! 🚀💎`)
   window.open(`https://wa.me/?text=${text}%20${url}`, '_blank')
+  showToast('Shared on WhatsApp!', 'success')
   trackEngagement('share_whatsapp', props.contentType)
   showShare.value = false
 }
@@ -378,6 +434,7 @@ const shareToWhatsApp = () => {
 const shareToMessenger = () => {
   const url = encodeURIComponent(window.location.href)
   window.open(`https://www.facebook.com/dialog/send?link=${url}&app_id=YOUR_APP_ID`, '_blank')
+  showToast('Shared on Messenger!', 'success')
   trackEngagement('share_messenger', props.contentType)
   showShare.value = false
 }
@@ -385,11 +442,11 @@ const shareToMessenger = () => {
 const copyLink = async () => {
   try {
     await navigator.clipboard.writeText(window.location.href)
-    // Show success message
-    console.log('Link copied to clipboard')
+    showToast('Link copied to clipboard!', 'success')
     trackEngagement('share_copy_link', props.contentType)
     showShare.value = false
   } catch (err) {
+    showToast('Failed to copy link', 'warning')
     console.error('Failed to copy link:', err)
   }
 }
