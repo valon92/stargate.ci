@@ -89,23 +89,65 @@
         </div>
 
         <!-- Comments List -->
-        <div class="space-y-3">
+        <div class="space-y-4">
           <div
             v-for="comment in comments"
             :key="comment.id"
-            class="bg-gray-700/50 rounded-lg p-3"
+            :class="[
+              'bg-gray-700/50 rounded-lg p-4 transition-all duration-200',
+              comment.isPinned ? 'border-l-4 border-yellow-500 bg-yellow-900/10' : ''
+            ]"
           >
+            <!-- Pinned Badge -->
+            <div v-if="comment.isPinned" class="flex items-center gap-2 mb-3">
+              <svg class="w-4 h-4 text-yellow-500" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+              </svg>
+              <span class="text-yellow-500 text-sm font-medium">Pinned Comment</span>
+            </div>
+
             <div class="flex items-start gap-3">
-              <div class="w-8 h-8 bg-primary-500 rounded-full flex items-center justify-center text-white font-semibold text-sm">
-                {{ comment.user.charAt(0).toUpperCase() }}
+              <div class="w-10 h-10 bg-primary-500 rounded-full flex items-center justify-center text-white font-semibold text-sm">
+                {{ comment.userAvatar }}
               </div>
               <div class="flex-1">
-                <div class="flex items-center gap-2 mb-1">
+                <div class="flex items-center gap-2 mb-2">
                   <span class="font-medium text-white">{{ comment.user }}</span>
                   <span class="text-gray-400 text-sm">{{ formatDate(comment.date) }}</span>
+                  <span v-if="comment.isEdited" class="text-gray-500 text-xs">(edited)</span>
                 </div>
-                <p class="text-gray-300">{{ comment.text }}</p>
-                <div class="flex items-center gap-4 mt-2">
+                
+                <!-- Comment Text -->
+                <div v-if="editingComment !== comment.id" class="text-gray-300 mb-3">
+                  {{ comment.text }}
+                </div>
+                
+                <!-- Edit Form -->
+                <div v-else class="mb-3">
+                  <textarea
+                    v-model="editText"
+                    class="w-full px-3 py-2 bg-gray-600 border border-gray-500 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 resize-none"
+                    rows="3"
+                    placeholder="Edit your comment..."
+                  ></textarea>
+                  <div class="flex gap-2 mt-2">
+                    <button
+                      @click="saveEdit(comment.id)"
+                      class="px-3 py-1 bg-green-600 hover:bg-green-700 text-white text-sm rounded transition-colors"
+                    >
+                      Save
+                    </button>
+                    <button
+                      @click="editingComment = null; editText = ''"
+                      class="px-3 py-1 bg-gray-600 hover:bg-gray-700 text-white text-sm rounded transition-colors"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Comment Actions -->
+                <div class="flex items-center gap-4">
                   <button
                     @click="toggleCommentLike(comment.id)"
                     :class="[
@@ -118,12 +160,103 @@
                     </svg>
                     <span>{{ comment.likes }}</span>
                   </button>
+                  
                   <button
                     @click="replyToComment(comment.id)"
                     class="text-gray-400 hover:text-blue-400 text-sm transition-colors"
                   >
-                    Reply
+                    Reply ({{ comment.replies.length }})
                   </button>
+                  
+                  <button
+                    @click="editComment(comment.id)"
+                    class="text-gray-400 hover:text-yellow-400 text-sm transition-colors"
+                  >
+                    Edit
+                  </button>
+                  
+                  <button
+                    @click="deleteComment(comment.id)"
+                    class="text-gray-400 hover:text-red-400 text-sm transition-colors"
+                  >
+                    Delete
+                  </button>
+                  
+                  <button
+                    @click="pinComment(comment.id)"
+                    :class="[
+                      'text-sm transition-colors',
+                      comment.isPinned ? 'text-yellow-400' : 'text-gray-400 hover:text-yellow-400'
+                    ]"
+                  >
+                    {{ comment.isPinned ? 'Unpin' : 'Pin' }}
+                  </button>
+                </div>
+
+                <!-- Reply Form -->
+                <div v-if="replyingTo === comment.id" class="mt-4 p-3 bg-gray-600/50 rounded-lg">
+                  <textarea
+                    v-model="replyText"
+                    class="w-full px-3 py-2 bg-gray-700 border border-gray-500 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 resize-none"
+                    rows="2"
+                    placeholder="Write a reply..."
+                  ></textarea>
+                  <div class="flex gap-2 mt-2">
+                    <button
+                      @click="addReply(comment.id)"
+                      class="px-3 py-1 bg-primary-500 hover:bg-primary-600 text-white text-sm rounded transition-colors"
+                    >
+                      Reply
+                    </button>
+                    <button
+                      @click="replyingTo = null; replyText = ''"
+                      class="px-3 py-1 bg-gray-600 hover:bg-gray-700 text-white text-sm rounded transition-colors"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Replies -->
+                <div v-if="comment.replies.length > 0" class="mt-4 space-y-3">
+                  <div
+                    v-for="reply in comment.replies"
+                    :key="reply.id"
+                    class="bg-gray-600/30 rounded-lg p-3 ml-4"
+                  >
+                    <div class="flex items-start gap-3">
+                      <div class="w-8 h-8 bg-secondary-500 rounded-full flex items-center justify-center text-white font-semibold text-xs">
+                        {{ reply.userAvatar }}
+                      </div>
+                      <div class="flex-1">
+                        <div class="flex items-center gap-2 mb-1">
+                          <span class="font-medium text-white text-sm">{{ reply.user }}</span>
+                          <span class="text-gray-400 text-xs">{{ formatDate(reply.date) }}</span>
+                        </div>
+                        <p class="text-gray-300 text-sm">{{ reply.text }}</p>
+                        <div class="flex items-center gap-3 mt-2">
+                          <button
+                            @click="toggleCommentLike(reply.id)"
+                            :class="[
+                              'flex items-center gap-1 text-xs transition-colors',
+                              reply.isLiked ? 'text-red-400' : 'text-gray-400 hover:text-red-400'
+                            ]"
+                          >
+                            <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
+                              <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                            </svg>
+                            <span>{{ reply.likes }}</span>
+                          </button>
+                          <button
+                            @click="deleteComment(reply.id)"
+                            class="text-gray-400 hover:text-red-400 text-xs transition-colors"
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -249,10 +382,16 @@ import { useRouter } from 'vue-router'
 interface Comment {
   id: string
   user: string
+  userAvatar: string
   text: string
   date: string
   likes: number
   isLiked: boolean
+  replies: Comment[]
+  isPinned: boolean
+  isEdited: boolean
+  editDate?: string
+  parentId?: string
 }
 
 interface Props {
@@ -281,6 +420,13 @@ const hasMoreComments = ref(false)
 const showNotification = ref(false)
 const notificationMessage = ref('')
 const notificationType = ref<'success' | 'info' | 'warning'>('success')
+const replyingTo = ref<string | null>(null)
+const replyText = ref('')
+const editingComment = ref<string | null>(null)
+const editText = ref('')
+const commentsPerPage = 10
+const currentPage = ref(1)
+const isLoadingComments = ref(false)
 
 // Check if user is subscribed
 const isSubscribed = computed(() => {
@@ -309,9 +455,13 @@ const toggleLike = () => {
   isLiked.value = !isLiked.value
   likesCount.value += isLiked.value ? 1 : -1
   
-  // Save to localStorage
+  // Save to localStorage with real counts
   const likes = JSON.parse(localStorage.getItem('stargate_likes') || '{}')
-  likes[props.contentId] = { isLiked: isLiked.value, count: likesCount.value }
+  if (!likes[props.contentId]) {
+    likes[props.contentId] = { isLiked: false, count: props.initialLikes }
+  }
+  likes[props.contentId].isLiked = isLiked.value
+  likes[props.contentId].count = likesCount.value
   localStorage.setItem('stargate_likes', JSON.stringify(likes))
   
   // Show notification
@@ -329,6 +479,12 @@ const toggleComments = () => {
 }
 
 const toggleShare = () => {
+  if (!isSubscribed.value) {
+    showToast('Subscribe to Stargate.ci to share content!', 'info')
+    router.push('/subscribe')
+    return
+  }
+  
   showShare.value = !showShare.value
   if (showShare.value) {
     trackEngagement('view_share', props.contentType)
@@ -350,10 +506,14 @@ const addComment = () => {
   const comment: Comment = {
     id: Date.now().toString(),
     user: 'Subscriber', // In real app, get from user profile
+    userAvatar: 'S', // In real app, get from user profile
     text: newComment.value,
     date: new Date().toISOString(),
     likes: 0,
-    isLiked: false
+    isLiked: false,
+    replies: [],
+    isPinned: false,
+    isEdited: false
   }
   
   comments.value.unshift(comment)
@@ -394,8 +554,153 @@ const toggleCommentLike = (commentId: string) => {
 }
 
 const replyToComment = (commentId: string) => {
-  // In a real app, this would open a reply form
-  console.log('Reply to comment:', commentId)
+  if (!isSubscribed.value) {
+    showToast('Subscribe to Stargate.ci to reply to comments!', 'info')
+    router.push('/subscribe')
+    return
+  }
+  
+  replyingTo.value = commentId
+  replyText.value = ''
+}
+
+const addReply = (parentId: string) => {
+  if (!replyText.value.trim()) {
+    showToast('Please enter a reply!', 'warning')
+    return
+  }
+  
+  const parentComment = comments.value.find(c => c.id === parentId)
+  if (!parentComment) return
+  
+  const reply: Comment = {
+    id: Date.now().toString(),
+    user: 'Subscriber',
+    userAvatar: 'S',
+    text: replyText.value,
+    date: new Date().toISOString(),
+    likes: 0,
+    isLiked: false,
+    replies: [],
+    isPinned: false,
+    isEdited: false,
+    parentId: parentId
+  }
+  
+  parentComment.replies.push(reply)
+  replyText.value = ''
+  replyingTo.value = null
+  
+  // Save to localStorage
+  const allComments = JSON.parse(localStorage.getItem('stargate_comments') || '{}')
+  if (allComments[props.contentId]) {
+    const commentIndex = allComments[props.contentId].findIndex((c: Comment) => c.id === parentId)
+    if (commentIndex !== -1) {
+      allComments[props.contentId][commentIndex] = parentComment
+      localStorage.setItem('stargate_comments', JSON.stringify(allComments))
+    }
+  }
+  
+  showToast('Reply added successfully!', 'success')
+  trackEngagement('reply', props.contentType)
+}
+
+const editComment = (commentId: string) => {
+  if (!isSubscribed.value) {
+    showToast('Subscribe to Stargate.ci to edit comments!', 'info')
+    router.push('/subscribe')
+    return
+  }
+  
+  const comment = comments.value.find(c => c.id === commentId)
+  if (!comment) return
+  
+  editingComment.value = commentId
+  editText.value = comment.text
+}
+
+const saveEdit = (commentId: string) => {
+  if (!editText.value.trim()) {
+    showToast('Please enter a comment!', 'warning')
+    return
+  }
+  
+  const comment = comments.value.find(c => c.id === commentId)
+  if (!comment) return
+  
+  comment.text = editText.value
+  comment.isEdited = true
+  comment.editDate = new Date().toISOString()
+  
+  // Save to localStorage
+  const allComments = JSON.parse(localStorage.getItem('stargate_comments') || '{}')
+  if (allComments[props.contentId]) {
+    const commentIndex = allComments[props.contentId].findIndex((c: Comment) => c.id === commentId)
+    if (commentIndex !== -1) {
+      allComments[props.contentId][commentIndex] = comment
+      localStorage.setItem('stargate_comments', JSON.stringify(allComments))
+    }
+  }
+  
+  editingComment.value = null
+  editText.value = ''
+  showToast('Comment updated successfully!', 'success')
+}
+
+const deleteComment = (commentId: string) => {
+  if (!isSubscribed.value) {
+    showToast('Subscribe to Stargate.ci to delete comments!', 'info')
+    router.push('/subscribe')
+    return
+  }
+  
+  const commentIndex = comments.value.findIndex(c => c.id === commentId)
+  if (commentIndex === -1) return
+  
+  comments.value.splice(commentIndex, 1)
+  commentsCount.value--
+  
+  // Save to localStorage
+  const allComments = JSON.parse(localStorage.getItem('stargate_comments') || '{}')
+  if (allComments[props.contentId]) {
+    allComments[props.contentId] = allComments[props.contentId].filter((c: Comment) => c.id !== commentId)
+    localStorage.setItem('stargate_comments', JSON.stringify(allComments))
+  }
+  
+  showToast('Comment deleted successfully!', 'success')
+}
+
+const pinComment = (commentId: string) => {
+  if (!isSubscribed.value) {
+    showToast('Subscribe to Stargate.ci to pin comments!', 'info')
+    router.push('/subscribe')
+    return
+  }
+  
+  const comment = comments.value.find(c => c.id === commentId)
+  if (!comment) return
+  
+  // Unpin all other comments first
+  comments.value.forEach(c => c.isPinned = false)
+  
+  // Pin this comment
+  comment.isPinned = true
+  
+  // Move pinned comment to top
+  const commentIndex = comments.value.findIndex(c => c.id === commentId)
+  if (commentIndex !== -1) {
+    const pinnedComment = comments.value.splice(commentIndex, 1)[0]
+    comments.value.unshift(pinnedComment)
+  }
+  
+  // Save to localStorage
+  const allComments = JSON.parse(localStorage.getItem('stargate_comments') || '{}')
+  if (allComments[props.contentId]) {
+    allComments[props.contentId] = comments.value
+    localStorage.setItem('stargate_comments', JSON.stringify(allComments))
+  }
+  
+  showToast('Comment pinned successfully!', 'success')
 }
 
 const loadMoreComments = () => {
