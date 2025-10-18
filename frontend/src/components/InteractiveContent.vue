@@ -1,16 +1,71 @@
 <template>
   <div class="interactive-content">
-    <!-- Like/Reaction Section -->
-    <div class="reactions-section mb-4">
-      <div class="flex items-center gap-4">
+    <!-- YouTube-like User Status Bar -->
+    <div class="user-status-bar mb-4 p-3 bg-gray-800/50 border border-gray-700 rounded-lg">
+      <div class="flex items-center justify-between">
+        <!-- User Info -->
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 bg-red-600 rounded-full flex items-center justify-center">
+            <span class="text-white font-bold text-sm">
+              {{ isSubscribed && currentUser ? currentUser.username.charAt(0).toUpperCase() : 'G' }}
+            </span>
+          </div>
+          <div>
+            <span class="text-white font-medium text-sm">
+              {{ isSubscribed && currentUser ? currentUser.username : 'Guest User' }}
+            </span>
+            <span v-if="isSubscribed && currentUser" class="text-gray-400 text-xs ml-2">
+              {{ currentUser.email }}
+            </span>
+          </div>
+        </div>
+
+        <!-- Subscribe/Unsubscribe Button -->
+        <div class="flex items-center gap-2">
+          <button
+            v-if="!isSubscribed"
+            @click="goToSubscribe"
+            class="flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-full font-medium text-sm transition-colors"
+          >
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M18 4H6c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-6 2.5c2.49 0 4.5 2.01 4.5 4.5S14.49 15.5 12 15.5s-4.5-2.01-4.5-4.5S9.51 6.5 12 6.5zM12 17c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+            </svg>
+            Subscribe
+          </button>
+          <button
+            v-else
+            @click="unsubscribe"
+            class="flex items-center gap-2 px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-full font-medium text-sm transition-colors"
+          >
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M18 4H6c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-6 2.5c2.49 0 4.5 2.01 4.5 4.5S14.49 15.5 12 15.5s-4.5-2.01-4.5-4.5S9.51 6.5 12 6.5zM12 17c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+            </svg>
+            Subscribed
+          </button>
+          
+          <!-- Debug Button - Remove this in production -->
+          <button
+            @click="createValidSubscriber"
+            class="flex items-center gap-2 px-3 py-1 bg-yellow-600 hover:bg-yellow-700 text-white rounded-full font-medium text-xs transition-colors"
+            title="Create valid subscriber for testing"
+          >
+            🔧 Fix
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- YouTube-like Action Buttons -->
+    <div class="action-buttons mb-4">
+      <div class="flex items-center gap-2">
         <!-- Like Button -->
         <button
           @click="toggleLike"
+          :disabled="!isSubscribed"
           :class="[
-            'flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all duration-200',
-            isLiked 
-              ? 'bg-red-500 text-white' 
-              : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+            'flex items-center gap-2 px-4 py-2 bg-gray-800 hover:bg-gray-700 text-gray-300 rounded-full font-medium transition-all duration-200',
+            !isSubscribed ? 'cursor-not-allowed opacity-50' : '',
+            isLiked ? 'bg-red-600 text-white hover:bg-red-700' : ''
           ]"
         >
           <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -22,11 +77,10 @@
         <!-- Comment Button -->
         <button
           @click="toggleComments"
+          :disabled="!isSubscribed"
           :class="[
-            'flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all duration-200',
-            showComments 
-              ? 'bg-blue-500 text-white' 
-              : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+            'flex items-center gap-2 px-4 py-2 bg-gray-800 hover:bg-gray-700 text-gray-300 rounded-full font-medium transition-all duration-200',
+            !isSubscribed ? 'cursor-not-allowed opacity-50' : ''
           ]"
         >
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -38,11 +92,10 @@
         <!-- Share Button -->
         <button
           @click="toggleShare"
+          :disabled="!isSubscribed"
           :class="[
-            'flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all duration-200',
-            showShare 
-              ? 'bg-green-500 text-white' 
-              : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+            'flex items-center gap-2 px-4 py-2 bg-gray-800 hover:bg-gray-700 text-gray-300 rounded-full font-medium transition-all duration-200',
+            !isSubscribed ? 'cursor-not-allowed opacity-50' : ''
           ]"
         >
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -70,13 +123,22 @@
         <div class="mb-6 p-4 bg-gray-700/50 rounded-lg border border-gray-600/30">
           <div class="flex items-start gap-3">
             <div class="w-10 h-10 bg-primary-500 rounded-full flex items-center justify-center text-white font-semibold text-sm">
-              {{ isSubscribed ? 'S' : 'G' }}
+              {{ isSubscribed && currentUser ? currentUser.username.charAt(0).toUpperCase() : 'G' }}
             </div>
             <div class="flex-1">
+              <div v-if="isSubscribed && currentUser" class="mb-2">
+                <span class="text-sm text-gray-300">Commenting as <strong class="text-primary-400">{{ currentUser.username }}</strong></span>
+              </div>
               <textarea
                 v-model="newComment"
-                :placeholder="isSubscribed ? 'Share your thoughts about this content...' : 'Share your thoughts... (Subscribe for more features)'"
-                class="w-full px-4 py-3 bg-gray-600/50 border border-gray-500/50 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none"
+                :disabled="!isSubscribed"
+                :placeholder="isSubscribed ? 'Share your thoughts about this content...' : 'Subscribe to comment on this content...'"
+                :class="[
+                  'w-full px-4 py-3 border rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none',
+                  isSubscribed 
+                    ? 'bg-gray-600/50 border-gray-500/50' 
+                    : 'bg-gray-800/50 border-gray-700/50 cursor-not-allowed'
+                ]"
                 rows="3"
                 @keyup.ctrl.enter="addComment"
               ></textarea>
@@ -405,6 +467,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { videoApiService } from '../services/videoApiService'
 
 interface Comment {
   id: string
@@ -461,6 +524,11 @@ const isSubscribed = computed(() => {
   return subscribers.length > 0
 })
 
+const currentUser = computed(() => {
+  const subscribers = JSON.parse(localStorage.getItem('stargate_subscribers') || '[]')
+  return subscribers.length > 0 ? subscribers[0] : null
+})
+
 // Methods
 const showToast = (message: string, type: 'success' | 'info' | 'warning' = 'success') => {
   notificationMessage.value = message
@@ -472,32 +540,51 @@ const showToast = (message: string, type: 'success' | 'info' | 'warning' = 'succ
   }, 3000)
 }
 
-const toggleLike = () => {
-  isLiked.value = !isLiked.value
-  likesCount.value += isLiked.value ? 1 : -1
-  
-  // Save to localStorage with real counts
-  const likes = JSON.parse(localStorage.getItem('stargate_likes') || '{}')
-  if (!likes[props.contentId]) {
-    likes[props.contentId] = { isLiked: false, count: props.initialLikes }
-  }
-  likes[props.contentId].isLiked = isLiked.value
-  likes[props.contentId].count = likesCount.value
-  localStorage.setItem('stargate_likes', JSON.stringify(likes))
-  
-  // Show notification
-  showToast(isLiked.value ? 'Liked!' : 'Unliked!', 'success')
-  
-  // Track engagement
-  trackEngagement('like', props.contentType)
-  
-  // Encourage subscription if not subscribed
-  if (!isSubscribed.value) {
-    setTimeout(() => {
-      showToast('Subscribe to Stargate.ci for more features!', 'info')
-    }, 1000)
-  }
-}
+    const toggleLike = async () => {
+      // Check if user is subscribed
+      if (!isSubscribed.value) {
+        showToast('Please subscribe to like content!', 'warning')
+        setTimeout(() => {
+          showToast('Subscribe to Stargate.ci for more features!', 'info')
+        }, 1000)
+        return
+      }
+      
+      try {
+        const sessionId = videoApiService.getSessionId()
+        const subscriberId = videoApiService.getSubscriberId()
+        
+        console.log('toggleLike - contentId:', props.contentId)
+        console.log('toggleLike - subscriberId:', subscriberId)
+        console.log('toggleLike - sessionId:', sessionId)
+        
+        
+        const response = await videoApiService.toggleLike(
+          props.contentId,
+          subscriberId,
+          sessionId
+        )
+        
+        console.log('Like response:', response)
+        
+        if (response.success) {
+          isLiked.value = response.data.is_liked
+          likesCount.value = response.data.likes_count
+          
+          // Show notification
+          showToast(isLiked.value ? 'Liked!' : 'Unliked!', 'success')
+          
+          // Track engagement
+          trackEngagement('like', props.contentType)
+        } else {
+          console.error('Like failed:', response)
+          showToast('Failed to update like', 'warning')
+        }
+      } catch (error) {
+        console.error('Error toggling like:', error)
+        showToast('Failed to update like', 'warning')
+      }
+    }
 
 const toggleComments = () => {
   showComments.value = !showComments.value
@@ -507,56 +594,130 @@ const toggleComments = () => {
 }
 
 const toggleShare = () => {
+  // Check if user is subscribed
+  if (!isSubscribed.value) {
+    showToast('Please subscribe to share content!', 'warning')
+    setTimeout(() => {
+      showToast('Subscribe to Stargate.ci for more features!', 'info')
+    }, 1000)
+    return
+  }
+  
   showShare.value = !showShare.value
   if (showShare.value) {
     trackEngagement('view_share', props.contentType)
   }
 }
 
-const addComment = () => {
-  if (!newComment.value.trim()) {
-    showToast('Please enter a comment!', 'warning')
-    return
-  }
-  
-  const comment: Comment = {
-    id: Date.now().toString(),
-    user: isSubscribed.value ? 'Subscriber' : 'Guest User', // In real app, get from user profile
-    userAvatar: isSubscribed.value ? 'S' : 'G', // In real app, get from user profile
-    text: newComment.value,
-    date: new Date().toISOString(),
-    likes: 0,
-    isLiked: false,
-    replies: [],
-    isPinned: false,
-    isEdited: false
-  }
-  
-  comments.value.unshift(comment)
-  commentsCount.value++
-  newComment.value = ''
-  
-  // Save to localStorage
-  const allComments = JSON.parse(localStorage.getItem('stargate_comments') || '{}')
-  if (!allComments[props.contentId]) {
-    allComments[props.contentId] = []
-  }
-  allComments[props.contentId].push(comment)
-  localStorage.setItem('stargate_comments', JSON.stringify(allComments))
-  
-  // Show notification
-  showToast('Comment added successfully!', 'success')
-  
-  // Track engagement
-  trackEngagement('comment', props.contentType)
-  
-  // Encourage subscription if not subscribed
-  if (!isSubscribed.value) {
+
+// Go to subscribe page
+const goToSubscribe = () => {
+  router.push('/subscribe')
+}
+
+// Unsubscribe functionality
+const unsubscribe = () => {
+  if (confirm('Are you sure you want to unsubscribe from Stargate.ci?')) {
+    // Remove subscriber from localStorage
+    localStorage.removeItem('stargate_subscribers')
+    
+    // Show notification
+    showToast('Successfully unsubscribed!', 'success')
+    
+    // Dispatch custom event to update navbar
+    window.dispatchEvent(new CustomEvent('subscription-changed'))
+    
+    // Refresh the page to update UI
     setTimeout(() => {
-      showToast('Subscribe to Stargate.ci for more features!', 'info')
-    }, 1000)
+      window.location.reload()
+    }, 1500)
   }
 }
+
+// Create valid subscriber for testing
+const createValidSubscriber = () => {
+  videoApiService.createValidSubscriber()
+  showToast('Valid subscriber created! Please refresh the page.', 'success')
+  
+  // Dispatch custom event to update navbar
+  window.dispatchEvent(new CustomEvent('subscription-changed'))
+  
+  setTimeout(() => {
+    window.location.reload()
+  }, 1500)
+}
+
+    const addComment = async () => {
+      // Check if user is subscribed
+      if (!isSubscribed.value) {
+        showToast('Please subscribe to comment!', 'warning')
+        setTimeout(() => {
+          showToast('Subscribe to Stargate.ci for more features!', 'info')
+        }, 1000)
+        return
+      }
+      
+      if (!newComment.value.trim()) {
+        showToast('Please enter a comment!', 'warning')
+        return
+      }
+      
+      try {
+        const sessionId = videoApiService.getSessionId()
+        const subscriberId = videoApiService.getSubscriberId()
+        
+        console.log('addComment - contentId:', props.contentId)
+        console.log('addComment - subscriberId:', subscriberId)
+        console.log('addComment - sessionId:', sessionId)
+        console.log('addComment - comment:', newComment.value)
+        
+        // Get subscriber username if available
+        const subscribers = JSON.parse(localStorage.getItem('stargate_subscribers') || '[]')
+        const currentSubscriber = subscribers.find((s: any) => s.id === subscriberId)
+        const username = currentSubscriber ? currentSubscriber.username : 'Guest User'
+        
+        const response = await videoApiService.addComment(
+          props.contentId,
+          newComment.value,
+          subscriberId,
+          sessionId
+        )
+        
+        console.log('Comment response:', response)
+        
+        if (response.success) {
+          // Convert API response to local format with real username
+          const comment: Comment = {
+            id: response.data.id.toString(),
+            user: response.data.author_name || username,
+            userAvatar: username.substring(0, 1).toUpperCase(),
+            text: response.data.content,
+            date: response.data.created_at,
+            likes: response.data.likes_count,
+            isLiked: false,
+            replies: [],
+            isPinned: response.data.is_pinned,
+            isEdited: response.data.is_edited
+          }
+          
+          comments.value.unshift(comment)
+          commentsCount.value++
+          newComment.value = ''
+          
+          // Show notification
+          showToast('Comment added successfully!', 'success')
+          
+          // Track engagement
+          trackEngagement('comment', props.contentType)
+        } else {
+          console.error('Comment failed:', response)
+          showToast('Failed to add comment', 'warning')
+        }
+      } catch (error) {
+        console.error('Error adding comment:', error)
+        showToast('Failed to add comment', 'warning')
+      }
+    }
 
 const toggleCommentLike = (commentId: string) => {
   const comment = comments.value.find(c => c.id === commentId)
@@ -581,51 +742,59 @@ const replyToComment = (commentId: string) => {
   replyText.value = ''
 }
 
-const addReply = (parentId: string) => {
+const addReply = async (parentId: string) => {
   if (!replyText.value.trim()) {
     showToast('Please enter a reply!', 'warning')
     return
   }
   
-  const parentComment = comments.value.find(c => c.id === parentId)
-  if (!parentComment) return
-  
-  const reply: Comment = {
-    id: Date.now().toString(),
-    user: isSubscribed.value ? 'Subscriber' : 'Guest User',
-    userAvatar: isSubscribed.value ? 'S' : 'G',
-    text: replyText.value,
-    date: new Date().toISOString(),
-    likes: 0,
-    isLiked: false,
-    replies: [],
-    isPinned: false,
-    isEdited: false,
-    parentId: parentId
-  }
-  
-  parentComment.replies.push(reply)
-  replyText.value = ''
-  replyingTo.value = null
-  
-  // Save to localStorage
-  const allComments = JSON.parse(localStorage.getItem('stargate_comments') || '{}')
-  if (allComments[props.contentId]) {
-    const commentIndex = allComments[props.contentId].findIndex((c: Comment) => c.id === parentId)
-    if (commentIndex !== -1) {
-      allComments[props.contentId][commentIndex] = parentComment
-      localStorage.setItem('stargate_comments', JSON.stringify(allComments))
+  try {
+    const sessionId = videoApiService.getSessionId()
+    const subscriberId = videoApiService.getSubscriberId()
+    
+    // Get subscriber username if available
+    const subscribers = JSON.parse(localStorage.getItem('stargate_subscribers') || '[]')
+    const currentSubscriber = subscribers.find((s: any) => s.id === subscriberId)
+    const username = currentSubscriber ? currentSubscriber.username : 'Guest User'
+    
+    const response = await videoApiService.addComment(
+      props.contentId,
+      replyText.value,
+      subscriberId,
+      sessionId,
+      parseInt(parentId)
+    )
+    
+    if (response.success) {
+      const parentComment = comments.value.find(c => c.id === parentId)
+      if (parentComment) {
+        const reply: Comment = {
+          id: response.data.id.toString(),
+          user: response.data.author_name || username,
+          userAvatar: username.substring(0, 1).toUpperCase(),
+          text: response.data.content,
+          date: response.data.created_at,
+          likes: response.data.likes_count,
+          isLiked: false,
+          replies: [],
+          isPinned: false,
+          isEdited: false,
+          parentId: parentId
+        }
+        
+        parentComment.replies.push(reply)
+        replyText.value = ''
+        replyingTo.value = null
+        
+        showToast('Reply added successfully!', 'success')
+        trackEngagement('reply', props.contentType)
+      }
+    } else {
+      showToast('Failed to add reply', 'warning')
     }
-  }
-  
-  showToast('Reply added successfully!', 'success')
-  trackEngagement('reply', props.contentType)
-  
-  // Encourage subscription if not subscribed
-  if (!isSubscribed.value) {
-    setTimeout(() => {
-      showToast('Subscribe to Stargate.ci for more features!', 'info')
-    }, 1000)
+  } catch (error) {
+    console.error('Error adding reply:', error)
+    showToast('Failed to add reply', 'warning')
   }
 }
 
@@ -733,14 +902,30 @@ const loadMoreComments = () => {
 }
 
 // Share methods
-const shareToFacebook = () => {
-  const url = encodeURIComponent(window.location.href)
-  const text = encodeURIComponent(`Check out this amazing content about Stargate Project and Cristal Intelligence on Stargate.ci! 🚀💎`)
-  window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${text}`, '_blank')
-  showToast('Shared on Facebook!', 'success')
-  trackEngagement('share_facebook', props.contentType)
-  showShare.value = false
-}
+    const shareToFacebook = async () => {
+      const url = encodeURIComponent(window.location.href)
+      const text = encodeURIComponent(`Check out this amazing content about Stargate Project and Cristal Intelligence on Stargate.ci! 🚀💎`)
+      window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${text}`, '_blank')
+      
+      // Record share in database
+      try {
+        const sessionId = videoApiService.getSessionId()
+        const subscriberId = videoApiService.getSubscriberId()
+        
+        await videoApiService.addShare(
+          props.contentId,
+          'facebook',
+          subscriberId,
+          sessionId
+        )
+      } catch (error) {
+        console.error('Error recording share:', error)
+      }
+      
+      showToast('Shared on Facebook!', 'success')
+      trackEngagement('share_facebook', props.contentType)
+      showShare.value = false
+    }
 
 const shareToX = () => {
   const url = encodeURIComponent(window.location.href)
@@ -809,200 +994,73 @@ const trackEngagement = (action: string, contentType: string) => {
   console.log('Engagement tracked:', engagement)
 }
 
-// Load saved data on mount
-onMounted(() => {
-  // Load likes
-  const likes = JSON.parse(localStorage.getItem('stargate_likes') || '{}')
-  if (likes[props.contentId]) {
-    isLiked.value = likes[props.contentId].isLiked
-    likesCount.value = likes[props.contentId].count
-  } else {
-    // Initialize with zero likes
-    likesCount.value = props.initialLikes
-  }
-  
-  // Load comments
-  const allComments = JSON.parse(localStorage.getItem('stargate_comments') || '{}')
-  if (allComments[props.contentId]) {
-    comments.value = allComments[props.contentId]
-    commentsCount.value = allComments[props.contentId].length
-  } else {
-    // Initialize with empty comments
-    comments.value = props.initialComments
-    commentsCount.value = props.initialComments.length
-  }
-  
-  // Add some test comments for demonstration (remove in production)
-  if (comments.value.length === 0) {
-    let testComments = []
-    
-    if (props.contentId === 'stargate-intro-video') {
-      testComments = [
-        {
-          id: 'test-1',
-          user: 'AI Enthusiast',
-          userAvatar: 'A',
-          text: 'This is amazing! The Stargate Project will revolutionize AI infrastructure.',
-          date: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
-          likes: 5,
-          isLiked: false,
-          replies: [],
-          isPinned: false,
-          isEdited: false
-        },
-        {
-          id: 'test-2',
-          user: 'Tech Researcher',
-          userAvatar: 'T',
-          text: 'The $500 billion investment shows the scale of this initiative. Exciting times ahead!',
-          date: new Date(Date.now() - 1 * 60 * 60 * 1000).toISOString(),
-          likes: 3,
-          isLiked: false,
-          replies: [
-            {
-              id: 'test-reply-1',
-              user: 'Developer',
-              userAvatar: 'D',
-              text: 'I agree! The infrastructure requirements are massive.',
-              date: new Date(Date.now() - 30 * 60 * 1000).toISOString(),
-              likes: 1,
+    // Load saved data on mount
+    onMounted(async () => {
+      try {
+        // Load video data from API
+        const videoResponse = await videoApiService.getVideo(props.contentId)
+        if (videoResponse.success) {
+          likesCount.value = videoResponse.data.likes_count
+          commentsCount.value = videoResponse.data.comments_count
+        }
+        
+        // Load user interactions
+        const sessionId = videoApiService.getSessionId()
+        const subscriberId = videoApiService.getSubscriberId()
+        
+        const interactionsResponse = await videoApiService.getUserInteractions(
+          props.contentId,
+          subscriberId,
+          sessionId
+        )
+        
+        if (interactionsResponse.success) {
+          isLiked.value = interactionsResponse.data.is_liked
+        }
+        
+        // Load comments from API
+        const commentsResponse = await videoApiService.getComments(props.contentId)
+        if (commentsResponse.success) {
+          // Convert API comments to local format
+          comments.value = commentsResponse.data.map(comment => ({
+            id: comment.id.toString(),
+            user: comment.author_name,
+            userAvatar: comment.author_avatar,
+            text: comment.content,
+            date: comment.created_at,
+            likes: comment.likes_count,
+            isLiked: false,
+            replies: comment.replies.map(reply => ({
+              id: reply.id.toString(),
+              user: reply.author_name,
+              userAvatar: reply.author_avatar,
+              text: reply.content,
+              date: reply.created_at,
+              likes: reply.likes_count,
               isLiked: false,
               replies: [],
               isPinned: false,
-              isEdited: false,
-              parentId: 'test-2'
-            }
-          ],
-          isPinned: false,
-          isEdited: false
+              isEdited: reply.is_edited
+            })),
+            isPinned: comment.is_pinned,
+            isEdited: comment.is_edited
+          }))
+          commentsCount.value = comments.value.length
         }
-      ]
-    } else if (props.contentId === 'stargate-deep-dive-video') {
-      testComments = [
-        {
-          id: 'test-3',
-          user: 'Data Scientist',
-          userAvatar: 'D',
-          text: 'The technical analysis is incredible. This will change everything we know about AI.',
-          date: new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString(),
-          likes: 8,
-          isLiked: false,
-          replies: [],
-          isPinned: false,
-          isEdited: false
-        },
-        {
-          id: 'test-4',
-          user: 'ML Engineer',
-          userAvatar: 'M',
-          text: 'The partnership between OpenAI, SoftBank, and Arm is game-changing.',
-          date: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
-          likes: 6,
-          isLiked: false,
-          replies: [],
-          isPinned: false,
-          isEdited: false
-        }
-      ]
-    } else if (props.contentId === 'stargate-technical-video') {
-      testComments = [
-        {
-          id: 'test-7',
-          user: 'System Architect',
-          userAvatar: 'S',
-          text: 'The technical implementation details are fascinating. This will revolutionize how we build AI systems.',
-          date: new Date(Date.now() - 5 * 60 * 60 * 1000).toISOString(),
-          likes: 7,
-          isLiked: false,
-          replies: [],
-          isPinned: false,
-          isEdited: false
-        },
-        {
-          id: 'test-8',
-          user: 'DevOps Engineer',
-          userAvatar: 'D',
-          text: 'The infrastructure requirements are massive but achievable. Exciting times ahead!',
-          date: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
-          likes: 5,
-          isLiked: false,
-          replies: [],
-          isPinned: false,
-          isEdited: false
-        }
-      ]
-    } else if (props.contentId === 'cristal-intelligence-video') {
-      testComments = [
-        {
-          id: 'test-5',
-          user: 'AI Ethicist',
-          userAvatar: 'E',
-          text: 'Cristal Intelligence represents the future of ethical AI development.',
-          date: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(),
-          likes: 12,
-          isLiked: false,
-          replies: [],
-          isPinned: true,
-          isEdited: false
-        },
-        {
-          id: 'test-6',
-          user: 'Researcher',
-          userAvatar: 'R',
-          text: 'The transparency and interpretability aspects are revolutionary.',
-          date: new Date(Date.now() - 1 * 60 * 60 * 1000).toISOString(),
-          likes: 4,
-          isLiked: false,
-          replies: [],
-          isPinned: false,
-          isEdited: false
-        }
-      ]
-    } else if (props.contentId === 'future-ai-video') {
-      testComments = [
-        {
-          id: 'test-9',
-          user: 'Industry Analyst',
-          userAvatar: 'I',
-          text: 'The industry impact will be unprecedented. Every sector will be transformed.',
-          date: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString(),
-          likes: 9,
-          isLiked: false,
-          replies: [],
-          isPinned: false,
-          isEdited: false
-        },
-        {
-          id: 'test-10',
-          user: 'Business Leader',
-          userAvatar: 'B',
-          text: 'This is the future we need to prepare for. The applications are endless.',
-          date: new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString(),
-          likes: 6,
-          isLiked: false,
-          replies: [],
-          isPinned: false,
-          isEdited: false
-        }
-      ]
-    }
-    
-    if (testComments.length > 0) {
-      comments.value = testComments
-      commentsCount.value = testComments.length
-      
-      // Save test comments to localStorage
-      const allComments = JSON.parse(localStorage.getItem('stargate_comments') || '{}')
-      allComments[props.contentId] = testComments
-      localStorage.setItem('stargate_comments', JSON.stringify(allComments))
-    }
-  }
+      } catch (error) {
+        console.error('Error loading data from API:', error)
+        // Use initial values if API fails
+        likesCount.value = props.initialLikes
+        commentsCount.value = props.initialComments.length
+        comments.value = props.initialComments
+      }
+  
 })
 </script>
 
 <style scoped>
 .interactive-content {
-  @apply w-full;
+  width: 100%;
 }
 
 .share-modal {

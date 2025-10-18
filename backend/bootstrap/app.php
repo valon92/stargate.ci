@@ -17,10 +17,12 @@ return Application::configure(basePath: dirname(__DIR__))
             'api.error' => \App\Http\Middleware\ApiErrorHandler::class,
             'api.throttle' => \App\Http\Middleware\ApiRateLimiter::class,
             'api.cache' => \App\Http\Middleware\ApiResponseCache::class,
+            'cors' => \App\Http\Middleware\CorsMiddleware::class,
         ]);
         
-        // Apply error handler to all API routes
+        // Apply error handler and CORS to all API routes
         $middleware->appendToGroup('api', [
+            \App\Http\Middleware\CorsMiddleware::class,
             \App\Http\Middleware\ApiErrorHandler::class,
         ]);
     })

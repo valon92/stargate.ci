@@ -2,149 +2,109 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Video extends Model
 {
     use HasFactory;
 
+    protected $table = 'content_videos';
+
     protected $fillable = [
-        'title',
-        'slug',
-        'description',
         'content_id',
-        'author_id',
-        'video_url',
-        'thumbnail_url',
-        'poster_url',
-        'duration',
-        'format',
-        'file_size',
-        'quality_options',
-        'subtitles',
-        'chapters',
-        'has_transcript',
-        'transcript',
-        'is_public',
-        'allow_download',
-        'allow_embed',
-        'view_count',
-        'like_count',
-        'dislike_count',
-        'average_rating',
-        'metadata',
+        'title',
+        'description',
+        'youtube_id',
+        'youtube_url',
+        'content_type',
+        'likes_count',
+        'comments_count',
+        'shares_count',
+        'views_count',
+        'is_active',
+        'metadata'
     ];
 
     protected $casts = [
-        'quality_options' => 'array',
-        'subtitles' => 'array',
-        'chapters' => 'array',
-        'has_transcript' => 'boolean',
-        'is_public' => 'boolean',
-        'allow_download' => 'boolean',
-        'allow_embed' => 'boolean',
-        'average_rating' => 'decimal:2',
         'metadata' => 'array',
+        'is_active' => 'boolean',
+        'likes_count' => 'integer',
+        'comments_count' => 'integer',
+        'shares_count' => 'integer',
+        'views_count' => 'integer'
     ];
 
-    public function contentItem(): BelongsTo
+    /**
+     * Get the interactions for this video
+     */
+    public function interactions(): HasMany
     {
-        return $this->belongsTo(ContentItem::class, 'content_id');
+        return $this->hasMany(VideoInteraction::class, 'video_content_id', 'content_id');
     }
 
-    public function author(): BelongsTo
+    /**
+     * Get the comments for this video
+     */
+    public function comments(): HasMany
     {
-        return $this->belongsTo(User::class, 'author_id');
+        return $this->hasMany(VideoComment::class, 'video_content_id', 'content_id')
+                    ->where('is_active', true)
+                    ->orderBy('is_pinned', 'desc')
+                    ->orderBy('created_at', 'desc');
     }
 
-    public function analytics(): HasMany
+    /**
+     * Get the likes for this video
+     */
+    public function likes(): HasMany
     {
-        return $this->hasMany(VideoAnalytics::class);
+        return $this->interactions()->where('interaction_type', 'like');
     }
 
-    public function playlists(): BelongsToMany
+    /**
+     * Get the shares for this video
+     */
+    public function shares(): HasMany
     {
-        return $this->belongsToMany(VideoPlaylist::class, 'video_playlist_items', 'video_id', 'playlist_id')
-                    ->withPivot(['sort_order', 'added_at'])
-                    ->withTimestamps();
+        return $this->interactions()->where('interaction_type', 'share');
     }
 
-    public function scopePublic($query)
+    /**
+     * Get the views for this video
+     */
+    public function views(): HasMany
     {
-        return $query->where('is_public', true);
+        return $this->interactions()->where('interaction_type', 'view');
     }
 
-    public function scopeByFormat($query, $format)
+    /**
+     * Scope for active videos
+     */
+    public function scopeActive($query)
     {
-        return $query->where('format', $format);
+        return $query->where('is_active', true);
     }
 
-    public function scopePopular($query)
+    /**
+     * Scope for specific content type
+     */
+    public function scopeOfType($query, $type)
     {
-        return $query->orderBy('view_count', 'desc');
+        return $query->where('content_type', $type);
     }
 
-    public function scopeRated($query)
+    /**
+     * Update interaction counts
+     */
+    public function updateCounts()
     {
-        return $query->orderBy('average_rating', 'desc');
-    }
-
-    public function scopeRecent($query)
-    {
-        return $query->orderBy('created_at', 'desc');
-    }
-
-    public function getDurationFormattedAttribute(): string
-    {
-        $hours = floor($this->duration / 3600);
-        $minutes = floor(($this->duration % 3600) / 60);
-        $seconds = $this->duration % 60;
-        
-        if ($hours > 0) {
-            return sprintf('%d:%02d:%02d', $hours, $minutes, $seconds);
-        }
-        
-        return sprintf('%d:%02d', $minutes, $seconds);
-    }
-
-    public function getFileSizeFormattedAttribute(): string
-    {
-        if (!$this->file_size) {
-            return 'Unknown';
-        }
-        
-        $bytes = $this->file_size;
-        $units = ['B', 'KB', 'MB', 'GB', 'TB'];
-        
-        for ($i = 0; $bytes > 1024 && $i < count($units) - 1; $i++) {
-            $bytes /= 1024;
-        }
-        
-        return round($bytes, 2) . ' ' . $units[$i];
-    }
-
-    public function incrementViewCount(): void
-    {
-        $this->increment('view_count');
-    }
-
-    public function incrementLikeCount(): void
-    {
-        $this->increment('like_count');
-    }
-
-    public function incrementDislikeCount(): void
-    {
-        $this->increment('dislike_count');
-    }
-
-    public function updateAverageRating(): void
-    {
-        // This would typically calculate from user ratings
-        // For now, we'll leave it as is
+        $this->update([
+            'likes_count' => $this->likes()->count(),
+            'comments_count' => $this->comments()->count(),
+            'shares_count' => $this->shares()->count(),
+            'views_count' => $this->views()->count()
+        ]);
     }
 }

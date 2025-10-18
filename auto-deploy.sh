@@ -2,6 +2,11 @@
 
 # 🚀 Auto-Deploy Script për stargate.ci
 # Përdorimi: ./auto-deploy.sh
+# 
+# ⚠️  IMPORTANT: This script is for MANUAL deployment only
+#    - No automatic Vercel deployment
+#    - No GitHub Actions triggers
+#    - Manual FTP upload only
 
 set -e
 
@@ -65,16 +70,9 @@ if [ -n "$(git status --porcelain)" ]; then
     warning "You have uncommitted changes. Consider committing them first."
 fi
 
-# 6. Commit dhe push (optional)
-read -p "🔄 Do you want to commit and push changes to GitHub? (y/N): " -n 1 -r
-echo
-if [[ $REPLY =~ ^[Yy]$ ]]; then
-    log "📤 Committing and pushing to GitHub..."
-    git add .
-    git commit -m "🚀 Auto-deploy: Build $(date +'%Y-%m-%d %H:%M:%S')" || true
-    git push origin main
-    success "Changes pushed to GitHub"
-fi
+# 6. Commit dhe push (optional) - DISABLED to prevent auto-deployments
+warning "⚠️  Auto-commit disabled to prevent unwanted deployments"
+warning "   Manual deployment only - no GitHub Actions triggers"
 
 # 7. Instruksione për upload
 echo ""
@@ -90,6 +88,11 @@ echo "   4. Extract the archive"
 echo "   5. Delete old files and the .tar.gz"
 echo ""
 echo "🌐 Your site will be updated at: https://stargate.ci"
+echo ""
+echo "⚠️  DEPLOYMENT SAFETY:"
+echo "   - No automatic Vercel deployment"
+echo "   - No GitHub Actions triggers" 
+echo "   - Manual upload only"
 echo ""
 
 # 8. FTP Upload (nëse ka credentials)

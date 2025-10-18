@@ -34,6 +34,9 @@ async function request<T = any>(url: string, options: ApiClientOptions = {}): Pr
 
   if (!response.ok) {
     const text = await response.text().catch(() => '')
+    console.error(`API Error: HTTP ${response.status}: ${text || response.statusText}`)
+    console.error(`Request URL: ${url}`)
+    console.error(`Request options:`, options)
     throw new Error(`HTTP ${response.status}: ${text || response.statusText}`)
   }
 
@@ -41,7 +44,7 @@ async function request<T = any>(url: string, options: ApiClientOptions = {}): Pr
   if (contentType.includes('application/json')) {
     return response.json() as Promise<T>
   }
-  // @ts-expect-error allow non-JSON responses for downloads, etc.
+  // Allow non-JSON responses for downloads, etc.
   return response as T
 }
 

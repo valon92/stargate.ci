@@ -2,7 +2,6 @@
 import { RouterView } from 'vue-router'
 import Header from './components/layout/Header.vue'
 import Footer from './components/layout/Footer.vue'
-import PWAStatus from './components/PWAStatus.vue'
 </script>
 
 <template>
@@ -17,8 +16,5 @@ import PWAStatus from './components/PWAStatus.vue'
     
     <!-- Footer -->
     <Footer />
-    
-    <!-- PWA Status and Controls -->
-    <PWAStatus />
   </div>
 </template>

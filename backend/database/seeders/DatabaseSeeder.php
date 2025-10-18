@@ -13,21 +13,12 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             // Core seeders
-            UserSeeder::class,
-            UserRoleSeeder::class,
-            ContentCategorySeeder::class,
-            CommunityCategorySeeder::class,
-            
-            // Content seeders
             ArticleSeeder::class,
             FAQSeeder::class,
-            TutorialSeeder::class,
-            CommunityPostSeeder::class,
-            TemplateSeeder::class,
             
-            // System seeders
-            SearchQuerySeeder::class,
-            AnalyticsEventSeeder::class,
+            // Video system seeders
+            VideoSeeder::class,
+            SubscriberSeeder::class,
         ]);
     }
 }

@@ -20,32 +20,26 @@
       </div>
 
       <!-- Total Shares -->
-      <div class="flex items-center gap-2">
+      <!-- <div class="flex items-center gap-2">
         <svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z"/>
         </svg>
         <span class="text-gray-300">{{ formatNumber(totalShares) }}</span>
         <span class="text-gray-500">Shares</span>
-      </div>
+      </div> -->
 
-      <!-- Active Users -->
-      <div class="flex items-center gap-2">
-        <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-        <span class="text-gray-300">{{ formatNumber(activeUsers) }}</span>
-        <span class="text-gray-500">Active</span>
-      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
+import { videoApiService } from '../services/videoApiService'
 
 // Reactive data
 const totalLikes = ref(0)
 const totalComments = ref(0)
 const totalShares = ref(0)
-const activeUsers = ref(0)
 
 // Methods
 const formatNumber = (num: number): string => {
@@ -57,34 +51,38 @@ const formatNumber = (num: number): string => {
   return num.toString()
 }
 
-const calculateStats = () => {
-  // Calculate total likes from localStorage (only from subscribed users)
-  const likes = JSON.parse(localStorage.getItem('stargate_likes') || '{}')
-  totalLikes.value = Object.values(likes).reduce((sum: number, like: any) => {
-    return sum + (like.count || 0)
-  }, 0)
-
-  // Calculate total comments from localStorage
-  const comments = JSON.parse(localStorage.getItem('stargate_comments') || '{}')
-  totalComments.value = Object.values(comments).reduce((sum: number, commentList: any) => {
-    if (Array.isArray(commentList)) {
-      // Count main comments + replies
-      return sum + commentList.reduce((commentSum: number, comment: any) => {
-        return commentSum + 1 + (comment.replies ? comment.replies.length : 0)
-      }, 0)
+const calculateStats = async () => {
+  try {
+    // Get video stats from API
+    const videoStatsResponse = await videoApiService.getVideoStats()
+    if (videoStatsResponse.success) {
+      totalLikes.value = videoStatsResponse.data.total_likes
+      totalComments.value = videoStatsResponse.data.total_comments
+      totalShares.value = videoStatsResponse.data.total_shares
     }
-    return sum
-  }, 0)
+  } catch (error) {
+    console.error('Error loading stats from API:', error)
+    // Fallback to localStorage
+    const likes = JSON.parse(localStorage.getItem('stargate_likes') || '{}')
+    totalLikes.value = Object.values(likes).reduce((sum: number, like: any) => {
+      return sum + (like.count || 0)
+    }, 0)
 
-  // Calculate total shares from localStorage
-  const engagements = JSON.parse(localStorage.getItem('stargate_engagements') || '[]')
-  totalShares.value = engagements.filter((engagement: any) => 
-    engagement.action.startsWith('share_')
-  ).length
+    const comments = JSON.parse(localStorage.getItem('stargate_comments') || '{}')
+    totalComments.value = Object.values(comments).reduce((sum: number, commentList: any) => {
+      if (Array.isArray(commentList)) {
+        return sum + commentList.reduce((commentSum: number, comment: any) => {
+          return commentSum + 1 + (comment.replies ? comment.replies.length : 0)
+        }, 0)
+      }
+      return sum
+    }, 0)
 
-  // Get active users from subscribers count
-  const subscribers = JSON.parse(localStorage.getItem('stargate_subscribers') || '[]')
-  activeUsers.value = subscribers.length
+    const engagements = JSON.parse(localStorage.getItem('stargate_engagements') || '[]')
+    totalShares.value = engagements.filter((engagement: any) => 
+      engagement.action.startsWith('share_')
+    ).length
+  }
 }
 
 // Update stats every 30 seconds
@@ -101,6 +99,9 @@ onMounted(() => {
 
 <style scoped>
 .engagement-stats {
-  @apply bg-gray-800/50 rounded-lg p-3 border border-gray-700;
+  background-color: rgba(31, 41, 55, 0.5);
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+  border: 1px solid rgba(55, 65, 81, 1);
 }
 </style>

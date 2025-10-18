@@ -1,21 +1,17 @@
-// News API Service for Stargate.ci
-// Fetches real news data using OpenAI API for Stargate Project and Cristal Intelligence
-
-import { openaiService } from './openaiService'
+// News API Service - Static data only
 
 export interface NewsArticle {
   id: string
   title: string
-  excerpt: string
   content: string
-  category: 'stargate' | 'cristal' | 'industry' | 'research' | 'ethics' | 'global'
+  excerpt: string
   author: string
   publishedAt: string
-  readTime: number
-  icon: string
+  category: 'stargate' | 'cristal' | 'openai' | 'softbank' | 'arm' | 'ai' | 'technology'
+  source: string
   url: string
+  imageUrl?: string
   tags: string[]
-  featured: boolean
 }
 
 export interface NewsResponse {
@@ -30,8 +26,8 @@ class NewsApiService {
   private cacheExpiry: Map<string, number> = new Map()
   private readonly CACHE_DURATION = 30 * 60 * 1000 // 30 minutes
 
-  // Generate news articles using OpenAI
-  async generateNewsArticles(category?: string, limit: number = 10): Promise<NewsResponse> {
+  // Generate news using static data
+  async generateNews(category?: string, limit: number = 10): Promise<NewsResponse> {
     try {
       const cacheKey = `news_${category || 'all'}_${limit}`
       
@@ -44,385 +40,175 @@ class NewsApiService {
         }
       }
 
-      // Check if OpenAI API key is configured
-      const apiKey = import.meta.env.VITE_OPENAI_API_KEY
-      if (!apiKey || apiKey === 'sk-your-openai-api-key-here') {
-        console.log('📰 OpenAI API key not configured, using fallback content')
-        const fallbackArticles = this.createFallbackArticles(category)
-        const result: NewsResponse = {
-          success: true,
-          articles: fallbackArticles,
-          total: fallbackArticles.length
-        }
-        
-        // Cache the fallback result
-        this.cache.set(cacheKey, result)
-        this.cacheExpiry.set(cacheKey, Date.now() + this.CACHE_DURATION)
-        
-        return result
-      }
-
-      console.log('📰 Generating fresh news data from OpenAI...')
-
-      // Create prompt for news generation
-      const prompt = this.createNewsPrompt(category, limit)
-      
-      // Generate content using OpenAI
-      const response = await openaiService.generateText(prompt, {
-        model: 'gpt-4',
-        max_tokens: 4000,
-        temperature: 0.7
-      })
-
-      if (!response.success) {
-        throw new Error(response.error || 'Failed to generate news')
-      }
-
-      // Parse the generated content
-      const articles = this.parseNewsContent(response.content, category)
-      
+      console.log('📰 Using static news data')
+      const staticNews = this.createStaticNews(category)
       const result: NewsResponse = {
         success: true,
-        articles,
-        total: articles.length
+        articles: staticNews.slice(0, limit),
+        total: staticNews.length
       }
-
+      
       // Cache the result
       this.cache.set(cacheKey, result)
       this.cacheExpiry.set(cacheKey, Date.now() + this.CACHE_DURATION)
-
       return result
 
     } catch (error) {
-      console.error('Error generating news:', error)
-      console.log('📰 Falling back to demo content due to error')
-      
+      console.error('📰 Error generating news:', error)
       // Return fallback content on error
-      const fallbackArticles = this.createFallbackArticles(category)
+      const fallbackNews = this.createFallbackNews(category)
       return {
         success: true,
-        articles: fallbackArticles,
-        total: fallbackArticles.length
+        articles: fallbackNews,
+        total: fallbackNews.length
       }
     }
   }
 
-  // Create prompt for news generation
-  private createNewsPrompt(category?: string, limit: number = 10): string {
-    const basePrompt = `Generate ${limit} realistic news articles about the Stargate Project and Cristal Intelligence. 
-    Each article should be informative, well-researched, and relevant to current AI developments.
-    
-    Return the articles in the following JSON format:
-    {
-      "articles": [
-        {
-          "title": "Article Title",
-          "excerpt": "Brief summary of the article (2-3 sentences)",
-          "content": "Full article content (3-4 paragraphs)",
-          "category": "stargate|cristal|industry|research|ethics|global",
-          "author": "Author Name",
-          "publishedAt": "YYYY-MM-DD",
-          "readTime": 5,
-          "icon": "🚀|💎|🏢|🔬|⚖️|🌐",
-          "url": "https://example.com/article",
-          "tags": ["tag1", "tag2", "tag3"],
-          "featured": true/false
-        }
-      ]
-    }`
-
-    if (category) {
-      const categoryPrompts = {
-        stargate: `Focus on the $500 billion Stargate AI infrastructure project by OpenAI, SoftBank, and Arm. Include updates on data centers, AI model development, infrastructure milestones, and partnerships.`,
-        cristal: `Focus on Cristal Intelligence - the revolutionary AI paradigm emphasizing transparency, interpretability, and ethical alignment. Include research breakthroughs, applications, and comparisons with traditional AI.`,
-        industry: `Focus on how Stargate and Cristal Intelligence are transforming industries like healthcare, finance, manufacturing, and education. Include real-world applications and case studies.`,
-        research: `Focus on latest research findings, technical breakthroughs, academic papers, and development milestones in AI infrastructure and transparent AI systems.`,
-        ethics: `Focus on AI ethics, governance frameworks, responsible AI development, policy implications, and ethical considerations in AI infrastructure.`,
-        global: `Focus on global impact, international cooperation, market effects, policy developments, and worldwide implications of these AI technologies.`
+  // Create static news data
+  private createStaticNews(category?: string): NewsArticle[] {
+    const allNews: NewsArticle[] = [
+      {
+        id: 'stargate-announcement-2024',
+        title: 'OpenAI, SoftBank, and Arm Announce $500 Billion Stargate Project',
+        content: 'The Stargate Project represents a revolutionary $500 billion AI infrastructure initiative that will reshape the future of artificial intelligence. This massive undertaking brings together three industry giants to create next-generation AI computing capabilities.',
+        excerpt: 'Revolutionary $500 billion AI infrastructure project announced by OpenAI, SoftBank, and Arm.',
+        author: 'AI Research Team',
+        publishedAt: '2024-12-15T10:00:00Z',
+        category: 'stargate',
+        source: 'Official Announcement',
+        url: 'https://example.com/stargate-announcement',
+        imageUrl: 'https://example.com/stargate-image.jpg',
+        tags: ['stargate', 'openai', 'softbank', 'arm', 'ai-infrastructure']
+      },
+      {
+        id: 'cristal-intelligence-breakthrough',
+        title: 'Cristal Intelligence: A New Paradigm in Transparent AI',
+        content: 'Cristal Intelligence represents a breakthrough in AI transparency and interpretability. This new paradigm focuses on creating AI systems that are as clear and understandable as crystal, enabling better decision-making and ethical AI development.',
+        excerpt: 'New paradigm in AI transparency and interpretability unveiled.',
+        author: 'Dr. Sarah Chen',
+        publishedAt: '2024-12-10T14:30:00Z',
+        category: 'cristal',
+        source: 'AI Research Journal',
+        url: 'https://example.com/cristal-intelligence',
+        imageUrl: 'https://example.com/cristal-image.jpg',
+        tags: ['cristal-intelligence', 'ai-transparency', 'ethical-ai', 'interpretability']
+      },
+      {
+        id: 'openai-gpt-5-development',
+        title: 'OpenAI Accelerates GPT-5 Development with Stargate Infrastructure',
+        content: 'OpenAI is leveraging the Stargate Project infrastructure to accelerate the development of GPT-5, their next-generation language model. This collaboration will enable unprecedented scale and capability in AI model training.',
+        excerpt: 'OpenAI uses Stargate infrastructure to accelerate GPT-5 development.',
+        author: 'Tech Reporter',
+        publishedAt: '2024-12-08T09:15:00Z',
+        category: 'openai',
+        source: 'Tech News Daily',
+        url: 'https://example.com/openai-gpt5',
+        imageUrl: 'https://example.com/gpt5-image.jpg',
+        tags: ['openai', 'gpt-5', 'stargate', 'ai-models', 'machine-learning']
+      },
+      {
+        id: 'softbank-ai-investment-strategy',
+        title: 'SoftBank Vision Fund Doubles Down on AI with Stargate Investment',
+        content: 'SoftBank Vision Fund announces a significant investment in the Stargate Project, reinforcing their commitment to AI technology and infrastructure development. This investment aligns with their long-term vision for AI transformation.',
+        excerpt: 'SoftBank Vision Fund makes major investment in Stargate Project.',
+        author: 'Investment Analyst',
+        publishedAt: '2024-12-05T16:45:00Z',
+        category: 'softbank',
+        source: 'Financial Times',
+        url: 'https://example.com/softbank-investment',
+        imageUrl: 'https://example.com/softbank-image.jpg',
+        tags: ['softbank', 'investment', 'stargate', 'ai-funding', 'vision-fund']
+      },
+      {
+        id: 'arm-ai-chip-architecture',
+        title: 'ARM Unveils Next-Generation AI Chip Architecture for Stargate',
+        content: 'ARM Holdings reveals their new AI-optimized chip architecture designed specifically for the Stargate Project. This breakthrough in chip design will enable unprecedented AI computing performance and efficiency.',
+        excerpt: 'ARM reveals AI-optimized chip architecture for Stargate Project.',
+        author: 'Hardware Engineer',
+        publishedAt: '2024-12-03T11:20:00Z',
+        category: 'arm',
+        source: 'Hardware Weekly',
+        url: 'https://example.com/arm-ai-chips',
+        imageUrl: 'https://example.com/arm-image.jpg',
+        tags: ['arm', 'ai-chips', 'hardware', 'stargate', 'chip-architecture']
+      },
+      {
+        id: 'ai-ethics-cristal-intelligence',
+        title: 'Cristal Intelligence Sets New Standards for AI Ethics',
+        content: 'The principles of Cristal Intelligence are being adopted by leading AI companies to ensure ethical AI development. This new framework emphasizes transparency, accountability, and human-centered AI design.',
+        excerpt: 'Cristal Intelligence principles adopted for ethical AI development.',
+        author: 'AI Ethics Researcher',
+        publishedAt: '2024-12-01T13:10:00Z',
+        category: 'cristal',
+        source: 'AI Ethics Journal',
+        url: 'https://example.com/ai-ethics-cristal',
+        imageUrl: 'https://example.com/ethics-image.jpg',
+        tags: ['ai-ethics', 'cristal-intelligence', 'transparency', 'ethical-ai', 'ai-governance']
+      },
+      {
+        id: 'stargate-infrastructure-update',
+        title: 'Stargate Project Infrastructure Development Reaches Milestone',
+        content: 'The Stargate Project infrastructure development has reached a significant milestone with the completion of the first phase of data centers. This achievement brings the project closer to its goal of creating the world\'s most advanced AI computing network.',
+        excerpt: 'Stargate Project infrastructure development reaches major milestone.',
+        author: 'Infrastructure Reporter',
+        publishedAt: '2024-11-28T08:30:00Z',
+        category: 'stargate',
+        source: 'Infrastructure News',
+        url: 'https://example.com/stargate-infrastructure',
+        imageUrl: 'https://example.com/infrastructure-image.jpg',
+        tags: ['stargate', 'infrastructure', 'data-centers', 'ai-computing', 'milestone']
+      },
+      {
+        id: 'ai-research-breakthrough',
+        title: 'Breakthrough in AI Research Enabled by Stargate Computing Power',
+        content: 'Researchers have achieved a major breakthrough in AI research using the computing power of the Stargate Project. This advancement opens new possibilities for AI model development and scientific discovery.',
+        excerpt: 'Major AI research breakthrough achieved using Stargate computing power.',
+        author: 'Research Scientist',
+        publishedAt: '2024-11-25T15:45:00Z',
+        category: 'ai',
+        source: 'Science Daily',
+        url: 'https://example.com/ai-research-breakthrough',
+        imageUrl: 'https://example.com/research-image.jpg',
+        tags: ['ai-research', 'stargate', 'breakthrough', 'scientific-discovery', 'computing-power']
       }
-      
-      return `${basePrompt}\n\n${categoryPrompts[category as keyof typeof categoryPrompts] || ''}`
+    ]
+
+    if (category && category !== 'all') {
+      return allNews.filter(article => article.category === category)
     }
 
-    return basePrompt
+    return allNews
   }
 
-  // Parse generated content into news articles
-  private parseNewsContent(content: string, category?: string): NewsArticle[] {
-    try {
-      // Try to extract JSON from the response
-      const jsonMatch = content.match(/\{[\s\S]*\}/)
-      if (!jsonMatch) {
-        throw new Error('No JSON found in response')
+  // Create fallback news
+  private createFallbackNews(category?: string): NewsArticle[] {
+    return [
+      {
+        id: 'fallback-news-1',
+        title: 'AI Technology Advances in 2024',
+        content: 'Artificial intelligence technology continues to advance rapidly in 2024, with new breakthroughs in machine learning and neural networks.',
+        excerpt: 'AI technology advances continue in 2024.',
+        author: 'Tech Reporter',
+        publishedAt: '2024-12-15T10:00:00Z',
+        category: 'ai',
+        source: 'Tech News',
+        url: 'https://example.com',
+        tags: ['ai', 'technology', 'machine-learning']
+      },
+      {
+        id: 'fallback-news-2',
+        title: 'Future of Artificial Intelligence',
+        content: 'The future of artificial intelligence looks promising with new developments in AI research and applications.',
+        excerpt: 'Future of AI looks promising with new developments.',
+        author: 'AI Researcher',
+        publishedAt: '2024-12-10T14:30:00Z',
+        category: 'technology',
+        source: 'AI Journal',
+        url: 'https://example.com',
+        tags: ['ai', 'future', 'research']
       }
-
-      const parsed = JSON.parse(jsonMatch[0])
-      
-      if (!parsed.articles || !Array.isArray(parsed.articles)) {
-        throw new Error('Invalid articles format')
-      }
-
-      return parsed.articles.map((article: any, index: number) => ({
-        id: `generated_${Date.now()}_${index}`,
-        title: article.title || 'Untitled Article',
-        excerpt: article.excerpt || 'No excerpt available',
-        content: article.content || 'No content available',
-        category: article.category || 'global',
-        author: article.author || 'AI Generated',
-        publishedAt: article.publishedAt || new Date().toISOString().split('T')[0],
-        readTime: article.readTime || 5,
-        icon: article.icon || '📰',
-        url: article.url || '#',
-        tags: article.tags || [],
-        featured: article.featured || false
-      }))
-
-    } catch (error) {
-      console.error('Error parsing news content:', error)
-      
-      // Fallback: create mock articles if parsing fails
-      return this.createFallbackArticles(category)
-    }
-  }
-
-  // Create fallback articles with real news from OpenAI and SoftBank
-  private createFallbackArticles(category?: string): NewsArticle[] {
-    const fallbackArticles = {
-      stargate: [
-        {
-          id: 'real_stargate_1',
-          title: 'OpenAI Announces Stargate Project: $500B AI Infrastructure Initiative',
-          excerpt: 'OpenAI, SoftBank, and Oracle announce the Stargate Project - a plan to build next-generation AI data centers in the U.S. for OpenAI, representing the largest AI infrastructure investment in history.',
-          content: 'In January 2025, OpenAI, SoftBank, and Oracle announced the Stargate Project, a groundbreaking plan to build next-generation AI data centers in the U.S. for OpenAI. This represents the largest AI infrastructure investment in history, designed to support the continued advancement of artificial intelligence technologies. The project will create massive computing capacity to transform cutting-edge AI technologies into practical and scalable services, with the U.S. serving as the epicenter of generative AI innovation.',
-          category: 'stargate' as const,
-          author: 'OpenAI Official',
-          publishedAt: '2025-01-15',
-          readTime: 6,
-          icon: '🚀',
-          url: 'https://openai.com/index/announcing-the-stargate-project/',
-          tags: ['Stargate Project', 'OpenAI', 'SoftBank', 'Oracle', 'AI Infrastructure', 'Data Centers'],
-          featured: true
-        },
-        {
-          id: 'real_stargate_2',
-          title: 'SoftBank Commits $30B Follow-on Investment in OpenAI',
-          excerpt: 'SoftBank commits to making follow-on investments in OpenAI, planning to invest up to $30 billion in the company to deepen their capital partnership.',
-          content: 'In March 2025, SoftBank committed to making follow-on investments in OpenAI, planning to invest up to $30 billion in the company. This bold investment decision is based on the assumption that a syndicate will be formed to support the full investment amount. The investment aims to deepen the capital partnership with OpenAI, an organization with unmatched AI capabilities, which is vital to building the strength envisioned for the SoftBank Group.',
-          category: 'stargate' as const,
-          author: 'SoftBank Group',
-          publishedAt: '2025-03-01',
-          readTime: 7,
-          icon: '💰',
-          url: 'https://group.softbank/media/Project/sbg/sbg/pdf/ir/financials/annual_reports/annual-report_fy2025_04_en.pdf',
-          tags: ['Investment', 'SoftBank', 'OpenAI', 'Partnership', 'Capital', 'AI Development'],
-          featured: true
-        },
-        {
-          id: 'latest_stargate_3',
-          title: 'Stargate Project: $500B AI Infrastructure Investment Announced',
-          excerpt: 'OpenAI, SoftBank, and Oracle announce the Stargate Project - a plan to build next-generation AI data centers in the U.S. for OpenAI, representing the largest AI infrastructure investment in history.',
-          content: 'In January 2025, OpenAI, SoftBank, and Oracle announced the Stargate Project, a groundbreaking plan to build next-generation AI data centers in the U.S. for OpenAI. This represents the largest AI infrastructure investment in history, designed to support the continued advancement of artificial intelligence technologies. The project will create massive computing capacity to transform cutting-edge AI technologies into practical and scalable services, with the U.S. serving as the epicenter of generative AI innovation. The Stargate Project is viewed as a core strategic investment to help shape the foundational infrastructure of the AI era.',
-          category: 'stargate' as const,
-          author: 'OpenAI Official',
-          publishedAt: '2025-01-15',
-          readTime: 6,
-          icon: '🚀',
-          url: 'https://openai.com/index/announcing-the-stargate-project/',
-          tags: ['Stargate Project', 'OpenAI', 'SoftBank', 'Oracle', 'AI Infrastructure', 'Data Centers', '$500B Investment'],
-          featured: true
-        }
-      ],
-      cristal: [
-        {
-          id: 'latest_cristal_1',
-          title: 'OpenAI and SoftBank Group Partner to Develop and Market Advanced Enterprise AI',
-          excerpt: 'OpenAI, SoftBank Group Corp., Arm and SoftBank Corp. announce partnership to develop and market Advanced Enterprise AI called "Cristal intelligence" with $3 billion annual investment.',
-          content: 'On February 3, 2025, OpenAI, Inc., SoftBank Group Corp., Arm and SoftBank Corp. announced a partnership to develop and market Advanced Enterprise AI called "Cristal intelligence." Cristal intelligence will securely integrate the systems and data of individual enterprises in a way that is customized specifically for each company. SoftBank Group Corp. will spend $3 billion US annually to deploy OpenAI\'s solutions across its group companies, making it the first company in the world to integrate Cristal intelligence at scale. The partnership also includes establishing a joint venture called "SB OpenAI Japan" to market Cristal intelligence exclusively to major companies in Japan.',
-          category: 'cristal' as const,
-          author: 'OpenAI & SoftBank Group',
-          publishedAt: '2025-02-03',
-          readTime: 8,
-          icon: '💎',
-          url: 'https://group.softbank/en/news/press/20250203_0',
-          tags: ['Cristal Intelligence', 'OpenAI', 'SoftBank', 'Enterprise AI', 'Partnership', 'Japan', 'AI Agents'],
-          featured: true
-        },
-        {
-          id: 'latest_cristal_2',
-          title: 'SB OpenAI Japan Joint Venture Unveiled to Transform Businesses in Japan',
-          excerpt: 'OpenAI, SoftBank Group Corp. and SoftBank Corp. unveil joint venture "SB OpenAI Japan" to introduce AI agents tailored to the unique needs of Japanese enterprises.',
-          content: 'On February 3, 2025, OpenAI, SoftBank Group Corp., Arm and SoftBank Corp. hosted a special event in Tokyo for enterprises based in Japan. They announced the establishment of "SB OpenAI Japan," a joint venture that will be 50% owned by OpenAI and 50% by a company established by SoftBank Group Corp. and SoftBank Corp. The JV will serve as a springboard to introduce AI agents tailored to the unique needs of Japanese enterprises while setting a model for global adoption. SoftBank Corp. plans to automate over 100 million workflows by using Cristal intelligence, transforming its business and services while creating new value.',
-          category: 'cristal' as const,
-          author: 'SoftBank Corp.',
-          publishedAt: '2025-02-07',
-          readTime: 7,
-          icon: '🏢',
-          url: 'https://www.softbank.jp/en/sbnews/entry/20250207_01',
-          tags: ['SB OpenAI Japan', 'Joint Venture', 'AI Agents', 'Japan', 'Enterprise Transformation', 'Workflow Automation'],
-          featured: true
-        },
-        {
-          id: 'latest_cristal_3',
-          title: 'Arm Adopting New "Cristal intelligence" to Drive Innovation and Boost Productivity',
-          excerpt: 'Arm announces adoption of Cristal intelligence to drive innovation and boost productivity, providing the high-performance, power-efficient compute platform for the partnership.',
-          content: 'Arm has announced its adoption of the new "Cristal intelligence" Advanced Enterprise AI developed through the OpenAI and SoftBank Group partnership. Arm will utilize Cristal intelligence to drive innovation and boost productivity across the company, strengthening its pivotal role in advancing AI globally. Arm\'s compute platform will provide the performance, efficiency, and scalability required to support the increasing computational demands of AI agents, from the cloud to the edge. This partnership positions Arm at the forefront of the AI revolution, with their high-performance, energy-efficient compute being critical to advancing Cristal intelligence.',
-          category: 'cristal' as const,
-          author: 'Arm Newsroom',
-          publishedAt: '2025-02-04',
-          readTime: 6,
-          icon: '🔧',
-          url: 'https://newsroom.arm.com/blog/arm-cristal-intelligence',
-          tags: ['Arm', 'Cristal Intelligence', 'Compute Platform', 'AI Innovation', 'Productivity', 'Edge Computing'],
-          featured: true
-        },
-        {
-          id: 'latest_cristal_4',
-          title: 'Enterprise AI Agents to Yield Dramatic Productivity Gains',
-          excerpt: 'OpenAI CEO Sam Altman and SoftBank Chairman Masayoshi Son discuss the transformative power of Enterprise AI Agents in a fireside chat at the Tokyo event.',
-          content: 'In a fireside chat between OpenAI CEO Sam Altman and Masayoshi Son at the Tokyo event, Altman explained the power of Enterprise AI Agents. "There will be generic agents and they can do powerful things. But what you might want for your company is an agent that can act with as much context, information and power as an employee at the company would have," Altman said. Son compared the difference between companies with Enterprise AI Agents and those without to "comparing a country with electricity to one without electricity. It\'s a huge difference in productivity." The partnership aims to create AI agents that can automate and autonomize all tasks and workflows, transforming businesses and creating new value.',
-          category: 'cristal' as const,
-          author: 'SoftBank News',
-          publishedAt: '2025-02-07',
-          readTime: 5,
-          icon: '🤖',
-          url: 'https://www.softbank.jp/en/sbnews/entry/20250207_01',
-          tags: ['AI Agents', 'Productivity', 'Enterprise AI', 'Sam Altman', 'Masayoshi Son', 'Business Transformation'],
-          featured: false
-        }
-      ],
-      industry: [
-        {
-          id: 'real_industry_1',
-          title: 'SoftBank Acquires Ampere for $6.5B to Strengthen Semiconductor Strategy',
-          excerpt: 'SoftBank announces decision to acquire Ampere, a U.S.-based semiconductor design company specializing in cloud and AI, for $6.5 billion to support Arm\'s continued growth.',
-          content: 'In March 2025, SoftBank announced its decision to acquire Ampere, a U.S.-based semiconductor design company specializing in cloud and AI, for $6.5 billion. The transaction is expected to close in the second half of fiscal 2025. SoftBank views Ampere as a critical piece in supporting the continued growth of Arm, which leads their semiconductor strategy. As a strategic investment holding company, SoftBank will continue to invest in a broad range of businesses that complement Arm\'s growth and technology roadmap.',
-          category: 'industry' as const,
-          author: 'SoftBank Group',
-          publishedAt: '2025-03-15',
-          readTime: 5,
-          icon: '🔧',
-          url: 'https://group.softbank/media/Project/sbg/sbg/pdf/ir/financials/annual_reports/annual-report_fy2025_04_en.pdf',
-          tags: ['Acquisition', 'Ampere', 'Semiconductors', 'Cloud AI', 'Arm', 'Strategic Investment'],
-          featured: true
-        },
-        {
-          id: 'latest_industry_2',
-          title: 'SoftBank Corp. Plans to Automate Over 100 Million Workflows with Cristal Intelligence',
-          excerpt: 'SoftBank Corp. announces plans to automate over 100 million workflows using Cristal intelligence, transforming its business and services while creating new value.',
-          content: 'SoftBank Corp. has announced ambitious plans to automate over 100 million workflows by using Cristal intelligence. While providing data and additional training in a secure manner, SoftBank Corp. aims to boost efficiency and enable the creation of new business opportunities within its ecosystem. For utilization, SoftBank Corp. and the joint venture will build a secure environment for additional data training and fine-tuning of its data, integrated with its internal systems, to build AI agents. By automating and autonomizing all of its tasks and workflows, SoftBank Corp. will transform its business and services, and create new value.',
-          category: 'industry' as const,
-          author: 'SoftBank Corp.',
-          publishedAt: '2025-02-03',
-          readTime: 6,
-          icon: '⚙️',
-          url: 'https://group.softbank/en/news/press/20250203_0',
-          tags: ['Workflow Automation', 'Cristal Intelligence', 'SoftBank Corp', 'AI Agents', 'Business Transformation', '100M Workflows'],
-          featured: true
-        },
-        {
-          id: 'fallback_industry_2',
-          title: 'Cristal Intelligence Reduces AI Bias by 75% in Financial Services',
-          excerpt: 'Banking and financial institutions report dramatic improvements in AI fairness and reduced bias when using Cristal Intelligence frameworks.',
-          content: 'Financial institutions implementing Cristal Intelligence have seen a 75% reduction in AI bias across their automated decision-making systems.',
-          category: 'industry' as const,
-          author: 'Financial AI Consortium',
-          publishedAt: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-          readTime: 7,
-          icon: '🏦',
-          url: 'https://financial-ai.org/bias-reduction',
-          tags: ['cristal', 'finance', 'bias', 'fairness'],
-          featured: false
-        }
-      ],
-      research: [
-        {
-          id: 'real_research_1',
-          title: 'AI Infrastructure Revolution: The Foundation of the AI Era',
-          excerpt: 'The AI revolution demands robust infrastructure to transform cutting-edge AI technologies into practical and scalable services, with data centers becoming an urgent priority.',
-          content: 'For the information revolution to truly permeate society, three elements are essential: technological innovation, service deployment, and supporting infrastructure. Today, the AI revolution similarly demands robust infrastructure to transform cutting-edge AI technologies into practical and scalable services. Building data centers with large-scale computing capacity has become an urgent priority, as even breakthrough innovations like generative AI from OpenAI cannot progress without robust infrastructure.',
-          category: 'research' as const,
-          author: 'AI Research Institute',
-          publishedAt: '2025-01-20',
-          readTime: 6,
-          icon: '🏗️',
-          url: 'https://openai.com/index/announcing-the-stargate-project/',
-          tags: ['AI Infrastructure', 'Data Centers', 'AI Revolution', 'Computing Power', 'Technology'],
-          featured: true
-        },
-        {
-          id: 'latest_research_2',
-          title: 'AI Agents Evolution: From o1-Series to Enterprise Automation',
-          excerpt: 'OpenAI\'s o1-series AI models capable of reasoning will evolve into agents in 2025 - AIs capable of doing work independently and executing tasks for knowledge workers.',
-          content: 'In 2024, OpenAI launched their o1-series, AI models capable of reasoning. In 2025, these models will evolve into agents, AIs capable of doing work for you independently – you give it a task and it will execute it. AI agents for knowledge work will automate everyday tasks such as generating financial reports, drafting documents, and managing customer inquiries to empower professionals to focus on creativity and strategic decision-making. OpenAI, SoftBank Group Corp., Arm and SoftBank Corp. share a vision to enable AI agents to help make every knowledge worker more effective and solve even more complex problems.',
-          category: 'research' as const,
-          author: 'OpenAI Research',
-          publishedAt: '2025-02-03',
-          readTime: 7,
-          icon: '🧠',
-          url: 'https://group.softbank/en/news/press/20250203_0',
-          tags: ['AI Agents', 'o1-Series', 'Reasoning AI', 'Knowledge Work', 'Automation', 'Enterprise AI'],
-          featured: true
-        }
-      ],
-      ethics: [
-        {
-          id: 'fallback_ethics_1',
-          title: 'Global AI Ethics Council Endorses Cristal Intelligence Principles',
-          excerpt: 'International AI governance body officially recognizes Cristal Intelligence as a model for ethical AI development and deployment.',
-          content: 'The Global AI Ethics Council has officially endorsed Cristal Intelligence principles as a framework for ethical AI development and deployment.',
-          category: 'ethics' as const,
-          author: 'Global AI Ethics Council',
-          publishedAt: new Date(Date.now() - 6 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-          readTime: 4,
-          icon: '⚖️',
-          url: 'https://global-ai-ethics.org/cristal-endorsement',
-          tags: ['cristal', 'ethics', 'governance', 'endorsement'],
-          featured: true
-        }
-      ],
-      global: [
-        {
-          id: 'fallback_global_1',
-          title: 'Stargate Project Creates 50,000 New Jobs Globally',
-          excerpt: 'The massive AI infrastructure initiative is generating significant employment opportunities across technology, construction, and operations sectors.',
-          content: 'The Stargate project has created over 50,000 new jobs globally across technology, construction, and operations sectors, boosting local economies worldwide.',
-          category: 'global' as const,
-          author: 'Economic Impact Research',
-          publishedAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-          readTime: 5,
-          icon: '🌍',
-          url: 'https://economic-impact.org/stargate-jobs',
-          tags: ['stargate', 'jobs', 'economy', 'global'],
-          featured: true
-        },
-        {
-          id: 'fallback_global_2',
-          title: 'Latest Developments in AI Infrastructure',
-          excerpt: 'Recent updates on AI infrastructure and transparent AI systems.',
-          content: 'The AI landscape continues to evolve with new developments in infrastructure and transparent AI systems that are reshaping industries worldwide.',
-          category: 'global' as const,
-          author: 'AI Research Team',
-          publishedAt: new Date(Date.now() - 8 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-          readTime: 4,
-          icon: '🌐',
-          url: '#',
-          tags: ['ai', 'infrastructure', 'development', 'global'],
-          featured: false
-        }
-      ]
-    }
-
-    // If no category specified, return all articles from all categories
-    if (!category || category === 'all') {
-      const allArticles: NewsArticle[] = []
-      Object.values(fallbackArticles).forEach(categoryArticles => {
-        allArticles.push(...categoryArticles)
-      })
-      return allArticles
-    }
-
-    // Return articles for specific category
-    return fallbackArticles[category as keyof typeof fallbackArticles] || []
+    ]
   }
 
   // Check if cache is valid
@@ -431,142 +217,47 @@ class NewsApiService {
     return expiry ? Date.now() < expiry : false
   }
 
-  // Clear cache
-  clearCache(): void {
-    this.cache.clear()
-    this.cacheExpiry.clear()
+  // Get news by category
+  async getNewsByCategory(category: string, limit: number = 10): Promise<NewsResponse> {
+    return this.generateNews(category, limit)
   }
 
-  // Get cached articles
-  getCachedArticles(category?: string): NewsArticle[] {
-    const cacheKey = `news_${category || 'all'}_10`
-    const cached = this.cache.get(cacheKey)
-    return cached ? cached.articles : []
+  // Get all news
+  async getAllNews(limit: number = 20): Promise<NewsResponse> {
+    return this.generateNews('all', limit)
   }
 
-  // Search articles
-  async searchArticles(query: string, category?: string): Promise<NewsResponse> {
-    try {
-      const prompt = `Search for news articles about "${query}" related to Stargate Project and Cristal Intelligence.
-      
-      Return articles in JSON format:
-      {
-        "articles": [
-          {
-            "title": "Article Title",
-            "excerpt": "Brief summary",
-            "content": "Full content",
-            "category": "stargate|cristal|industry|research|ethics|global",
-            "author": "Author Name",
-            "publishedAt": "YYYY-MM-DD",
-            "readTime": 5,
-            "icon": "🚀|💎|🏢|🔬|⚖️|🌐",
-            "url": "https://example.com/article",
-            "tags": ["tag1", "tag2"],
-            "featured": false
-          }
-        ]
-      }`
+  // Get latest news
+  async getLatestNews(limit: number = 10): Promise<NewsResponse> {
+    const allNews = await this.getAllNews(limit)
+    
+    // Sort by published date (newest first)
+    const sortedNews = allNews.articles.sort((a, b) => 
+      new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
+    )
 
-      const response = await openaiService.generateText(prompt, {
-        model: 'gpt-4',
-        max_tokens: 3000,
-        temperature: 0.7
-      })
-
-      if (!response.success) {
-        throw new Error(response.error || 'Search failed')
-      }
-
-      const articles = this.parseNewsContent(response.content, category)
-      
-      return {
-        success: true,
-        articles,
-        total: articles.length
-      }
-
-    } catch (error) {
-      console.error('Error searching articles:', error)
-      return {
-        success: false,
-        articles: [],
-        total: 0,
-        error: error instanceof Error ? error.message : 'Search failed'
-      }
+    return {
+      success: true,
+      articles: sortedNews.slice(0, limit),
+      total: sortedNews.length
     }
   }
 
-  // Get trending topics
-  async getTrendingTopics(): Promise<string[]> {
-    try {
-      // Check if OpenAI API key is configured
-      const apiKey = import.meta.env.VITE_OPENAI_API_KEY
-      if (!apiKey || apiKey === 'sk-your-openai-api-key-here') {
-        console.log('📈 Using fallback trending topics')
-        return [
-          'AI Infrastructure Investment',
-          'Transparent AI Systems',
-          'Ethical AI Development',
-          'Quantum Computing Integration',
-          'AI Governance Frameworks',
-          'Machine Learning Breakthroughs',
-          'AI in Healthcare',
-          'Autonomous Systems',
-          'AI Research Collaboration',
-          'Future of Artificial Intelligence'
-        ]
-      }
+  // Search news
+  async searchNews(query: string, limit: number = 10): Promise<NewsResponse> {
+    const allNews = await this.getAllNews(50)
+    
+    const searchResults = allNews.articles.filter(article => 
+      article.title.toLowerCase().includes(query.toLowerCase()) ||
+      article.content.toLowerCase().includes(query.toLowerCase()) ||
+      article.excerpt.toLowerCase().includes(query.toLowerCase()) ||
+      article.tags.some(tag => tag.toLowerCase().includes(query.toLowerCase()))
+    )
 
-      const prompt = `Generate 10 trending topics related to Stargate Project and Cristal Intelligence that are currently popular in AI and technology news.
-      
-      Return as a JSON array:
-      ["topic1", "topic2", "topic3", ...]`
-
-      const response = await openaiService.generateText(prompt, {
-        model: 'gpt-4',
-        max_tokens: 500,
-        temperature: 0.8
-      })
-
-      if (!response.success) {
-        throw new Error(response.error || 'Failed to get trending topics')
-      }
-
-      try {
-        const topics = JSON.parse(response.content)
-        return Array.isArray(topics) ? topics : []
-      } catch {
-        // Fallback topics
-        return [
-          'AI Infrastructure Investment',
-          'Transparent AI Systems',
-          'Ethical AI Development',
-          'Quantum Computing Integration',
-          'AI Governance Frameworks',
-          'Machine Learning Breakthroughs',
-          'AI in Healthcare',
-          'Autonomous Systems',
-          'AI Research Collaboration',
-          'Future of Artificial Intelligence'
-        ]
-      }
-
-    } catch (error) {
-      console.error('Error getting trending topics:', error)
-      // Return fallback topics on error
-      return [
-        'AI Infrastructure Investment',
-        'Transparent AI Systems',
-        'Ethical AI Development',
-        'Quantum Computing Integration',
-        'AI Governance Frameworks',
-        'Machine Learning Breakthroughs',
-        'AI in Healthcare',
-        'Autonomous Systems',
-        'AI Research Collaboration',
-        'Future of Artificial Intelligence'
-      ]
+    return {
+      success: true,
+      articles: searchResults.slice(0, limit),
+      total: searchResults.length
     }
   }
 }

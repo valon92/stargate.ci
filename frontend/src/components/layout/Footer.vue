@@ -43,9 +43,7 @@
           </div>
           <div class="mt-4 md:mt-0">
             <div class="flex space-x-6 text-sm">
-              <RouterLink to="/legal-disclaimer" class="text-gray-400 hover:text-white transition-colors duration-200">Legal Disclaimer</RouterLink>
-              <RouterLink to="/privacy" class="text-gray-400 hover:text-white transition-colors duration-200">Privacy Policy</RouterLink>
-              <RouterLink to="/terms" class="text-gray-400 hover:text-white transition-colors duration-200">Terms of Service</RouterLink>
+              <RouterLink to="/disclaimer" class="text-gray-400 hover:text-white transition-colors duration-200">Disclaimer</RouterLink>
             </div>
           </div>
         </div>
@@ -61,10 +59,11 @@ import { RouterLink } from 'vue-router'
 const currentYear = computed(() => new Date().getFullYear())
 
 const platformLinks = [
-  { name: 'About Platform', href: '/about' },
-  { name: 'Services', href: '/services' },
+  { name: 'About', href: '/about' },
+  { name: 'Events', href: '/events' },
   { name: 'News', href: '/news' },
   { name: 'FAQ', href: '/faq' },
   { name: 'Contact', href: '/contact' },
+  { name: 'Subscribe', href: '/subscribe' },
 ]
 </script>

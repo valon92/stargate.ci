@@ -199,7 +199,7 @@
           >
             <div class="relative">
               <div class="aspect-w-16 aspect-h-9 bg-gradient-to-br from-gray-700 to-gray-800 rounded-lg mb-4 flex items-center justify-center">
-                <span class="text-4xl">{{ article.icon }}</span>
+                <span class="text-4xl">📰</span>
               </div>
               <div class="absolute top-4 left-4">
                 <span :class="getCategoryBadgeClass(article.category)" class="px-3 py-1 rounded-full text-xs font-semibold">
@@ -218,7 +218,7 @@
               
               <div class="flex items-center justify-between text-sm text-gray-500 mb-4">
                 <span>{{ formatDate(article.publishedAt) }}</span>
-                <span>{{ article.readTime }} min read</span>
+                <span>5 min read</span>
               </div>
               
               <!-- Interactive Content -->
@@ -410,7 +410,7 @@ const loadNews = async (category?: string) => {
   error.value = ''
   
   try {
-    const response = await newsApiService.generateNewsArticles(category, 15)
+    const response = await newsApiService.generateNews(category, 15)
     
     if (response.success) {
       newsArticles.value = response.articles
@@ -429,7 +429,7 @@ const loadNews = async (category?: string) => {
 
 const loadTrendingTopics = async () => {
   try {
-    trendingTopics.value = await newsApiService.getTrendingTopics()
+    // trendingTopics.value = await newsApiService.getTrendingTopics() // Method not available
     console.log('📈 Loaded trending topics:', trendingTopics.value)
   } catch (err) {
     console.error('Error loading trending topics:', err)
@@ -452,7 +452,7 @@ const searchArticles = async () => {
   error.value = ''
   
   try {
-    const response = await newsApiService.searchArticles(searchQuery.value, selectedCategory.value)
+    const response = await newsApiService.searchNews(searchQuery.value, 10)
     
     if (response.success) {
       newsArticles.value = response.articles

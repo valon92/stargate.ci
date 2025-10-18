@@ -235,32 +235,10 @@
           </div>
         </div>
 
-        <!-- Member Spotlight -->
-        <div class="bg-gray-800/50 border border-gray-700 rounded-lg p-8">
-          <h3 class="text-2xl font-bold text-center mb-8">
-            <span class="gradient-text">Member Spotlight</span>
-          </h3>
-          
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div 
-              v-for="member in displayedMembers.slice(0, 3)" 
-              :key="member.id"
-              class="text-center"
-            >
-              <div class="w-20 h-20 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span class="text-white font-bold text-2xl">{{ member.username.charAt(0).toUpperCase() }}</span>
-              </div>
-              <h4 class="text-lg font-bold text-white mb-2">{{ member.username }}</h4>
-              <p class="text-sm text-gray-400 mb-3">{{ member.role || 'Community Member' }}</p>
-              <div v-if="member.organization" class="text-xs text-gray-500 mb-2">{{ member.organization }}</div>
-              <div class="text-xs text-gray-500">Joined {{ formatDate(member.subscribedAt) }}</div>
-            </div>
-          </div>
-        </div>
 
         <div class="text-center mt-12">
           <p class="text-gray-400 mb-6">
-            Join over <span class="text-primary-400 font-bold">1,000,000</span> members worldwide
+            Join over <span class="text-primary-400 font-bold">({{ totalMembers.toLocaleString() }})</span> members worldwide
           </p>
           <div class="flex flex-col sm:flex-row gap-4 justify-center">
             <RouterLink 
@@ -357,7 +335,7 @@ import { ref, onMounted, computed } from 'vue'
 import { RouterLink } from 'vue-router'
 import { useHead } from '@vueuse/head'
 import InteractiveContent from '../components/InteractiveContent.vue'
-import { emailNotificationService } from '../services/emailNotificationService'
+// Email notification service removed - using localStorage for subscribers
 
 
 // Members data
@@ -393,7 +371,9 @@ const totalCountries = computed(() => {
 // Methods
 const loadMembers = () => {
   // Load members from email notification service
-  allMembers.value = emailNotificationService.getSubscribers()
+  // Load subscribers from localStorage
+  const subscribers = JSON.parse(localStorage.getItem('stargate_subscribers') || '[]')
+  allMembers.value = subscribers
   console.log('Loading members from email service:', allMembers.value)
   updateDisplayedMembers()
 }
@@ -446,7 +426,10 @@ useHead({
 
 <style scoped>
 .youtube-video-container {
-  @apply bg-gray-800 rounded-lg overflow-hidden border border-gray-700;
+  background-color: rgba(31, 41, 55, 1);
+  border-radius: 0.5rem;
+  overflow: hidden;
+  border: 1px solid rgba(55, 65, 81, 1);
 }
 .aspect-w-16 {
   position: relative;
@@ -462,18 +445,41 @@ useHead({
 }
 
 .card {
-  @apply bg-gray-800/50 border border-gray-700 rounded-lg overflow-hidden;
+  background-color: rgba(31, 41, 55, 0.5);
+  border: 1px solid rgba(55, 65, 81, 1);
+  border-radius: 0.5rem;
+  overflow: hidden;
 }
 
 .btn-primary {
-  @apply bg-gradient-to-r from-primary-500 to-secondary-500 text-white px-6 py-3 rounded-lg font-medium hover:from-primary-600 hover:to-secondary-600 transition-all duration-300;
+  background: linear-gradient(to right, #3b82f6, #8b5cf6);
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  transition: all 0.3s;
+}
+.btn-primary:hover {
+  background: linear-gradient(to right, #2563eb, #7c3aed);
 }
 
 .btn-outline {
-  @apply border border-gray-600 text-gray-300 px-4 py-2 rounded-lg font-medium hover:bg-gray-700 hover:border-gray-500 transition-all duration-200;
+  border: 1px solid rgba(75, 85, 99, 1);
+  color: rgba(209, 213, 219, 1);
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+.btn-outline:hover {
+  background-color: rgba(55, 65, 81, 1);
+  border-color: rgba(107, 114, 128, 1);
 }
 
 .gradient-text {
-  @apply bg-gradient-to-r from-primary-400 to-secondary-400 bg-clip-text text-transparent;
+  background: linear-gradient(to right, #60a5fa, #a78bfa);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
 }
 </style>

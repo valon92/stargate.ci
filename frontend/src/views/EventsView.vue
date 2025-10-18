@@ -205,7 +205,7 @@
               <div class="flex gap-3">
                 <button 
                   v-if="event.type === 'video'"
-                  @click="openVideo(event.videoUrl)"
+                  @click="event.videoUrl ? openVideo(event.videoUrl) : null"
                   class="flex-1 btn-primary text-sm"
                 >
                   Watch Video
@@ -524,7 +524,7 @@ const loadEvents = async (category?: string) => {
   isLoading.value = true
   try {
     // First try to get latest events from ChatGPT
-    const latestResponse = await eventsApiService.searchLatestEvents()
+    const latestResponse = await eventsApiService.getAllEvents(10)
     if (latestResponse.success && latestResponse.events.length > 0) {
       events.value = latestResponse.events
       console.log('📅 Loaded real events:', latestResponse.events.length)
@@ -572,7 +572,7 @@ const searchEvents = async (query: string) => {
   
   isLoading.value = true
   try {
-    const response = await eventsApiService.searchEvents(query, selectedCategory.value)
+    const response = await eventsApiService.searchEvents(query, 10)
     if (response.success) {
       events.value = response.events
       console.log('🔍 Search results:', response.events.length)
@@ -591,10 +591,10 @@ const refreshEvents = async () => {
   isLoading.value = true
   try {
     // Clear cache to force fresh data
-    eventsApiService.clearCache()
+    // eventsApiService.clearCache() // Method not available
     
     // Get latest events from ChatGPT
-    const response = await eventsApiService.searchLatestEvents()
+    const response = await eventsApiService.getAllEvents(10)
     if (response.success) {
       events.value = response.events
       console.log('🔄 Refreshed real events:', response.events.length)

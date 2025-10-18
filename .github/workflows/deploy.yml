@@ -34,18 +34,22 @@ jobs:
         cd frontend
         tar -czf ../stargate-ci-auto-deploy.tar.gz -C dist .
     
-    - name: Deploy via FTP
-      uses: SamKirkland/FTP-Deploy-Action@v4.3.4
-      with:
-        server: ${{ secrets.FTP_SERVER }}
-        username: ${{ secrets.FTP_USERNAME }}
-        password: ${{ secrets.FTP_PASSWORD }}
-        local-dir: frontend/dist/
-        server-dir: /public_html/
-        exclude: |
-          **/.git*
-          **/.git*/**
-          **/node_modules/**
+    # FTP deployment disabled - manual deployment only
+    # - name: Deploy via FTP
+    #   uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+    #   with:
+    #     server: ${{ secrets.FTP_SERVER }}
+    #     username: ${{ secrets.FTP_USERNAME }}
+    #     password: ${{ secrets.FTP_PASSWORD }}
+    #     local-dir: frontend/dist/
+    #     server-dir: /public_html/
+    #     exclude: |
+    #       **/.git*
+    #       **/.git*/**
+    #       **/node_modules/**
     
-    - name: Notify deployment success
-      run: echo "✅ Deployment to stargate.ci completed successfully!"
+    - name: Notify deployment package ready
+      run: |
+        echo "✅ Deployment package created successfully!"
+        echo "📦 Package: stargate-ci-auto-deploy.tar.gz"
+        echo "📋 Manual upload required - FTP deployment disabled"

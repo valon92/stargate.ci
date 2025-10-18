@@ -203,11 +203,11 @@
 <script setup lang="ts">
 import { useHead } from '@vueuse/head'
 import { ref, onMounted } from 'vue'
-import { stargateApi, type StargateProjectData, type CristalIntelligenceData } from '../services/stargateApi'
+// Stargate API service removed - using static data
 
 // Reactive data
-const stargateData = ref<StargateProjectData | null>(null)
-const cristalData = ref<CristalIntelligenceData | null>(null)
+const stargateData = ref<any>(null)
+const cristalData = ref<any>(null)
 const isLoading = ref(true)
 
 // Platform mission and vision from API
@@ -218,20 +218,52 @@ const platformValues = ref<string[]>([])
 // Load official data on component mount
 onMounted(async () => {
   try {
-    const [stargate, cristal] = await Promise.all([
-      stargateApi.getStargateProjectData(),
-      stargateApi.getCristalIntelligenceData()
-    ])
-
-    stargateData.value = stargate
-    cristalData.value = cristal
+    // Static data for Stargate Project
+    stargateData.value = {
+      name: 'Stargate Project',
+      description: 'A revolutionary AI infrastructure project by OpenAI, SoftBank, and Arm',
+      investment: '$500 billion',
+      partners: ['OpenAI', 'SoftBank', 'Arm'],
+      timeline: '2024-2027',
+      goals: [
+        'Build next-generation AI infrastructure',
+        'Create massive data processing capabilities',
+        'Develop advanced AI models',
+        'Establish global AI computing network'
+      ]
+    }
     
-    // Get platform mission, vision, and values
-    platformMission.value = stargateApi.getPlatformMission()
-    platformVision.value = stargateApi.getPlatformVision()
-    platformValues.value = stargateApi.getPlatformValues()
+    // Static data for Cristal Intelligence
+    cristalData.value = {
+      name: 'Cristal Intelligence',
+      description: 'A new paradigm of cristalline computing that transcends traditional boundaries',
+      features: [
+        'Transparent AI decision-making',
+        'Ethical AI development',
+        'Cristalline data processing',
+        'Advanced interpretability'
+      ],
+      benefits: [
+        'Enhanced transparency',
+        'Improved trust',
+        'Better decision-making',
+        'Ethical AI implementation'
+      ]
+    }
+    
+    // Platform information
+    platformMission.value = 'To educate and inform the public about cutting-edge technologies in AI, cloud computing, and advanced data processing through transparent, accessible content.'
+    platformVision.value = 'Building a global community of innovators and learners who understand the transformative power of technology and its ethical implications.'
+    platformValues.value = [
+      'Transparency',
+      'Education',
+      'Ethics',
+      'Innovation',
+      'Accessibility'
+    ]
+    
   } catch (error) {
-    console.error('Error loading official data:', error)
+    console.error('Error loading about data:', error)
   } finally {
     isLoading.value = false
   }

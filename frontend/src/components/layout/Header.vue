@@ -17,18 +17,17 @@
 
         <!-- Search Bar - Desktop -->
         <div class="hidden lg:block flex-1 max-w-md mx-8">
-          <SearchInput 
-            placeholder="Search posts, users, articles, FAQs..."
-            size="md"
-            variant="default"
-            @search="handleSearch"
-          />
+          <div class="relative">
+            <input
+              type="text"
+              placeholder="Search articles, FAQs..."
+              class="w-full px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              @keyup.enter="handleSearch"
+            />
+          </div>
         </div>
 
-        <!-- Engagement Stats - Desktop -->
-        <div class="hidden xl:block">
-          <EngagementStats />
-        </div>
+        <!-- Engagement Stats - Removed from desktop -->
 
         <!-- Desktop Navigation - Optimized -->
         <div class="hidden lg:block">
@@ -72,19 +71,27 @@
 
         <!-- Right Section - Optimized -->
         <div class="flex items-center space-x-2">
-          <!-- Notification Center -->
-          <div class="hidden md:block">
-            <NotificationCenter />
-          </div>
+          <!-- Notification Center - Removed -->
           
-          <!-- CTA Buttons - Compact -->
+          <!-- CTA Buttons - Desktop Subscribe -->
           <div class="hidden md:flex items-center space-x-2">
             <RouterLink
+              v-if="!isSubscribed"
               to="/subscribe"
               class="bg-gradient-to-r from-primary-500 to-secondary-500 text-white px-3 py-1.5 rounded-md text-sm font-medium hover:from-primary-600 hover:to-secondary-600 transition-all duration-150 shadow-md hover:shadow-lg pointer-events-auto relative z-10"
             >
               Subscribe
             </RouterLink>
+            <button
+              v-else
+              @click="unsubscribe"
+              class="bg-gradient-to-r from-gray-600 to-gray-700 text-white px-3 py-1.5 rounded-md text-sm font-medium hover:from-gray-700 hover:to-gray-800 transition-all duration-150 shadow-md hover:shadow-lg pointer-events-auto relative z-10 flex items-center gap-2"
+            >
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M18 4H6c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-6 2.5c2.49 0 4.5 2.01 4.5 4.5S14.49 15.5 12 15.5s-4.5-2.01-4.5-4.5S9.51 6.5 12 6.5zM12 17c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+              </svg>
+              Subscribed
+            </button>
           </div>
 
           <!-- Mobile menu button -->
@@ -107,11 +114,11 @@
         <div class="px-2 pt-2 pb-3 space-y-1 border-t border-gray-700/30">
           <!-- Mobile Search Bar -->
           <div class="px-2 py-2">
-            <SearchInput 
+            <input
+              type="text"
               placeholder="Search..."
-              size="sm"
-              variant="minimal"
-              @search="handleSearch"
+              class="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
+              @keyup.enter="handleSearch"
             />
           </div>
 
@@ -150,12 +157,23 @@
           <!-- Mobile CTA - Compact -->
           <div class="pt-2 border-t border-gray-700/30 space-y-1">
             <RouterLink
+              v-if="!isSubscribed"
               to="/subscribe"
               class="bg-gradient-to-r from-primary-500 to-secondary-500 text-white block px-2 py-2 rounded-md text-sm font-medium text-center hover:from-primary-600 hover:to-secondary-600 transition-all duration-150"
               @click="closeMenu"
             >
               Subscribe
             </RouterLink>
+            <button
+              v-else
+              @click="unsubscribe"
+              class="bg-gradient-to-r from-gray-600 to-gray-700 text-white block px-2 py-2 rounded-md text-sm font-medium text-center hover:from-gray-700 hover:to-gray-800 transition-all duration-150 w-full flex items-center justify-center gap-2"
+            >
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M18 4H6c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-6 2.5c2.49 0 4.5 2.01 4.5 4.5S14.49 15.5 12 15.5s-4.5-2.01-4.5-4.5S9.51 6.5 12 6.5zM12 17c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+              </svg>
+              Subscribed
+            </button>
           </div>
         </div>
       </div>
@@ -166,16 +184,20 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, watch } from 'vue'
 import { RouterLink, useRoute, useRouter } from 'vue-router'
-import { useNavigationPerformance } from '../../composables/usePerformance'
-import NotificationCenter from '../NotificationCenter.vue'
-import SearchInput from '../SearchInput.vue'
-import EngagementStats from '../EngagementStats.vue'
 
 const route = useRoute()
 const router = useRouter()
 
 // Performance optimized state
-const { isMenuOpen, toggleMenu, closeMenu } = useNavigationPerformance()
+const isMenuOpen = ref(false)
+
+const toggleMenu = () => {
+  isMenuOpen.value = !isMenuOpen.value
+}
+
+const closeMenu = () => {
+  isMenuOpen.value = false
+}
 
 // Memoized navigation - computed for performance
 const primaryNavigation = computed(() => [
@@ -190,14 +212,45 @@ const secondaryNavigation = computed(() => [
   { name: 'Contact', href: '/contact' },
 ])
 
+// Subscription status - reactive
+const subscriptionStatus = ref(false)
+
+const isSubscribed = computed(() => {
+  return subscriptionStatus.value
+})
+
+const currentUser = computed(() => {
+  const subscribers = JSON.parse(localStorage.getItem('stargate_subscribers') || '[]')
+  return subscribers.length > 0 ? subscribers[0] : null
+})
+
+// Update subscription status
+const updateSubscriptionStatus = () => {
+  const subscribers = JSON.parse(localStorage.getItem('stargate_subscribers') || '[]')
+  subscriptionStatus.value = subscribers.length > 0
+}
+
 
 // Search handler
-const handleSearch = (query: string) => {
-  if (query.trim()) {
+const handleSearch = (event: Event) => {
+  const target = event.target as HTMLInputElement
+  const query = target.value.trim()
+  if (query) {
     // Close mobile menu if open
     closeMenu()
-    // Navigate to search page with query using Vue Router
-    router.push(`/search?q=${encodeURIComponent(query)}`)
+    // Simple search - could be enhanced later
+    console.log('Search query:', query)
+  }
+}
+
+// Unsubscribe functionality
+const unsubscribe = () => {
+  if (confirm('Are you sure you want to unsubscribe from Stargate.ci?')) {
+    // Remove subscriber from localStorage
+    localStorage.removeItem('stargate_subscribers')
+    
+    // Refresh the page to update UI
+    window.location.reload()
   }
 }
 
@@ -206,10 +259,30 @@ watch(() => route.path, () => {
   closeMenu()
 })
 
+// Watch for localStorage changes to update subscription status
+const refreshSubscriptionStatus = () => {
+  // Force reactivity update by accessing localStorage
+  const subscribers = JSON.parse(localStorage.getItem('stargate_subscribers') || '[]')
+  return subscribers.length > 0
+}
+
 // Initialize on mount
 onMounted(() => {
   // Set English as default language
   document.documentElement.setAttribute('dir', 'ltr')
+  
+  // Initialize subscription status
+  updateSubscriptionStatus()
+  
+  // Listen for storage events (when localStorage changes in other tabs)
+  window.addEventListener('storage', () => {
+    updateSubscriptionStatus()
+  })
+  
+  // Listen for custom events (when localStorage changes in same tab)
+  window.addEventListener('subscription-changed', () => {
+    updateSubscriptionStatus()
+  })
   document.documentElement.setAttribute('lang', 'en')
 })
 </script>

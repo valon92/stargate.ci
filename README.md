@@ -18,10 +18,8 @@ This project provides transparent, accessible information about cutting-edge tec
 - **Framework**: Vue 3 with TypeScript
 - **Styling**: TailwindCSS with custom design system
 - **Build Tool**: Vite
-- **Internationalization**: Vue i18n (English & French)
 - **State Management**: Pinia
 - **Meta Management**: @unhead/vue for dynamic SEO
-- **Deployment**: Surge.sh with custom domain support
 
 ### Backend (Laravel)
 - **Framework**: Laravel 12
@@ -36,14 +34,45 @@ stargate.ci/
 ├── frontend/                 # Vue.js frontend application
 │   ├── src/
 │   │   ├── components/       # Reusable Vue components
+│   │   │   ├── InteractiveContent.vue
+│   │   │   ├── EngagementStats.vue
+│   │   │   └── layout/
+│   │   │       ├── Header.vue
+│   │   │       └── Footer.vue
 │   │   ├── views/           # Page components
-│   │   ├── locales/         # Translation files
+│   │   │   ├── HomeView.vue
+│   │   │   ├── AboutView.vue
+│   │   │   ├── EventsView.vue
+│   │   │   ├── NewsView.vue
+│   │   │   ├── FAQView.vue
+│   │   │   ├── ContactView.vue
+│   │   │   ├── SubscribeView.vue
+│   │   │   ├── DisclaimerView.vue
+│   │   │   └── NotFoundView.vue
+│   │   ├── services/        # API services
+│   │   │   ├── videoApiService.ts
+│   │   │   ├── newsApiService.ts
+│   │   │   ├── eventsApiService.ts
+│   │   │   └── apiClient.ts
 │   │   └── router/          # Vue Router configuration
 │   └── package.json
 ├── backend/                  # Laravel backend API
 │   ├── app/
 │   │   ├── Http/Controllers/Api/  # API controllers
+│   │   │   ├── VideoController.php
+│   │   │   ├── VideoInteractionController.php
+│   │   │   ├── VideoCommentController.php
+│   │   │   ├── SubscriberController.php
+│   │   │   ├── ArticleController.php
+│   │   │   ├── FAQController.php
+│   │   │   └── ContactController.php
 │   │   └── Models/          # Eloquent models
+│   │       ├── Video.php
+│   │       ├── VideoInteraction.php
+│   │       ├── VideoComment.php
+│   │       ├── Subscriber.php
+│   │       ├── Article.php
+│   │       └── FAQ.php
 │   ├── database/
 │   │   ├── migrations/      # Database migrations
 │   │   └── seeders/         # Database seeders
@@ -80,35 +109,39 @@ php artisan serve
 ## 🌐 Features
 
 ### Public Features
-- **Home Page**: Introduction to Stargate and key technologies
+- **Home Page**: Introduction to Stargate and key technologies with interactive videos
 - **About**: Mission, vision, and project information
-- **Services**: Detailed technology explanations
-- **Partners**: Information about SoftBank, OpenAI, Arm, and Crystal Intelligence
-- **Insights**: Educational articles and blog posts
+- **Events**: Real events and meetings related to Stargate Project and Cristal Intelligence
+- **News**: Latest news from OpenAI, SoftBank, Arm, and other relevant sources
 - **FAQ**: Frequently asked questions
 - **Contact**: Contact form with backend integration
-- **Multilingual**: English and French support
+- **Subscribe**: User subscription system for notifications
+- **Interactive Content**: Like, comment, and share functionality for videos and articles
 
-### Admin Features (API)
-- Article management (CRUD)
-- FAQ management (CRUD)
-- Contact message management
-- User authentication
+### Core Functionality
+- **Video System**: YouTube video integration with engagement tracking
+- **News System**: Real-time news from official sources
+- **Events System**: Real events and meetings information
+- **Subscription System**: User subscription with email notifications
+- **Interactive Features**: Likes, comments, shares for all content
+- **Responsive Design**: Mobile-first design with modern UI/UX
 
 ## 🔧 API Endpoints
 
 ### Public Endpoints
-- `GET /api/v1/articles` - List published articles
-- `GET /api/v1/articles/{slug}` - Get article by slug
+- `GET /api/v1/content/articles` - List published articles
+- `GET /api/v1/content/articles/{id}` - Get article by ID
 - `GET /api/v1/faqs` - List active FAQs
+- `GET /api/v1/faqs/{id}` - Get FAQ by ID
 - `POST /api/v1/contact` - Submit contact form
-
-### Admin Endpoints (Protected)
-- `GET /api/v1/admin/articles` - List all articles
-- `POST /api/v1/admin/articles` - Create article
-- `PUT /api/v1/admin/articles/{id}` - Update article
-- `DELETE /api/v1/admin/articles/{id}` - Delete article
-- Similar endpoints for FAQs and contact messages
+- `GET /api/v1/videos` - List all videos
+- `GET /api/v1/videos/{contentId}` - Get video by content ID
+- `GET /api/v1/videos/stats/overview` - Get video statistics
+- `POST /api/v1/videos/interactions/like` - Toggle video like
+- `POST /api/v1/videos/interactions/share` - Add video share
+- `POST /api/v1/videos/comments` - Add video comment
+- `GET /api/v1/subscribers` - List subscribers
+- `POST /api/v1/subscribers` - Create new subscriber
 
 ## 🎨 Design System
 
@@ -130,11 +163,11 @@ php artisan serve
 
 ## 🚀 Deployment
 
-### Vercel (Recommended)
-Both frontend and backend are configured for Vercel deployment:
-
-1. **Frontend**: Deploy to Vercel with automatic builds
-2. **Backend**: Deploy Laravel API to Vercel using PHP runtime
+### Manual Deployment
+1. Build the frontend: `npm run build`
+2. Upload the `dist` folder to your web server
+3. Configure the backend API endpoints
+4. Set up the database and run migrations
 
 ### Environment Variables
 - `VITE_API_URL`: Backend API URL
@@ -158,18 +191,21 @@ Both frontend and backend are configured for Vercel deployment:
 ## 🌐 Live Deployment
 
 ### Current Status
-- **Frontend**: ✅ Live at https://stargate-ci-preview.surge.sh
-- **Domain**: ⏳ stargate.ci (DNS configuration pending)
-- **Backend**: 🔄 Development phase
+- **Frontend**: ✅ Live at https://stargate.ci
+- **Backend**: ✅ API running
 - **Last Update**: January 2025
 
 ### Features Live
 - ✅ Cristal Intelligence concept implementation
 - ✅ Domain explanation section
-- ✅ Multi-language support (EN/FR)
 - ✅ Responsive design
 - ✅ SEO optimization
 - ✅ Modern UI/UX with TailwindCSS
+- ✅ Interactive video system
+- ✅ Real-time news integration
+- ✅ Events system
+- ✅ Subscription system
+- ✅ Like, comment, share functionality
 
 ## 🤝 Contributing
 
@@ -186,7 +222,3 @@ This project is for educational purposes. All content is based on publicly avail
 ## ⚠️ Disclaimer
 
 This site is an independent educational initiative, not an official representative of the Stargate project. All content is based on publicly available information and is intended for educational purposes only.
-
----
-
-**Last Updated**: December 2024

@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
-import { adminGuard, guestGuard, userGuard } from './guards'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -36,47 +35,15 @@ const router = createRouter({
       component: () => import('../views/ContactView.vue'),
     },
     {
-      path: '/dashboard',
-      name: 'dashboard',
-      component: () => import('../views/DashboardView.vue'),
-      beforeEnter: userGuard,
-    },
-    {
-      path: '/profile/:userId?',
-      name: 'profile',
-      component: () => import('../components/UserProfile.vue'),
-    },
-    {
-      path: '/privacy',
-      name: 'privacy',
-      component: () => import('../views/PrivacyView.vue'),
-    },
-    {
-      path: '/terms',
-      name: 'terms',
-      component: () => import('../views/TermsView.vue'),
-    },
-    {
       path: '/disclaimer',
       name: 'disclaimer',
       component: () => import('../views/DisclaimerView.vue'),
     },
     {
-      path: '/legal-disclaimer',
-      name: 'legal-disclaimer',
-      component: () => import('../views/LegalDisclaimerView.vue'),
-    },
-    {
       path: '/subscribe',
       name: 'subscribe',
-      component: () => import('../views/UnifiedLoginView.vue'),
+      component: () => import('../views/SubscribeView.vue'),
     },
-    {
-      path: '/auth',
-      name: 'user-auth',
-      component: () => import('../views/UserAuthView.vue'),
-    },
-    // Removed admin routes as they are unnecessary for educational platform
     {
       path: '/:pathMatch(.*)*',
       name: 'not-found',
