@@ -22,7 +22,7 @@ use App\Http\Controllers\Api\VideoCommentController;
 */
 
 // Public routes with rate limiting
-Route::prefix('v1')->middleware('api.throttle:100,1')->group(function () {
+Route::prefix('v1')->middleware('api.throttle:1000,1')->group(function () {
     // Public content routes (cached for 60 minutes)
     Route::middleware('api.cache:60')->group(function () {
         Route::get('/content/articles', [ArticleController::class, 'index']);
@@ -50,36 +50,44 @@ Route::prefix('v1')->middleware('api.throttle:100,1')->group(function () {
     // Contact routes
     Route::post('/contact', [ContactController::class, 'store']);
     
-    // Video System Routes (public)
-    Route::get('/videos', [VideoController::class, 'index']);
-    Route::get('/videos/{contentId}', [VideoController::class, 'show']);
-    Route::post('/videos', [VideoController::class, 'store']);
-    Route::put('/videos/{contentId}/counts', [VideoController::class, 'updateCounts']);
-    Route::get('/videos/stats/overview', [VideoController::class, 'stats']);
+        // Video System Routes (public)
+        Route::get('/videos', [VideoController::class, 'index']);
+        Route::post('/videos', [VideoController::class, 'store']);
+        Route::get('/videos/stats/overview', [VideoController::class, 'stats']);
+        
+        // Video comment routes (public) - no caching for real-time data - MUST be before {contentId} route
+        Route::get('/videos/comments', [VideoCommentController::class, 'index']);
+        Route::post('/videos/comments', [VideoCommentController::class, 'store']);
+        Route::put('/videos/comments/{id}', [VideoCommentController::class, 'update']);
+        Route::delete('/videos/comments/{id}', [VideoCommentController::class, 'destroy']);
+        Route::post('/videos/comments/like', [VideoCommentController::class, 'toggleLike']);
+        Route::post('/videos/comments/pin/{id}', [VideoCommentController::class, 'togglePin']);
+        Route::post('/videos/comments/check-like', [VideoCommentController::class, 'checkLike']);
+        
+        // Video interaction routes (public)
+        Route::post('/videos/interactions/like', [VideoInteractionController::class, 'toggleLike']);
+        Route::post('/videos/interactions/share', [VideoInteractionController::class, 'addShare']);
+        Route::post('/videos/interactions/view', [VideoInteractionController::class, 'addView']);
+        Route::post('/videos/interactions/check', [VideoInteractionController::class, 'checkInteraction']);
+        Route::get('/videos/interactions/user', [VideoInteractionController::class, 'getUserInteractions']);
+        
+        // Video routes with contentId - MUST be after specific routes
+        Route::get('/videos/{contentId}', [VideoController::class, 'show']);
+        Route::put('/videos/{contentId}/counts', [VideoController::class, 'updateCounts']);
     
-    // Video interaction routes (public)
-    Route::post('/videos/interactions/like', [VideoInteractionController::class, 'toggleLike']);
-    Route::post('/videos/interactions/share', [VideoInteractionController::class, 'addShare']);
-    Route::post('/videos/interactions/view', [VideoInteractionController::class, 'addView']);
-    Route::post('/videos/interactions/check', [VideoInteractionController::class, 'checkInteraction']);
-    Route::get('/videos/interactions/user', [VideoInteractionController::class, 'getUserInteractions']);
-    
-    // Video comment routes (public) - no caching for real-time data
-    Route::get('/videos/comments', [VideoCommentController::class, 'index']);
-    Route::post('/videos/comments', [VideoCommentController::class, 'store']);
-    Route::put('/videos/comments/{id}', [VideoCommentController::class, 'update']);
-    Route::delete('/videos/comments/{id}', [VideoCommentController::class, 'destroy']);
-    Route::post('/videos/comments/like', [VideoCommentController::class, 'toggleLike']);
-    Route::post('/videos/comments/pin/{id}', [VideoCommentController::class, 'togglePin']);
-    Route::post('/videos/comments/check-like', [VideoCommentController::class, 'checkLike']);
+    // Test route for debugging (outside middleware)
+    Route::get('/videos/test', function() {
+        return response()->json(['message' => 'Video route works!']);
+    });
     
     // Subscriber routes (public)
     Route::get('/subscribers', [SubscriberController::class, 'index']);
     Route::post('/subscribers', [SubscriberController::class, 'store']);
+    Route::get('/subscribers/email/{email}', [SubscriberController::class, 'getByEmail']);
+    Route::get('/subscribers/stats/overview', [SubscriberController::class, 'stats']);
     Route::get('/subscribers/{id}', [SubscriberController::class, 'show']);
     Route::put('/subscribers/{id}', [SubscriberController::class, 'update']);
     Route::delete('/subscribers/{id}', [SubscriberController::class, 'destroy']);
-    Route::get('/subscribers/stats/overview', [SubscriberController::class, 'stats']);
     Route::put('/subscribers/{id}/activity', [SubscriberController::class, 'updateActivity']);
 });
 

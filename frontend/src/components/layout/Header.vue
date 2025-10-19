@@ -73,24 +73,31 @@
         <div class="flex items-center space-x-2">
           <!-- Notification Center - Removed -->
           
-          <!-- CTA Buttons - Desktop Subscribe -->
+          <!-- CTA Buttons - Desktop Subscribe/Login -->
           <div class="hidden md:flex items-center space-x-2">
-            <RouterLink
-              v-if="!isSubscribed"
-              to="/subscribe"
-              class="bg-gradient-to-r from-primary-500 to-secondary-500 text-white px-3 py-1.5 rounded-md text-sm font-medium hover:from-primary-600 hover:to-secondary-600 transition-all duration-150 shadow-md hover:shadow-lg pointer-events-auto relative z-10"
-            >
-              Subscribe
-            </RouterLink>
+            <template v-if="!isSubscribed">
+              <RouterLink
+                to="/signin"
+                class="text-gray-300 hover:text-white px-3 py-1.5 rounded-md text-sm font-medium transition-colors duration-150 hover:bg-gray-800/40"
+              >
+                Sign In
+              </RouterLink>
+              <RouterLink
+                to="/signup"
+                class="bg-gradient-to-r from-primary-500 to-secondary-500 text-white px-3 py-1.5 rounded-md text-sm font-medium hover:from-primary-600 hover:to-secondary-600 transition-all duration-150 shadow-md hover:shadow-lg pointer-events-auto relative z-10"
+              >
+                Sign Up
+              </RouterLink>
+            </template>
             <button
               v-else
               @click="unsubscribe"
               class="bg-gradient-to-r from-gray-600 to-gray-700 text-white px-3 py-1.5 rounded-md text-sm font-medium hover:from-gray-700 hover:to-gray-800 transition-all duration-150 shadow-md hover:shadow-lg pointer-events-auto relative z-10 flex items-center gap-2"
             >
               <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M18 4H6c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-6 2.5c2.49 0 4.5 2.01 4.5 4.5S14.49 15.5 12 15.5s-4.5-2.01-4.5-4.5S9.51 6.5 12 6.5zM12 17c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                <path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/>
               </svg>
-              Subscribed
+              Logout
             </button>
           </div>
 
@@ -156,23 +163,31 @@
 
           <!-- Mobile CTA - Compact -->
           <div class="pt-2 border-t border-gray-700/30 space-y-1">
-            <RouterLink
-              v-if="!isSubscribed"
-              to="/subscribe"
-              class="bg-gradient-to-r from-primary-500 to-secondary-500 text-white block px-2 py-2 rounded-md text-sm font-medium text-center hover:from-primary-600 hover:to-secondary-600 transition-all duration-150"
-              @click="closeMenu"
-            >
-              Subscribe
-            </RouterLink>
+            <template v-if="!isSubscribed">
+              <RouterLink
+                to="/signin"
+                class="text-gray-300 hover:text-white block px-2 py-2 rounded-md text-sm font-medium text-center transition-colors duration-150 hover:bg-gray-800/40"
+                @click="closeMenu"
+              >
+                Sign In
+              </RouterLink>
+              <RouterLink
+                to="/signup"
+                class="bg-gradient-to-r from-primary-500 to-secondary-500 text-white block px-2 py-2 rounded-md text-sm font-medium text-center hover:from-primary-600 hover:to-secondary-600 transition-all duration-150"
+                @click="closeMenu"
+              >
+                Sign Up
+              </RouterLink>
+            </template>
             <button
               v-else
               @click="unsubscribe"
               class="bg-gradient-to-r from-gray-600 to-gray-700 text-white block px-2 py-2 rounded-md text-sm font-medium text-center hover:from-gray-700 hover:to-gray-800 transition-all duration-150 w-full flex items-center justify-center gap-2"
             >
               <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M18 4H6c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-6 2.5c2.49 0 4.5 2.01 4.5 4.5S14.49 15.5 12 15.5s-4.5-2.01-4.5-4.5S9.51 6.5 12 6.5zM12 17c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                <path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/>
               </svg>
-              Subscribed
+              Logout
             </button>
           </div>
         </div>
@@ -243,14 +258,18 @@ const handleSearch = (event: Event) => {
   }
 }
 
-// Unsubscribe functionality
+// Logout functionality
 const unsubscribe = () => {
-  if (confirm('Are you sure you want to unsubscribe from Stargate.ci?')) {
-    // Remove subscriber from localStorage
+  if (confirm('Are you sure you want to logout from Stargate.ci?')) {
+    // Remove subscriber from localStorage (logout)
     localStorage.removeItem('stargate_subscribers')
+    localStorage.removeItem('stargate_session_id')
     
-    // Refresh the page to update UI
-    window.location.reload()
+    // Update subscription status
+    updateSubscriptionStatus()
+    
+    // Dispatch custom event to update other components
+    window.dispatchEvent(new CustomEvent('subscription-changed'))
   }
 }
 

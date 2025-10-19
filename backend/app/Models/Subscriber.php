@@ -13,6 +13,7 @@ class Subscriber extends Model
     protected $fillable = [
         'username',
         'email',
+        'password',
         'first_name',
         'last_name',
         'country',
@@ -33,7 +34,14 @@ class Subscriber extends Model
         'is_active' => 'boolean',
         'email_notifications' => 'boolean',
         'subscribed_at' => 'datetime',
-        'last_activity_at' => 'datetime'
+        'last_activity_at' => 'datetime',
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed'
+    ];
+
+    protected $hidden = [
+        'password',
+        'remember_token'
     ];
 
     /**
@@ -81,7 +89,7 @@ class Subscriber extends Model
      */
     public function getDisplayNameAttribute()
     {
-        return $this->full_name ?: $this->username;
+        return $this->username;
     }
 
     /**

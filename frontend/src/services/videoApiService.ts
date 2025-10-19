@@ -236,8 +236,8 @@ class VideoApiService {
       const subscriberId = subscribers[0].id
       console.log('getSubscriberId - found subscriber ID:', subscriberId)
       
-      // Check if ID is valid (should be between 1-7 based on current database)
-      if (typeof subscriberId === 'number' && subscriberId >= 1 && subscriberId <= 7) {
+      // Check if ID is valid (should be a positive number)
+      if (typeof subscriberId === 'number' && subscriberId > 0) {
         return subscriberId
       } else {
         console.log('getSubscriberId - invalid subscriber ID, cleaning localStorage and defaulting to 1')
@@ -262,6 +262,15 @@ class VideoApiService {
     localStorage.setItem('stargate_subscribers', JSON.stringify([validSubscriber]))
     console.log('Created valid subscriber in localStorage:', validSubscriber)
   }
+
+  // Get subscriber by email
+  async getSubscriberByEmail(email: string): Promise<{ success: boolean; data: any; message: string }> {
+    const url = `${this.baseUrl}/subscribers/email/${encodeURIComponent(email)}`
+    console.log('getSubscriberByEmail - URL:', url)
+    console.log('getSubscriberByEmail - email:', email)
+    return apiClient.get(url)
+  }
+
 }
 
 export const videoApiService = new VideoApiService()

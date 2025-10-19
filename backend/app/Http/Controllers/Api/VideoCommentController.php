@@ -19,6 +19,9 @@ class VideoCommentController extends Controller
         try {
             $videoContentId = $request->input('video_content_id');
             
+            // Debug: Log to file directly
+            file_put_contents(storage_path('logs/debug.log'), 'VideoCommentController@index - video_content_id: ' . $videoContentId . PHP_EOL, FILE_APPEND);
+            
             if (!$videoContentId) {
                 return response()->json([
                     'success' => false,
@@ -26,13 +29,24 @@ class VideoCommentController extends Controller
                 ], 400);
             }
 
-            // Ensure video exists
+            // Check if video exists, if not create it
             $video = Video::where('content_id', $videoContentId)->first();
             if (!$video) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Video not found'
-                ], 404);
+                // Create video entry if it doesn't exist
+                $video = Video::create([
+                    'content_id' => $videoContentId,
+                    'title' => 'Video ' . $videoContentId,
+                    'description' => 'Description for ' . $videoContentId,
+                    'youtube_id' => $videoContentId,
+                    'youtube_url' => 'https://www.youtube.com/embed/' . $videoContentId,
+                    'content_type' => 'video',
+                    'likes_count' => 0,
+                    'comments_count' => 0,
+                    'shares_count' => 0,
+                    'views_count' => 0,
+                    'is_active' => true
+                ]);
+                \Log::info('VideoCommentController@index - Created new video: ' . $videoContentId);
             }
 
             $comments = VideoComment::where('video_content_id', $videoContentId)
@@ -45,22 +59,43 @@ class VideoCommentController extends Controller
 
             // Transform comments to include author info
             $transformedComments = $comments->map(function ($comment) {
+                // Debug logging
+                \Log::info('VideoCommentController@index - Comment ID: ' . $comment->id);
+                \Log::info('VideoCommentController@index - Comment subscriber_id: ' . $comment->subscriber_id);
+                \Log::info('VideoCommentController@index - Comment subscriber loaded: ' . ($comment->subscriber ? 'Yes' : 'No'));
+                if ($comment->subscriber) {
+                    \Log::info('VideoCommentController@index - Subscriber username: ' . $comment->subscriber->username);
+                    \Log::info('VideoCommentController@index - Subscriber display_name: ' . $comment->subscriber->display_name);
+                }
+                \Log::info('VideoCommentController@index - Comment author_name: ' . $comment->author_name);
+                
                 return [
                     'id' => $comment->id,
                     'content' => $comment->content,
                     'author_name' => $comment->author_name,
                     'author_avatar' => $comment->author_avatar,
+                    'subscriber_id' => $comment->subscriber_id, // Add this for frontend debugging
                     'likes_count' => $comment->likes_count,
                     'is_pinned' => $comment->is_pinned,
                     'is_edited' => $comment->is_edited,
                     'created_at' => $comment->created_at,
                     'edited_at' => $comment->edited_at,
                     'replies' => $comment->replies->map(function ($reply) {
+                        // Debug logging for replies
+                        \Log::info('VideoCommentController@index - Reply ID: ' . $reply->id);
+                        \Log::info('VideoCommentController@index - Reply subscriber_id: ' . $reply->subscriber_id);
+                        \Log::info('VideoCommentController@index - Reply subscriber loaded: ' . ($reply->subscriber ? 'Yes' : 'No'));
+                        if ($reply->subscriber) {
+                            \Log::info('VideoCommentController@index - Reply Subscriber username: ' . $reply->subscriber->username);
+                        }
+                        \Log::info('VideoCommentController@index - Reply author_name: ' . $reply->author_name);
+                        
                         return [
                             'id' => $reply->id,
                             'content' => $reply->content,
                             'author_name' => $reply->author_name,
                             'author_avatar' => $reply->author_avatar,
+                            'subscriber_id' => $reply->subscriber_id, // Add this for frontend debugging
                             'likes_count' => $reply->likes_count,
                             'is_edited' => $reply->is_edited,
                             'created_at' => $reply->created_at,

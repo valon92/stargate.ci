@@ -51,6 +51,7 @@ class SubscriberController extends Controller
             $validator = Validator::make($request->all(), [
                 'username' => 'required|string|max:255|unique:subscribers,username',
                 'email' => 'required|email|max:255|unique:subscribers,email',
+                'password' => 'required|string|min:6',
                 'first_name' => 'nullable|string|max:255',
                 'last_name' => 'nullable|string|max:255',
                 'country' => 'nullable|string|max:255',
@@ -73,6 +74,7 @@ class SubscriberController extends Controller
             $subscriber = Subscriber::create([
                 'username' => $request->username,
                 'email' => $request->email,
+                'password' => $request->password, // Will be hashed by Laravel
                 'first_name' => $request->first_name,
                 'last_name' => $request->last_name,
                 'country' => $request->country,
@@ -108,6 +110,36 @@ class SubscriberController extends Controller
     {
         try {
             $subscriber = Subscriber::find($id);
+
+            if (!$subscriber) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Subscriber not found'
+                ], 404);
+            }
+
+            return response()->json([
+                'success' => true,
+                'data' => $subscriber,
+                'message' => 'Subscriber retrieved successfully'
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to retrieve subscriber',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Get subscriber by email
+     */
+    public function getByEmail(string $email): JsonResponse
+    {
+        try {
+            $subscriber = Subscriber::where('email', $email)->first();
 
             if (!$subscriber) {
                 return response()->json([

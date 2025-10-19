@@ -27,13 +27,22 @@ class VideoInteractionController extends Controller
             $subscriberId = $request->subscriber_id;
             $sessionId = $request->session_id;
 
-            // Ensure video exists
+            // Ensure video exists, create if not
             $video = Video::where('content_id', $videoContentId)->first();
             if (!$video) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Video not found'
-                ], 404);
+                $video = Video::create([
+                    'content_id' => $videoContentId,
+                    'title' => 'Video ' . $videoContentId,
+                    'description' => 'Description for ' . $videoContentId,
+                    'youtube_id' => $videoContentId,
+                    'youtube_url' => 'https://www.youtube.com/embed/' . $videoContentId,
+                    'content_type' => 'video',
+                    'likes_count' => 0,
+                    'comments_count' => 0,
+                    'shares_count' => 0,
+                    'views_count' => 0,
+                    'is_active' => true
+                ]);
             }
 
             // Toggle like

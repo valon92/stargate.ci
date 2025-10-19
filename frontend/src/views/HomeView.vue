@@ -68,8 +68,6 @@
               <InteractiveContent
                 content-id="stargate-intro-video"
                 content-type="video"
-                :initial-likes="0"
-                :initial-comments="[]"
               />
             </div>
           </div>
@@ -95,8 +93,6 @@
               <InteractiveContent
                 content-id="stargate-deep-dive-video"
                 content-type="video"
-                :initial-likes="0"
-                :initial-comments="[]"
               />
             </div>
           </div>
@@ -122,8 +118,6 @@
               <InteractiveContent
                 content-id="stargate-technical-video"
                 content-type="video"
-                :initial-likes="0"
-                :initial-comments="[]"
               />
             </div>
           </div>
@@ -149,8 +143,6 @@
               <InteractiveContent
                 content-id="cristal-intelligence-video"
                 content-type="video"
-                :initial-likes="0"
-                :initial-comments="[]"
               />
             </div>
           </div>
@@ -176,8 +168,6 @@
               <InteractiveContent
                 content-id="future-ai-video"
                 content-type="video"
-                :initial-likes="0"
-                :initial-comments="[]"
               />
             </div>
           </div>
@@ -250,9 +240,11 @@
             <button 
               @click="loadMoreMembers"
               class="btn-outline"
-              v-if="totalMembers > displayedMembers.length"
+              v-if="hasMoreMembers && displayedMembers.length > 0 && displayedMembers.length < totalMembers"
+              :disabled="isLoadingMore"
             >
-              View More Members
+              <span v-if="isLoadingMore">Loading...</span>
+              <span v-else>Load More Members</span>
             </button>
           </div>
         </div>
@@ -335,18 +327,22 @@ import { ref, onMounted, computed } from 'vue'
 import { RouterLink } from 'vue-router'
 import { useHead } from '@vueuse/head'
 import InteractiveContent from '../components/InteractiveContent.vue'
+import { videoApiService } from '../services/videoApiService'
 // Email notification service removed - using localStorage for subscribers
 
 
 // Members data
 const allMembers = ref<any[]>([])
 const displayedMembers = ref<any[]>([])
-const membersPerPage = 6
+const membersPerPage = 10
 const currentPage = ref(1)
+const isLoadingMore = ref(false)
+const hasMoreMembers = ref(true)
+const totalMembersCount = ref(0)
 
 
 // Computed properties
-const totalMembers = computed(() => allMembers.value.length)
+const totalMembers = computed(() => totalMembersCount.value || allMembers.value.length)
 
 // Community statistics
 const activeMembersThisMonth = computed(() => {
@@ -369,25 +365,75 @@ const totalCountries = computed(() => {
 })
 
 // Methods
-const loadMembers = () => {
-  // Load members from email notification service
-  // Load subscribers from localStorage
-  const subscribers = JSON.parse(localStorage.getItem('stargate_subscribers') || '[]')
-  allMembers.value = subscribers
-  console.log('Loading members from email service:', allMembers.value)
+const loadMembers = async (page = 1, append = false) => {
+  try {
+    // Load subscribers from API with pagination
+    const response = await videoApiService.getSubscribers()
+    console.log('🔍 DEBUG - API Response:', response)
+    if (response.success) {
+      if (append) {
+        // Append new members to existing list
+        allMembers.value = [...allMembers.value, ...response.data]
+      } else {
+        // Replace with new members (initial load)
+        allMembers.value = response.data
+        // Store total count from API pagination
+        totalMembersCount.value = response.pagination?.total || response.data.length
+      }
+      console.log('✅ Loading members from API:', allMembers.value.length, 'loaded,', totalMembersCount.value, 'total members')
+      
+      // Check if there are more members to load
+      if (!append) {
+        // Initial load - check if there are more pages
+        hasMoreMembers.value = response.data.length === membersPerPage && totalMembersCount.value > membersPerPage
+      } else {
+        // Loading more - check if we got a full page
+        hasMoreMembers.value = response.data.length === membersPerPage
+      }
+    } else {
+      console.error('❌ API returned success: false')
+      // Fallback to localStorage if API fails
+      const subscribers = JSON.parse(localStorage.getItem('stargate_subscribers') || '[]')
+      allMembers.value = subscribers
+      totalMembersCount.value = subscribers.length
+      hasMoreMembers.value = false
+      console.log('⚠️ Loading members from localStorage (fallback):', allMembers.value.length, 'members')
+    }
+  } catch (error) {
+    console.error('❌ Error loading members from API:', error)
+    // Fallback to localStorage if API fails
+    const subscribers = JSON.parse(localStorage.getItem('stargate_subscribers') || '[]')
+    allMembers.value = subscribers
+    totalMembersCount.value = subscribers.length
+    hasMoreMembers.value = false
+    console.log('⚠️ Loading members from localStorage (fallback):', allMembers.value.length, 'members')
+  }
   updateDisplayedMembers()
 }
 
 const updateDisplayedMembers = () => {
-  const startIndex = 0
+  // Show only the first 10 members initially, then more as we load them
   const endIndex = currentPage.value * membersPerPage
-  displayedMembers.value = allMembers.value.slice(startIndex, endIndex)
-  console.log('Updated displayed members:', displayedMembers.value)
+  displayedMembers.value = allMembers.value.slice(0, endIndex)
+  console.log('Updated displayed members:', displayedMembers.value.length, 'out of', allMembers.value.length, 'total')
 }
 
-const loadMoreMembers = () => {
+const loadMoreMembers = async () => {
+  if (isLoadingMore.value || !hasMoreMembers.value) return
+  
+  isLoadingMore.value = true
   currentPage.value++
-  updateDisplayedMembers()
+  
+  try {
+    // Load more members from API
+    await loadMembers(currentPage.value, true)
+  } catch (error) {
+    console.error('Error loading more members:', error)
+    // Reset page if error occurs
+    currentPage.value--
+  } finally {
+    isLoadingMore.value = false
+  }
 }
 
 const formatDate = (dateString: string) => {

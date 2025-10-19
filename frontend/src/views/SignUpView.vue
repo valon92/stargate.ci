@@ -1,30 +1,31 @@
 <template>
   <div class="min-h-screen bg-gray-900 py-12">
-    <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md mx-auto px-4 sm:px-6 lg:px-8">
       <!-- Header -->
       <div class="text-center mb-12">
         <h1 class="text-4xl font-bold gradient-text mb-4">
-          Subscribe to Stargate.ci
+          Sign Up
         </h1>
         <p class="text-xl text-gray-300">
-          Stay updated with the latest news about Stargate Project and Cristal Intelligence
+          Create your Stargate.ci account
         </p>
       </div>
 
-      <!-- Subscribe Form -->
+      <!-- Sign Up Form -->
       <div class="bg-gray-800 rounded-lg p-8 border border-gray-700">
-        <form @submit.prevent="handleSubscribe" class="space-y-6">
+        <form @submit.prevent="handleSignUp" class="space-y-6">
           <!-- Username -->
           <div>
             <label for="username" class="block text-sm font-medium text-gray-300 mb-2">
-              Username (Optional)
+              Username *
             </label>
             <input
               type="text"
               id="username"
               v-model="form.username"
+              required
               class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-              placeholder="Enter your username"
+              placeholder="Choose a username"
             />
           </div>
 
@@ -43,63 +44,92 @@
             />
           </div>
 
-          <!-- Country (Optional) -->
+          <!-- Password -->
           <div>
-            <label for="country" class="block text-sm font-medium text-gray-300 mb-2">
-              Country (Optional)
+            <label for="password" class="block text-sm font-medium text-gray-300 mb-2">
+              Password *
             </label>
             <input
-              type="text"
-              id="country"
-              v-model="form.country"
+              type="password"
+              id="password"
+              v-model="form.password"
+              required
               class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-              placeholder="Enter your country"
+              placeholder="Create a password"
             />
           </div>
 
-          <!-- Interests (Optional) -->
+          <!-- Confirm Password -->
+          <div>
+            <label for="confirmPassword" class="block text-sm font-medium text-gray-300 mb-2">
+              Confirm Password *
+            </label>
+            <input
+              type="password"
+              id="confirmPassword"
+              v-model="form.confirmPassword"
+              required
+              class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              placeholder="Confirm your password"
+            />
+          </div>
+
+          <!-- Country -->
+          <div>
+            <label for="country" class="block text-sm font-medium text-gray-300 mb-2">
+              Country
+            </label>
+            <select
+              id="country"
+              v-model="form.country"
+              class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+            >
+              <option value="">Select your country</option>
+              <option value="Kosovo">Kosovo</option>
+              <option value="Albania">Albania</option>
+              <option value="USA">United States</option>
+              <option value="UK">United Kingdom</option>
+              <option value="Germany">Germany</option>
+              <option value="France">France</option>
+              <option value="Italy">Italy</option>
+              <option value="Spain">Spain</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+
+          <!-- Interests -->
           <div>
             <label class="block text-sm font-medium text-gray-300 mb-2">
               Interests (Optional)
             </label>
-            <div class="space-y-2">
-              <label class="flex items-center">
+            <div class="grid grid-cols-2 gap-2">
+              <label v-for="interest in availableInterests" :key="interest" class="flex items-center">
                 <input
                   type="checkbox"
+                  :value="interest"
                   v-model="form.interests"
-                  value="stargate"
-                  class="rounded border-gray-600 bg-gray-700 text-primary-500 focus:ring-primary-500"
+                  class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
                 />
-                <span class="ml-2 text-gray-300">Stargate Project</span>
-              </label>
-              <label class="flex items-center">
-                <input
-                  type="checkbox"
-                  v-model="form.interests"
-                  value="cristal"
-                  class="rounded border-gray-600 bg-gray-700 text-primary-500 focus:ring-primary-500"
-                />
-                <span class="ml-2 text-gray-300">Cristal Intelligence</span>
-              </label>
-              <label class="flex items-center">
-                <input
-                  type="checkbox"
-                  v-model="form.interests"
-                  value="ai"
-                  class="rounded border-gray-600 bg-gray-700 text-primary-500 focus:ring-primary-500"
-                />
-                <span class="ml-2 text-gray-300">AI Technology</span>
-              </label>
-              <label class="flex items-center">
-                <input
-                  type="checkbox"
-                  v-model="form.interests"
-                  value="news"
-                  class="rounded border-gray-600 bg-gray-700 text-primary-500 focus:ring-primary-500"
-                />
-                <span class="ml-2 text-gray-300">Latest News</span>
+                <span class="ml-2 text-sm text-gray-300">{{ interest }}</span>
               </label>
             </div>
+          </div>
+
+          <!-- Terms and Conditions -->
+          <div class="flex items-center">
+            <input
+              id="terms"
+              type="checkbox"
+              v-model="form.acceptTerms"
+              required
+              class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
+            />
+            <label for="terms" class="ml-2 block text-sm text-gray-300">
+              I agree to the 
+              <a href="/terms" class="text-primary-400 hover:text-primary-300 underline">Terms of Service</a>
+              and 
+              <a href="/privacy" class="text-primary-400 hover:text-primary-300 underline">Privacy Policy</a>
+            </label>
           </div>
 
           <!-- Submit Button -->
@@ -108,14 +138,14 @@
             :disabled="isSubmitting"
             class="w-full bg-gradient-to-r from-primary-500 to-secondary-500 text-white py-3 px-6 rounded-lg font-medium hover:from-primary-600 hover:to-secondary-600 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus:ring-offset-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
           >
-            {{ isSubmitting ? 'Subscribing...' : 'Subscribe' }}
+            {{ isSubmitting ? 'Creating account...' : 'Sign Up' }}
           </button>
         </form>
 
         <!-- Success Message -->
         <div v-if="showSuccess" class="mt-6 p-4 bg-green-900/20 border border-green-500/30 rounded-lg">
           <p class="text-green-200 text-center">
-            ✅ Successfully subscribed! You'll receive updates about Stargate Project and Cristal Intelligence.
+            ✅ Account created successfully! Welcome to Stargate.ci.
           </p>
         </div>
 
@@ -125,6 +155,16 @@
             ❌ {{ errorMessage }}
           </p>
         </div>
+      </div>
+
+      <!-- Sign In Link -->
+      <div class="mt-8 text-center">
+        <p class="text-gray-400">
+          Already have an account? 
+          <RouterLink to="/signin" class="text-primary-400 hover:text-primary-300 underline">
+            Sign in to Stargate.ci
+          </RouterLink>
+        </p>
       </div>
 
       <!-- Benefits -->
@@ -159,22 +199,12 @@
           <p class="text-gray-400">Join our community of AI enthusiasts and researchers</p>
         </div>
       </div>
-
-      <!-- Login Link -->
-      <div class="mt-8 text-center">
-        <p class="text-gray-400">
-          Already have an account? 
-          <RouterLink to="/login" class="text-primary-400 hover:text-primary-300 underline">
-            Log in to your account
-          </RouterLink>
-        </p>
-      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useHead } from '@vueuse/head'
 import { useRouter } from 'vue-router'
 import { videoApiService } from '@/services/videoApiService'
@@ -184,18 +214,37 @@ const router = useRouter()
 
 // Set page title
 useHead({
-  title: 'Subscribe - Stargate.ci',
+  title: 'Sign Up - Stargate.ci',
   meta: [
-    { name: 'description', content: 'Subscribe to Stargate.ci for the latest updates on Stargate Project and Cristal Intelligence' }
+    { name: 'description', content: 'Create your Stargate.ci account to access exclusive content and features' }
   ]
 })
+
+// Available interests
+const availableInterests = [
+  'Stargate Project',
+  'Cristal Intelligence',
+  'AI Research',
+  'Machine Learning',
+  'Deep Learning',
+  'Neural Networks',
+  'Computer Vision',
+  'Natural Language Processing',
+  'Robotics',
+  'Quantum Computing',
+  'Data Science',
+  'Technology'
+]
 
 // Form data
 const form = ref({
   username: '',
   email: '',
+  password: '',
+  confirmPassword: '',
   country: '',
-  interests: [] as string[]
+  interests: [] as string[],
+  acceptTerms: false
 })
 
 // UI state
@@ -205,53 +254,63 @@ const showError = ref(false)
 const errorMessage = ref('')
 
 // Handle form submission
-const handleSubscribe = async () => {
+const handleSignUp = async () => {
   isSubmitting.value = true
   showSuccess.value = false
   showError.value = false
 
   try {
-    // Validate email
-    if (!form.value.email) {
-      throw new Error('Email is required')
+    // Validate form
+    if (!form.value.username || !form.value.email || !form.value.password) {
+      throw new Error('Username, email, and password are required')
+    }
+
+    if (form.value.password !== form.value.confirmPassword) {
+      throw new Error('Passwords do not match')
+    }
+
+    if (!form.value.acceptTerms) {
+      throw new Error('You must accept the Terms of Service and Privacy Policy')
     }
 
     // Check if subscriber already exists in database
     let existingSubscriber
     try {
       existingSubscriber = await videoApiService.getSubscriberByEmail(form.value.email)
-      console.log('existingSubscriber response:', existingSubscriber)
+      console.log('SignUp - existingSubscriber response:', existingSubscriber)
     } catch (error) {
-      console.log('Subscriber not found, will create new one:', error.message)
+      console.log('SignUp - Subscriber not found, will create new one:', error.message)
       existingSubscriber = { success: false, data: null }
     }
     
-            if (existingSubscriber.success && existingSubscriber.data) {
-              // Subscriber exists, redirect to login page
-              showToast('Account already exists! Please log in instead.', 'warning')
-              
-              // Redirect to login page after 2 seconds
-              setTimeout(() => {
-                router.push('/login')
-              }, 2000)
-              
-              return // Exit early, don't create new subscriber
-              
-            } else {
+    if (existingSubscriber.success && existingSubscriber.data) {
+      // Subscriber exists, redirect to sign in page
+      showToast('Account already exists! Please sign in instead.', 'warning')
+      
+      // Redirect to sign in page after 2 seconds
+      setTimeout(() => {
+        router.push('/signin')
+      }, 2000)
+      
+      return // Exit early, don't create new subscriber
+      
+    } else {
       // Subscriber doesn't exist, create new one
       console.log('Creating new subscriber for email:', form.value.email)
       // Create new subscriber in database
       const subscriberData = {
-        username: form.value.username || `user_${Date.now()}`,
+        username: form.value.username,
         email: form.value.email,
-        first_name: form.value.username || null,
+        password: form.value.password, // Will be hashed by Laravel
+        first_name: form.value.username,
         last_name: null,
         country: form.value.country || null,
         profession: null,
         company: null,
-        interests: form.value.interests, // Send as array, not JSON string
-        avatar: form.value.username ? form.value.username.charAt(0).toUpperCase() : 'U',
-        status: 'active'
+        interests: form.value.interests,
+        avatar: form.value.username.charAt(0).toUpperCase(),
+        is_active: true,
+        email_notifications: true
       }
 
       const response = await videoApiService.createSubscriber(subscriberData)
@@ -265,30 +324,31 @@ const handleSubscribe = async () => {
         
         // Show success message
         showSuccess.value = true
-        showToast('Successfully subscribed! You are now logged in.', 'success')
+        showToast('Account created successfully! You are now signed in.', 'success')
         
-        // Simulate email notification
-        console.log('Sending welcome email to:', form.value.email)
+        // Dispatch custom event to update navbar
+        window.dispatchEvent(new CustomEvent('subscription-changed'))
+        
+        // Reset form
+        form.value = {
+          username: '',
+          email: '',
+          password: '',
+          confirmPassword: '',
+          country: '',
+          interests: [],
+          acceptTerms: false
+        }
+
+        // Redirect to home page after 2 seconds
+        setTimeout(() => {
+          router.push('/')
+        }, 2000)
+        
       } else {
-        throw new Error(response.message || 'Failed to create subscriber')
+        throw new Error(response.message || 'Failed to create account')
       }
     }
-    
-    // Dispatch custom event to update navbar
-    window.dispatchEvent(new CustomEvent('subscription-changed'))
-    
-    // Reset form
-    form.value = {
-      username: '',
-      email: '',
-      country: '',
-      interests: []
-    }
-
-    // Redirect to home page after 2 seconds
-    setTimeout(() => {
-      router.push('/')
-    }, 2000)
 
   } catch (error: any) {
     errorMessage.value = error.message
@@ -308,6 +368,18 @@ const showToast = (message: string, type: 'success' | 'error' | 'warning' | 'inf
   // Simple toast implementation - you can enhance this later
   console.log(`${type.toUpperCase()}: ${message}`)
 }
+
+// Check if user is already signed in
+onMounted(() => {
+  const subscribers = JSON.parse(localStorage.getItem('stargate_subscribers') || '[]')
+  if (subscribers.length > 0) {
+    // User is already signed in, redirect to home
+    showToast('You are already signed in!', 'info')
+    setTimeout(() => {
+      router.push('/')
+    }, 1500)
+  }
+})
 </script>
 
 <style scoped>

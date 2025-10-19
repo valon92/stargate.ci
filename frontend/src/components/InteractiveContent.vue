@@ -24,13 +24,13 @@
         <div class="flex items-center gap-2">
           <button
             v-if="!isSubscribed"
-            @click="goToSubscribe"
+            @click="goToSignIn"
             class="flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-full font-medium text-sm transition-colors"
           >
             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
               <path d="M18 4H6c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-6 2.5c2.49 0 4.5 2.01 4.5 4.5S14.49 15.5 12 15.5s-4.5-2.01-4.5-4.5S9.51 6.5 12 6.5zM12 17c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
             </svg>
-            Subscribe
+            Sign In
           </button>
           <button
             v-else
@@ -38,9 +38,9 @@
             class="flex items-center gap-2 px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-full font-medium text-sm transition-colors"
           >
             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M18 4H6c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-6 2.5c2.49 0 4.5 2.01 4.5 4.5S14.49 15.5 12 15.5s-4.5-2.01-4.5-4.5S9.51 6.5 12 6.5zM12 17c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+              <path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/>
             </svg>
-            Subscribed
+            Logout
           </button>
           
           <!-- Debug Button - Remove this in production -->
@@ -77,11 +77,7 @@
         <!-- Comment Button -->
         <button
           @click="toggleComments"
-          :disabled="!isSubscribed"
-          :class="[
-            'flex items-center gap-2 px-4 py-2 bg-gray-800 hover:bg-gray-700 text-gray-300 rounded-full font-medium transition-all duration-200',
-            !isSubscribed ? 'cursor-not-allowed opacity-50' : ''
-          ]"
+          class="flex items-center gap-2 px-4 py-2 bg-gray-800 hover:bg-gray-700 text-gray-300 rounded-full font-medium transition-all duration-200"
         >
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
@@ -132,7 +128,7 @@
               <textarea
                 v-model="newComment"
                 :disabled="!isSubscribed"
-                :placeholder="isSubscribed ? 'Share your thoughts about this content...' : 'Subscribe to comment on this content...'"
+                :placeholder="isSubscribed ? 'Share your thoughts about this content...' : 'Sign in to comment... (You can view all comments without signing in)'"
                 :class="[
                   'w-full px-4 py-3 border rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none',
                   isSubscribed 
@@ -156,13 +152,13 @@
           </div>
         </div>
 
-        <!-- Subscribe Encouragement -->
+        <!-- Sign In Encouragement -->
         <div v-if="!isSubscribed" class="mb-4 p-3 bg-blue-900/20 border border-blue-500/30 rounded-lg">
           <p class="text-blue-300 text-sm">
-            <router-link to="/subscribe" class="text-blue-400 hover:text-blue-300 underline">
-              Subscribe to Stargate.ci
+            <router-link to="/signin" class="text-blue-400 hover:text-blue-300 underline">
+              Sign in to Stargate.ci
             </router-link>
-            for more features and to support our community!
+            to like, comment, and reply! You can view all comments and likes without signing in.
           </p>
         </div>
 
@@ -282,7 +278,7 @@
                         v-model="replyText"
                         class="w-full px-4 py-3 bg-gray-700/50 border border-gray-500/50 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none"
                         rows="2"
-                        :placeholder="isSubscribed ? 'Write a reply...' : 'Write a reply... (Subscribe for more features)'"
+                        :placeholder="isSubscribed ? 'Write a reply...' : 'Write a reply... (Sign in to reply, but you can view all replies without signing in)'"
                         @keyup.ctrl.enter="addReply(comment.id)"
                       ></textarea>
                       <div class="flex items-center justify-between mt-3">
@@ -465,7 +461,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { videoApiService } from '../services/videoApiService'
 
@@ -501,7 +497,7 @@ const router = useRouter()
 // Reactive data
 const isLiked = ref(false)
 const likesCount = ref(props.initialLikes)
-const showComments = ref(false)
+const showComments = ref(true) // Auto-open comments section
 const showShare = ref(false)
 const comments = ref<Comment[]>(props.initialComments)
 const commentsCount = ref(props.initialComments.length)
@@ -518,16 +514,28 @@ const commentsPerPage = 10
 const currentPage = ref(1)
 const isLoadingComments = ref(false)
 
+// Subscription status - reactive (same as Header.vue)
+const subscriptionStatus = ref(false)
+
 // Check if user is subscribed
 const isSubscribed = computed(() => {
-  const subscribers = JSON.parse(localStorage.getItem('stargate_subscribers') || '[]')
-  return subscribers.length > 0
+  return subscriptionStatus.value
 })
 
 const currentUser = computed(() => {
   const subscribers = JSON.parse(localStorage.getItem('stargate_subscribers') || '[]')
   return subscribers.length > 0 ? subscribers[0] : null
 })
+
+// Update subscription status function (same as Header.vue)
+const updateSubscriptionStatus = () => {
+  const subscribers = JSON.parse(localStorage.getItem('stargate_subscribers') || '[]')
+  subscriptionStatus.value = subscribers.length > 0
+  
+  // Note: We don't clear comments and likes when user logs out
+  // Comments and likes should remain visible to all users
+  // Only interactive actions (like, comment, reply) are disabled for non-signed-in users
+}
 
 // Methods
 const showToast = (message: string, type: 'success' | 'info' | 'warning' = 'success') => {
@@ -543,9 +551,9 @@ const showToast = (message: string, type: 'success' | 'info' | 'warning' = 'succ
     const toggleLike = async () => {
       // Check if user is subscribed
       if (!isSubscribed.value) {
-        showToast('Please subscribe to like content!', 'warning')
+        showToast('Please sign in to like content!', 'warning')
         setTimeout(() => {
-          showToast('Subscribe to Stargate.ci for more features!', 'info')
+          showToast('You can view all likes and comments without signing in!', 'info')
         }, 1000)
         return
       }
@@ -587,6 +595,7 @@ const showToast = (message: string, type: 'success' | 'info' | 'warning' = 'succ
     }
 
 const toggleComments = () => {
+  // Allow viewing comments for all users (subscribed and non-subscribed)
   showComments.value = !showComments.value
   if (showComments.value) {
     trackEngagement('view_comments', props.contentType)
@@ -595,13 +604,13 @@ const toggleComments = () => {
 
 const toggleShare = () => {
   // Check if user is subscribed
-  if (!isSubscribed.value) {
-    showToast('Please subscribe to share content!', 'warning')
-    setTimeout(() => {
-      showToast('Subscribe to Stargate.ci for more features!', 'info')
-    }, 1000)
-    return
-  }
+      if (!isSubscribed.value) {
+        showToast('Please sign in to share content!', 'warning')
+        setTimeout(() => {
+          showToast('You can view all content without signing in!', 'info')
+        }, 1000)
+        return
+      }
   
   showShare.value = !showShare.value
   if (showShare.value) {
@@ -610,27 +619,28 @@ const toggleShare = () => {
 }
 
 
-// Go to subscribe page
-const goToSubscribe = () => {
-  router.push('/subscribe')
+// Go to sign in page
+const goToSignIn = () => {
+  router.push('/signin')
 }
 
-// Unsubscribe functionality
+// Unsubscribe/Logout functionality
 const unsubscribe = () => {
-  if (confirm('Are you sure you want to unsubscribe from Stargate.ci?')) {
-    // Remove subscriber from localStorage
+  if (confirm('Are you sure you want to logout from Stargate.ci?')) {
+    // Remove subscriber from localStorage (logout)
     localStorage.removeItem('stargate_subscribers')
+    localStorage.removeItem('stargate_session_id')
+    
+    // Update subscription status
+    updateSubscriptionStatus()
     
     // Show notification
-    showToast('Successfully unsubscribed!', 'success')
+    showToast('Successfully logged out! You can still view comments and likes.', 'success')
     
-    // Dispatch custom event to update navbar
+    // Dispatch custom event to update navbar and other components
     window.dispatchEvent(new CustomEvent('subscription-changed'))
     
-    // Refresh the page to update UI
-    setTimeout(() => {
-      window.location.reload()
-    }, 1500)
+    // Note: Comments and likes remain visible - only interactive actions are disabled
   }
 }
 
@@ -650,9 +660,9 @@ const createValidSubscriber = () => {
     const addComment = async () => {
       // Check if user is subscribed
       if (!isSubscribed.value) {
-        showToast('Please subscribe to comment!', 'warning')
+        showToast('Please sign in to comment!', 'warning')
         setTimeout(() => {
-          showToast('Subscribe to Stargate.ci for more features!', 'info')
+          showToast('You can view all comments without signing in!', 'info')
         }, 1000)
         return
       }
@@ -673,8 +683,21 @@ const createValidSubscriber = () => {
         
         // Get subscriber username if available
         const subscribers = JSON.parse(localStorage.getItem('stargate_subscribers') || '[]')
-        const currentSubscriber = subscribers.find((s: any) => s.id === subscriberId)
+        console.log('addComment - subscribers from localStorage:', subscribers)
+        console.log('addComment - subscriberId:', subscriberId)
+        console.log('addComment - subscribers.length:', subscribers.length)
+        
+        // Use the first subscriber from localStorage (current logged-in user)
+        const currentSubscriber = subscribers.length > 0 ? subscribers[0] : null
+        console.log('addComment - currentSubscriber found:', currentSubscriber)
+        
+        if (currentSubscriber) {
+          console.log('addComment - currentSubscriber.username:', currentSubscriber.username)
+          console.log('addComment - currentSubscriber.id:', currentSubscriber.id)
+        }
+        
         const username = currentSubscriber ? currentSubscriber.username : 'Guest User'
+        console.log('addComment - final username:', username)
         
         const response = await videoApiService.addComment(
           props.contentId,
@@ -689,7 +712,7 @@ const createValidSubscriber = () => {
           // Convert API response to local format with real username
           const comment: Comment = {
             id: response.data.id.toString(),
-            user: response.data.author_name || username,
+            user: username, // Use the username from localStorage, not API response
             userAvatar: username.substring(0, 1).toUpperCase(),
             text: response.data.content,
             date: response.data.created_at,
@@ -700,8 +723,14 @@ const createValidSubscriber = () => {
             isEdited: response.data.is_edited
           }
           
+          console.log('addComment - comment object being added:', comment)
+          console.log('addComment - comment.user:', comment.user)
+          console.log('addComment - comment.userAvatar:', comment.userAvatar)
+          
           comments.value.unshift(comment)
           commentsCount.value++
+          
+          console.log('addComment - comments array after adding:', comments.value)
           newComment.value = ''
           
           // Show notification
@@ -738,11 +767,29 @@ const toggleCommentLike = (commentId: string) => {
 }
 
 const replyToComment = (commentId: string) => {
+  // Check if user is subscribed
+      if (!isSubscribed.value) {
+        showToast('Please sign in to reply to comments!', 'warning')
+        setTimeout(() => {
+          showToast('You can view all comments and replies without signing in!', 'info')
+        }, 1000)
+        return
+      }
+  
   replyingTo.value = commentId
   replyText.value = ''
 }
 
 const addReply = async (parentId: string) => {
+  // Check if user is subscribed
+      if (!isSubscribed.value) {
+        showToast('Please sign in to reply to comments!', 'warning')
+        setTimeout(() => {
+          showToast('You can view all comments and replies without signing in!', 'info')
+        }, 1000)
+        return
+      }
+  
   if (!replyText.value.trim()) {
     showToast('Please enter a reply!', 'warning')
     return
@@ -754,7 +801,8 @@ const addReply = async (parentId: string) => {
     
     // Get subscriber username if available
     const subscribers = JSON.parse(localStorage.getItem('stargate_subscribers') || '[]')
-    const currentSubscriber = subscribers.find((s: any) => s.id === subscriberId)
+    // Use the first subscriber from localStorage (current logged-in user)
+    const currentSubscriber = subscribers.length > 0 ? subscribers[0] : null
     const username = currentSubscriber ? currentSubscriber.username : 'Guest User'
     
     const response = await videoApiService.addComment(
@@ -770,7 +818,7 @@ const addReply = async (parentId: string) => {
       if (parentComment) {
         const reply: Comment = {
           id: response.data.id.toString(),
-          user: response.data.author_name || username,
+          user: username, // Use the username from localStorage, not API response
           userAvatar: username.substring(0, 1).toUpperCase(),
           text: response.data.content,
           date: response.data.created_at,
@@ -800,8 +848,8 @@ const addReply = async (parentId: string) => {
 
 const editComment = (commentId: string) => {
   if (!isSubscribed.value) {
-    showToast('Subscribe to Stargate.ci to edit comments!', 'info')
-    router.push('/subscribe')
+    showToast('Sign in to edit comments! You can view all comments without signing in.', 'info')
+    router.push('/signin')
     return
   }
   
@@ -842,8 +890,8 @@ const saveEdit = (commentId: string) => {
 
 const deleteComment = (commentId: string) => {
   if (!isSubscribed.value) {
-    showToast('Subscribe to Stargate.ci to delete comments!', 'info')
-    router.push('/subscribe')
+    showToast('Sign in to delete comments! You can view all comments without signing in.', 'info')
+    router.push('/signin')
     return
   }
   
@@ -865,8 +913,8 @@ const deleteComment = (commentId: string) => {
 
 const pinComment = (commentId: string) => {
   if (!isSubscribed.value) {
-    showToast('Subscribe to Stargate.ci to pin comments!', 'info')
-    router.push('/subscribe')
+    showToast('Sign in to pin comments! You can view all comments without signing in.', 'info')
+    router.push('/signin')
     return
   }
   
@@ -996,6 +1044,13 @@ const trackEngagement = (action: string, contentType: string) => {
 
     // Load saved data on mount
     onMounted(async () => {
+      // Initialize subscription status
+      updateSubscriptionStatus()
+      
+      // Listen for subscription changes
+      window.addEventListener('subscription-changed', updateSubscriptionStatus)
+      window.addEventListener('storage', updateSubscriptionStatus)
+      
       try {
         // Load video data from API
         const videoResponse = await videoApiService.getVideo(props.contentId)
@@ -1004,57 +1059,99 @@ const trackEngagement = (action: string, contentType: string) => {
           commentsCount.value = videoResponse.data.comments_count
         }
         
-        // Load user interactions
-        const sessionId = videoApiService.getSessionId()
-        const subscriberId = videoApiService.getSubscriberId()
-        
-        const interactionsResponse = await videoApiService.getUserInteractions(
-          props.contentId,
-          subscriberId,
-          sessionId
-        )
-        
-        if (interactionsResponse.success) {
-          isLiked.value = interactionsResponse.data.is_liked
+        // Load user interactions (only if user is logged in)
+        if (isSubscribed.value) {
+          const sessionId = videoApiService.getSessionId()
+          const subscriberId = videoApiService.getSubscriberId()
+          
+          const interactionsResponse = await videoApiService.getUserInteractions(
+            props.contentId,
+            subscriberId,
+            sessionId
+          )
+          
+          if (interactionsResponse.success) {
+            isLiked.value = interactionsResponse.data.is_liked
+          }
         }
         
         // Load comments from API
         const commentsResponse = await videoApiService.getComments(props.contentId)
         if (commentsResponse.success) {
+          // Get current subscriber info for proper username display
+          const subscribers = JSON.parse(localStorage.getItem('stargate_subscribers') || '[]')
+          const currentSubscriber = subscribers.length > 0 ? subscribers[0] : null
+          
           // Convert API comments to local format
-          comments.value = commentsResponse.data.map(comment => ({
-            id: comment.id.toString(),
-            user: comment.author_name,
-            userAvatar: comment.author_avatar,
-            text: comment.content,
-            date: comment.created_at,
-            likes: comment.likes_count,
-            isLiked: false,
-            replies: comment.replies.map(reply => ({
-              id: reply.id.toString(),
-              user: reply.author_name,
-              userAvatar: reply.author_avatar,
-              text: reply.content,
-              date: reply.created_at,
-              likes: reply.likes_count,
+          comments.value = commentsResponse.data.map(comment => {
+            // Use real username if this comment is from current user, otherwise use API data
+            const isCurrentUserComment = currentSubscriber && comment.subscriber_id === currentSubscriber.id
+            const displayName = isCurrentUserComment ? currentSubscriber.username : (comment.author_name || 'Guest User')
+            const displayAvatar = isCurrentUserComment ? currentSubscriber.username.charAt(0).toUpperCase() : (comment.author_avatar || 'G')
+            
+            console.log('Loading comment - comment.subscriber_id:', comment.subscriber_id)
+            console.log('Loading comment - currentSubscriber.id:', currentSubscriber?.id)
+            console.log('Loading comment - isCurrentUserComment:', isCurrentUserComment)
+            console.log('Loading comment - displayName:', displayName)
+            console.log('Loading comment - comment.author_name:', comment.author_name)
+            
+            return {
+              id: comment.id.toString(),
+              user: displayName,
+              userAvatar: displayAvatar,
+              text: comment.content,
+              date: comment.created_at,
+              likes: comment.likes_count,
               isLiked: false,
-              replies: [],
-              isPinned: false,
-              isEdited: reply.is_edited
-            })),
-            isPinned: comment.is_pinned,
-            isEdited: comment.is_edited
-          }))
-          commentsCount.value = comments.value.length
+              replies: comment.replies.map(reply => {
+                // Use real username if this reply is from current user, otherwise use API data
+                const isCurrentUserReply = currentSubscriber && reply.subscriber_id === currentSubscriber.id
+                const replyDisplayName = isCurrentUserReply ? currentSubscriber.username : (reply.author_name || 'Guest User')
+                const replyDisplayAvatar = isCurrentUserReply ? currentSubscriber.username.charAt(0).toUpperCase() : (reply.author_avatar || 'G')
+                
+                console.log('Loading reply - reply.subscriber_id:', reply.subscriber_id)
+                console.log('Loading reply - isCurrentUserReply:', isCurrentUserReply)
+                console.log('Loading reply - replyDisplayName:', replyDisplayName)
+                
+                return {
+                  id: reply.id.toString(),
+                  user: replyDisplayName,
+                  userAvatar: replyDisplayAvatar,
+                  text: reply.content,
+                  date: reply.created_at,
+                  likes: reply.likes_count,
+                  isLiked: false,
+                  replies: [],
+                  isPinned: false,
+                  isEdited: reply.is_edited
+                }
+              }),
+              isPinned: comment.is_pinned,
+              isEdited: comment.is_edited
+            }
+          })
+          // Don't overwrite commentsCount - we already have the correct count from video data
+          // commentsCount.value = comments.value.length
         }
-      } catch (error) {
+      } catch (error: any) {
         console.error('Error loading data from API:', error)
-        // Use initial values if API fails
-        likesCount.value = props.initialLikes
-        commentsCount.value = props.initialComments.length
-        comments.value = props.initialComments
+        console.error('Full error details:', error)
+        
+        // DO NOT reset counts to 0 - keep current values
+        // likesCount.value = props.initialLikes
+        // commentsCount.value = props.initialComments.length
+        // comments.value = props.initialComments
+        
+        // Show user-friendly error message
+        showToast('Failed to load data. Please refresh the page.', 'error')
       }
   
+})
+
+// Cleanup event listeners on unmount
+onUnmounted(() => {
+  window.removeEventListener('subscription-changed', updateSubscriptionStatus)
+  window.removeEventListener('storage', updateSubscriptionStatus)
 })
 </script>
 

@@ -48,10 +48,20 @@ class VideoController extends Controller
                 ->first();
 
             if (!$video) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Video not found'
-                ], 404);
+                // Create video entry if it doesn't exist
+                $video = Video::create([
+                    'content_id' => $contentId,
+                    'title' => 'Video ' . $contentId,
+                    'description' => 'Description for ' . $contentId,
+                    'youtube_id' => $contentId,
+                    'youtube_url' => 'https://www.youtube.com/embed/' . $contentId,
+                    'content_type' => 'video',
+                    'likes_count' => 0,
+                    'comments_count' => 0,
+                    'shares_count' => 0,
+                    'views_count' => 0,
+                    'is_active' => true
+                ]);
             }
 
             // Load relationships
