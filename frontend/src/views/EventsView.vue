@@ -18,7 +18,7 @@
 
     <!-- Events Filter -->
     <section class="py-16 bg-gray-800/30">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-12 xl:px-16">
         <!-- Search Bar -->
         <div class="mb-8">
           <div class="max-w-2xl mx-auto">
@@ -90,7 +90,7 @@
 
     <!-- Events Grid -->
     <section class="py-24">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-12 xl:px-16">
         <!-- Real Events Notice -->
         <div v-if="!isLoading && events.length > 0" class="mb-8 p-4 bg-green-900/20 border border-green-500/30 rounded-lg">
           <div class="flex items-center gap-3">
@@ -257,7 +257,7 @@
 
     <!-- Event Categories Info -->
     <section class="py-24 bg-gray-800/30">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-12 xl:px-16">
         <div class="text-center mb-16">
           <h2 class="text-3xl md:text-4xl font-bold mb-4">
             <span class="gradient-text">Event Categories</span>
