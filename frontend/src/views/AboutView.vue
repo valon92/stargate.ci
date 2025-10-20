@@ -16,159 +16,53 @@
       </div>
     </section>
 
-    <!-- Platform Mission Section -->
+    <!-- Domain Meaning Section -->
     <section class="py-24 bg-gray-800/50">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          <div>
-            <h2 class="text-3xl md:text-4xl font-bold mb-6">
-              <span class="gradient-text">Our Platform Mission</span>
-            </h2>
-            <p class="text-lg text-gray-300 leading-relaxed mb-6">
-              {{ platformMission }}
-            </p>
-            <div class="space-y-4">
-              <div class="flex items-start space-x-3">
-                <div class="w-6 h-6 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                  <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
-                  </svg>
-                </div>
-                <p class="text-gray-300">Facilitate connections between companies and official projects</p>
-              </div>
-              <div class="flex items-start space-x-3">
-                <div class="w-6 h-6 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                  <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
-                  </svg>
-                </div>
-                <p class="text-gray-300">Provide accurate information from official sources</p>
-              </div>
-              <div class="flex items-start space-x-3">
-                <div class="w-6 h-6 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                  <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
-                  </svg>
-                </div>
-                <p class="text-gray-300">Preserve intellectual property rights and legal compliance</p>
-              </div>
-            </div>
-          </div>
-          <div class="card">
-            <div class="p-6">
-              <h3 class="text-xl font-bold text-white mb-4">Domain Meaning</h3>
-              <div class="space-y-4">
-                <div class="p-4 bg-primary-500/10 rounded-lg border border-primary-500/20">
-                  <h4 class="font-semibold text-primary-400 mb-2">stargate</h4>
-                  <p class="text-gray-300 text-sm">The revolutionary project from OpenAI, SoftBank, and ARM - a $500B investment in next-generation AI computing infrastructure.</p>
-                </div>
-                <div class="p-4 bg-secondary-500/10 rounded-lg border border-secondary-500/20">
-                  <h4 class="font-semibold text-secondary-400 mb-2">.ci</h4>
-                  <p class="text-gray-300 text-sm">Cristal Intelligence - Advanced Enterprise AI that securely integrates systems and data, customized for each company.</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Platform Vision Section -->
-    <section class="py-24 bg-gradient-to-r from-primary-900/20 to-secondary-900/20">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          <div class="order-2 lg:order-1">
-            <div class="card">
-              <div class="p-6">
-                <h3 class="text-xl font-bold text-white mb-4">Official Project Data</h3>
-                <div class="space-y-4">
-                  <div v-if="stargateData" class="p-4 bg-primary-500/10 rounded-lg border border-primary-500/20">
-                    <h4 class="font-semibold text-primary-400 mb-2">Stargate Project</h4>
-                    <p class="text-gray-300 text-sm mb-2">{{ stargateData.description }}</p>
-                    <div class="grid grid-cols-2 gap-2 text-xs">
-                      <div><span class="text-primary-400">Investment:</span> {{ stargateData.totalInvestment }}</div>
-                      <div><span class="text-primary-400">Timeline:</span> {{ stargateData.projectTimeline }}</div>
-                      <div><span class="text-primary-400">Jobs:</span> {{ stargateData.jobs }}</div>
-                      <div><span class="text-primary-400">Partners:</span> {{ stargateData.partners }}</div>
-                    </div>
-                  </div>
-                  <div v-if="cristalData" class="p-4 bg-secondary-500/10 rounded-lg border border-secondary-500/20">
-                    <h4 class="font-semibold text-secondary-400 mb-2">Cristal Intelligence</h4>
-                    <p class="text-gray-300 text-sm mb-2">{{ cristalData.description }}</p>
-                    <div class="text-xs">
-                      <div><span class="text-secondary-400">Investment:</span> {{ cristalData.partnership.investment }}</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="order-1 lg:order-2">
-            <h2 class="text-3xl md:text-4xl font-bold mb-6">
-              <span class="gradient-text">Our Platform Vision</span>
-            </h2>
-            <p class="text-lg text-gray-300 leading-relaxed mb-6">
-              {{ platformVision }}
-            </p>
-            <div class="space-y-4">
-              <div class="flex items-start space-x-3">
-                <div class="w-6 h-6 bg-gradient-to-r from-secondary-500 to-primary-500 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                  <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
-                  </svg>
-                </div>
-                <p class="text-gray-300">Premier platform connecting businesses with AI future</p>
-              </div>
-              <div class="flex items-start space-x-3">
-                <div class="w-6 h-6 bg-gradient-to-r from-secondary-500 to-primary-500 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                  <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
-                  </svg>
-                </div>
-                <p class="text-gray-300">Fostering innovation while maintaining transparency</p>
-              </div>
-              <div class="flex items-start space-x-3">
-                <div class="w-6 h-6 bg-gradient-to-r from-secondary-500 to-primary-500 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                  <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
-                  </svg>
-                </div>
-                <p class="text-gray-300">Legal compliance and intellectual property respect</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Platform Values Section -->
-    <section class="py-24 bg-gray-800/50">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-16">
           <h2 class="text-3xl md:text-4xl font-bold mb-4">
-            <span class="gradient-text">Our Platform Values</span>
+            <span class="gradient-text">Domain Meaning</span>
           </h2>
           <p class="text-xl text-gray-300 max-w-3xl mx-auto">
-            The principles that guide our platform operations and ensure ethical, transparent, and compliant service delivery
+            Understanding the significance behind our domain name and its connection to cutting-edge AI technologies
           </p>
         </div>
         
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          <div v-for="(value, index) in platformValues" :key="index" class="card text-center">
-            <div class="w-16 h-16 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full flex items-center justify-center mx-auto mb-6">
-              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div class="card">
+            <div class="p-6">
+              <div class="w-16 h-16 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+              </div>
+              <h3 class="text-xl font-bold text-white mb-4 text-center">stargate</h3>
+              <div class="p-4 bg-primary-500/10 rounded-lg border border-primary-500/20">
+                <p class="text-gray-300 text-sm leading-relaxed">
+                  The revolutionary project from OpenAI, SoftBank, and ARM - a $500B investment in next-generation AI computing infrastructure. This massive undertaking represents the future of artificial intelligence and computing power.
+                </p>
+              </div>
             </div>
-            <h3 class="text-xl font-semibold mb-4 text-white">{{ value }}</h3>
-            <p class="text-gray-400">
-              {{ getValueDescription(value) }}
-            </p>
+          </div>
+          
+          <div class="card">
+            <div class="p-6">
+              <div class="w-16 h-16 bg-gradient-to-r from-secondary-500 to-primary-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                </svg>
+              </div>
+              <h3 class="text-xl font-bold text-white mb-4 text-center">.ci</h3>
+              <div class="p-4 bg-secondary-500/10 rounded-lg border border-secondary-500/20">
+                <p class="text-gray-300 text-sm leading-relaxed">
+                  Cristal Intelligence - Advanced Enterprise AI that securely integrates systems and data, customized for each company. This represents the next evolution in AI technology with enhanced transparency and ethical implementation.
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </section>
-
 
     <!-- Legal Disclaimer Section -->
     <section class="py-24 bg-gradient-to-r from-yellow-900/20 to-orange-900/20">
@@ -202,92 +96,13 @@
 
 <script setup lang="ts">
 import { useHead } from '@vueuse/head'
-import { ref, onMounted } from 'vue'
-// Stargate API service removed - using static data
-
-// Reactive data
-const stargateData = ref<any>(null)
-const cristalData = ref<any>(null)
-const isLoading = ref(true)
-
-// Platform mission and vision from API
-const platformMission = ref('')
-const platformVision = ref('')
-const platformValues = ref<string[]>([])
-
-// Load official data on component mount
-onMounted(async () => {
-  try {
-    // Static data for Stargate Project
-    stargateData.value = {
-      name: 'Stargate Project',
-      description: 'A revolutionary AI infrastructure project by OpenAI, SoftBank, and Arm',
-      investment: '$500 billion',
-      partners: ['OpenAI', 'SoftBank', 'Arm'],
-      timeline: '2024-2027',
-      goals: [
-        'Build next-generation AI infrastructure',
-        'Create massive data processing capabilities',
-        'Develop advanced AI models',
-        'Establish global AI computing network'
-      ]
-    }
-    
-    // Static data for Cristal Intelligence
-    cristalData.value = {
-      name: 'Cristal Intelligence',
-      description: 'A new paradigm of cristalline computing that transcends traditional boundaries',
-      features: [
-        'Transparent AI decision-making',
-        'Ethical AI development',
-        'Cristalline data processing',
-        'Advanced interpretability'
-      ],
-      benefits: [
-        'Enhanced transparency',
-        'Improved trust',
-        'Better decision-making',
-        'Ethical AI implementation'
-      ]
-    }
-    
-    // Platform information
-    platformMission.value = 'To educate and inform the public about cutting-edge technologies in AI, cloud computing, and advanced data processing through transparent, accessible content.'
-    platformVision.value = 'Building a global community of innovators and learners who understand the transformative power of technology and its ethical implications.'
-    platformValues.value = [
-      'Transparency',
-      'Education',
-      'Ethics',
-      'Innovation',
-      'Accessibility'
-    ]
-    
-  } catch (error) {
-    console.error('Error loading about data:', error)
-  } finally {
-    isLoading.value = false
-  }
-})
-
-// Get value description
-const getValueDescription = (value: string): string => {
-  const descriptions: Record<string, string> = {
-    'Transparency and Accuracy': 'We provide accurate information from official sources and maintain complete transparency in our operations.',
-    'Legal Compliance': 'We ensure all activities comply with legal requirements and respect intellectual property rights.',
-    'Ethical AI Implementation': 'We guide organizations toward ethical AI adoption while preserving human values and rights.',
-    'Intellectual Property Respect': 'We respect and protect all intellectual property rights of official project partners.',
-    'Educational Excellence': 'We provide comprehensive educational resources to help organizations understand AI technologies.',
-    'Innovation Facilitation': 'We facilitate connections and innovation while maintaining ethical standards and legal compliance.'
-  }
-  return descriptions[value] || 'Core platform value that guides our operations.'
-}
 
 useHead({
-  title: 'About stargate.ci - Platform Mission & Vision',
+  title: 'About stargate.ci - Domain Meaning & Legal Disclaimer',
   meta: [
     {
       name: 'description',
-      content: 'Learn about stargate.ci platform mission, vision, and values. The bridge between companies and official Stargate and Cristal Intelligence projects.'
+      content: 'Learn about stargate.ci domain meaning and legal disclaimer. Understanding the significance behind our domain name and our legal position.'
     }
   ]
 })
