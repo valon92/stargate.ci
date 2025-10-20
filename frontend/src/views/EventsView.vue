@@ -112,15 +112,15 @@
           <p class="mt-4 text-gray-400">Searching for real events...</p>
         </div>
 
-        <!-- Events Grid -->
-        <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Events Display - Single Card Style (like videos on home page) -->
+        <div v-else class="space-y-8">
           <div 
             v-for="event in filteredEvents" 
             :key="event.id"
-            class="card group hover:scale-105 transition-all duration-300 hover:shadow-2xl"
+            class="event-container group hover:scale-[1.02] transition-all duration-300"
           >
-            <!-- Event Image/Video -->
-            <div class="relative overflow-hidden rounded-t-lg">
+            <!-- Event Video/Content -->
+            <div class="relative overflow-hidden rounded-lg">
               <div v-if="event.type === 'video'" class="aspect-w-16 aspect-h-9">
                 <iframe
                   :src="event.videoUrl"
@@ -133,10 +133,10 @@
               </div>
               <div v-else class="aspect-w-16 aspect-h-9 bg-gradient-to-br from-primary-900/20 to-secondary-900/20 flex items-center justify-center">
                 <div class="text-center">
-                  <div class="w-16 h-16 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <span class="text-2xl">{{ event.icon }}</span>
+                  <div class="w-20 h-20 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <span class="text-3xl">{{ event.icon }}</span>
                   </div>
-                  <h3 class="text-lg font-bold text-white">{{ event.title }}</h3>
+                  <h3 class="text-2xl font-bold text-white">{{ event.title }}</h3>
                 </div>
               </div>
               
@@ -172,15 +172,15 @@
                 </div>
               </div>
 
-              <h3 class="text-xl font-bold text-white mb-3 group-hover:text-primary-400 transition-colors">
+              <h3 class="text-2xl font-bold text-white mb-4 group-hover:text-primary-400 transition-colors">
                 {{ event.title }}
               </h3>
               
-              <p class="text-gray-400 mb-4 line-clamp-3">
+              <p class="text-gray-400 mb-6 text-lg leading-relaxed">
                 {{ event.description }}
               </p>
 
-              <div class="flex items-center justify-between mb-4">
+              <div class="flex items-center justify-between mb-6">
                 <div class="flex items-center text-sm text-gray-400">
                   <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
@@ -202,35 +202,35 @@
               />
 
               <!-- Event Actions -->
-              <div class="flex gap-3">
+              <div class="flex gap-3 mt-6">
                 <button 
                   v-if="event.type === 'video'"
                   @click="event.videoUrl ? openVideo(event.videoUrl) : null"
-                  class="flex-1 btn-primary text-sm"
+                  class="flex-1 btn-primary"
                 >
                   Watch Video
                 </button>
                 <button 
                   v-else-if="event.registrationUrl"
                   @click="openRegistration(event.registrationUrl)"
-                  class="flex-1 btn-primary text-sm"
+                  class="flex-1 btn-primary"
                 >
                   Register Now
                 </button>
                 <button 
                   v-else
                   @click="viewEventDetails(event)"
-                  class="flex-1 btn-outline text-sm"
+                  class="flex-1 btn-outline"
                 >
                   View Details
                 </button>
                 
                 <button 
                   @click="addToCalendar(event)"
-                  class="px-3 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors"
+                  class="px-4 py-3 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors"
                   title="Add to Calendar"
                 >
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                   </svg>
                 </button>
@@ -622,8 +622,16 @@ onMounted(async () => {
   overflow: hidden;
 }
 
+.event-container {
+  background-color: rgba(31, 41, 55, 1);
+  border-radius: 0.5rem;
+  overflow: hidden;
+  border: 1px solid rgba(55, 65, 81, 1);
+}
+
 .aspect-w-16 {
   position: relative;
+  width: 100%;
   padding-bottom: 56.25%; /* 16:9 aspect ratio */
 }
 
@@ -634,6 +642,14 @@ onMounted(async () => {
   top: 0;
   right: 0;
   bottom: 0;
+  left: 0;
+}
+
+.aspect-w-16 iframe {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
   left: 0;
 }
 </style>
