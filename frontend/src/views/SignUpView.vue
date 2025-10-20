@@ -279,7 +279,7 @@ const handleSignUp = async () => {
       existingSubscriber = await videoApiService.getSubscriberByEmail(form.value.email)
       console.log('SignUp - existingSubscriber response:', existingSubscriber)
     } catch (error) {
-      console.log('SignUp - Subscriber not found, will create new one:', error.message)
+      console.log('SignUp - Subscriber not found, will create new one:', (error as any).message)
       existingSubscriber = { success: false, data: null }
     }
     
@@ -303,10 +303,10 @@ const handleSignUp = async () => {
         email: form.value.email,
         password: form.value.password, // Will be hashed by Laravel
         first_name: form.value.username,
-        last_name: null,
-        country: form.value.country || null,
-        profession: null,
-        company: null,
+        last_name: undefined,
+        country: form.value.country || undefined,
+        profession: undefined,
+        company: undefined,
         interests: form.value.interests,
         avatar: form.value.username.charAt(0).toUpperCase(),
         is_active: true,

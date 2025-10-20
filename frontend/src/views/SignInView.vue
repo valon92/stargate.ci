@@ -161,7 +161,7 @@ const handleSignIn = async () => {
       existingSubscriber = await videoApiService.getSubscriberByEmail(form.value.email)
       console.log('SignIn - existingSubscriber response:', existingSubscriber)
     } catch (error) {
-      console.log('SignIn - Subscriber not found:', error.message)
+      console.log('SignIn - Subscriber not found:', (error as any).message)
       throw new Error('Invalid email or password')
     }
     

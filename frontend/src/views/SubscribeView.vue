@@ -222,7 +222,7 @@ const handleSubscribe = async () => {
       existingSubscriber = await videoApiService.getSubscriberByEmail(form.value.email)
       console.log('existingSubscriber response:', existingSubscriber)
     } catch (error) {
-      console.log('Subscriber not found, will create new one:', error.message)
+      console.log('Subscriber not found, will create new one:', (error as any).message)
       existingSubscriber = { success: false, data: null }
     }
     
@@ -244,11 +244,11 @@ const handleSubscribe = async () => {
       const subscriberData = {
         username: form.value.username || `user_${Date.now()}`,
         email: form.value.email,
-        first_name: form.value.username || null,
-        last_name: null,
-        country: form.value.country || null,
-        profession: null,
-        company: null,
+        first_name: form.value.username || undefined,
+        last_name: undefined,
+        country: form.value.country || undefined,
+        profession: undefined,
+        company: undefined,
         interests: form.value.interests, // Send as array, not JSON string
         avatar: form.value.username ? form.value.username.charAt(0).toUpperCase() : 'U',
         status: 'active'

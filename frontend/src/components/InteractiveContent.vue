@@ -1085,11 +1085,11 @@ const trackEngagement = (action: string, contentType: string) => {
           // Convert API comments to local format
           comments.value = commentsResponse.data.map(comment => {
             // Use real username if this comment is from current user, otherwise use API data
-            const isCurrentUserComment = currentSubscriber && comment.subscriber_id === currentSubscriber.id
+            const isCurrentUserComment = currentSubscriber && (comment as any).subscriber_id === currentSubscriber.id
             const displayName = isCurrentUserComment ? currentSubscriber.username : (comment.author_name || 'Guest User')
             const displayAvatar = isCurrentUserComment ? currentSubscriber.username.charAt(0).toUpperCase() : (comment.author_avatar || 'G')
             
-            console.log('Loading comment - comment.subscriber_id:', comment.subscriber_id)
+            console.log('Loading comment - comment.subscriber_id:', (comment as any).subscriber_id)
             console.log('Loading comment - currentSubscriber.id:', currentSubscriber?.id)
             console.log('Loading comment - isCurrentUserComment:', isCurrentUserComment)
             console.log('Loading comment - displayName:', displayName)
@@ -1105,11 +1105,11 @@ const trackEngagement = (action: string, contentType: string) => {
               isLiked: false,
               replies: comment.replies.map(reply => {
                 // Use real username if this reply is from current user, otherwise use API data
-                const isCurrentUserReply = currentSubscriber && reply.subscriber_id === currentSubscriber.id
+                const isCurrentUserReply = currentSubscriber && (reply as any).subscriber_id === currentSubscriber.id
                 const replyDisplayName = isCurrentUserReply ? currentSubscriber.username : (reply.author_name || 'Guest User')
                 const replyDisplayAvatar = isCurrentUserReply ? currentSubscriber.username.charAt(0).toUpperCase() : (reply.author_avatar || 'G')
                 
-                console.log('Loading reply - reply.subscriber_id:', reply.subscriber_id)
+                console.log('Loading reply - reply.subscriber_id:', (reply as any).subscriber_id)
                 console.log('Loading reply - isCurrentUserReply:', isCurrentUserReply)
                 console.log('Loading reply - replyDisplayName:', replyDisplayName)
                 
@@ -1143,7 +1143,7 @@ const trackEngagement = (action: string, contentType: string) => {
         // comments.value = props.initialComments
         
         // Show user-friendly error message
-        showToast('Failed to load data. Please refresh the page.', 'error')
+        showToast('Failed to load data. Please refresh the page.', 'warning')
       }
   
 })

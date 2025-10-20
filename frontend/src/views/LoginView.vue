@@ -126,7 +126,7 @@ const handleLogin = async () => {
       existingSubscriber = await videoApiService.getSubscriberByEmail(form.value.email)
       console.log('Login - existingSubscriber response:', existingSubscriber)
     } catch (error) {
-      console.log('Login - Subscriber not found:', error.message)
+      console.log('Login - Subscriber not found:', (error as any).message)
       throw new Error('No account found with this email address. Please subscribe first.')
     }
     
