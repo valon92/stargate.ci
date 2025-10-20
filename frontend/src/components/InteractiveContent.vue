@@ -138,14 +138,13 @@
                 rows="3"
                 @keyup.ctrl.enter="addComment"
               ></textarea>
-              <div class="flex items-center justify-between mt-3">
-                <span class="text-xs text-gray-400">Press Ctrl+Enter to post</span>
+              <div class="flex justify-end mt-3">
                 <button
                   @click="addComment"
                   :disabled="!newComment.trim()"
-                  class="px-6 py-2 bg-primary-500 hover:bg-primary-600 disabled:bg-gray-600 disabled:cursor-not-allowed text-white rounded-lg font-medium transition-all duration-200 shadow-lg hover:shadow-primary-500/25"
+                  class="px-4 py-1.5 bg-primary-500 hover:bg-primary-600 disabled:bg-gray-600 disabled:cursor-not-allowed text-white text-sm rounded-lg transition-all duration-200"
                 >
-                  Post Comment
+                  Post
                 </button>
               </div>
             </div>
@@ -281,22 +280,19 @@
                         :placeholder="isSubscribed ? 'Write a reply...' : 'Write a reply... (Sign in to reply, but you can view all replies without signing in)'"
                         @keyup.ctrl.enter="addReply(comment.id)"
                       ></textarea>
-                      <div class="flex items-center justify-between mt-3">
-                        <span class="text-xs text-gray-400">Press Ctrl+Enter to reply</span>
-                        <div class="flex gap-2">
-                          <button
-                            @click="addReply(comment.id)"
-                            class="px-4 py-2 bg-primary-500 hover:bg-primary-600 text-white text-sm rounded-lg transition-all duration-200 shadow-md hover:shadow-primary-500/25"
-                          >
-                            Reply
-                          </button>
-                          <button
-                            @click="replyingTo = null; replyText = ''"
-                            class="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white text-sm rounded-lg transition-all duration-200"
-                          >
-                            Cancel
-                          </button>
-                        </div>
+                      <div class="flex justify-end gap-2 mt-3">
+                        <button
+                          @click="addReply(comment.id)"
+                          class="px-3 py-1.5 bg-primary-500 hover:bg-primary-600 text-white text-sm rounded-lg transition-all duration-200"
+                        >
+                          Reply
+                        </button>
+                        <button
+                          @click="replyingTo = null; replyText = ''"
+                          class="px-3 py-1.5 bg-gray-600 hover:bg-gray-700 text-white text-sm rounded-lg transition-all duration-200"
+                        >
+                          Cancel
+                        </button>
                       </div>
                     </div>
                   </div>
