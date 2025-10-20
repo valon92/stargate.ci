@@ -16,103 +16,9 @@
       </div>
     </section>
 
-    <!-- News Categories -->
+    <!-- News Filter -->
     <section class="py-16 bg-gray-800/30">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-12">
-          <h2 class="text-3xl md:text-4xl font-bold mb-4">
-            <span class="gradient-text">News Categories</span>
-          </h2>
-          <p class="text-xl text-gray-300 max-w-3xl mx-auto">
-            Explore news and updates organized by category to find the information most relevant to you.
-          </p>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          <div class="card text-center group hover:scale-105 transition-transform duration-300">
-            <div class="w-16 h-16 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-6">
-              <span class="text-2xl">🚀</span>
-            </div>
-            <h3 class="text-xl font-bold mb-4">Stargate Project</h3>
-            <p class="text-gray-400 mb-4">
-              Latest updates on the $500 billion AI infrastructure initiative by OpenAI, SoftBank, and Arm.
-            </p>
-            <button @click="filterByCategory('stargate')" class="btn-outline">
-              View Stargate News
-            </button>
-          </div>
-
-          <div class="card text-center group hover:scale-105 transition-transform duration-300">
-            <div class="w-16 h-16 bg-gradient-to-r from-purple-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-6">
-              <span class="text-2xl">💎</span>
-            </div>
-            <h3 class="text-xl font-bold mb-4">Cristal Intelligence</h3>
-            <p class="text-gray-400 mb-4">
-              News and insights about the revolutionary AI paradigm emphasizing transparency and ethical alignment.
-            </p>
-            <button @click="filterByCategory('cristal')" class="btn-outline">
-              View Cristal News
-            </button>
-          </div>
-
-          <div class="card text-center group hover:scale-105 transition-transform duration-300">
-            <div class="w-16 h-16 bg-gradient-to-r from-green-500 to-green-600 rounded-full flex items-center justify-center mx-auto mb-6">
-              <span class="text-2xl">🏢</span>
-            </div>
-            <h3 class="text-xl font-bold mb-4">Industry Impact</h3>
-            <p class="text-gray-400 mb-4">
-              How Stargate and Cristal Intelligence are transforming industries and creating new opportunities.
-            </p>
-            <button @click="filterByCategory('industry')" class="btn-outline">
-              View Industry News
-            </button>
-          </div>
-
-          <div class="card text-center group hover:scale-105 transition-transform duration-300">
-            <div class="w-16 h-16 bg-gradient-to-r from-orange-500 to-orange-600 rounded-full flex items-center justify-center mx-auto mb-6">
-              <span class="text-2xl">🔬</span>
-            </div>
-            <h3 class="text-xl font-bold mb-4">Research & Development</h3>
-            <p class="text-gray-400 mb-4">
-              Latest research findings, technical breakthroughs, and development milestones.
-            </p>
-            <button @click="filterByCategory('research')" class="btn-outline">
-              View Research News
-            </button>
-          </div>
-
-          <div class="card text-center group hover:scale-105 transition-transform duration-300">
-            <div class="w-16 h-16 bg-gradient-to-r from-red-500 to-red-600 rounded-full flex items-center justify-center mx-auto mb-6">
-              <span class="text-2xl">⚖️</span>
-            </div>
-            <h3 class="text-xl font-bold mb-4">AI Ethics & Governance</h3>
-            <p class="text-gray-400 mb-4">
-              Updates on ethical AI development, governance frameworks, and responsible AI practices.
-            </p>
-            <button @click="filterByCategory('ethics')" class="btn-outline">
-              View Ethics News
-            </button>
-          </div>
-
-          <div class="card text-center group hover:scale-105 transition-transform duration-300">
-            <div class="w-16 h-16 bg-gradient-to-r from-teal-500 to-teal-600 rounded-full flex items-center justify-center mx-auto mb-6">
-              <span class="text-2xl">🌐</span>
-            </div>
-            <h3 class="text-xl font-bold mb-4">Global Impact</h3>
-            <p class="text-gray-400 mb-4">
-              How these technologies are affecting global markets, policies, and international cooperation.
-            </p>
-            <button @click="filterByCategory('global')" class="btn-outline">
-              View Global News
-            </button>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Latest News Section -->
-    <section class="py-24">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-12 xl:px-16">
         <!-- Search Bar -->
         <div class="mb-8">
           <div class="max-w-2xl mx-auto">
@@ -143,32 +49,47 @@
           </div>
         </div>
 
-        <div class="flex justify-between items-center mb-12">
-          <div>
-            <h2 class="text-3xl md:text-4xl font-bold mb-4">
-              <span class="gradient-text">Latest News</span>
-            </h2>
-            <p class="text-xl text-gray-300">
-              {{ filteredNews.length }} {{ selectedCategory ? selectedCategory + ' ' : '' }}articles found
-            </p>
+        <div class="flex flex-col md:flex-row gap-4 justify-center items-center mb-12">
+          <div class="flex flex-wrap gap-2">
+            <button 
+              v-for="category in newsCategories" 
+              :key="category.id"
+              @click="filterByCategory(category.id)"
+              :class="[
+                'px-4 py-2 rounded-lg font-medium transition-all duration-200',
+                selectedCategory === category.id 
+                  ? 'bg-primary-500 text-white' 
+                  : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+              ]"
+            >
+              {{ category.name }}
+            </button>
           </div>
-          <div class="flex gap-4">
-            <select v-model="selectedCategory" @change="filterByCategory(selectedCategory)" class="bg-gray-800 border border-gray-600 text-white rounded-lg px-4 py-2">
-              <option value="">All Categories</option>
-              <option value="stargate">Stargate Project</option>
-              <option value="cristal">Cristal Intelligence</option>
-              <option value="industry">Industry Impact</option>
-              <option value="research">Research & Development</option>
-              <option value="ethics">AI Ethics & Governance</option>
-              <option value="global">Global Impact</option>
-            </select>
-            <select v-model="sortBy" class="bg-gray-800 border border-gray-600 text-white rounded-lg px-4 py-2">
+          <div class="flex gap-2">
+            <select v-model="sortBy" @change="filterByCategory(selectedCategory)" class="bg-gray-800 border border-gray-600 text-white rounded-lg px-4 py-2">
               <option value="date">Latest First</option>
               <option value="title">Alphabetical</option>
               <option value="category">By Category</option>
             </select>
+            <button
+              @click="refreshNews"
+              :disabled="isLoading"
+              class="px-4 py-2 bg-primary-600 hover:bg-primary-700 disabled:bg-gray-600 text-white rounded-lg font-medium transition-all duration-200 flex items-center gap-2"
+            >
+              <svg v-if="!isLoading" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+              </svg>
+              <div v-else class="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+              {{ isLoading ? 'Loading...' : 'Refresh News' }}
+            </button>
           </div>
         </div>
+      </div>
+    </section>
+
+    <!-- News Grid -->
+    <section class="py-24">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-12 xl:px-16">
 
         <!-- Loading State -->
         <div v-if="isLoading" class="text-center py-12">
@@ -190,56 +111,88 @@
           </div>
         </div>
 
-        <!-- News Grid -->
-        <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- News Display - Single Card Style (like events on events page) -->
+        <div v-else class="space-y-8">
           <article 
             v-for="article in paginatedNews" 
             :key="article.id"
-            class="card group hover:scale-105 transition-all duration-300 hover:shadow-2xl"
+            class="news-container group hover:scale-[1.02] transition-all duration-300"
           >
-            <div class="relative">
-              <div class="aspect-w-16 aspect-h-9 bg-gradient-to-br from-gray-700 to-gray-800 rounded-lg mb-4 flex items-center justify-center">
-                <span class="text-4xl">📰</span>
+            <!-- News Content -->
+            <div class="relative overflow-hidden rounded-lg">
+              <div class="aspect-w-16 aspect-h-9 bg-gradient-to-br from-gray-700 to-gray-800 flex items-center justify-center">
+                <div class="text-center">
+                  <div class="w-20 h-20 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <span class="text-3xl">📰</span>
+                  </div>
+                  <h3 class="text-2xl font-bold text-white">{{ article.title }}</h3>
+                </div>
               </div>
+              
+              <!-- Category Badge -->
               <div class="absolute top-4 left-4">
-                <span :class="getCategoryBadgeClass(article.category)" class="px-3 py-1 rounded-full text-xs font-semibold">
+                <span :class="getCategoryBadgeClass(article.category)" class="px-3 py-1 rounded-full text-xs font-medium">
                   {{ article.category }}
                 </span>
               </div>
+              
+              <!-- Date Badge -->
+              <div class="absolute top-4 right-4">
+                <span class="px-3 py-1 bg-gray-800/80 text-white rounded-full text-xs font-medium">
+                  {{ formatDate(article.publishedAt) }}
+                </span>
+              </div>
             </div>
-            
+
+            <!-- News Content -->
             <div class="p-6">
-              <h3 class="text-xl font-bold text-white mb-3 group-hover:text-primary-400 transition-colors">
+              <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center text-sm text-gray-400">
+                  <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                  </svg>
+                  By {{ article.author }}
+                </div>
+                <div class="text-sm text-gray-400">
+                  5 min read
+                </div>
+              </div>
+
+              <h3 class="text-2xl font-bold text-white mb-4 group-hover:text-primary-400 transition-colors">
                 {{ article.title }}
               </h3>
-              <p class="text-gray-400 mb-4 line-clamp-3">
+              
+              <p class="text-gray-400 mb-6 text-lg leading-relaxed">
                 {{ article.excerpt }}
               </p>
-              
-              <div class="flex items-center justify-between text-sm text-gray-500 mb-4">
-                <span>{{ formatDate(article.publishedAt) }}</span>
-                <span>5 min read</span>
-              </div>
-              
-              <!-- Interactive Content -->
-              <InteractiveContent
-                :content-id="article.id"
-                content-type="news"
-                :initial-likes="0"
-                :initial-comments="[]"
-              />
 
-              <div class="flex items-center justify-between">
-                <span class="text-sm text-gray-400">By {{ article.author }}</span>
+              <!-- News Actions -->
+              <div class="flex gap-3 mb-6">
                 <a 
                   :href="article.url" 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  class="text-primary-400 hover:text-primary-300 font-medium transition-colors"
+                  class="flex-1 btn-primary"
                 >
-                  Read More →
+                  Read Full Article
                 </a>
+                
+                <button 
+                  @click="shareArticle(article)"
+                  class="px-4 py-3 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors"
+                  title="Share Article"
+                >
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z"></path>
+                  </svg>
+                </button>
               </div>
+
+              <!-- Interactive Content -->
+              <InteractiveContent
+                :content-id="article.id"
+                content-type="news"
+              />
             </div>
           </article>
         </div>
@@ -303,14 +256,14 @@
       </div>
     </section>
 
-    <!-- Newsletter Signup -->
-    <section class="py-24 bg-gray-800/30">
+    <!-- Newsletter Subscription -->
+    <section class="py-24">
       <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <h2 class="text-3xl md:text-4xl font-bold mb-6">
-          <span class="gradient-text">Stay Updated</span>
+          <span class="gradient-text">Join Our Community</span>
         </h2>
         <p class="text-xl text-gray-300 mb-8">
-          Get the latest news and updates about Stargate Project and Cristal Intelligence delivered to your inbox.
+          Stay informed about the latest developments in AI infrastructure, Stargate Project updates, and Cristal Intelligence breakthroughs. Be part of the future of artificial intelligence.
         </p>
         
         <div class="max-w-md mx-auto">
@@ -318,7 +271,7 @@
             <input 
               v-model="email"
               type="email" 
-              placeholder="Enter your email address"
+              placeholder="Your email address"
               class="flex-1 px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
             >
             <button 
@@ -326,11 +279,11 @@
               :disabled="!email || isSubscribing"
               class="px-6 py-3 bg-gradient-to-r from-primary-500 to-secondary-500 text-white rounded-lg font-medium hover:from-primary-600 hover:to-secondary-600 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {{ isSubscribing ? 'Subscribing...' : 'Subscribe' }}
+              {{ isSubscribing ? 'Joining...' : 'Join Now' }}
             </button>
           </div>
           <p class="text-sm text-gray-400 mt-3">
-            We respect your privacy. Unsubscribe at any time.
+            Join thousands of AI enthusiasts. No spam, just valuable insights.
           </p>
         </div>
       </div>
@@ -358,6 +311,38 @@ const newsArticles = ref<NewsArticle[]>([])
 const isLoading = ref(false)
 const error = ref('')
 const trendingTopics = ref<string[]>([])
+
+// News categories
+const newsCategories = ref([
+  {
+    id: '',
+    name: 'All News'
+  },
+  {
+    id: 'stargate',
+    name: 'Stargate Project'
+  },
+  {
+    id: 'cristal',
+    name: 'Cristal Intelligence'
+  },
+  {
+    id: 'industry',
+    name: 'Industry Impact'
+  },
+  {
+    id: 'research',
+    name: 'Research & Development'
+  },
+  {
+    id: 'ethics',
+    name: 'AI Ethics & Governance'
+  },
+  {
+    id: 'global',
+    name: 'Global Impact'
+  }
+])
 
 // Computed properties
 const filteredNews = computed(() => {
@@ -508,6 +493,32 @@ const subscribeNewsletter = async () => {
   }
 }
 
+const refreshNews = async () => {
+  isLoading.value = true
+  try {
+    await loadNews(selectedCategory.value || undefined)
+    console.log('🔄 Refreshed news articles')
+  } catch (error) {
+    console.error('Error refreshing news:', error)
+  } finally {
+    isLoading.value = false
+  }
+}
+
+const shareArticle = (article: NewsArticle) => {
+  if (navigator.share) {
+    navigator.share({
+      title: article.title,
+      text: article.excerpt,
+      url: article.url
+    })
+  } else {
+    // Fallback to copying URL to clipboard
+    navigator.clipboard.writeText(article.url)
+    alert('Article URL copied to clipboard!')
+  }
+}
+
 // Lifecycle
 onMounted(async () => {
   await loadNews()
@@ -541,10 +552,37 @@ watch(sortBy, () => {
   @apply border border-gray-600 text-gray-300 px-4 py-2 rounded-lg font-medium hover:bg-gray-700 hover:border-gray-500 transition-all duration-200;
 }
 
+.btn-primary {
+  @apply bg-gradient-to-r from-primary-500 to-secondary-500 text-white px-6 py-3 rounded-lg font-medium hover:from-primary-600 hover:to-secondary-600 transition-all duration-200;
+}
+
 .line-clamp-3 {
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+
+.news-container {
+  background-color: rgba(31, 41, 55, 1);
+  border-radius: 0.5rem;
+  overflow: hidden;
+  border: 1px solid rgba(55, 65, 81, 1);
+}
+
+.aspect-w-16 {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+}
+
+.aspect-h-9 {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
 }
 </style>
