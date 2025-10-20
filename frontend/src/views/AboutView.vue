@@ -18,7 +18,7 @@
 
     <!-- Domain Meaning Section -->
     <section class="py-24 bg-gray-800/50">
-      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-16">
           <h2 class="text-3xl md:text-4xl font-bold mb-4">
             <span class="gradient-text">Domain Meaning</span>
@@ -28,7 +28,7 @@
           </p>
         </div>
         
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
           <div class="card">
             <div class="p-6">
               <div class="w-16 h-16 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full flex items-center justify-center mx-auto mb-6">
@@ -57,6 +57,94 @@
                 <p class="text-gray-300 text-sm leading-relaxed">
                   Cristal Intelligence - Advanced Enterprise AI that securely integrates systems and data, customized for each company. This represents the next evolution in AI technology with enhanced transparency and ethical implementation.
                 </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Detailed Information Section -->
+        <div class="card">
+          <div class="p-8">
+            <div class="text-center mb-8">
+              <h3 class="text-2xl font-bold text-white mb-4">
+                <span class="gradient-text">Detailed Project Information</span>
+              </h3>
+              <p class="text-gray-300">
+                Comprehensive overview of Project Stargate and Cristal Intelligence initiatives
+              </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+              <!-- Project Stargate -->
+              <div class="p-6 bg-primary-500/10 rounded-lg border border-primary-500/20">
+                <h4 class="text-lg font-semibold text-primary-400 mb-3">Project Stargate</h4>
+                <div class="space-y-2 text-sm text-gray-300">
+                  <p><span class="text-primary-400">Investment:</span> $100B - $500B</p>
+                  <p><span class="text-primary-400">Timeline:</span> 2025-2029</p>
+                  <p><span class="text-primary-400">Partners:</span> OpenAI, SoftBank, Oracle, MGX</p>
+                  <p><span class="text-primary-400">Jobs:</span> 100,000+ positions</p>
+                </div>
+              </div>
+
+              <!-- Cristal Intelligence -->
+              <div class="p-6 bg-secondary-500/10 rounded-lg border border-secondary-500/20">
+                <h4 class="text-lg font-semibold text-secondary-400 mb-3">Cristal Intelligence</h4>
+                <div class="space-y-2 text-sm text-gray-300">
+                  <p><span class="text-secondary-400">Investment:</span> $3B/year</p>
+                  <p><span class="text-secondary-400">Partnership:</span> SB OpenAI Japan (50-50)</p>
+                  <p><span class="text-secondary-400">Focus:</span> Enterprise AI agents</p>
+                  <p><span class="text-secondary-400">Automation:</span> 100M+ tasks</p>
+                </div>
+              </div>
+
+              <!-- Current Status -->
+              <div class="p-6 bg-yellow-500/10 rounded-lg border border-yellow-500/20">
+                <h4 class="text-lg font-semibold text-yellow-400 mb-3">Current Status</h4>
+                <div class="space-y-2 text-sm text-gray-300">
+                  <p><span class="text-yellow-400">US:</span> Ohio facility acquired</p>
+                  <p><span class="text-yellow-400">Europe:</span> Narvik, Norway expansion</p>
+                  <p><span class="text-yellow-400">Status:</span> Active negotiations</p>
+                  <p><span class="text-yellow-400">Focus:</span> Infrastructure build</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Key Information -->
+            <div class="bg-gray-800/30 rounded-lg p-6 border border-gray-700">
+              <h4 class="text-lg font-semibold text-white mb-4">Key Project Details</h4>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <h5 class="font-semibold text-primary-400 mb-2">Project Stargate Goals:</h5>
+                  <ul class="text-sm text-gray-300 space-y-1">
+                    <li>• Build massive AI data centers in the USA</li>
+                    <li>• Create 100,000+ new jobs</li>
+                    <li>• Industrial retraining for AI technology</li>
+                    <li>• $500B infrastructure investment by 2029</li>
+                  </ul>
+                </div>
+                <div>
+                  <h5 class="font-semibold text-secondary-400 mb-2">Cristal Intelligence Features:</h5>
+                  <ul class="text-sm text-gray-300 space-y-1">
+                    <li>• Autonomous AI agents for business tasks</li>
+                    <li>• Financial reports and document automation</li>
+                    <li>• Customer service automation</li>
+                    <li>• Integration with Arm and PayPay systems</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Sources -->
+            <div class="mt-6 p-4 bg-gray-800/20 rounded-lg border border-gray-700">
+              <h5 class="font-semibold text-white mb-2">Official Sources:</h5>
+              <div class="flex flex-wrap gap-2 text-sm">
+                <span class="px-2 py-1 bg-primary-500/20 text-primary-400 rounded">Wikipedia</span>
+                <span class="px-2 py-1 bg-primary-500/20 text-primary-400 rounded">Politico</span>
+                <span class="px-2 py-1 bg-primary-500/20 text-primary-400 rounded">AP News</span>
+                <span class="px-2 py-1 bg-primary-500/20 text-primary-400 rounded">OpenAI</span>
+                <span class="px-2 py-1 bg-primary-500/20 text-primary-400 rounded">The Verge</span>
+                <span class="px-2 py-1 bg-primary-500/20 text-primary-400 rounded">Reuters</span>
+                <span class="px-2 py-1 bg-primary-500/20 text-primary-400 rounded">TechRadar</span>
               </div>
             </div>
           </div>
