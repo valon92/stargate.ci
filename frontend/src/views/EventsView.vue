@@ -193,16 +193,8 @@
                 </div>
               </div>
 
-              <!-- Interactive Content -->
-              <InteractiveContent
-                :content-id="event.id"
-                content-type="event"
-                :initial-likes="0"
-                :initial-comments="[]"
-              />
-
               <!-- Event Actions -->
-              <div class="flex gap-3 mt-6">
+              <div class="flex gap-3 mb-6">
                 <button 
                   v-if="event.type === 'video'"
                   @click="event.videoUrl ? openVideo(event.videoUrl) : null"
@@ -235,6 +227,14 @@
                   </svg>
                 </button>
               </div>
+
+              <!-- Interactive Content -->
+              <InteractiveContent
+                :content-id="event.id"
+                content-type="event"
+                :initial-likes="0"
+                :initial-comments="[]"
+              />
             </div>
           </div>
         </div>
