@@ -17,14 +17,12 @@
 
         <!-- Search Bar - Desktop -->
         <div class="hidden lg:block flex-1 max-w-md mx-8">
-          <div class="relative">
-            <input
-              type="text"
-              placeholder="Search articles, FAQs..."
-              class="w-full px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-              @keyup.enter="handleSearch"
-            />
-          </div>
+          <SearchBox
+            ref="searchBoxRef"
+            :placeholder="'Search articles, videos, FAQs...'"
+            @search="handleSearch"
+            @suggestion-select="handleSuggestionSelect"
+          />
         </div>
 
         <!-- Engagement Stats - Removed from desktop -->
@@ -125,11 +123,11 @@
         <div class="px-2 pt-2 pb-3 space-y-1 border-t border-gray-700/30">
           <!-- Mobile Search Bar -->
           <div class="px-2 py-2">
-            <input
-              type="text"
-              placeholder="Search..."
-              class="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
-              @keyup.enter="handleSearch"
+            <SearchBox
+              ref="mobileSearchBoxRef"
+              :placeholder="'Search articles, videos, FAQs...'"
+              @search="handleSearch"
+              @suggestion-select="handleSuggestionSelect"
             />
           </div>
 
@@ -202,6 +200,7 @@
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import { RouterLink, useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from '../../stores/auth'
+import SearchBox from '../SearchBox.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -251,15 +250,18 @@ const updateSubscriptionStatus = () => {
 
 
 // Search handler
-const handleSearch = (event: Event) => {
-  const target = event.target as HTMLInputElement
-  const query = target.value.trim()
-  if (query) {
+const handleSearch = (query: string) => {
+  if (query.trim()) {
     // Close mobile menu if open
     closeMenu()
-    // Simple search - could be enhanced later
-    console.log('Search query:', query)
+    // Navigate to search page with query
+    router.push(`/search?q=${encodeURIComponent(query.trim())}`)
   }
+}
+
+// Handle suggestion selection
+const handleSuggestionSelect = (suggestion: string) => {
+  handleSearch(suggestion)
 }
 
 // Logout functionality

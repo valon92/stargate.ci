@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\SubscriberController;
 use App\Http\Controllers\Api\VideoInteractionController;
 use App\Http\Controllers\Api\VideoCommentController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\SearchController;
 
 /*
 |--------------------------------------------------------------------------
@@ -92,6 +93,20 @@ Route::prefix('v1')->middleware('api.throttle:1000,1')->group(function () {
     // Test route for debugging (outside middleware)
     Route::get('/videos/test', function() {
         return response()->json(['message' => 'Video route works!']);
+    });
+    
+    // Search routes (public with rate limiting)
+    Route::middleware('api.throttle:200,1')->group(function () {
+        Route::get('/search', [SearchController::class, 'search']);
+        Route::get('/search/suggestions', [SearchController::class, 'suggestions']);
+        Route::get('/search/filters', [SearchController::class, 'filters']);
+        Route::get('/search/analytics', [SearchController::class, 'analytics']);
+    });
+    
+    // Protected search routes (require authentication)
+    Route::middleware(['auth:sanctum', 'api.throttle:100,1'])->group(function () {
+        Route::post('/search/save', [SearchController::class, 'saveSearch']);
+        Route::get('/search/saved', [SearchController::class, 'savedSearches']);
     });
     
     // Subscriber routes (public)

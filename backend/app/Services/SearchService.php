@@ -2,12 +2,13 @@
 
 namespace App\Services;
 
-use App\Models\SearchIndex;
-use App\Models\SearchQuery;
-use App\Models\Tutorial;
-use App\Models\CommunityPost;
+use App\Models\Article;
+use App\Models\Video;
+use App\Models\FAQ;
 use App\Models\User;
-use App\Models\ContentCategory;
+use App\Models\Subscriber;
+use App\Models\VideoComment;
+use App\Models\ContactMessage;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
@@ -30,14 +31,20 @@ class SearchService
         $results = [];
 
         switch ($type) {
-            case 'content':
-                $results = $this->searchContent($searchTerms, $filters, $limit, $offset);
+            case 'articles':
+                $results = $this->searchArticles($searchTerms, $filters, $limit, $offset);
                 break;
-            case 'community':
-                $results = $this->searchCommunity($searchTerms, $filters, $limit, $offset);
+            case 'videos':
+                $results = $this->searchVideos($searchTerms, $filters, $limit, $offset);
+                break;
+            case 'faqs':
+                $results = $this->searchFAQs($searchTerms, $filters, $limit, $offset);
                 break;
             case 'users':
                 $results = $this->searchUsers($searchTerms, $filters, $limit, $offset);
+                break;
+            case 'comments':
+                $results = $this->searchComments($searchTerms, $filters, $limit, $offset);
                 break;
             default:
                 $results = $this->searchAll($searchTerms, $filters, $limit, $offset);
@@ -58,22 +65,22 @@ class SearchService
     }
 
     /**
-     * Search content (tutorials, articles)
+     * Search articles
      */
-    protected function searchContent(array $terms, array $filters, int $limit, int $offset): array
+    protected function searchArticles(array $terms, array $filters, int $limit, int $offset): array
     {
-        $query = Tutorial::query()
+        $query = Article::query()
             ->select([
-                'tutorials.*',
+                'articles.*',
                 DB::raw('
                     (
-                        CASE WHEN title LIKE ? THEN 3 ELSE 0 END +
-                        CASE WHEN description LIKE ? THEN 2 ELSE 0 END +
-                        CASE WHEN overview LIKE ? THEN 1 ELSE 0 END
+                        CASE WHEN title LIKE ? THEN 4 ELSE 0 END +
+                        CASE WHEN excerpt LIKE ? THEN 2 ELSE 0 END +
+                        CASE WHEN content LIKE ? THEN 1 ELSE 0 END
                     ) as relevance_score
                 ')
             ])
-            ->where('is_published', true);
+            ->where('published', true);
 
         // Build search conditions
         $searchPattern = '%' . implode('%', $terms) . '%';
@@ -83,49 +90,206 @@ class SearchService
         $query->where(function ($q) use ($terms) {
             foreach ($terms as $term) {
                 $q->where('title', 'like', '%' . $term . '%')
-                  ->orWhere('description', 'like', '%' . $term . '%')
-                  ->orWhere('overview', 'like', '%' . $term . '%')
-                  ->orWhereJsonContains('learning_objectives', $term);
+                  ->orWhere('excerpt', 'like', '%' . $term . '%')
+                  ->orWhere('content', 'like', '%' . $term . '%');
             }
         });
 
         // Apply filters
         if (isset($filters['category'])) {
-            $query->where('content_id', $filters['category']);
+            $query->where('category', $filters['category']);
         }
 
-        if (isset($filters['difficulty'])) {
-            $query->where('difficulty_level', $filters['difficulty']);
+        if (isset($filters['author'])) {
+            $query->where('author', $filters['author']);
         }
 
-        if (isset($filters['tags'])) {
-            foreach ($filters['tags'] as $tag) {
-                $query->whereJsonContains('learning_objectives', $tag);
-            }
+        if (isset($filters['date_from'])) {
+            $query->where('published_at', '>=', $filters['date_from']);
+        }
+
+        if (isset($filters['date_to'])) {
+            $query->where('published_at', '<=', $filters['date_to']);
         }
 
         // Order by relevance and recency
         $results = $query
-            ->orderByRaw('relevance_score DESC, updated_at DESC')
+            ->orderByRaw('relevance_score DESC, published_at DESC')
             ->limit($limit)
             ->offset($offset)
-            ->with(['author', 'contentItem'])
             ->get();
 
-        return $results->map(function ($tutorial) {
+        return $results->map(function ($article) {
             return [
-                'id' => $tutorial->id,
-                'type' => 'content',
-                'title' => $tutorial->title,
-                'description' => $tutorial->description,
-                'url' => "/learning/tutorials/{$tutorial->id}",
-                'author' => $tutorial->author->name ?? 'Unknown',
-                'category' => $tutorial->contentItem->name ?? 'Uncategorized',
-                'tags' => $tutorial->learning_objectives ?? [],
-                'difficulty' => $tutorial->difficulty_level,
-                'duration' => $tutorial->estimated_duration,
-                'updated_at' => $tutorial->updated_at,
-                'relevance_score' => $tutorial->relevance_score ?? 0
+                'id' => $article->id,
+                'type' => 'article',
+                'title' => $article->title,
+                'excerpt' => $article->excerpt,
+                'url' => "/articles/{$article->slug}",
+                'author' => $article->author,
+                'category' => $article->category,
+                'read_time' => $article->read_time,
+                'published_at' => $article->published_at,
+                'relevance_score' => $article->relevance_score ?? 0
+            ];
+        })->toArray();
+    }
+
+    /**
+     * Search videos
+     */
+    protected function searchVideos(array $terms, array $filters, int $limit, int $offset): array
+    {
+        $query = Video::query()
+            ->select([
+                'content_videos.*',
+                DB::raw('
+                    (
+                        CASE WHEN title LIKE ? THEN 4 ELSE 0 END +
+                        CASE WHEN description LIKE ? THEN 2 ELSE 0 END
+                    ) as relevance_score
+                ')
+            ])
+            ->where('is_active', true);
+
+        // Build search conditions
+        $searchPattern = '%' . implode('%', $terms) . '%';
+        $query->addBinding([$searchPattern, $searchPattern], 'select');
+
+        // Apply search where clause
+        $query->where(function ($q) use ($terms) {
+            foreach ($terms as $term) {
+                $q->where('title', 'like', '%' . $term . '%')
+                  ->orWhere('description', 'like', '%' . $term . '%');
+            }
+        });
+
+        // Apply filters
+        if (isset($filters['content_type'])) {
+            $query->where('content_type', $filters['content_type']);
+        }
+
+        // Order by relevance and activity
+        $results = $query
+            ->orderByRaw('relevance_score DESC, views_count DESC')
+            ->limit($limit)
+            ->offset($offset)
+            ->get();
+
+        return $results->map(function ($video) {
+            return [
+                'id' => $video->content_id,
+                'type' => 'video',
+                'title' => $video->title,
+                'description' => Str::limit($video->description, 200),
+                'url' => "/videos/{$video->content_id}",
+                'youtube_id' => $video->youtube_id,
+                'content_type' => $video->content_type,
+                'likes_count' => $video->likes_count,
+                'comments_count' => $video->comments_count,
+                'views_count' => $video->views_count,
+                'relevance_score' => $video->relevance_score ?? 0
+            ];
+        })->toArray();
+    }
+
+    /**
+     * Search FAQs
+     */
+    protected function searchFAQs(array $terms, array $filters, int $limit, int $offset): array
+    {
+        $query = FAQ::query()
+            ->select([
+                'f_a_q_s.*',
+                DB::raw('
+                    (
+                        CASE WHEN question LIKE ? THEN 4 ELSE 0 END +
+                        CASE WHEN answer LIKE ? THEN 2 ELSE 0 END
+                    ) as relevance_score
+                ')
+            ])
+            ->where('active', true);
+
+        // Build search conditions
+        $searchPattern = '%' . implode('%', $terms) . '%';
+        $query->addBinding([$searchPattern, $searchPattern], 'select');
+
+        // Apply search where clause
+        $query->where(function ($q) use ($terms) {
+            foreach ($terms as $term) {
+                $q->where('question', 'like', '%' . $term . '%')
+                  ->orWhere('answer', 'like', '%' . $term . '%');
+            }
+        });
+
+        // Order by relevance and order
+        $results = $query
+            ->orderByRaw('relevance_score DESC, `order` ASC')
+            ->limit($limit)
+            ->offset($offset)
+            ->get();
+
+        return $results->map(function ($faq) {
+            return [
+                'id' => $faq->id,
+                'type' => 'faq',
+                'question' => $faq->question,
+                'answer' => Str::limit($faq->answer, 300),
+                'url' => "/faqs#{$faq->id}",
+                'order' => $faq->order,
+                'relevance_score' => $faq->relevance_score ?? 0
+            ];
+        })->toArray();
+    }
+
+    /**
+     * Search comments
+     */
+    protected function searchComments(array $terms, array $filters, int $limit, int $offset): array
+    {
+        $query = VideoComment::query()
+            ->select([
+                'video_comments.*',
+                DB::raw('
+                    (
+                        CASE WHEN comment_text LIKE ? THEN 3 ELSE 0 END +
+                        CASE WHEN author_name LIKE ? THEN 2 ELSE 0 END
+                    ) as relevance_score
+                ')
+            ])
+            ->where('is_active', true);
+
+        // Build search conditions
+        $searchPattern = '%' . implode('%', $terms) . '%';
+        $query->addBinding([$searchPattern, $searchPattern], 'select');
+
+        // Apply search where clause
+        $query->where(function ($q) use ($terms) {
+            foreach ($terms as $term) {
+                $q->where('comment_text', 'like', '%' . $term . '%')
+                  ->orWhere('author_name', 'like', '%' . $term . '%');
+            }
+        });
+
+        // Order by relevance and date
+        $results = $query
+            ->orderByRaw('relevance_score DESC, created_at DESC')
+            ->limit($limit)
+            ->offset($offset)
+            ->get();
+
+        return $results->map(function ($comment) {
+            return [
+                'id' => $comment->id,
+                'type' => 'comment',
+                'text' => Str::limit($comment->comment_text, 200),
+                'author' => $comment->author_name,
+                'video_id' => $comment->video_content_id,
+                'url' => "/videos/{$comment->video_content_id}#comment-{$comment->id}",
+                'likes_count' => $comment->likes_count ?? 0,
+                'is_pinned' => $comment->is_pinned ?? false,
+                'created_at' => $comment->created_at,
+                'relevance_score' => $comment->relevance_score ?? 0
             ];
         })->toArray();
     }
@@ -265,12 +429,13 @@ class SearchService
      */
     protected function searchAll(array $terms, array $filters, int $limit, int $offset): array
     {
-        $contentResults = $this->searchContent($terms, $filters, $limit / 3, 0);
-        $communityResults = $this->searchCommunity($terms, $filters, $limit / 3, 0);
-        $userResults = $this->searchUsers($terms, $filters, $limit / 3, 0);
+        $articleResults = $this->searchArticles($terms, $filters, $limit / 4, 0);
+        $videoResults = $this->searchVideos($terms, $filters, $limit / 4, 0);
+        $faqResults = $this->searchFAQs($terms, $filters, $limit / 4, 0);
+        $userResults = $this->searchUsers($terms, $filters, $limit / 4, 0);
 
         // Combine and sort by relevance
-        $allResults = array_merge($contentResults, $communityResults, $userResults);
+        $allResults = array_merge($articleResults, $videoResults, $faqResults, $userResults);
         
         // Sort by relevance score
         usort($allResults, function ($a, $b) {
@@ -283,24 +448,32 @@ class SearchService
     /**
      * Get search suggestions based on query
      */
-    public function getSuggestions(string $query, string $type = 'all'): array
+    public function getSuggestions(string $query): array
     {
         $suggestions = [];
 
-        // Get popular search terms
-        $popularTerms = SearchQuery::select('query')
-            ->where('query', 'like', $query . '%')
-            ->groupBy('query')
-            ->orderByRaw('COUNT(*) DESC')
-            ->limit(5)
-            ->pluck('query')
+        // Get suggestions from articles
+        $articleTitles = Article::where('title', 'like', '%' . $query . '%')
+            ->where('published', true)
+            ->limit(3)
+            ->pluck('title')
             ->toArray();
 
-        $suggestions = array_merge($suggestions, $popularTerms);
+        // Get suggestions from videos
+        $videoTitles = Video::where('title', 'like', '%' . $query . '%')
+            ->where('is_active', true)
+            ->limit(3)
+            ->pluck('title')
+            ->toArray();
 
-        // Get related terms based on content
-        $relatedTerms = $this->getRelatedTerms($query, $type);
-        $suggestions = array_merge($suggestions, $relatedTerms);
+        // Get suggestions from FAQs
+        $faqQuestions = FAQ::where('question', 'like', '%' . $query . '%')
+            ->where('active', true)
+            ->limit(3)
+            ->pluck('question')
+            ->toArray();
+
+        $suggestions = array_merge($articleTitles, $videoTitles, $faqQuestions);
 
         // Remove duplicates and limit
         return array_unique(array_slice($suggestions, 0, 10));
@@ -314,37 +487,45 @@ class SearchService
         $filters = [];
 
         switch ($type) {
-            case 'content':
+            case 'articles':
                 $filters = [
-                    'categories' => ContentCategory::select('id', 'name')->get()->toArray(),
-                    'difficulties' => [
-                        ['value' => 1, 'label' => 'Beginner'],
-                        ['value' => 2, 'label' => 'Intermediate'],
-                        ['value' => 3, 'label' => 'Advanced'],
-                        ['value' => 4, 'label' => 'Expert'],
-                        ['value' => 5, 'label' => 'Master']
-                    ]
+                    'categories' => Article::select('category')
+                        ->distinct()
+                        ->whereNotNull('category')
+                        ->pluck('category')
+                        ->map(function($cat) {
+                            return ['value' => $cat, 'label' => ucfirst($cat)];
+                        })
+                        ->toArray(),
+                    'authors' => Article::select('author')
+                        ->distinct()
+                        ->whereNotNull('author')
+                        ->pluck('author')
+                        ->map(function($author) {
+                            return ['value' => $author, 'label' => $author];
+                        })
+                        ->toArray()
                 ];
                 break;
-            case 'community':
+            case 'videos':
                 $filters = [
-                    'categories' => DB::table('community_categories')
-                        ->select('id', 'name')
-                        ->where('is_active', true)
-                        ->get()
-                        ->toArray(),
-                    'status' => [
-                        ['value' => 'solved', 'label' => 'Solved'],
-                        ['value' => 'pinned', 'label' => 'Pinned']
-                    ]
+                    'content_types' => Video::select('content_type')
+                        ->distinct()
+                        ->whereNotNull('content_type')
+                        ->pluck('content_type')
+                        ->map(function($type) {
+                            return ['value' => $type, 'label' => ucfirst($type)];
+                        })
+                        ->toArray()
                 ];
                 break;
             case 'users':
                 $filters = [
-                    'roles' => DB::table('user_roles')
-                        ->select('slug as value', 'name as label')
-                        ->get()
-                        ->toArray()
+                    'roles' => [
+                        ['value' => 'admin', 'label' => 'Admin'],
+                        ['value' => 'user', 'label' => 'User'],
+                        ['value' => 'moderator', 'label' => 'Moderator']
+                    ]
                 ];
                 break;
         }
@@ -426,13 +607,12 @@ class SearchService
     protected function logSearchQuery(string $query, string $type, int $resultsCount): void
     {
         try {
-            SearchQuery::create([
-                'user_id' => auth()->id(),
+            // Simple logging for now - can be enhanced with proper search analytics
+            \Log::info('Search performed', [
                 'query' => $query,
-                'search_type' => $type,
+                'type' => $type,
                 'results_count' => $resultsCount,
-                'filters_used' => [],
-                'searched_at' => now(),
+                'user_id' => auth()->id()
             ]);
         } catch (\Exception $e) {
             // Log error but don't fail the search
@@ -445,26 +625,80 @@ class SearchService
      */
     public function getPopularSearches(int $limit = 10): array
     {
-        return SearchQuery::select('query')
-            ->where('searched_at', '>=', now()->subDays(30))
-            ->groupBy('query')
-            ->orderByRaw('COUNT(*) DESC')
-            ->limit($limit)
-            ->pluck('query')
-            ->toArray();
+        // Return some popular search terms for now
+        return [
+            'stargate',
+            'cristal intelligence',
+            'AI',
+            'machine learning',
+            'artificial intelligence',
+            'technology',
+            'innovation',
+            'research',
+            'development',
+            'future'
+        ];
     }
 
     /**
-     * Get recent searches for user
+     * Get trending searches
      */
-    public function getUserRecentSearches(int $userId, int $limit = 10): array
+    public function getTrendingSearches(int $limit = 10): array
     {
-        return SearchQuery::where('user_id', $userId)
-            ->orderBy('searched_at', 'desc')
-            ->limit($limit)
-            ->pluck('query')
-            ->unique()
-            ->values()
-            ->toArray();
+        // Return trending search terms
+        return [
+            'stargate project',
+            'cristal AI',
+            'openAI',
+            'softbank',
+            'ARM chips',
+            'AI ethics',
+            'transparency',
+            'governance',
+            'breakthrough',
+            'summit'
+        ];
+    }
+
+    /**
+     * Get search analytics
+     */
+    public function getSearchAnalytics(): array
+    {
+        return [
+            'total_searches' => 0,
+            'popular_terms' => $this->getPopularSearches(5),
+            'trending_terms' => $this->getTrendingSearches(5),
+            'search_types' => [
+                'articles' => 0,
+                'videos' => 0,
+                'faqs' => 0,
+                'users' => 0
+            ]
+        ];
+    }
+
+    /**
+     * Save search for user
+     */
+    public function saveSearch(int $userId, string $query, array $filters = [], ?string $name = null): array
+    {
+        // Simple implementation - can be enhanced with database storage
+        return [
+            'id' => uniqid(),
+            'name' => $name ?: $query,
+            'query' => $query,
+            'filters' => $filters,
+            'created_at' => now()
+        ];
+    }
+
+    /**
+     * Get user's saved searches
+     */
+    public function getUserSavedSearches(int $userId): array
+    {
+        // Return empty array for now - can be enhanced with database storage
+        return [];
     }
 }
