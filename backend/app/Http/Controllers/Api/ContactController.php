@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\ContactMessage;
+use App\Mail\ContactMessageNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
@@ -23,8 +24,13 @@ class ContactController extends Controller
 
         $contactMessage = ContactMessage::create($validated);
 
-        // Here you could send an email notification
-        // Mail::to('admin@stargate.ci')->send(new ContactMessageNotification($contactMessage));
+        // Send email notification to admin
+        try {
+            Mail::to('svalon95@gmail.com')->send(new ContactMessageNotification($contactMessage));
+        } catch (\Exception $e) {
+            // Log the error but don't fail the request
+            \Log::error('Failed to send contact message email: ' . $e->getMessage());
+        }
 
         return response()->json([
             'message' => 'Thank you for your message! We\'ll get back to you soon.',
