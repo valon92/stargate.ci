@@ -7,12 +7,12 @@
         <div class="flex items-center gap-3">
           <div class="w-8 h-8 bg-red-600 rounded-full flex items-center justify-center">
             <span class="text-white font-bold text-sm">
-              {{ isSubscribed && currentUser ? currentUser.username.charAt(0).toUpperCase() : 'G' }}
+              {{ isSubscribed && currentUser && currentUser.name ? currentUser.name.charAt(0).toUpperCase() : 'G' }}
             </span>
           </div>
           <div>
             <span class="text-white font-medium text-sm">
-              {{ isSubscribed && currentUser ? currentUser.username : 'Guest User' }}
+              {{ isSubscribed && currentUser && currentUser.name ? currentUser.name : 'Guest User' }}
             </span>
             <span v-if="isSubscribed && currentUser" class="text-gray-400 text-xs ml-2">
               {{ currentUser.email }}
@@ -43,14 +43,6 @@
             Logout
           </button>
           
-          <!-- Debug Button - Remove this in production -->
-          <button
-            @click="createValidSubscriber"
-            class="flex items-center gap-2 px-3 py-1 bg-yellow-600 hover:bg-yellow-700 text-white rounded-full font-medium text-xs transition-colors"
-            title="Create valid subscriber for testing"
-          >
-            🔧 Fix
-          </button>
         </div>
       </div>
     </div>
@@ -119,11 +111,11 @@
         <div class="mb-6 p-4 bg-gray-700/50 rounded-lg border border-gray-600/30">
           <div class="flex items-start gap-3">
             <div class="w-10 h-10 bg-primary-500 rounded-full flex items-center justify-center text-white font-semibold text-sm">
-              {{ isSubscribed && currentUser ? currentUser.username.charAt(0).toUpperCase() : 'G' }}
+              {{ isSubscribed && currentUser && currentUser.name ? currentUser.name.charAt(0).toUpperCase() : 'G' }}
             </div>
             <div class="flex-1">
               <div v-if="isSubscribed && currentUser" class="mb-2">
-                <span class="text-sm text-gray-300">Commenting as <strong class="text-primary-400">{{ currentUser.username }}</strong></span>
+                <span class="text-sm text-gray-300">Commenting as <strong class="text-primary-400">{{ currentUser.name }}</strong></span>
               </div>
               <textarea
                 v-model="newComment"
@@ -460,6 +452,7 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { videoApiService } from '../services/videoApiService'
+import { useAuthStore } from '../stores/auth'
 
 interface Comment {
   id: string
@@ -490,6 +483,9 @@ const props = withDefaults(defineProps<Props>(), {
 
 const router = useRouter()
 
+// Use authentication store
+const authStore = useAuthStore()
+
 // Reactive data
 const isLiked = ref(false)
 const likesCount = ref(props.initialLikes)
@@ -515,18 +511,16 @@ const subscriptionStatus = ref(false)
 
 // Check if user is subscribed
 const isSubscribed = computed(() => {
-  return subscriptionStatus.value
+  return authStore.isAuthenticated
 })
 
 const currentUser = computed(() => {
-  const subscribers = JSON.parse(localStorage.getItem('stargate_subscribers') || '[]')
-  return subscribers.length > 0 ? subscribers[0] : null
+  return authStore.currentUser
 })
 
-// Update subscription status function (same as Header.vue)
+// Update subscription status function
 const updateSubscriptionStatus = () => {
-  const subscribers = JSON.parse(localStorage.getItem('stargate_subscribers') || '[]')
-  subscriptionStatus.value = subscribers.length > 0
+  subscriptionStatus.value = authStore.isAuthenticated
   
   // Note: We don't clear comments and likes when user logs out
   // Comments and likes should remain visible to all users
@@ -640,18 +634,6 @@ const unsubscribe = () => {
   }
 }
 
-// Create valid subscriber for testing
-const createValidSubscriber = () => {
-  videoApiService.createValidSubscriber()
-  showToast('Valid subscriber created! Please refresh the page.', 'success')
-  
-  // Dispatch custom event to update navbar
-  window.dispatchEvent(new CustomEvent('subscription-changed'))
-  
-  setTimeout(() => {
-    window.location.reload()
-  }, 1500)
-}
 
     const addComment = async () => {
       // Check if user is subscribed
@@ -677,22 +659,19 @@ const createValidSubscriber = () => {
         console.log('addComment - sessionId:', sessionId)
         console.log('addComment - comment:', newComment.value)
         
-        // Get subscriber username if available
-        const subscribers = JSON.parse(localStorage.getItem('stargate_subscribers') || '[]')
-        console.log('addComment - subscribers from localStorage:', subscribers)
+        // Get authenticated user info
+        const user = authStore.currentUser
+        console.log('addComment - user from auth store:', user)
         console.log('addComment - subscriberId:', subscriberId)
-        console.log('addComment - subscribers.length:', subscribers.length)
         
-        // Use the first subscriber from localStorage (current logged-in user)
-        const currentSubscriber = subscribers.length > 0 ? subscribers[0] : null
-        console.log('addComment - currentSubscriber found:', currentSubscriber)
+        console.log('addComment - currentUser found:', user)
         
-        if (currentSubscriber) {
-          console.log('addComment - currentSubscriber.username:', currentSubscriber.username)
-          console.log('addComment - currentSubscriber.id:', currentSubscriber.id)
+        if (user) {
+          console.log('addComment - user.name:', user.name)
+          console.log('addComment - user.id:', user.id)
         }
         
-        const username = currentSubscriber ? currentSubscriber.username : 'Guest User'
+        const username = user ? user.name : 'Guest User'
         console.log('addComment - final username:', username)
         
         const response = await videoApiService.addComment(
@@ -795,11 +774,9 @@ const addReply = async (parentId: string) => {
     const sessionId = videoApiService.getSessionId()
     const subscriberId = videoApiService.getSubscriberId()
     
-    // Get subscriber username if available
-    const subscribers = JSON.parse(localStorage.getItem('stargate_subscribers') || '[]')
-    // Use the first subscriber from localStorage (current logged-in user)
-    const currentSubscriber = subscribers.length > 0 ? subscribers[0] : null
-    const username = currentSubscriber ? currentSubscriber.username : 'Guest User'
+    // Get authenticated user info
+    const user = authStore.currentUser
+    const username = user ? user.name : 'Guest User'
     
     const response = await videoApiService.addComment(
       props.contentId,
@@ -1040,11 +1017,14 @@ const trackEngagement = (action: string, contentType: string) => {
 
     // Load saved data on mount
     onMounted(async () => {
+      // Initialize auth store
+      authStore.initialize()
+      
       // Initialize subscription status
       updateSubscriptionStatus()
       
-      // Listen for subscription changes
-      window.addEventListener('subscription-changed', updateSubscriptionStatus)
+      // Listen for authentication changes
+      window.addEventListener('auth-changed', updateSubscriptionStatus)
       window.addEventListener('storage', updateSubscriptionStatus)
       
       try {
@@ -1074,19 +1054,18 @@ const trackEngagement = (action: string, contentType: string) => {
         // Load comments from API
         const commentsResponse = await videoApiService.getComments(props.contentId)
         if (commentsResponse.success) {
-          // Get current subscriber info for proper username display
-          const subscribers = JSON.parse(localStorage.getItem('stargate_subscribers') || '[]')
-          const currentSubscriber = subscribers.length > 0 ? subscribers[0] : null
+          // Get current authenticated user info for proper username display
+          const user = authStore.currentUser
           
           // Convert API comments to local format
           comments.value = commentsResponse.data.map(comment => {
             // Use real username if this comment is from current user, otherwise use API data
-            const isCurrentUserComment = currentSubscriber && (comment as any).subscriber_id === currentSubscriber.id
-            const displayName = isCurrentUserComment ? currentSubscriber.username : (comment.author_name || 'Guest User')
-            const displayAvatar = isCurrentUserComment ? currentSubscriber.username.charAt(0).toUpperCase() : (comment.author_avatar || 'G')
+            const isCurrentUserComment = user && (comment as any).subscriber_id === user.id
+            const displayName = isCurrentUserComment ? user.name : (comment.author_name || 'Guest User')
+            const displayAvatar = isCurrentUserComment ? user.name.charAt(0).toUpperCase() : (comment.author_avatar || 'G')
             
             console.log('Loading comment - comment.subscriber_id:', (comment as any).subscriber_id)
-            console.log('Loading comment - currentSubscriber.id:', currentSubscriber?.id)
+            console.log('Loading comment - user.id:', user?.id)
             console.log('Loading comment - isCurrentUserComment:', isCurrentUserComment)
             console.log('Loading comment - displayName:', displayName)
             console.log('Loading comment - comment.author_name:', comment.author_name)
@@ -1101,9 +1080,9 @@ const trackEngagement = (action: string, contentType: string) => {
               isLiked: false,
               replies: comment.replies.map(reply => {
                 // Use real username if this reply is from current user, otherwise use API data
-                const isCurrentUserReply = currentSubscriber && (reply as any).subscriber_id === currentSubscriber.id
-                const replyDisplayName = isCurrentUserReply ? currentSubscriber.username : (reply.author_name || 'Guest User')
-                const replyDisplayAvatar = isCurrentUserReply ? currentSubscriber.username.charAt(0).toUpperCase() : (reply.author_avatar || 'G')
+                const isCurrentUserReply = user && (reply as any).subscriber_id === user.id
+                const replyDisplayName = isCurrentUserReply ? user.name : (reply.author_name || 'Guest User')
+                const replyDisplayAvatar = isCurrentUserReply ? user.name.charAt(0).toUpperCase() : (reply.author_avatar || 'G')
                 
                 console.log('Loading reply - reply.subscriber_id:', (reply as any).subscriber_id)
                 console.log('Loading reply - isCurrentUserReply:', isCurrentUserReply)
@@ -1146,7 +1125,7 @@ const trackEngagement = (action: string, contentType: string) => {
 
 // Cleanup event listeners on unmount
 onUnmounted(() => {
-  window.removeEventListener('subscription-changed', updateSubscriptionStatus)
+  window.removeEventListener('auth-changed', updateSubscriptionStatus)
   window.removeEventListener('storage', updateSubscriptionStatus)
 })
 </script>

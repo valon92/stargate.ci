@@ -117,10 +117,14 @@
 import { ref, onMounted } from 'vue'
 import { useHead } from '@vueuse/head'
 import { useRouter } from 'vue-router'
-import { videoApiService } from '@/services/videoApiService'
+import { authService, type LoginRequest } from '@/services/authService'
+import { useAuthStore } from '@/stores/auth'
 
 // Router
 const router = useRouter()
+
+// Use authentication store
+const authStore = useAuthStore()
 
 // Set page title
 useHead({
@@ -155,31 +159,21 @@ const handleSignIn = async () => {
       throw new Error('Email and password are required')
     }
 
-    // Check if subscriber exists in database
-    let existingSubscriber
-    try {
-      existingSubscriber = await videoApiService.getSubscriberByEmail(form.value.email)
-      console.log('SignIn - existingSubscriber response:', existingSubscriber)
-    } catch (error) {
-      console.log('SignIn - Subscriber not found:', (error as any).message)
-      throw new Error('Invalid email or password')
+    // Authenticate with backend
+    const loginData: LoginRequest = {
+      email: form.value.email,
+      password: form.value.password
     }
+
+    const response = await authService.login(loginData)
     
-    if (existingSubscriber.success && existingSubscriber.data) {
-      // TODO: Implement password verification
-      // For now, just log them in
-      const subscriber = existingSubscriber.data
-      
-      // Store subscriber in localStorage for session
-      localStorage.setItem('stargate_subscribers', JSON.stringify([subscriber]))
-      localStorage.setItem('stargate_session_id', `user_${subscriber.id}_${Date.now()}`)
+    if (response.success) {
+      // Store authentication data in store
+      authStore.login(response.data.user, response.data.token)
       
       // Show success message
       showSuccess.value = true
       showToast('Successfully signed in! Welcome back.', 'success')
-      
-      // Dispatch custom event to update navbar
-      window.dispatchEvent(new CustomEvent('subscription-changed'))
       
       // Reset form
       form.value = {
@@ -192,9 +186,8 @@ const handleSignIn = async () => {
       setTimeout(() => {
         router.push('/')
       }, 2000)
-      
     } else {
-      throw new Error('Invalid email or password')
+      throw new Error(response.message || 'Login failed')
     }
 
   } catch (error: any) {
@@ -218,10 +211,12 @@ const showToast = (message: string, type: 'success' | 'error' | 'warning' | 'inf
 
 // Check if user is already signed in
 onMounted(() => {
-  const subscribers = JSON.parse(localStorage.getItem('stargate_subscribers') || '[]')
-  if (subscribers.length > 0) {
-    // User is already signed in, redirect to home
-    showToast('You are already signed in!', 'info')
+  // Initialize auth store
+  authStore.initialize()
+  
+  if (authStore.isAuthenticated) {
+    // User is already logged in, redirect to home
+    showToast('You are already logged in!', 'info')
     setTimeout(() => {
       router.push('/')
     }, 1500)

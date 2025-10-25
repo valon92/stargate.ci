@@ -29,6 +29,21 @@
             />
           </div>
 
+          <!-- Password -->
+          <div>
+            <label for="password" class="block text-sm font-medium text-gray-300 mb-2">
+              Password *
+            </label>
+            <input
+              type="password"
+              id="password"
+              v-model="form.password"
+              required
+              class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              placeholder="Enter your password"
+            />
+          </div>
+
           <!-- Submit Button -->
           <button
             type="submit"
@@ -84,10 +99,14 @@
 import { ref, onMounted } from 'vue'
 import { useHead } from '@vueuse/head'
 import { useRouter } from 'vue-router'
-import { videoApiService } from '@/services/videoApiService'
+import { authService, type LoginRequest } from '@/services/authService'
+import { useAuthStore } from '@/stores/auth'
 
 // Router
 const router = useRouter()
+
+// Use authentication store
+const authStore = useAuthStore()
 
 // Set page title
 useHead({
@@ -99,7 +118,8 @@ useHead({
 
 // Form data
 const form = ref({
-  email: ''
+  email: '',
+  password: ''
 })
 
 // UI state
@@ -115,48 +135,39 @@ const handleLogin = async () => {
   showError.value = false
 
   try {
-    // Validate email
-    if (!form.value.email) {
-      throw new Error('Email is required')
+    // Validate form
+    if (!form.value.email || !form.value.password) {
+      throw new Error('Email and password are required')
     }
 
-    // Check if subscriber exists in database
-    let existingSubscriber
-    try {
-      existingSubscriber = await videoApiService.getSubscriberByEmail(form.value.email)
-      console.log('Login - existingSubscriber response:', existingSubscriber)
-    } catch (error) {
-      console.log('Login - Subscriber not found:', (error as any).message)
-      throw new Error('No account found with this email address. Please subscribe first.')
+    // Authenticate with backend
+    const loginData: LoginRequest = {
+      email: form.value.email,
+      password: form.value.password
     }
+
+    const response = await authService.login(loginData)
     
-    if (existingSubscriber.success && existingSubscriber.data) {
-      // Subscriber exists, log them in
-      const subscriber = existingSubscriber.data
-      
-      // Store subscriber in localStorage for session
-      localStorage.setItem('stargate_subscribers', JSON.stringify([subscriber]))
-      localStorage.setItem('stargate_session_id', `user_${subscriber.id}_${Date.now()}`)
+    if (response.success) {
+      // Store authentication data in store
+      authStore.login(response.data.user, response.data.token)
       
       // Show success message
       showSuccess.value = true
       showToast('Successfully logged in! Welcome back.', 'success')
       
-      // Dispatch custom event to update navbar
-      window.dispatchEvent(new CustomEvent('subscription-changed'))
-      
       // Reset form
       form.value = {
-        email: ''
+        email: '',
+        password: ''
       }
 
       // Redirect to home page after 2 seconds
       setTimeout(() => {
         router.push('/')
       }, 2000)
-      
     } else {
-      throw new Error('No account found with this email address. Please subscribe first.')
+      throw new Error(response.message || 'Login failed')
     }
 
   } catch (error: any) {
@@ -180,8 +191,10 @@ const showToast = (message: string, type: 'success' | 'error' | 'warning' | 'inf
 
 // Check if user is already logged in
 onMounted(() => {
-  const subscribers = JSON.parse(localStorage.getItem('stargate_subscribers') || '[]')
-  if (subscribers.length > 0) {
+  // Initialize auth store
+  authStore.initialize()
+  
+  if (authStore.isAuthenticated) {
     // User is already logged in, redirect to home
     showToast('You are already logged in!', 'info')
     setTimeout(() => {

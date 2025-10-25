@@ -22,14 +22,6 @@
               <RouterLink to="/legal-disclaimer" class="text-yellow-400 hover:text-yellow-300 underline">Read full legal disclaimer</RouterLink>
             </p>
           </div>
-          <div class="flex flex-col sm:flex-row gap-4 justify-center">
-            <RouterLink to="/about" class="btn-primary">
-              Learn More
-            </RouterLink>
-            <RouterLink to="/insights" class="btn-secondary">
-              Read More
-            </RouterLink>
-          </div>
         </div>
       </div>
     </section>

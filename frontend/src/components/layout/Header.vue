@@ -89,16 +89,20 @@
                 Sign Up
               </RouterLink>
             </template>
-            <button
-              v-else
-              @click="unsubscribe"
-              class="bg-gradient-to-r from-gray-600 to-gray-700 text-white px-3 py-1.5 rounded-md text-sm font-medium hover:from-gray-700 hover:to-gray-800 transition-all duration-150 shadow-md hover:shadow-lg pointer-events-auto relative z-10 flex items-center gap-2"
-            >
-              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/>
-              </svg>
-              Logout
-            </button>
+            <div v-else class="flex items-center gap-2">
+              <span class="text-sm text-gray-300">
+                Welcome, {{ currentUser?.name || 'User' }}
+              </span>
+              <button
+                @click="unsubscribe"
+                class="bg-gradient-to-r from-gray-600 to-gray-700 text-white px-3 py-1.5 rounded-md text-sm font-medium hover:from-gray-700 hover:to-gray-800 transition-all duration-150 shadow-md hover:shadow-lg pointer-events-auto relative z-10 flex items-center gap-2"
+              >
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/>
+                </svg>
+                Logout
+              </button>
+            </div>
           </div>
 
           <!-- Mobile menu button -->
@@ -131,7 +135,6 @@
 
           <!-- Primary Navigation Mobile -->
           <div v-if="primaryNavigation.length > 0" class="space-y-0.5">
-            <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider px-2 py-1">Main</div>
             <RouterLink
               v-for="item in primaryNavigation"
               :key="item.name"
@@ -146,7 +149,6 @@
 
           <!-- Secondary Navigation Mobile -->
           <div class="space-y-0.5" :class="{ 'pt-1': primaryNavigation.length > 0 }">
-            <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider px-2 py-1">Resources</div>
             <RouterLink
               v-for="item in secondaryNavigation"
               :key="item.name"
@@ -197,11 +199,15 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import { RouterLink, useRoute, useRouter } from 'vue-router'
+import { useAuthStore } from '../../stores/auth'
 
 const route = useRoute()
 const router = useRouter()
+
+// Use authentication store
+const authStore = useAuthStore()
 
 // Performance optimized state
 const isMenuOpen = ref(false)
@@ -231,18 +237,16 @@ const secondaryNavigation = computed(() => [
 const subscriptionStatus = ref(false)
 
 const isSubscribed = computed(() => {
-  return subscriptionStatus.value
+  return authStore.isAuthenticated
 })
 
 const currentUser = computed(() => {
-  const subscribers = JSON.parse(localStorage.getItem('stargate_subscribers') || '[]')
-  return subscribers.length > 0 ? subscribers[0] : null
+  return authStore.currentUser
 })
 
 // Update subscription status
 const updateSubscriptionStatus = () => {
-  const subscribers = JSON.parse(localStorage.getItem('stargate_subscribers') || '[]')
-  subscriptionStatus.value = subscribers.length > 0
+  subscriptionStatus.value = authStore.isAuthenticated
 }
 
 
@@ -259,17 +263,9 @@ const handleSearch = (event: Event) => {
 }
 
 // Logout functionality
-const unsubscribe = () => {
+const unsubscribe = async () => {
   if (confirm('Are you sure you want to logout from Stargate.ci?')) {
-    // Remove subscriber from localStorage (logout)
-    localStorage.removeItem('stargate_subscribers')
-    localStorage.removeItem('stargate_session_id')
-    
-    // Update subscription status
-    updateSubscriptionStatus()
-    
-    // Dispatch custom event to update other components
-    window.dispatchEvent(new CustomEvent('subscription-changed'))
+    await authStore.logout()
   }
 }
 
@@ -278,17 +274,21 @@ watch(() => route.path, () => {
   closeMenu()
 })
 
+// Watch for auth store changes
+watch(() => authStore.isAuthenticated, (newValue) => {
+  updateSubscriptionStatus()
+})
+
 // Watch for localStorage changes to update subscription status
-const refreshSubscriptionStatus = () => {
-  // Force reactivity update by accessing localStorage
-  const subscribers = JSON.parse(localStorage.getItem('stargate_subscribers') || '[]')
-  return subscribers.length > 0
-}
+// This function is no longer needed as we use the auth store
 
 // Initialize on mount
 onMounted(() => {
   // Set English as default language
   document.documentElement.setAttribute('dir', 'ltr')
+  
+  // Initialize auth store
+  authStore.initialize()
   
   // Initialize subscription status
   updateSubscriptionStatus()
@@ -299,9 +299,15 @@ onMounted(() => {
   })
   
   // Listen for custom events (when localStorage changes in same tab)
-  window.addEventListener('subscription-changed', () => {
+  window.addEventListener('auth-changed', () => {
     updateSubscriptionStatus()
   })
   document.documentElement.setAttribute('lang', 'en')
+})
+
+// Cleanup event listeners on unmount
+onUnmounted(() => {
+  window.removeEventListener('auth-changed', updateSubscriptionStatus)
+  window.removeEventListener('storage', updateSubscriptionStatus)
 })
 </script>

@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\VideoController;
 use App\Http\Controllers\Api\SubscriberController;
 use App\Http\Controllers\Api\VideoInteractionController;
 use App\Http\Controllers\Api\VideoCommentController;
+use App\Http\Controllers\Api\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,6 +21,19 @@ use App\Http\Controllers\Api\VideoCommentController;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+
+// Authentication routes (no rate limiting for auth)
+Route::prefix('v1')->group(function () {
+    Route::post('/auth/register', [AuthController::class, 'register']);
+    Route::post('/auth/login', [AuthController::class, 'login']);
+    Route::post('/auth/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
+    Route::get('/auth/me', [AuthController::class, 'me'])->middleware('auth:sanctum');
+    
+    // Test route
+    Route::get('/auth/test', function() {
+        return response()->json(['message' => 'Auth routes working!']);
+    });
+});
 
 // Public routes with rate limiting
 Route::prefix('v1')->middleware('api.throttle:1000,1')->group(function () {
