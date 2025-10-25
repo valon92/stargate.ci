@@ -46,8 +46,7 @@
                 </RouterLink>
               </div>
               
-              <!-- Separator (only if there are items in both sections) -->
-              <div v-if="primaryNavigation.length > 0 && secondaryNavigation.length > 0" class="w-px h-4 bg-gray-600 mx-1.5"></div>
+              <!-- Separator removed -->
               
               <!-- Secondary Navigation -->
               <div class="flex items-center space-x-0.5">
