@@ -168,14 +168,12 @@
 
               <!-- News Actions -->
               <div class="flex gap-3 mb-6">
-                <a 
-                  :href="article.url" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
+                <RouterLink 
+                  :to="`/article/${article.id}`"
                   class="flex-1 btn-primary"
                 >
                   Read Full Article
-                </a>
+                </RouterLink>
                 
                 <button 
                   @click="shareArticle(article)"
