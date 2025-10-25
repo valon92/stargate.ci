@@ -215,6 +215,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { useHead } from '@vueuse/head'
+import { apiClient } from '@/services/apiClient'
 
 
 const form = ref({
@@ -252,8 +253,15 @@ const submitForm = async () => {
   submitMessage.value = ''
   
   try {
-    // Simulate API call to platform contact service
-    await new Promise(resolve => setTimeout(resolve, 2000))
+    // Send data to backend API
+    const response = await apiClient.post('/api/v1/contact', {
+      name: form.value.name,
+      email: form.value.email,
+      subject: form.value.subject,
+      message: form.value.message
+    })
+    
+    console.log('Contact form response:', response)
     
     // Reset form
     form.value = {
@@ -266,10 +274,11 @@ const submitForm = async () => {
     }
     
     submitSuccess.value = true
-    submitMessage.value = 'Thank you for your inquiry! Our platform team will review your message and connect you with the appropriate project teams.'
-  } catch (error) {
+    submitMessage.value = response.message || 'Thank you for your message! We\'ll get back to you soon.'
+  } catch (error: any) {
+    console.error('Contact form error:', error)
     submitSuccess.value = false
-    submitMessage.value = 'There was an error submitting your inquiry. Please try again or contact us directly.'
+    submitMessage.value = error.message || 'There was an error submitting your inquiry. Please try again or contact us directly.'
   } finally {
     isSubmitting.value = false
   }
