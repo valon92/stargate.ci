@@ -107,7 +107,7 @@
             <p>This message was sent through the Stargate.ci contact form.</p>
             <p>Reply directly to this email to respond to the sender.</p>
             <div class="timestamp">
-                Received: {{ $contactMessage->created_at->format('F j, Y \a\t g:i A') }}
+                Received: {{ $contactMessage->created_at ? $contactMessage->created_at->format('F j, Y \a\t g:i A') : now()->format('F j, Y \a\t g:i A') }}
             </div>
         </div>
     </div>
