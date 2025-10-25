@@ -26,10 +26,13 @@ class ContactController extends Controller
 
         // Send email notification to admin
         try {
+            \Log::info('Attempting to send contact email for message ID: ' . $contactMessage->id);
             Mail::to('svalon95@gmail.com')->send(new ContactMessageNotification($contactMessage));
+            \Log::info('Contact email sent successfully for message ID: ' . $contactMessage->id);
         } catch (\Exception $e) {
             // Log the error but don't fail the request
             \Log::error('Failed to send contact message email: ' . $e->getMessage());
+            \Log::error('Email error details: ' . $e->getFile() . ':' . $e->getLine());
         }
 
         return response()->json([
