@@ -57,3 +57,4 @@ class ContactMessageNotification extends Mailable
         return [];
     }
 }
+

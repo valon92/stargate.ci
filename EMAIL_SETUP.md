@@ -91,3 +91,4 @@ MAIL_USERNAME=your-mailtrap-username
 MAIL_PASSWORD=your-mailtrap-password
 MAIL_ENCRYPTION=tls
 ```
+

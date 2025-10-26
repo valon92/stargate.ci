@@ -149,3 +149,4 @@ Për të deployuar në production:
 4. Verifiko që email-at po dërgohen
 
 **Sistemi është gati për production!** 🎉
+

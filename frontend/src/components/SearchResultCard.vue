@@ -195,3 +195,4 @@ const formatNumber = (num: number) => {
   overflow: hidden;
 }
 </style>
+
