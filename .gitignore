@@ -1,0 +1,5 @@
+
+# Deployment archives
+*.tar.gz
+stargate-*-deployment/
+stargate-complete-deployment/
