@@ -5,6 +5,7 @@ export interface User {
   name: string
   email: string
   email_verified_at?: string
+  subscriber_id?: number // Subscriber ID for interactions/comments
   created_at: string
   updated_at: string
 }
@@ -14,6 +15,7 @@ export interface AuthResponse {
   message: string
   data: {
     user: User
+    subscriber_id?: number // Subscriber ID for interactions/comments
     token: string
     token_type: string
   }

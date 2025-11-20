@@ -122,7 +122,7 @@
             <div class="relative overflow-hidden rounded-lg">
               <div class="aspect-w-16 aspect-h-9 bg-gradient-to-br from-gray-700 to-gray-800 flex items-center justify-center">
                 <div class="text-center">
-                  <div class="w-20 h-20 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <div class="w-20 h-20 bg-black rounded-full flex items-center justify-center mx-auto mb-6">
                     <span class="text-3xl">📰</span>
                   </div>
                   <h3 class="text-2xl font-bold text-white">{{ article.title }}</h3>
@@ -275,7 +275,7 @@
             <button 
               @click="subscribeNewsletter"
               :disabled="!email || isSubscribing"
-              class="px-6 py-3 bg-gradient-to-r from-primary-500 to-secondary-500 text-white rounded-lg font-medium hover:from-primary-600 hover:to-secondary-600 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+              class="px-6 py-3 bg-black text-white rounded-lg font-medium hover:bg-gray-900 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {{ isSubscribing ? 'Joining...' : 'Join Now' }}
             </button>
@@ -680,10 +680,7 @@ watch(sortBy, () => {
 
 <style scoped>
 .gradient-text {
-  background: linear-gradient(135deg, #0ea5e9 0%, #a855f7 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: white;
 }
 
 .card {
@@ -695,7 +692,7 @@ watch(sortBy, () => {
 }
 
 .btn-primary {
-  @apply bg-gradient-to-r from-primary-500 to-secondary-500 text-white px-6 py-3 rounded-lg font-medium hover:from-primary-600 hover:to-secondary-600 transition-all duration-200;
+  @apply bg-black text-white px-6 py-3 rounded-lg font-medium transition-all duration-200;
 }
 
 .line-clamp-3 {

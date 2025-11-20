@@ -5,11 +5,11 @@
         <!-- Logo Section - Optimized -->
         <div class="flex items-center flex-shrink-0">
           <RouterLink to="/" class="flex items-center space-x-2 group">
-            <div class="w-7 h-7 lg:w-8 lg:h-8 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-lg flex items-center justify-center group-hover:scale-105 transition-transform duration-200">
+            <div class="w-7 h-7 lg:w-8 lg:h-8 bg-black rounded-lg flex items-center justify-center group-hover:scale-105 transition-transform duration-200">
               <span class="text-white font-bold text-sm lg:text-base">S</span>
             </div>
             <div class="block">
-              <span class="text-base sm:text-lg lg:text-xl font-bold gradient-text">Stargate.ci</span>
+              <span class="text-base sm:text-lg lg:text-xl font-bold text-white">Stargate.ci</span>
               <div class="text-xs text-gray-400 -mt-0.5">Cristal Intelligence</div>
             </div>
           </RouterLink>
@@ -75,13 +75,15 @@
             <template v-if="!isSubscribed">
               <RouterLink
                 to="/signin"
+                @click="saveReturnUrl"
                 class="text-gray-300 hover:text-white px-3 py-1.5 rounded-md text-sm font-medium transition-colors duration-150 hover:bg-gray-800/40"
               >
                 Sign In
               </RouterLink>
               <RouterLink
                 to="/signup"
-                class="bg-gradient-to-r from-primary-500 to-secondary-500 text-white px-3 py-1.5 rounded-md text-sm font-medium hover:from-primary-600 hover:to-secondary-600 transition-all duration-150 shadow-md hover:shadow-lg pointer-events-auto relative z-10"
+                @click="saveReturnUrl"
+                class="bg-white text-black px-3 py-1.5 rounded-md text-sm font-medium hover:bg-gray-100 transition-all duration-150 shadow-md hover:shadow-lg pointer-events-auto relative z-10"
               >
                 Sign Up
               </RouterLink>
@@ -165,15 +167,15 @@
             <template v-if="!isSubscribed">
               <RouterLink
                 to="/signin"
+                @click="() => { saveReturnUrl(); closeMenu(); }"
                 class="text-gray-300 hover:text-white block px-2 py-2 rounded-md text-sm font-medium text-center transition-colors duration-150 hover:bg-gray-800/40"
-                @click="closeMenu"
               >
                 Sign In
               </RouterLink>
               <RouterLink
                 to="/signup"
-                class="bg-gradient-to-r from-primary-500 to-secondary-500 text-white block px-2 py-2 rounded-md text-sm font-medium text-center hover:from-primary-600 hover:to-secondary-600 transition-all duration-150"
-                @click="closeMenu"
+                @click="() => { saveReturnUrl(); closeMenu(); }"
+                class="bg-white text-black block px-2 py-2 rounded-md text-sm font-medium text-center hover:bg-gray-100 transition-all duration-150"
               >
                 Sign Up
               </RouterLink>
@@ -216,6 +218,12 @@ const toggleMenu = () => {
 
 const closeMenu = () => {
   isMenuOpen.value = false
+}
+
+// Save current page URL and scroll position before navigating to sign in/up
+const saveReturnUrl = () => {
+  sessionStorage.setItem('return_url', window.location.pathname + window.location.search)
+  sessionStorage.setItem('return_scroll', window.scrollY.toString())
 }
 
 // Memoized navigation - computed for performance

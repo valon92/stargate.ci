@@ -8,6 +8,12 @@ export interface ApiClientOptions extends RequestInit {
 }
 
 async function request<T = any>(url: string, options: ApiClientOptions = {}): Promise<T> {
+  // Add base URL if not already present
+  // In production (non-localhost), use same-origin relative paths to avoid CORS
+  const isLocalhost = typeof window !== 'undefined' && window.location.hostname === 'localhost'
+  const baseUrl = isLocalhost ? 'http://localhost:8000' : ''
+  const fullUrl = url.startsWith('http') ? url : `${baseUrl}${url}`
+  
   const token = typeof window !== 'undefined' ? localStorage.getItem('auth_token') : null
 
   const headers: Record<string, string> = {
@@ -26,7 +32,7 @@ async function request<T = any>(url: string, options: ApiClientOptions = {}): Pr
     headers['Authorization'] = `Bearer ${token}`
   }
 
-  const response = await fetch(url, {
+  const response = await fetch(fullUrl, {
     ...options,
     headers,
     body
@@ -34,10 +40,29 @@ async function request<T = any>(url: string, options: ApiClientOptions = {}): Pr
 
   if (!response.ok) {
     const text = await response.text().catch(() => '')
-    console.error(`API Error: HTTP ${response.status}: ${text || response.statusText}`)
-    console.error(`Request URL: ${url}`)
-    console.error(`Request options:`, options)
-    throw new Error(`HTTP ${response.status}: ${text || response.statusText}`)
+    
+    // Only log non-404 errors (404 is expected for resources that don't exist yet)
+    // This reduces console noise for expected 404s (videos, analytics, etc.)
+    if (response.status !== 404) {
+      console.error(`API Error: HTTP ${response.status}: ${text || response.statusText}`)
+      console.error(`Request URL: ${fullUrl}`)
+      console.error(`Request options:`, options)
+    }
+    
+    // Try to parse JSON error response
+    let errorData: any = null
+    try {
+      if (text) {
+        errorData = JSON.parse(text)
+      }
+    } catch (e) {
+      // Not JSON, use text as is
+    }
+    
+    const error: any = new Error(`HTTP ${response.status}: ${text || response.statusText}`)
+    error.status = response.status
+    error.responseData = errorData || text
+    throw error
   }
 
   const contentType = response.headers.get('content-type') || ''

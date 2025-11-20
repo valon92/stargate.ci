@@ -550,15 +550,30 @@ const showToast = (message: string, type: 'success' | 'info' | 'warning' = 'succ
       
       try {
         const sessionId = videoApiService.getSessionId()
-        const subscriberId = videoApiService.getSubscriberId()
+        // Use subscriber_id from user if available, otherwise try to get by email
+        let subscriberId = authStore.currentUser?.subscriber_id
+        if (!subscriberId && authStore.currentUser?.email) {
+          try {
+            const subscriberResponse = await videoApiService.getSubscriberByEmail(authStore.currentUser.email)
+            if (subscriberResponse.success && subscriberResponse.data) {
+              subscriberId = subscriberResponse.data.id
+            }
+          } catch (e) {
+            console.log('Could not fetch subscriber by email:', e)
+          }
+        }
+        const contentId = String(props.contentId)
         
-        console.log('toggleLike - contentId:', props.contentId)
+        console.log('toggleLike - contentId:', contentId)
         console.log('toggleLike - subscriberId:', subscriberId)
         console.log('toggleLike - sessionId:', sessionId)
+        console.log('toggleLike - contentType:', props.contentType)
+        console.log('toggleLike - isAuthenticated:', authStore.isAuthenticated)
+        console.log('toggleLike - currentUser:', authStore.currentUser)
         
         
         const response = await videoApiService.toggleLike(
-          props.contentId,
+          contentId,
           subscriberId,
           sessionId
         )
@@ -652,30 +667,44 @@ const unsubscribe = () => {
       
       try {
         const sessionId = videoApiService.getSessionId()
-        const subscriberId = videoApiService.getSubscriberId()
+        // Use subscriber_id from user if available, otherwise try to get by email
+        let subscriberId = authStore.currentUser?.subscriber_id
+        if (!subscriberId && authStore.currentUser?.email) {
+          try {
+            const subscriberResponse = await videoApiService.getSubscriberByEmail(authStore.currentUser.email)
+            if (subscriberResponse.success && subscriberResponse.data) {
+              subscriberId = subscriberResponse.data.id
+            }
+          } catch (e) {
+            console.log('Could not fetch subscriber by email:', e)
+          }
+        }
+        const contentId = String(props.contentId)
         
-        console.log('addComment - contentId:', props.contentId)
+        console.log('addComment - contentId:', contentId)
         console.log('addComment - subscriberId:', subscriberId)
         console.log('addComment - sessionId:', sessionId)
         console.log('addComment - comment:', newComment.value)
+        console.log('addComment - contentType:', props.contentType)
+        console.log('addComment - isAuthenticated:', authStore.isAuthenticated)
         
         // Get authenticated user info
         const user = authStore.currentUser
         console.log('addComment - user from auth store:', user)
-        console.log('addComment - subscriberId:', subscriberId)
         
         console.log('addComment - currentUser found:', user)
         
         if (user) {
           console.log('addComment - user.name:', user.name)
           console.log('addComment - user.id:', user.id)
+          console.log('addComment - user.subscriber_id:', user.subscriber_id)
         }
         
         const username = user ? user.name : 'Guest User'
         console.log('addComment - final username:', username)
         
         const response = await videoApiService.addComment(
-          props.contentId,
+          contentId,
           newComment.value,
           subscriberId,
           sessionId
@@ -772,14 +801,26 @@ const addReply = async (parentId: string) => {
   
   try {
     const sessionId = videoApiService.getSessionId()
-    const subscriberId = videoApiService.getSubscriberId()
+    // Use subscriber_id from user if available, otherwise try to get by email
+    let subscriberId = authStore.currentUser?.subscriber_id
+    if (!subscriberId && authStore.currentUser?.email) {
+      try {
+        const subscriberResponse = await videoApiService.getSubscriberByEmail(authStore.currentUser.email)
+        if (subscriberResponse.success && subscriberResponse.data) {
+          subscriberId = subscriberResponse.data.id
+        }
+      } catch (e) {
+        console.log('Could not fetch subscriber by email:', e)
+      }
+    }
+    const contentId = String(props.contentId)
     
     // Get authenticated user info
     const user = authStore.currentUser
     const username = user ? user.name : 'Guest User'
     
     const response = await videoApiService.addComment(
-      props.contentId,
+      contentId,
       replyText.value,
       subscriberId,
       sessionId,
@@ -931,10 +972,21 @@ const loadMoreComments = () => {
       // Record share in database
       try {
         const sessionId = videoApiService.getSessionId()
-        const subscriberId = videoApiService.getSubscriberId()
+        // Use subscriber_id from user if available, otherwise try to get by email
+        let subscriberId = authStore.currentUser?.subscriber_id
+        if (!subscriberId && authStore.currentUser?.email) {
+          try {
+            const subscriberResponse = await videoApiService.getSubscriberByEmail(authStore.currentUser.email)
+            if (subscriberResponse.success && subscriberResponse.data) {
+              subscriberId = subscriberResponse.data.id
+            }
+          } catch (e) {
+            console.log('Could not fetch subscriber by email:', e)
+          }
+        }
         
         await videoApiService.addShare(
-          props.contentId,
+          String(props.contentId),
           'facebook',
           subscriberId,
           sessionId
@@ -1028,31 +1080,47 @@ const trackEngagement = (action: string, contentType: string) => {
       window.addEventListener('storage', updateSubscriptionStatus)
       
       try {
+        // Ensure contentId is string
+        const contentId = String(props.contentId)
+        
         // Load video data from API
-        const videoResponse = await videoApiService.getVideo(props.contentId)
+        const videoResponse = await videoApiService.getVideo(contentId)
         if (videoResponse.success) {
           likesCount.value = videoResponse.data.likes_count
           commentsCount.value = videoResponse.data.comments_count
         }
         
         // Load user interactions (only if user is logged in)
-        if (isSubscribed.value) {
+        if (isSubscribed.value && authStore.currentUser) {
           const sessionId = videoApiService.getSessionId()
-          const subscriberId = videoApiService.getSubscriberId()
+          // Use subscriber_id from user if available, otherwise try to get by email
+          let subscriberId = authStore.currentUser.subscriber_id
+          if (!subscriberId && authStore.currentUser.email) {
+            try {
+              const subscriberResponse = await videoApiService.getSubscriberByEmail(authStore.currentUser.email)
+              if (subscriberResponse.success && subscriberResponse.data) {
+                subscriberId = subscriberResponse.data.id
+              }
+            } catch (e) {
+              console.log('Could not fetch subscriber by email:', e)
+            }
+          }
           
-          const interactionsResponse = await videoApiService.getUserInteractions(
-            props.contentId,
-            subscriberId,
-            sessionId
-          )
-          
-          if (interactionsResponse.success) {
-            isLiked.value = interactionsResponse.data.is_liked
+          if (subscriberId) {
+            const interactionsResponse = await videoApiService.getUserInteractions(
+              contentId,
+              subscriberId,
+              sessionId
+            )
+            
+            if (interactionsResponse.success) {
+              isLiked.value = interactionsResponse.data.is_liked
+            }
           }
         }
         
         // Load comments from API
-        const commentsResponse = await videoApiService.getComments(props.contentId)
+        const commentsResponse = await videoApiService.getComments(contentId)
         if (commentsResponse.success) {
           // Get current authenticated user info for proper username display
           const user = authStore.currentUser
@@ -1109,16 +1177,20 @@ const trackEngagement = (action: string, contentType: string) => {
           // commentsCount.value = comments.value.length
         }
       } catch (error: any) {
-        console.error('Error loading data from API:', error)
-        console.error('Full error details:', error)
+        // Only log non-404 errors (404 is expected for videos that don't exist yet)
+        if (error?.status !== 404 && error?.response?.status !== 404) {
+          console.error('Error loading data from API:', error)
+        }
         
         // DO NOT reset counts to 0 - keep current values
         // likesCount.value = props.initialLikes
         // commentsCount.value = props.initialComments.length
         // comments.value = props.initialComments
         
-        // Show user-friendly error message
-        showToast('Failed to load data. Please refresh the page.', 'warning')
+        // Only show error message for non-404 errors
+        if (error?.status !== 404 && error?.response?.status !== 404) {
+          showToast('Failed to load data. Please refresh the page.', 'warning')
+        }
       }
   
 })

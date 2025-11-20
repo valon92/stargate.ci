@@ -11,6 +11,9 @@ use App\Http\Controllers\Api\VideoInteractionController;
 use App\Http\Controllers\Api\VideoCommentController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\SearchController;
+use App\Http\Controllers\Api\EventsController;
+use App\Http\Controllers\Api\EventRegistrationController;
+use App\Http\Controllers\Api\VoiceActionsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -118,6 +121,41 @@ Route::prefix('v1')->middleware('api.throttle:1000,1')->group(function () {
     Route::put('/subscribers/{id}', [SubscriberController::class, 'update']);
     Route::delete('/subscribers/{id}', [SubscriberController::class, 'destroy']);
     Route::put('/subscribers/{id}/activity', [SubscriberController::class, 'updateActivity']);
+    
+    // Events routes (public)
+    Route::get('/events', [EventsController::class, 'index']);
+    Route::get('/events/categories', [EventsController::class, 'categories']);
+    Route::get('/events/upcoming', [EventsController::class, 'upcoming']);
+    Route::get('/events/category/{category}', [EventsController::class, 'byCategory']);
+    Route::get('/events/search', [EventsController::class, 'search']);
+    Route::get('/events/sync-status', [EventsController::class, 'syncStatus']);
+    
+    Route::get('/events/{id}', [EventsController::class, 'show']);
+    
+    // Events sync routes (with rate limiting)
+    Route::middleware('api.throttle:10,1')->group(function () {
+        Route::post('/events/sync', [EventsController::class, 'sync']);
+    });
+    
+    // Event registration routes (public)
+    Route::post('/events/register', [EventRegistrationController::class, 'register']);
+    Route::get('/events/{eventId}/stats', [EventRegistrationController::class, 'stats']);
+    Route::get('/events/check-registration', [EventRegistrationController::class, 'checkRegistration']);
+    Route::get('/events/user-events', [EventRegistrationController::class, 'userEvents']);
+    Route::delete('/events/registrations/{registrationId}', [EventRegistrationController::class, 'cancel']);
+    
+    // Test reminder route (for testing)
+    Route::post('/events/test-reminder/{registrationId}', [EventRegistrationController::class, 'sendTestReminder']);
+    
+    // Voice Actions SDK routes (public)
+    Route::get('/commands', [VoiceActionsController::class, 'getCommands']);
+    Route::get('/commands/demo', [VoiceActionsController::class, 'getDemoCommands']);
+});
+
+// Voice Actions SDK routes without v1 prefix (for SDK compatibility)
+Route::middleware('api.throttle:1000,1')->group(function () {
+    Route::get('/commands', [VoiceActionsController::class, 'getCommands']);
+    Route::get('/commands/demo', [VoiceActionsController::class, 'getDemoCommands']);
 });
 
 // Health check route

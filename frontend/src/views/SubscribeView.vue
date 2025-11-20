@@ -106,7 +106,7 @@
           <button
             type="submit"
             :disabled="isSubmitting"
-            class="w-full bg-gradient-to-r from-primary-500 to-secondary-500 text-white py-3 px-6 rounded-lg font-medium hover:from-primary-600 hover:to-secondary-600 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus:ring-offset-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+            class="w-full bg-black text-white py-3 px-6 rounded-lg font-medium hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus:ring-offset-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
           >
             {{ isSubmitting ? 'Subscribing...' : 'Subscribe' }}
           </button>
@@ -312,9 +312,6 @@ const showToast = (message: string, type: 'success' | 'error' | 'warning' | 'inf
 
 <style scoped>
 .gradient-text {
-  background: linear-gradient(135deg, #0ea5e9, #a855f7);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: white;
 }
 </style>

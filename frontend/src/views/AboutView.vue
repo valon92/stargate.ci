@@ -31,7 +31,7 @@
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
           <div class="card">
             <div class="p-6">
-              <div class="w-16 h-16 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full flex items-center justify-center mx-auto mb-6">
+              <div class="w-16 h-16 bg-black rounded-full flex items-center justify-center mx-auto mb-6">
                 <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
                 </svg>
@@ -202,6 +202,6 @@ useHead({
 }
 
 .gradient-text {
-  @apply bg-gradient-to-r from-primary-400 to-secondary-400 bg-clip-text text-transparent;
+  @apply text-white;
 }
 </style>

@@ -67,10 +67,16 @@ class SearchService {
     limit?: number
     page?: number
   } = {}): Promise<SearchResponse> {
-    const params = new URLSearchParams({
-      q: query,
-      ...options
-    })
+    const params = new URLSearchParams()
+    params.append('q', query)
+    if (options.type) params.append('type', options.type)
+    if (options.category) params.append('category', options.category)
+    if (options.author) params.append('author', options.author)
+    if (options.date_from) params.append('date_from', options.date_from)
+    if (options.date_to) params.append('date_to', options.date_to)
+    if (options.sort) params.append('sort', options.sort)
+    if (options.limit) params.append('limit', options.limit.toString())
+    if (options.page) params.append('page', options.page.toString())
 
     return apiClient.get(`${this.baseUrl}?${params.toString()}`)
   }
@@ -120,9 +126,12 @@ class SearchService {
   async getPopularSearches(): Promise<string[]> {
     try {
       const response = await this.getAnalytics()
-      return response.data.popular_terms || []
-    } catch (error) {
-      console.error('Failed to get popular searches:', error)
+      return response.data?.popular_terms || response.data?.popular || []
+    } catch (error: any) {
+      // Silently fail - analytics endpoint might not be available
+      if (error?.status !== 404) {
+        console.error('Failed to get popular searches:', error)
+      }
       return []
     }
   }
@@ -133,9 +142,12 @@ class SearchService {
   async getTrendingSearches(): Promise<string[]> {
     try {
       const response = await this.getAnalytics()
-      return response.data.trending_terms || []
-    } catch (error) {
-      console.error('Failed to get trending searches:', error)
+      return response.data?.trending_terms || response.data?.trending || []
+    } catch (error: any) {
+      // Silently fail - analytics endpoint might not be available
+      if (error?.status !== 404) {
+        console.error('Failed to get trending searches:', error)
+      }
       return []
     }
   }
@@ -179,7 +191,7 @@ class SearchService {
     func: T,
     wait: number
   ): (...args: Parameters<T>) => Promise<ReturnType<T>> {
-    let timeout: NodeJS.Timeout | null = null
+    let timeout: number | null = null
 
     return (...args: Parameters<T>): Promise<ReturnType<T>> => {
       return new Promise((resolve) => {

@@ -92,3 +92,12 @@ MAIL_PASSWORD=your-mailtrap-password
 MAIL_ENCRYPTION=tls
 ```
 
+
+
+
+
+
+
+
+
+

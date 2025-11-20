@@ -95,6 +95,21 @@ npm install
 npm run dev
 ```
 
+### Voice Actions SDK Setup
+```bash
+# Përditëso SDK në versionin më të ri
+cd frontend
+npm run voice-sdk:update
+
+# Ose përdor script-in bash për më shumë opsione
+./scripts/update-voice-sdk.sh latest
+
+# Kontrollo versionin aktual
+npm run voice-sdk:version
+```
+
+Për më shumë informacione, shiko [VOICE_ACTIONS_SDK_LOCALHOST_UPDATE.md](./VOICE_ACTIONS_SDK_LOCALHOST_UPDATE.md)
+
 ### Backend Setup
 ```bash
 cd backend
@@ -117,6 +132,7 @@ php artisan serve
 - **Contact**: Contact form with backend integration
 - **Subscribe**: User subscription system for notifications
 - **Interactive Content**: Like, comment, and share functionality for videos and articles
+- **Voice Control**: Voice Actions SDK integration for hands-free navigation and control
 
 ### Core Functionality
 - **Video System**: YouTube video integration with engagement tracking
@@ -142,6 +158,8 @@ php artisan serve
 - `POST /api/v1/videos/comments` - Add video comment
 - `GET /api/v1/subscribers` - List subscribers
 - `POST /api/v1/subscribers` - Create new subscriber
+- `GET /api/v1/commands` - Get voice commands for Voice Actions SDK
+- `GET /api/v1/commands/demo` - Get demo voice commands (no API key required)
 
 ## 🎨 Design System
 

@@ -40,6 +40,26 @@ const router = createRouter({
       component: () => import('../views/DisclaimerView.vue'),
     },
     {
+      path: '/privacy',
+      name: 'privacy',
+      component: () => import('../views/PrivacyPolicyView.vue'),
+    },
+    {
+      path: '/terms',
+      name: 'terms',
+      component: () => import('../views/TermsOfServiceView.vue'),
+    },
+    {
+      path: '/cookies',
+      name: 'cookies',
+      component: () => import('../views/CookiePolicyView.vue'),
+    },
+    {
+      path: '/settings',
+      name: 'settings',
+      component: () => import('../views/SettingsView.vue'),
+    },
+    {
       path: '/subscribe',
       name: 'subscribe',
       component: () => import('../views/SubscribeView.vue'),
@@ -75,6 +95,14 @@ const router = createRouter({
       component: () => import('../views/NotFoundView.vue'),
     },
   ],
+  scrollBehavior(to, from, savedPosition) {
+    // If there's a saved position (e.g., browser back/forward), use it
+    if (savedPosition) {
+      return savedPosition
+    }
+    // Otherwise, scroll to top
+    return { top: 0, behavior: 'smooth' }
+  },
 })
 
 export default router

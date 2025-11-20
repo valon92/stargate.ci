@@ -136,7 +136,7 @@
           <button
             type="submit"
             :disabled="isSubmitting"
-            class="w-full bg-gradient-to-r from-primary-500 to-secondary-500 text-white py-3 px-6 rounded-lg font-medium hover:from-primary-600 hover:to-secondary-600 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus:ring-offset-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+            class="w-full bg-black text-white py-3 px-6 rounded-lg font-medium hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus:ring-offset-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
           >
             {{ isSubmitting ? 'Creating account...' : 'Sign Up' }}
           </button>
@@ -207,10 +207,12 @@
 import { ref, onMounted } from 'vue'
 import { useHead } from '@vueuse/head'
 import { useRouter } from 'vue-router'
+import { useAuthStore } from '../stores/auth'
 import { videoApiService } from '@/services/videoApiService'
 
-// Router
+// Router and Auth
 const router = useRouter()
+const authStore = useAuthStore()
 
 // Set page title
 useHead({
@@ -340,10 +342,34 @@ const handleSignUp = async () => {
           acceptTerms: false
         }
 
-        // Redirect to home page after 2 seconds
+        // Redirect to saved URL or default location
+        const returnUrl = sessionStorage.getItem('return_url')
+        const returnScroll = sessionStorage.getItem('return_scroll')
+        const pendingVideoUrl = sessionStorage.getItem('pending_video_url')
+        
+        // Clean up sessionStorage
+        if (returnUrl) sessionStorage.removeItem('return_url')
+        if (returnScroll) sessionStorage.removeItem('return_scroll')
+        
         setTimeout(() => {
-          router.push('/')
-        }, 2000)
+          if (returnUrl) {
+            // Navigate to saved URL
+            router.push(returnUrl).then(() => {
+              // Restore scroll position after navigation
+              if (returnScroll) {
+                setTimeout(() => {
+                  window.scrollTo({ top: parseInt(returnScroll), behavior: 'auto' })
+                }, 100)
+              }
+            })
+          } else if (pendingVideoUrl) {
+            // Redirect to events page to open video
+            router.push('/events')
+          } else {
+            // Redirect to home page
+            router.push('/')
+          }
+        }, 1500)
         
       } else {
         throw new Error(response.message || 'Failed to create account')
@@ -371,10 +397,16 @@ const showToast = (message: string, type: 'success' | 'error' | 'warning' | 'inf
 
 // Check if user is already signed in
 onMounted(() => {
-  const subscribers = JSON.parse(localStorage.getItem('stargate_subscribers') || '[]')
-  if (subscribers.length > 0) {
-    // User is already signed in, redirect to home
-    showToast('You are already signed in!', 'info')
+  // Scroll to top
+  window.scrollTo({ top: 0, behavior: 'instant' })
+  
+  // Initialize auth store
+  authStore.initialize()
+  
+  // Only redirect if user is actually authenticated
+  if (authStore.isAuthenticated) {
+    // User is already logged in, redirect to home
+    showToast('You are already logged in!', 'info')
     setTimeout(() => {
       router.push('/')
     }, 1500)
@@ -384,9 +416,6 @@ onMounted(() => {
 
 <style scoped>
 .gradient-text {
-  background: linear-gradient(135deg, #0ea5e9, #a855f7);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: white;
 }
 </style>

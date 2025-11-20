@@ -62,3 +62,12 @@ echo ""
 echo "🎉 Setup complete! Your contact form will now send emails to svalon95@gmail.com"
 echo "📝 All contact messages will be delivered to your personal email address"
 
+
+
+
+
+
+
+
+
+

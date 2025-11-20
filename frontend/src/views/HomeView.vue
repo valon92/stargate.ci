@@ -208,7 +208,7 @@
               :key="member.id"
               class="text-center group hover:scale-105 transition-transform duration-200"
             >
-              <div class="w-16 h-16 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full flex items-center justify-center mx-auto mb-3 group-hover:shadow-lg">
+              <div class="w-16 h-16 bg-black rounded-full flex items-center justify-center mx-auto mb-3 group-hover:shadow-lg">
                 <span class="text-white font-bold text-lg">{{ member.username.charAt(0).toUpperCase() }}</span>
               </div>
               <div class="text-sm font-medium text-white truncate">{{ member.username }}</div>
@@ -269,7 +269,7 @@
           <div class="space-y-8">
             <div class="card group hover:scale-105 transition-transform duration-300">
               <div class="flex items-center mb-4">
-                <div class="w-12 h-12 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-lg flex items-center justify-center mr-4">
+                <div class="w-12 h-12 bg-black rounded-lg flex items-center justify-center mr-4">
                   <span class="text-white font-bold text-xl">S</span>
                 </div>
                 <h3 class="text-2xl font-bold text-white">Stargate</h3>
@@ -279,7 +279,7 @@
             
             <div class="card group hover:scale-105 transition-transform duration-300">
               <div class="flex items-center mb-4">
-                <div class="w-12 h-12 bg-gradient-to-r from-secondary-500 to-primary-500 rounded-lg flex items-center justify-center mr-4">
+                <div class="w-12 h-12 bg-black rounded-lg flex items-center justify-center mr-4">
                   <span class="text-white font-bold text-xl">.ci</span>
                 </div>
                 <h3 class="text-2xl font-bold text-white">Cristal Intelligence</h3>
@@ -288,9 +288,9 @@
             </div>
           </div>
           
-          <div class="card bg-gradient-to-br from-primary-900/20 to-secondary-900/20 border border-primary-500/30">
+          <div class="card bg-black/50 border border-gray-700">
             <div class="text-center">
-              <div class="w-20 h-20 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full flex items-center justify-center mx-auto mb-6">
+              <div class="w-20 h-20 bg-black rounded-full flex items-center justify-center mx-auto mb-6">
                 <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
                 </svg>
@@ -391,14 +391,19 @@ const loadMembers = async (page = 1, append = false) => {
       hasMoreMembers.value = false
       console.log('⚠️ Loading members from localStorage (fallback):', allMembers.value.length, 'members')
     }
-  } catch (error) {
-    console.error('❌ Error loading members from API:', error)
+  } catch (error: any) {
+    // Only log non-404 errors (404 is expected if subscribers endpoint doesn't exist)
+    if (error?.status !== 404 && error?.response?.status !== 404) {
+      console.error('❌ Error loading members from API:', error)
+    }
     // Fallback to localStorage if API fails
     const subscribers = JSON.parse(localStorage.getItem('stargate_subscribers') || '[]')
     allMembers.value = subscribers
     totalMembersCount.value = subscribers.length
     hasMoreMembers.value = false
-    console.log('⚠️ Loading members from localStorage (fallback):', allMembers.value.length, 'members')
+    if (error?.status !== 404 && error?.response?.status !== 404) {
+      console.log('⚠️ Loading members from localStorage (fallback):', allMembers.value.length, 'members')
+    }
   }
   updateDisplayedMembers()
 }
@@ -490,7 +495,7 @@ useHead({
 }
 
 .btn-primary {
-  background: linear-gradient(to right, #3b82f6, #8b5cf6);
+  background: black;
   color: white;
   padding: 0.75rem 1.5rem;
   border-radius: 0.5rem;
@@ -498,7 +503,7 @@ useHead({
   transition: all 0.3s;
 }
 .btn-primary:hover {
-  background: linear-gradient(to right, #2563eb, #7c3aed);
+  background: rgb(17, 24, 39);
 }
 
 .btn-outline {
@@ -515,9 +520,6 @@ useHead({
 }
 
 .gradient-text {
-  background: linear-gradient(to right, #60a5fa, #a78bfa);
-  background-clip: text;
-  -webkit-background-clip: text;
-  color: transparent;
+  color: white;
 }
 </style>

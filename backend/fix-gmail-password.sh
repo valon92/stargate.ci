@@ -67,3 +67,12 @@ echo ""
 echo "🎉 Configuration complete!"
 echo "📧 All contact form messages will now be sent to svalon95@gmail.com"
 
+
+
+
+
+
+
+
+
+

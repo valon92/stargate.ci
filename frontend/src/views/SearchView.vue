@@ -204,8 +204,8 @@ const performSearch = async (query: string) => {
 
   try {
     const response = await searchService.search(query, {
-      type: filters.value.type,
-      sort: filters.value.sort,
+      type: filters.value.type as 'all' | 'articles' | 'videos' | 'faqs' | 'users' | 'comments',
+      sort: filters.value.sort as 'relevance' | 'date' | 'title' | 'author',
       category: filters.value.category,
       author: filters.value.author,
       date_from: filters.value.date_from,
@@ -271,8 +271,8 @@ const loadMore = async () => {
   isLoadingMore.value = true
   try {
     const response = await searchService.search(currentQuery.value, {
-      type: filters.value.type,
-      sort: filters.value.sort,
+      type: filters.value.type as 'all' | 'articles' | 'videos' | 'faqs' | 'users' | 'comments',
+      sort: filters.value.sort as 'relevance' | 'date' | 'title' | 'author',
       category: filters.value.category,
       author: filters.value.author,
       date_from: filters.value.date_from,

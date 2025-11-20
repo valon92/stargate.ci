@@ -399,7 +399,7 @@ onMounted(() => {
 
 <style scoped>
 .btn-primary {
-  @apply bg-gradient-to-r from-primary-500 to-secondary-500 text-white px-6 py-3 rounded-lg font-medium hover:from-primary-600 hover:to-secondary-600 transition-all duration-200;
+  @apply bg-black text-white px-6 py-3 rounded-lg font-medium transition-all duration-200;
 }
 
 .prose {

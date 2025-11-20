@@ -150,3 +150,12 @@ Për të deployuar në production:
 
 **Sistemi është gati për production!** 🎉
 
+
+
+
+
+
+
+
+
+

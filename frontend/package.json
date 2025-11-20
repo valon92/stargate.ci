@@ -19,10 +19,15 @@
     "package": "tar -czf ../stargate-ci-deploy-$(date +%Y%m%d-%H%M%S).tar.gz -C dist .",
     "api:test": "node scripts/test-apis.js",
     "api:setup": "node scripts/setup-apis.js",
-    "api:health": "node scripts/check-api-health.js"
+    "api:health": "node scripts/check-api-health.js",
+    "voice-sdk:update": "npm install @valon92/voice-actions-sdk@latest",
+    "voice-sdk:update-github": "npm install git+https://github.com/valon92/voice-actions-sdk-.git#main --save",
+    "voice-sdk:version": "npm list @valon92/voice-actions-sdk",
+    "voice-sdk:check": "./scripts/update-voice-sdk.sh check"
   },
   "dependencies": {
     "@unhead/vue": "^2.0.14",
+    "@valon92/voice-actions-sdk": "github:valon92/voice-actions-sdk-#main",
     "@vueuse/head": "^2.0.0",
     "pinia": "^3.0.3",
     "vue": "^3.5.18",

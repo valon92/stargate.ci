@@ -5,10 +5,13 @@
         <!-- Brand Section -->
         <div class="col-span-1 md:col-span-2">
           <div class="flex items-center space-x-2 mb-4">
-            <div class="w-8 h-8 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-lg flex items-center justify-center">
-              <span class="text-white font-bold text-lg">S</span>
+            <div class="w-8 h-8 bg-black rounded-lg flex items-center justify-center">
+              <span class="text-white font-bold text-base">S</span>
             </div>
-            <span class="text-xl font-bold gradient-text">Stargate.ci</span>
+            <div class="block">
+              <span class="text-xl font-bold text-white">Stargate.ci</span>
+              <div class="text-xs text-gray-400 -mt-0.5">Cristal Intelligence</div>
+            </div>
           </div>
           <p class="text-gray-400 mb-4 max-w-md">
             Independent educational platform connecting companies with Stargate Project and Cristal Intelligence opportunities.
@@ -42,8 +45,12 @@
             </p>
           </div>
           <div class="mt-4 md:mt-0">
-            <div class="flex space-x-6 text-sm">
+            <div class="flex flex-wrap gap-4 text-sm">
+              <RouterLink to="/privacy" class="text-gray-400 hover:text-white transition-colors duration-200">Privacy</RouterLink>
+              <RouterLink to="/terms" class="text-gray-400 hover:text-white transition-colors duration-200">Terms</RouterLink>
+              <RouterLink to="/cookies" class="text-gray-400 hover:text-white transition-colors duration-200">Cookies</RouterLink>
               <RouterLink to="/disclaimer" class="text-gray-400 hover:text-white transition-colors duration-200">Disclaimer</RouterLink>
+              <RouterLink to="/settings" class="text-gray-400 hover:text-white transition-colors duration-200">Settings</RouterLink>
             </div>
           </div>
         </div>
