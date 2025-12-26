@@ -1,15 +1,15 @@
 <template>
   <div class="min-h-screen">
     <!-- Hero Section -->
-    <section class="relative overflow-hidden bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
-      <div class="absolute inset-0 bg-gradient-to-br from-primary-900/10 to-secondary-900/10"></div>
+    <section class="relative overflow-hidden bg-gradient-to-br from-gray-100 via-gray-50 to-gray-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+      <div class="absolute inset-0 bg-gradient-to-br from-primary-900/10 to-secondary-900/10 dark:from-primary-900/10 dark:to-secondary-900/10"></div>
       
       <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
         <div class="text-center">
           <h1 class="text-4xl md:text-6xl font-bold mb-6">
             <span class="gradient-text">Settings</span>
           </h1>
-          <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+          <p class="text-xl text-gray-700 dark:text-gray-300 max-w-3xl mx-auto">
             Manage your preferences and account settings
           </p>
         </div>
@@ -17,23 +17,23 @@
     </section>
 
     <!-- Settings Content -->
-    <section class="py-24 bg-gray-800/50">
+    <section class="py-24 bg-gray-800/50 dark:bg-gray-800/50 bg-gray-50">
       <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="space-y-6">
           <!-- Appearance Settings -->
           <div class="card">
-            <h2 class="text-2xl font-bold text-white mb-6">Appearance</h2>
+            <h2 class="text-2xl font-bold text-black dark:text-white mb-6">Appearance</h2>
             
             <div class="space-y-4">
               <div class="flex items-center justify-between">
                 <div>
-                  <label class="text-white font-medium">Theme</label>
-                  <p class="text-gray-400 text-sm">Choose your preferred color theme</p>
+                  <label class="text-black dark:text-white font-medium">Theme</label>
+                  <p class="text-gray-600 dark:text-gray-400 text-sm">Choose your preferred color theme</p>
                 </div>
                 <select 
                   v-model="settings.theme"
                   @change="saveSettings"
-                  class="bg-gray-700 text-white border border-gray-600 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  class="bg-white dark:bg-gray-700 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500 transition-colors"
                 >
                   <option value="dark">Dark</option>
                   <option value="light">Light</option>
@@ -43,13 +43,13 @@
 
               <div class="flex items-center justify-between">
                 <div>
-                  <label class="text-white font-medium">Language</label>
-                  <p class="text-gray-400 text-sm">Select your preferred language</p>
+                  <label class="text-black dark:text-white font-medium">Language</label>
+                  <p class="text-gray-600 dark:text-gray-400 text-sm">Select your preferred language</p>
                 </div>
                 <select 
                   v-model="settings.language"
                   @change="saveSettings"
-                  class="bg-gray-700 text-white border border-gray-600 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  class="bg-white dark:bg-gray-700 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500 transition-colors"
                 >
                   <option value="en">English</option>
                   <option value="sq">Albanian</option>
@@ -60,13 +60,13 @@
 
           <!-- Voice Control Settings -->
           <div class="card">
-            <h2 class="text-2xl font-bold text-white mb-6">Voice Control</h2>
+            <h2 class="text-2xl font-bold text-black dark:text-white mb-6">Voice Control</h2>
             
             <div class="space-y-4">
               <div class="flex items-center justify-between">
                 <div>
-                  <label class="text-white font-medium">Enable Voice Control</label>
-                  <p class="text-gray-400 text-sm">Allow voice commands to control the platform</p>
+                  <label class="text-black dark:text-white font-medium">Enable Voice Control</label>
+                  <p class="text-gray-600 dark:text-gray-400 text-sm">Allow voice commands to control the platform</p>
                 </div>
                 <label class="relative inline-flex items-center cursor-pointer">
                   <input 
@@ -81,14 +81,14 @@
 
               <div class="flex items-center justify-between">
                 <div>
-                  <label class="text-white font-medium">Voice Control Language</label>
-                  <p class="text-gray-400 text-sm">Language for voice recognition</p>
+                  <label class="text-black dark:text-white font-medium">Voice Control Language</label>
+                  <p class="text-gray-600 dark:text-gray-400 text-sm">Language for voice recognition</p>
                 </div>
                 <select 
                   v-model="settings.voiceLanguage"
                   @change="saveSettings"
                   :disabled="!settings.voiceControl"
-                  class="bg-gray-700 text-white border border-gray-600 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                  class="bg-white dark:bg-gray-700 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                 >
                   <option value="en-US">English</option>
                 </select>
@@ -96,8 +96,8 @@
 
               <div class="flex items-center justify-between">
                 <div>
-                  <label class="text-white font-medium">Voice Feedback</label>
-                  <p class="text-gray-400 text-sm">Play audio feedback for voice commands</p>
+                  <label class="text-black dark:text-white font-medium">Voice Feedback</label>
+                  <p class="text-gray-600 dark:text-gray-400 text-sm">Play audio feedback for voice commands</p>
                 </div>
                 <label class="relative inline-flex items-center cursor-pointer">
                   <input 
@@ -115,13 +115,13 @@
 
           <!-- Notification Settings -->
           <div class="card">
-            <h2 class="text-2xl font-bold text-white mb-6">Notifications</h2>
+            <h2 class="text-2xl font-bold text-black dark:text-white mb-6">Notifications</h2>
             
             <div class="space-y-4">
               <div class="flex items-center justify-between">
                 <div>
-                  <label class="text-white font-medium">Email Notifications</label>
-                  <p class="text-gray-400 text-sm">Receive email updates about events and news</p>
+                  <label class="text-black dark:text-white font-medium">Email Notifications</label>
+                  <p class="text-gray-600 dark:text-gray-400 text-sm">Receive email updates about events and news</p>
                 </div>
                 <label class="relative inline-flex items-center cursor-pointer">
                   <input 
@@ -136,8 +136,8 @@
 
               <div class="flex items-center justify-between">
                 <div>
-                  <label class="text-white font-medium">Event Reminders</label>
-                  <p class="text-gray-400 text-sm">Get reminders for upcoming events</p>
+                  <label class="text-black dark:text-white font-medium">Event Reminders</label>
+                  <p class="text-gray-600 dark:text-gray-400 text-sm">Get reminders for upcoming events</p>
                 </div>
                 <label class="relative inline-flex items-center cursor-pointer">
                   <input 
@@ -152,8 +152,8 @@
 
               <div class="flex items-center justify-between">
                 <div>
-                  <label class="text-white font-medium">Newsletter</label>
-                  <p class="text-gray-400 text-sm">Subscribe to our newsletter for updates</p>
+                  <label class="text-black dark:text-white font-medium">Newsletter</label>
+                  <p class="text-gray-600 dark:text-gray-400 text-sm">Subscribe to our newsletter for updates</p>
                 </div>
                 <label class="relative inline-flex items-center cursor-pointer">
                   <input 
@@ -170,13 +170,13 @@
 
           <!-- Privacy Settings -->
           <div class="card">
-            <h2 class="text-2xl font-bold text-white mb-6">Privacy</h2>
+            <h2 class="text-2xl font-bold text-black dark:text-white mb-6">Privacy</h2>
             
             <div class="space-y-4">
               <div class="flex items-center justify-between">
                 <div>
-                  <label class="text-white font-medium">Analytics</label>
-                  <p class="text-gray-400 text-sm">Help us improve by sharing anonymous usage data</p>
+                  <label class="text-black dark:text-white font-medium">Analytics</label>
+                  <p class="text-gray-600 dark:text-gray-400 text-sm">Help us improve by sharing anonymous usage data</p>
                 </div>
                 <label class="relative inline-flex items-center cursor-pointer">
                   <input 
@@ -191,8 +191,8 @@
 
               <div class="flex items-center justify-between">
                 <div>
-                  <label class="text-white font-medium">Personalized Content</label>
-                  <p class="text-gray-400 text-sm">Show content based on your interests</p>
+                  <label class="text-black dark:text-white font-medium">Personalized Content</label>
+                  <p class="text-gray-600 dark:text-gray-400 text-sm">Show content based on your interests</p>
                 </div>
                 <label class="relative inline-flex items-center cursor-pointer">
                   <input 
@@ -206,10 +206,10 @@
               </div>
             </div>
 
-            <div class="mt-6 pt-6 border-t border-gray-700">
+            <div class="mt-6 pt-6 border-t border-gray-700 dark:border-gray-700 border-gray-200">
               <RouterLink 
                 to="/privacy" 
-                class="text-primary-400 hover:text-primary-300 underline text-sm"
+                class="text-primary-400 dark:text-primary-400 text-primary-600 hover:text-primary-300 dark:hover:text-primary-300 hover:text-primary-700 underline text-sm"
               >
                 View Privacy Policy
               </RouterLink>
@@ -218,21 +218,21 @@
 
           <!-- Cookie Settings -->
           <div class="card">
-            <h2 class="text-2xl font-bold text-white mb-6">Cookie Preferences</h2>
+            <h2 class="text-2xl font-bold text-black dark:text-white mb-6">Cookie Preferences</h2>
             
             <div class="space-y-4">
               <div class="flex items-center justify-between">
                 <div>
-                  <label class="text-white font-medium">Essential Cookies</label>
-                  <p class="text-gray-400 text-sm">Required for the platform to function</p>
+                  <label class="text-black dark:text-white font-medium">Essential Cookies</label>
+                  <p class="text-gray-600 dark:text-gray-400 text-sm">Required for the platform to function</p>
                 </div>
-                <span class="text-gray-500 text-sm">Always Active</span>
+                <span class="text-gray-500 dark:text-gray-500 text-sm">Always Active</span>
               </div>
 
               <div class="flex items-center justify-between">
                 <div>
-                  <label class="text-white font-medium">Analytics Cookies</label>
-                  <p class="text-gray-400 text-sm">Help us understand how you use the platform</p>
+                  <label class="text-black dark:text-white font-medium">Analytics Cookies</label>
+                  <p class="text-gray-600 dark:text-gray-400 text-sm">Help us understand how you use the platform</p>
                 </div>
                 <label class="relative inline-flex items-center cursor-pointer">
                   <input 
@@ -247,8 +247,8 @@
 
               <div class="flex items-center justify-between">
                 <div>
-                  <label class="text-white font-medium">Functional Cookies</label>
-                  <p class="text-gray-400 text-sm">Remember your preferences and settings</p>
+                  <label class="text-black dark:text-white font-medium">Functional Cookies</label>
+                  <p class="text-gray-600 dark:text-gray-400 text-sm">Remember your preferences and settings</p>
                 </div>
                 <label class="relative inline-flex items-center cursor-pointer">
                   <input 
@@ -262,10 +262,10 @@
               </div>
             </div>
 
-            <div class="mt-6 pt-6 border-t border-gray-700">
+            <div class="mt-6 pt-6 border-t border-gray-700 dark:border-gray-700 border-gray-200">
               <RouterLink 
                 to="/cookies" 
-                class="text-primary-400 hover:text-primary-300 underline text-sm"
+                class="text-primary-400 dark:text-primary-400 text-primary-600 hover:text-primary-300 dark:hover:text-primary-300 hover:text-primary-700 underline text-sm"
               >
                 Learn more about cookies
               </RouterLink>
@@ -274,13 +274,13 @@
 
           <!-- Data Management -->
           <div class="card">
-            <h2 class="text-2xl font-bold text-white mb-6">Data Management</h2>
+            <h2 class="text-2xl font-bold text-black dark:text-white mb-6">Data Management</h2>
             
             <div class="space-y-4">
               <div class="flex items-center justify-between">
                 <div>
-                  <label class="text-white font-medium">Export Data</label>
-                  <p class="text-gray-400 text-sm">Download a copy of your data</p>
+                  <label class="text-black dark:text-white font-medium">Export Data</label>
+                  <p class="text-gray-600 dark:text-gray-400 text-sm">Download a copy of your data</p>
                 </div>
                 <button 
                   @click="exportData"
@@ -292,8 +292,8 @@
 
               <div class="flex items-center justify-between">
                 <div>
-                  <label class="text-white font-medium">Delete Account</label>
-                  <p class="text-gray-400 text-sm">Permanently delete your account and data</p>
+                  <label class="text-black dark:text-white font-medium">Delete Account</label>
+                  <p class="text-gray-600 dark:text-gray-400 text-sm">Permanently delete your account and data</p>
                 </div>
                 <button 
                   @click="confirmDelete"
@@ -322,6 +322,7 @@
 import { ref, onMounted } from 'vue'
 import { RouterLink } from 'vue-router'
 import { useHead } from '@vueuse/head'
+import { useTheme } from '../composables/useTheme'
 
 useHead({
   title: 'Settings | Stargate.ci',
@@ -365,6 +366,9 @@ const settings = ref<Settings>({
 
 const saveMessage = ref<string>('')
 
+// Use theme composable
+const { setTheme } = useTheme()
+
 const notifyVoiceControlChange = () => {
   if (typeof window === 'undefined') return
   window.dispatchEvent(
@@ -396,20 +400,8 @@ const saveSettings = () => {
     saveMessage.value = ''
   }, 3000)
   
-  // Apply theme immediately
-  if (settings.value.theme === 'dark') {
-    document.documentElement.classList.add('dark')
-  } else if (settings.value.theme === 'light') {
-    document.documentElement.classList.remove('dark')
-  } else {
-    // Auto - follow system preference
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
-    if (prefersDark) {
-      document.documentElement.classList.add('dark')
-    } else {
-      document.documentElement.classList.remove('dark')
-    }
-  }
+  // Apply theme using composable
+  setTheme(settings.value.theme as 'light' | 'dark' | 'auto')
 }
 
 const exportData = () => {
@@ -436,7 +428,7 @@ const confirmDelete = () => {
 
 onMounted(() => {
   loadSettings()
-  saveSettings() // Apply loaded settings
+  // Theme will be applied automatically by useTheme composable in App.vue
 })
 </script>
 

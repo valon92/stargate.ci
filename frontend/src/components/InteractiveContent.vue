@@ -1,7 +1,7 @@
 <template>
   <div class="interactive-content">
     <!-- YouTube-like User Status Bar -->
-    <div class="user-status-bar mb-4 p-3 bg-gray-800/50 border border-gray-700 rounded-lg">
+    <div class="user-status-bar mb-4 p-3 bg-white dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-lg">
       <div class="flex items-center justify-between">
         <!-- User Info -->
         <div class="flex items-center gap-3">
@@ -11,10 +11,10 @@
             </span>
           </div>
           <div>
-            <span class="text-white font-medium text-sm">
+            <span class="text-black dark:text-white font-medium text-sm">
               {{ isSubscribed && currentUser && currentUser.name ? currentUser.name : 'Guest User' }}
             </span>
-            <span v-if="isSubscribed && currentUser" class="text-gray-400 text-xs ml-2">
+            <span v-if="isSubscribed && currentUser" class="text-gray-600 dark:text-gray-400 text-xs ml-2">
               {{ currentUser.email }}
             </span>
           </div>
@@ -35,7 +35,7 @@
           <button
             v-else
             @click="unsubscribe"
-            class="flex items-center gap-2 px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-full font-medium text-sm transition-colors"
+            class="flex items-center gap-2 px-4 py-2 bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-700 text-gray-900 dark:text-white rounded-full font-medium text-sm transition-colors"
           >
             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
               <path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/>
@@ -55,7 +55,7 @@
           @click="toggleLike"
           :disabled="!isSubscribed"
           :class="[
-            'flex items-center gap-2 px-4 py-2 bg-gray-800 hover:bg-gray-700 text-gray-300 rounded-full font-medium transition-all duration-200',
+            'flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-900 dark:text-gray-300 rounded-full font-medium transition-all duration-200',
             !isSubscribed ? 'cursor-not-allowed opacity-50' : '',
             isLiked ? 'bg-red-600 text-white hover:bg-red-700' : ''
           ]"
@@ -69,7 +69,7 @@
         <!-- Comment Button -->
         <button
           @click="toggleComments"
-          class="flex items-center gap-2 px-4 py-2 bg-gray-800 hover:bg-gray-700 text-gray-300 rounded-full font-medium transition-all duration-200"
+          class="flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-900 dark:text-gray-300 rounded-full font-medium transition-all duration-200"
         >
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
@@ -82,7 +82,7 @@
           @click="toggleShare"
           :disabled="!isSubscribed"
           :class="[
-            'flex items-center gap-2 px-4 py-2 bg-gray-800 hover:bg-gray-700 text-gray-300 rounded-full font-medium transition-all duration-200',
+            'flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-900 dark:text-gray-300 rounded-full font-medium transition-all duration-200',
             !isSubscribed ? 'cursor-not-allowed opacity-50' : ''
           ]"
         >
@@ -96,10 +96,10 @@
 
     <!-- Comments Section -->
     <div v-if="showComments" class="comments-section mb-6">
-      <div class="bg-gray-800/90 backdrop-blur-sm border border-gray-600/50 rounded-lg p-6 shadow-xl">
+      <div class="bg-white dark:bg-gray-800/90 backdrop-blur-sm border border-gray-200 dark:border-gray-600/50 rounded-lg p-6 shadow-xl">
         <div class="flex items-center justify-between mb-6">
-          <h3 class="text-xl font-bold text-white">Comments ({{ commentsCount }})</h3>
-          <div class="flex items-center gap-2 text-sm text-gray-400">
+          <h3 class="text-xl font-bold text-black dark:text-white">Comments ({{ commentsCount }})</h3>
+          <div class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
             </svg>
@@ -108,24 +108,24 @@
         </div>
         
         <!-- Add Comment Form -->
-        <div class="mb-6 p-4 bg-gray-700/50 rounded-lg border border-gray-600/30">
+        <div class="mb-6 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-600/30">
           <div class="flex items-start gap-3">
             <div class="w-10 h-10 bg-primary-500 rounded-full flex items-center justify-center text-white font-semibold text-sm">
               {{ isSubscribed && currentUser && currentUser.name ? currentUser.name.charAt(0).toUpperCase() : 'G' }}
             </div>
             <div class="flex-1">
               <div v-if="isSubscribed && currentUser" class="mb-2">
-                <span class="text-sm text-gray-300">Commenting as <strong class="text-primary-400">{{ currentUser.name }}</strong></span>
+                <span class="text-sm text-gray-700 dark:text-gray-300">Commenting as <strong class="text-primary-600 dark:text-primary-400">{{ currentUser.name }}</strong></span>
               </div>
               <textarea
                 v-model="newComment"
                 :disabled="!isSubscribed"
                 :placeholder="isSubscribed ? 'Share your thoughts about this content...' : 'Sign in to comment... (You can view all comments without signing in)'"
                 :class="[
-                  'w-full px-4 py-3 border rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none',
+                  'w-full px-4 py-3 border rounded-lg text-black dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none',
                   isSubscribed 
-                    ? 'bg-gray-600/50 border-gray-500/50' 
-                    : 'bg-gray-800/50 border-gray-700/50 cursor-not-allowed'
+                    ? 'bg-white dark:bg-gray-600/50 border-gray-300 dark:border-gray-500/50' 
+                    : 'bg-gray-100 dark:bg-gray-800/50 border-gray-300 dark:border-gray-700/50 cursor-not-allowed'
                 ]"
                 rows="3"
                 @keyup.ctrl.enter="addComment"
@@ -144,9 +144,9 @@
         </div>
 
         <!-- Sign In Encouragement -->
-        <div v-if="!isSubscribed" class="mb-4 p-3 bg-blue-900/20 border border-blue-500/30 rounded-lg">
-          <p class="text-blue-300 text-sm">
-            <router-link to="/signin" class="text-blue-400 hover:text-blue-300 underline">
+        <div v-if="!isSubscribed" class="mb-4 p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-500/30 rounded-lg">
+          <p class="text-blue-800 dark:text-blue-300 text-sm">
+            <router-link to="/signin" class="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 underline">
               Sign in to Stargate.ci
             </router-link>
             to like, comment, and reply! You can view all comments and likes without signing in.
@@ -159,8 +159,8 @@
             v-for="comment in comments"
             :key="comment.id"
             :class="[
-              'bg-gray-700/80 backdrop-blur-sm border border-gray-600/40 rounded-lg p-5 transition-all duration-200 hover:bg-gray-700/90 hover:border-gray-500/60 shadow-lg',
-              comment.isPinned ? 'border-l-4 border-yellow-500 bg-yellow-900/20 shadow-yellow-500/20' : ''
+              'bg-white dark:bg-gray-700/80 backdrop-blur-sm border border-gray-200 dark:border-gray-600/40 rounded-lg p-5 transition-all duration-200 hover:bg-gray-50 dark:hover:bg-gray-700/90 hover:border-gray-300 dark:hover:border-gray-500/60 shadow-lg',
+              comment.isPinned ? 'border-l-4 border-yellow-500 bg-yellow-50 dark:bg-yellow-900/20 shadow-yellow-500/20' : ''
             ]"
           >
             <!-- Pinned Badge -->
@@ -177,13 +177,13 @@
               </div>
               <div class="flex-1">
                 <div class="flex items-center gap-2 mb-2">
-                  <span class="font-medium text-white">{{ comment.user }}</span>
-                  <span class="text-gray-400 text-sm">{{ formatDate(comment.date) }}</span>
-                  <span v-if="comment.isEdited" class="text-gray-500 text-xs">(edited)</span>
+                  <span class="font-medium text-black dark:text-white">{{ comment.user }}</span>
+                  <span class="text-gray-600 dark:text-gray-400 text-sm">{{ formatDate(comment.date) }}</span>
+                  <span v-if="comment.isEdited" class="text-gray-500 dark:text-gray-500 text-xs">(edited)</span>
                 </div>
                 
                 <!-- Comment Text -->
-                <div v-if="editingComment !== comment.id" class="text-gray-300 mb-3">
+                <div v-if="editingComment !== comment.id" class="text-gray-700 dark:text-gray-300 mb-3">
                   {{ comment.text }}
                 </div>
                 
@@ -191,7 +191,7 @@
                 <div v-else class="mb-3">
                   <textarea
                     v-model="editText"
-                    class="w-full px-3 py-2 bg-gray-600 border border-gray-500 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 resize-none"
+                    class="w-full px-3 py-2 bg-white dark:bg-gray-600 border border-gray-300 dark:border-gray-500 rounded-lg text-black dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 resize-none"
                     rows="3"
                     placeholder="Edit your comment..."
                   ></textarea>
@@ -204,7 +204,7 @@
                     </button>
                     <button
                       @click="editingComment = null; editText = ''"
-                      class="px-3 py-1 bg-gray-600 hover:bg-gray-700 text-white text-sm rounded transition-colors"
+                      class="px-3 py-1 bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-700 text-gray-900 dark:text-white text-sm rounded transition-colors"
                     >
                       Cancel
                     </button>
@@ -217,7 +217,7 @@
                     @click="toggleCommentLike(comment.id)"
                     :class="[
                       'flex items-center gap-1 text-sm transition-colors',
-                      comment.isLiked ? 'text-red-400' : 'text-gray-400 hover:text-red-400'
+                      comment.isLiked ? 'text-red-600 dark:text-red-400' : 'text-gray-600 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400'
                     ]"
                   >
                     <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
@@ -228,21 +228,21 @@
                   
                   <button
                     @click="replyToComment(comment.id)"
-                    class="text-gray-400 hover:text-blue-400 text-sm transition-colors"
+                    class="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 text-sm transition-colors"
                   >
                     Reply ({{ comment.replies.length }})
                   </button>
                   
                   <button
                     @click="editComment(comment.id)"
-                    class="text-gray-400 hover:text-yellow-400 text-sm transition-colors"
+                    class="text-gray-600 dark:text-gray-400 hover:text-yellow-600 dark:hover:text-yellow-400 text-sm transition-colors"
                   >
                     Edit
                   </button>
                   
                   <button
                     @click="deleteComment(comment.id)"
-                    class="text-gray-400 hover:text-red-400 text-sm transition-colors"
+                    class="text-gray-600 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 text-sm transition-colors"
                   >
                     Delete
                   </button>
@@ -251,7 +251,7 @@
                     @click="pinComment(comment.id)"
                     :class="[
                       'text-sm transition-colors',
-                      comment.isPinned ? 'text-yellow-400' : 'text-gray-400 hover:text-yellow-400'
+                      comment.isPinned ? 'text-yellow-600 dark:text-yellow-400' : 'text-gray-600 dark:text-gray-400 hover:text-yellow-600 dark:hover:text-yellow-400'
                     ]"
                   >
                     {{ comment.isPinned ? 'Unpin' : 'Pin' }}
@@ -259,7 +259,7 @@
                 </div>
 
                 <!-- Reply Form -->
-                <div v-if="replyingTo === comment.id" class="mt-4 p-4 bg-gray-600/70 backdrop-blur-sm border border-gray-500/40 rounded-lg shadow-lg">
+                <div v-if="replyingTo === comment.id" class="mt-4 p-4 bg-gray-50 dark:bg-gray-600/70 backdrop-blur-sm border border-gray-200 dark:border-gray-500/40 rounded-lg shadow-lg">
                   <div class="flex items-start gap-3">
                     <div class="w-8 h-8 bg-secondary-500 rounded-full flex items-center justify-center text-white font-semibold text-xs">
                       {{ isSubscribed ? 'S' : 'G' }}
@@ -267,7 +267,7 @@
                     <div class="flex-1">
                       <textarea
                         v-model="replyText"
-                        class="w-full px-4 py-3 bg-gray-700/50 border border-gray-500/50 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none"
+                        class="w-full px-4 py-3 bg-white dark:bg-gray-700/50 border border-gray-300 dark:border-gray-500/50 rounded-lg text-black dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none"
                         rows="2"
                         :placeholder="isSubscribed ? 'Write a reply...' : 'Write a reply... (Sign in to reply, but you can view all replies without signing in)'"
                         @keyup.ctrl.enter="addReply(comment.id)"
@@ -281,7 +281,7 @@
                         </button>
                         <button
                           @click="replyingTo = null; replyText = ''"
-                          class="px-3 py-1.5 bg-gray-600 hover:bg-gray-700 text-white text-sm rounded-lg transition-all duration-200"
+                          class="px-3 py-1.5 bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-700 text-gray-900 dark:text-white text-sm rounded-lg transition-all duration-200"
                         >
                           Cancel
                         </button>
@@ -295,7 +295,7 @@
                   <div
                     v-for="reply in comment.replies"
                     :key="reply.id"
-                    class="bg-gray-600/60 backdrop-blur-sm border border-gray-500/30 rounded-lg p-4 ml-6 shadow-md hover:bg-gray-600/70 transition-all duration-200"
+                    class="bg-gray-50 dark:bg-gray-600/60 backdrop-blur-sm border border-gray-200 dark:border-gray-500/30 rounded-lg p-4 ml-6 shadow-md hover:bg-gray-100 dark:hover:bg-gray-600/70 transition-all duration-200"
                   >
                     <div class="flex items-start gap-3">
                       <div class="w-8 h-8 bg-secondary-500 rounded-full flex items-center justify-center text-white font-semibold text-xs">
@@ -303,16 +303,16 @@
                       </div>
                       <div class="flex-1">
                         <div class="flex items-center gap-2 mb-1">
-                          <span class="font-medium text-white text-sm">{{ reply.user }}</span>
-                          <span class="text-gray-400 text-xs">{{ formatDate(reply.date) }}</span>
+                          <span class="font-medium text-black dark:text-white text-sm">{{ reply.user }}</span>
+                          <span class="text-gray-600 dark:text-gray-400 text-xs">{{ formatDate(reply.date) }}</span>
                         </div>
-                        <p class="text-gray-300 text-sm">{{ reply.text }}</p>
+                        <p class="text-gray-700 dark:text-gray-300 text-sm">{{ reply.text }}</p>
                         <div class="flex items-center gap-3 mt-2">
                           <button
                             @click="toggleCommentLike(reply.id)"
                             :class="[
                               'flex items-center gap-1 text-xs transition-colors',
-                              reply.isLiked ? 'text-red-400' : 'text-gray-400 hover:text-red-400'
+                              reply.isLiked ? 'text-red-600 dark:text-red-400' : 'text-gray-600 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400'
                             ]"
                           >
                             <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
@@ -322,7 +322,7 @@
                           </button>
                           <button
                             @click="deleteComment(reply.id)"
-                            class="text-gray-400 hover:text-red-400 text-xs transition-colors"
+                            class="text-gray-600 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 text-xs transition-colors"
                           >
                             Delete
                           </button>
@@ -340,7 +340,7 @@
         <button
           v-if="hasMoreComments"
           @click="loadMoreComments"
-          class="w-full mt-4 py-2 text-primary-400 hover:text-primary-300 transition-colors"
+          class="w-full mt-4 py-2 text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 transition-colors"
         >
           Load more comments
         </button>
@@ -349,12 +349,12 @@
 
     <!-- Share Modal -->
     <div v-if="showShare" class="share-modal fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div class="bg-gray-800 rounded-lg p-6 max-w-md w-full mx-4">
+      <div class="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-md w-full mx-4">
         <div class="flex items-center justify-between mb-4">
-          <h3 class="text-lg font-semibold text-white">Share Content</h3>
+          <h3 class="text-lg font-semibold text-black dark:text-white">Share Content</h3>
           <button
             @click="toggleShare"
-            class="text-gray-400 hover:text-white transition-colors"
+            class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
           >
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>

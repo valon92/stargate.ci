@@ -1,7 +1,7 @@
 <template>
-  <div class="min-h-screen bg-gray-900">
+  <div class="min-h-screen bg-gray-900 dark:bg-gray-900 bg-white">
     <!-- Header -->
-    <div class="bg-gray-800/50 border-b border-gray-700">
+    <div class="bg-gray-800/50 dark:bg-gray-800/50 bg-gray-50 border-b border-gray-700 dark:border-gray-700 border-gray-200">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <div class="flex flex-col lg:flex-row gap-6">
           <!-- Search Box -->
@@ -21,7 +21,7 @@
             <select
               v-model="filters.type"
               @change="applyFilters"
-              class="px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+              class="px-3 py-2 bg-gray-700 dark:bg-gray-700 bg-white border border-gray-600 dark:border-gray-600 border-gray-300 rounded-lg text-white dark:text-white text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
             >
               <option value="all">All Types</option>
               <option value="articles">Articles</option>
@@ -35,7 +35,7 @@
             <select
               v-model="filters.sort"
               @change="applyFilters"
-              class="px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+              class="px-3 py-2 bg-gray-700 dark:bg-gray-700 bg-white border border-gray-600 dark:border-gray-600 border-gray-300 rounded-lg text-white dark:text-white text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
             >
               <option value="relevance">Relevance</option>
               <option value="date">Date</option>
@@ -46,7 +46,7 @@
             <!-- Clear Filters -->
             <button
               @click="clearFilters"
-              class="px-3 py-2 text-gray-400 hover:text-white text-sm transition-colors"
+              class="px-3 py-2 text-gray-400 dark:text-gray-400 text-gray-600 hover:text-white dark:hover:text-white hover:text-gray-900 text-sm transition-colors"
             >
               Clear Filters
             </button>
@@ -61,12 +61,12 @@
       <div v-if="hasSearched">
         <!-- Results Header -->
         <div class="mb-6">
-          <h1 class="text-2xl font-bold text-white mb-2">
+          <h1 class="text-2xl font-bold text-white dark:text-white text-gray-900 mb-2">
             Search Results
           </h1>
-          <p class="text-gray-400">
+          <p class="text-gray-400 dark:text-gray-400 text-gray-600">
             {{ totalResults }} results for "{{ currentQuery }}"
-            <span v-if="isLoading" class="ml-2 text-primary-500">Searching...</span>
+            <span v-if="isLoading" class="ml-2 text-primary-500 dark:text-primary-500 text-primary-600">Searching...</span>
           </p>
         </div>
 
@@ -77,7 +77,7 @@
 
         <!-- No Results -->
         <div v-else-if="results.length === 0" class="text-center py-12">
-          <div class="text-gray-400 mb-4">
+          <div class="text-gray-400 dark:text-gray-400 text-gray-600 mb-4">
             <svg class="mx-auto h-12 w-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
             </svg>

@@ -1,5 +1,5 @@
 <template>
-  <header class="sticky top-0 z-50 bg-gray-900/90 backdrop-blur-sm border-b border-gray-700/30 shadow-sm">
+  <header class="sticky top-0 z-50 bg-gray-900/90 dark:bg-gray-900/90 bg-white/90 backdrop-blur-sm border-b border-gray-700/30 dark:border-gray-700/30 border-gray-200/30 shadow-sm transition-colors duration-300">
     <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between items-center h-14">
         <!-- Logo Section - Optimized -->
@@ -9,8 +9,8 @@
               <span class="text-white font-bold text-sm lg:text-base">S</span>
             </div>
             <div class="block">
-              <span class="text-base sm:text-lg lg:text-xl font-bold text-white">Stargate.ci</span>
-              <div class="text-xs text-gray-400 -mt-0.5">Cristal Intelligence</div>
+              <span class="text-base sm:text-lg lg:text-xl font-bold text-black dark:text-white">Stargate.ci</span>
+              <div class="text-xs text-gray-400 dark:text-gray-400 text-gray-700 -mt-0.5">Cristal Intelligence</div>
             </div>
           </RouterLink>
         </div>
@@ -37,9 +37,9 @@
                   v-for="item in primaryNavigation"
                   :key="item.name"
                   :to="item.href"
-                  class="text-gray-300 hover:text-white px-3 py-1.5 rounded-md text-sm font-medium transition-colors duration-150 hover:bg-gray-800/40"
+                  class="text-gray-300 dark:text-gray-300 text-gray-700 hover:text-white dark:hover:text-white hover:text-gray-900 px-3 py-1.5 rounded-md text-sm font-medium transition-colors duration-150 hover:bg-gray-800/40 dark:hover:bg-gray-800/40 hover:bg-gray-100"
                   :class="{ 
-                    'text-white bg-primary-500/20 border border-primary-500/30': $route.path === item.href 
+                    'text-white dark:text-white text-gray-900 bg-primary-500/20 dark:bg-primary-500/20 border border-primary-500/30 dark:border-primary-500/30': $route.path === item.href 
                   }"
                 >
                   {{ item.name }}
@@ -54,9 +54,9 @@
                   v-for="item in secondaryNavigation"
                   :key="item.name"
                   :to="item.href"
-                  class="text-gray-400 hover:text-white px-2.5 py-1.5 rounded-md text-sm font-medium transition-colors duration-150 hover:bg-gray-800/40"
+                  class="text-gray-400 dark:text-gray-400 text-gray-600 hover:text-white dark:hover:text-white hover:text-gray-900 px-2.5 py-1.5 rounded-md text-sm font-medium transition-colors duration-150 hover:bg-gray-800/40 dark:hover:bg-gray-800/40 hover:bg-gray-100"
                   :class="{ 
-                    'text-white bg-gray-800/40': $route.path === item.href 
+                    'text-white dark:text-white text-gray-900 bg-gray-800/40 dark:bg-gray-800/40 bg-gray-100': $route.path === item.href 
                   }"
                 >
                   {{ item.name }}
@@ -76,20 +76,20 @@
               <RouterLink
                 to="/signin"
                 @click="saveReturnUrl"
-                class="text-gray-300 hover:text-white px-3 py-1.5 rounded-md text-sm font-medium transition-colors duration-150 hover:bg-gray-800/40"
+                class="text-gray-300 dark:text-gray-300 text-gray-700 hover:text-white dark:hover:text-white hover:text-gray-900 px-3 py-1.5 rounded-md text-sm font-medium transition-colors duration-150 hover:bg-gray-800/40 dark:hover:bg-gray-800/40 hover:bg-gray-100"
               >
                 Sign In
               </RouterLink>
               <RouterLink
                 to="/signup"
                 @click="saveReturnUrl"
-                class="bg-white text-black px-3 py-1.5 rounded-md text-sm font-medium hover:bg-gray-100 transition-all duration-150 shadow-md hover:shadow-lg pointer-events-auto relative z-10"
+                class="bg-black dark:bg-white text-white dark:text-black px-3 py-1.5 rounded-md text-sm font-medium hover:bg-gray-900 dark:hover:bg-gray-100 transition-all duration-150 shadow-md hover:shadow-lg pointer-events-auto relative z-10"
               >
                 Sign Up
               </RouterLink>
             </template>
             <div v-else class="flex items-center gap-2">
-              <span class="text-sm text-gray-300">
+              <span class="text-sm text-gray-300 dark:text-gray-300 text-gray-700">
                 Welcome, {{ currentUser?.name || 'User' }}
               </span>
               <button
@@ -108,7 +108,7 @@
           <div class="lg:hidden">
             <button
               @click="toggleMenu"
-              class="text-gray-300 hover:text-white p-1.5 rounded-md hover:bg-gray-800/40 transition-colors duration-150"
+              class="text-gray-300 dark:text-gray-300 text-gray-700 hover:text-white dark:hover:text-white hover:text-gray-900 p-1.5 rounded-md hover:bg-gray-800/40 dark:hover:bg-gray-800/40 hover:bg-gray-100 transition-colors duration-150"
             >
               <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path v-if="!isMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
@@ -121,7 +121,7 @@
 
       <!-- Mobile Navigation - Optimized -->
       <div v-if="isMenuOpen" class="lg:hidden">
-        <div class="px-2 pt-2 pb-3 space-y-1 border-t border-gray-700/30">
+        <div class="px-2 pt-2 pb-3 space-y-1 border-t border-gray-700/30 dark:border-gray-700/30 border-gray-200/30">
           <!-- Mobile Search Bar -->
           <div class="px-2 py-2">
             <SearchBox
@@ -138,8 +138,8 @@
               v-for="item in primaryNavigation"
               :key="item.name"
               :to="item.href"
-              class="text-gray-300 hover:text-white block px-2 py-1.5 rounded-md text-sm font-medium transition-colors duration-150 hover:bg-gray-800/40"
-              :class="{ 'text-white bg-primary-500/20': $route.path === item.href }"
+              class="text-gray-300 dark:text-gray-300 text-gray-700 hover:text-white dark:hover:text-white hover:text-gray-900 block px-2 py-1.5 rounded-md text-sm font-medium transition-colors duration-150 hover:bg-gray-800/40 dark:hover:bg-gray-800/40 hover:bg-gray-100"
+              :class="{ 'text-white dark:text-white text-gray-900 bg-primary-500/20 dark:bg-primary-500/20 bg-primary-100': $route.path === item.href }"
               @click="closeMenu"
             >
               {{ item.name }}
@@ -152,8 +152,8 @@
               v-for="item in secondaryNavigation"
               :key="item.name"
               :to="item.href"
-              class="text-gray-400 hover:text-white block px-2 py-1.5 rounded-md text-sm font-medium transition-colors duration-150 hover:bg-gray-800/40"
-              :class="{ 'text-white bg-gray-800/40': $route.path === item.href }"
+              class="text-gray-400 dark:text-gray-400 text-gray-600 hover:text-white dark:hover:text-white hover:text-gray-900 block px-2 py-1.5 rounded-md text-sm font-medium transition-colors duration-150 hover:bg-gray-800/40 dark:hover:bg-gray-800/40 hover:bg-gray-100"
+              :class="{ 'text-white dark:text-white text-gray-900 bg-gray-800/40 dark:bg-gray-800/40 bg-gray-100': $route.path === item.href }"
               @click="closeMenu"
             >
               {{ item.name }}
@@ -163,19 +163,19 @@
           </div>
 
           <!-- Mobile CTA - Compact -->
-          <div class="pt-2 border-t border-gray-700/30 space-y-1">
+          <div class="pt-2 border-t border-gray-700/30 dark:border-gray-700/30 border-gray-200/30 space-y-1">
             <template v-if="!isSubscribed">
               <RouterLink
                 to="/signin"
                 @click="() => { saveReturnUrl(); closeMenu(); }"
-                class="text-gray-300 hover:text-white block px-2 py-2 rounded-md text-sm font-medium text-center transition-colors duration-150 hover:bg-gray-800/40"
+                class="text-gray-300 dark:text-gray-300 text-gray-700 hover:text-white dark:hover:text-white hover:text-gray-900 block px-2 py-2 rounded-md text-sm font-medium text-center transition-colors duration-150 hover:bg-gray-800/40 dark:hover:bg-gray-800/40 hover:bg-gray-100"
               >
                 Sign In
               </RouterLink>
               <RouterLink
                 to="/signup"
                 @click="() => { saveReturnUrl(); closeMenu(); }"
-                class="bg-white text-black block px-2 py-2 rounded-md text-sm font-medium text-center hover:bg-gray-100 transition-all duration-150"
+                class="bg-black dark:bg-white text-white dark:text-black block px-2 py-2 rounded-md text-sm font-medium text-center hover:bg-gray-900 dark:hover:bg-gray-100 transition-all duration-150"
               >
                 Sign Up
               </RouterLink>

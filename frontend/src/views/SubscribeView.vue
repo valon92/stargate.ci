@@ -1,36 +1,36 @@
 <template>
-  <div class="min-h-screen bg-gray-900 py-12">
+  <div class="min-h-screen bg-gray-900 dark:bg-gray-900 bg-white py-12">
     <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
       <!-- Header -->
       <div class="text-center mb-12">
         <h1 class="text-4xl font-bold gradient-text mb-4">
           Subscribe to Stargate.ci
         </h1>
-        <p class="text-xl text-gray-300">
+        <p class="text-xl text-gray-300 dark:text-gray-300 text-gray-700">
           Stay updated with the latest news about Stargate Project and Cristal Intelligence
         </p>
       </div>
 
       <!-- Subscribe Form -->
-      <div class="bg-gray-800 rounded-lg p-8 border border-gray-700">
+      <div class="bg-gray-800 dark:bg-gray-800 bg-white rounded-lg p-8 border border-gray-700 dark:border-gray-700 border-gray-200">
         <form @submit.prevent="handleSubscribe" class="space-y-6">
           <!-- Username -->
           <div>
-            <label for="username" class="block text-sm font-medium text-gray-300 mb-2">
+            <label for="username" class="block text-sm font-medium text-gray-300 dark:text-gray-300 text-gray-700 mb-2">
               Username (Optional)
             </label>
             <input
               type="text"
               id="username"
               v-model="form.username"
-              class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              class="w-full px-4 py-3 bg-gray-700 dark:bg-gray-700 bg-white border border-gray-600 dark:border-gray-600 border-gray-300 rounded-lg text-white dark:text-white text-gray-900 placeholder-gray-400 dark:placeholder-gray-400 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               placeholder="Enter your username"
             />
           </div>
 
           <!-- Email -->
           <div>
-            <label for="email" class="block text-sm font-medium text-gray-300 mb-2">
+            <label for="email" class="block text-sm font-medium text-gray-300 dark:text-gray-300 text-gray-700 mb-2">
               Email Address *
             </label>
             <input
@@ -38,28 +38,28 @@
               id="email"
               v-model="form.email"
               required
-              class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              class="w-full px-4 py-3 bg-gray-700 dark:bg-gray-700 bg-white border border-gray-600 dark:border-gray-600 border-gray-300 rounded-lg text-white dark:text-white text-gray-900 placeholder-gray-400 dark:placeholder-gray-400 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               placeholder="Enter your email address"
             />
           </div>
 
           <!-- Country (Optional) -->
           <div>
-            <label for="country" class="block text-sm font-medium text-gray-300 mb-2">
+            <label for="country" class="block text-sm font-medium text-gray-300 dark:text-gray-300 text-gray-700 mb-2">
               Country (Optional)
             </label>
             <input
               type="text"
               id="country"
               v-model="form.country"
-              class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              class="w-full px-4 py-3 bg-gray-700 dark:bg-gray-700 bg-white border border-gray-600 dark:border-gray-600 border-gray-300 rounded-lg text-white dark:text-white text-gray-900 placeholder-gray-400 dark:placeholder-gray-400 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               placeholder="Enter your country"
             />
           </div>
 
           <!-- Interests (Optional) -->
           <div>
-            <label class="block text-sm font-medium text-gray-300 mb-2">
+            <label class="block text-sm font-medium text-gray-300 dark:text-gray-300 text-gray-700 mb-2">
               Interests (Optional)
             </label>
             <div class="space-y-2">
@@ -68,36 +68,36 @@
                   type="checkbox"
                   v-model="form.interests"
                   value="stargate"
-                  class="rounded border-gray-600 bg-gray-700 text-primary-500 focus:ring-primary-500"
+                  class="rounded border-gray-600 dark:border-gray-600 border-gray-300 bg-gray-700 dark:bg-gray-700 bg-white text-primary-500 dark:text-primary-500 text-primary-600 focus:ring-primary-500"
                 />
-                <span class="ml-2 text-gray-300">Stargate Project</span>
+                <span class="ml-2 text-gray-300 dark:text-gray-300 text-gray-700">Stargate Project</span>
               </label>
               <label class="flex items-center">
                 <input
                   type="checkbox"
                   v-model="form.interests"
                   value="cristal"
-                  class="rounded border-gray-600 bg-gray-700 text-primary-500 focus:ring-primary-500"
+                  class="rounded border-gray-600 dark:border-gray-600 border-gray-300 bg-gray-700 dark:bg-gray-700 bg-white text-primary-500 dark:text-primary-500 text-primary-600 focus:ring-primary-500"
                 />
-                <span class="ml-2 text-gray-300">Cristal Intelligence</span>
+                <span class="ml-2 text-gray-300 dark:text-gray-300 text-gray-700">Cristal Intelligence</span>
               </label>
               <label class="flex items-center">
                 <input
                   type="checkbox"
                   v-model="form.interests"
                   value="ai"
-                  class="rounded border-gray-600 bg-gray-700 text-primary-500 focus:ring-primary-500"
+                  class="rounded border-gray-600 dark:border-gray-600 border-gray-300 bg-gray-700 dark:bg-gray-700 bg-white text-primary-500 dark:text-primary-500 text-primary-600 focus:ring-primary-500"
                 />
-                <span class="ml-2 text-gray-300">AI Technology</span>
+                <span class="ml-2 text-gray-300 dark:text-gray-300 text-gray-700">AI Technology</span>
               </label>
               <label class="flex items-center">
                 <input
                   type="checkbox"
                   v-model="form.interests"
                   value="news"
-                  class="rounded border-gray-600 bg-gray-700 text-primary-500 focus:ring-primary-500"
+                  class="rounded border-gray-600 dark:border-gray-600 border-gray-300 bg-gray-700 dark:bg-gray-700 bg-white text-primary-500 dark:text-primary-500 text-primary-600 focus:ring-primary-500"
                 />
-                <span class="ml-2 text-gray-300">Latest News</span>
+                <span class="ml-2 text-gray-300 dark:text-gray-300 text-gray-700">Latest News</span>
               </label>
             </div>
           </div>
@@ -106,7 +106,7 @@
           <button
             type="submit"
             :disabled="isSubmitting"
-            class="w-full bg-black text-white py-3 px-6 rounded-lg font-medium hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus:ring-offset-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+            class="w-full bg-black dark:bg-black bg-gray-900 text-white dark:text-white py-3 px-6 rounded-lg font-medium hover:bg-gray-900 dark:hover:bg-gray-900 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-offset-white disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
           >
             {{ isSubmitting ? 'Subscribing...' : 'Subscribe' }}
           </button>
@@ -135,36 +135,36 @@
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
             </svg>
           </div>
-          <h3 class="text-lg font-semibold text-white mb-2">Latest Updates</h3>
-          <p class="text-gray-400">Get notified about new developments in Stargate Project and Cristal Intelligence</p>
+          <h3 class="text-lg font-semibold text-white dark:text-white text-gray-900 mb-2">Latest Updates</h3>
+          <p class="text-gray-400 dark:text-gray-400 text-gray-600">Get notified about new developments in Stargate Project and Cristal Intelligence</p>
         </div>
 
         <div class="text-center">
-          <div class="w-12 h-12 bg-secondary-500/20 rounded-lg flex items-center justify-center mx-auto mb-4">
-            <svg class="w-6 h-6 text-secondary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div class="w-12 h-12 bg-secondary-500/20 dark:bg-secondary-500/20 bg-secondary-50 rounded-lg flex items-center justify-center mx-auto mb-4">
+            <svg class="w-6 h-6 text-secondary-400 dark:text-secondary-400 text-secondary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
             </svg>
           </div>
-          <h3 class="text-lg font-semibold text-white mb-2">Educational Content</h3>
-          <p class="text-gray-400">Access to exclusive educational materials and insights</p>
+          <h3 class="text-lg font-semibold text-white dark:text-white text-gray-900 mb-2">Educational Content</h3>
+          <p class="text-gray-400 dark:text-gray-400 text-gray-600">Access to exclusive educational materials and insights</p>
         </div>
 
         <div class="text-center">
-          <div class="w-12 h-12 bg-green-500/20 rounded-lg flex items-center justify-center mx-auto mb-4">
-            <svg class="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div class="w-12 h-12 bg-green-500/20 dark:bg-green-500/20 bg-green-50 rounded-lg flex items-center justify-center mx-auto mb-4">
+            <svg class="w-6 h-6 text-green-400 dark:text-green-400 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
             </svg>
           </div>
-          <h3 class="text-lg font-semibold text-white mb-2">Community Access</h3>
-          <p class="text-gray-400">Join our community of AI enthusiasts and researchers</p>
+          <h3 class="text-lg font-semibold text-white dark:text-white text-gray-900 mb-2">Community Access</h3>
+          <p class="text-gray-400 dark:text-gray-400 text-gray-600">Join our community of AI enthusiasts and researchers</p>
         </div>
       </div>
 
       <!-- Login Link -->
       <div class="mt-8 text-center">
-        <p class="text-gray-400">
+        <p class="text-gray-400 dark:text-gray-400 text-gray-600">
           Already have an account? 
-          <RouterLink to="/login" class="text-primary-400 hover:text-primary-300 underline">
+          <RouterLink to="/login" class="text-primary-400 dark:text-primary-400 text-primary-600 hover:text-primary-300 dark:hover:text-primary-300 hover:text-primary-700 underline">
             Log in to your account
           </RouterLink>
         </p>
@@ -312,6 +312,6 @@ const showToast = (message: string, type: 'success' | 'error' | 'warning' | 'inf
 
 <style scoped>
 .gradient-text {
-  color: white;
+  @apply text-black dark:text-white;
 }
 </style>

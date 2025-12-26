@@ -1,13 +1,13 @@
 <template>
-  <div class="min-h-screen bg-gray-900">
+  <div class="min-h-screen bg-gray-900 dark:bg-gray-900 bg-white">
     <!-- Header -->
-    <div class="bg-gradient-to-r from-gray-800 to-gray-900 border-b border-gray-700">
+    <div class="bg-gradient-to-r from-gray-800 to-gray-900 dark:from-gray-800 dark:to-gray-900 bg-gradient-to-r from-gray-50 to-gray-100 border-b border-gray-700 dark:border-gray-700 border-gray-200">
       <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div class="flex items-center justify-between">
           <div class="flex items-center space-x-4">
             <RouterLink 
               to="/news" 
-              class="flex items-center text-gray-400 hover:text-white transition-colors"
+              class="flex items-center text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
             >
               <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
@@ -19,7 +19,7 @@
           <div class="flex items-center space-x-4">
             <button 
               @click="shareArticle"
-              class="flex items-center px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors"
+              class="flex items-center px-4 py-2 bg-gray-700 dark:bg-gray-700 bg-gray-200 hover:bg-gray-600 dark:hover:bg-gray-600 hover:bg-gray-300 text-white dark:text-white text-gray-900 rounded-lg transition-colors"
             >
               <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z"></path>
@@ -36,17 +36,17 @@
       <!-- Loading State -->
       <div v-if="isLoading" class="text-center py-12">
         <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary-500"></div>
-        <p class="mt-4 text-gray-400">Loading article...</p>
+        <p class="mt-4 text-gray-400 dark:text-gray-400 text-gray-600">Loading article...</p>
       </div>
 
       <!-- Error State -->
       <div v-else-if="error" class="text-center py-12">
-        <div class="text-red-400 mb-4">
+        <div class="text-red-400 dark:text-red-400 text-red-600 mb-4">
           <svg class="w-16 h-16 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
           </svg>
           <h3 class="text-xl font-bold mb-2">Article Not Found</h3>
-          <p class="text-gray-400 mb-4">{{ error }}</p>
+          <p class="text-gray-400 dark:text-gray-400 text-gray-600 mb-4">{{ error }}</p>
           <RouterLink to="/news" class="btn-primary">
             Back to News
           </RouterLink>
@@ -65,12 +65,12 @@
           </div>
 
           <!-- Title -->
-          <h1 class="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">
+          <h1 class="text-4xl md:text-5xl font-bold text-black dark:text-white mb-6 leading-tight">
             {{ article.title }}
           </h1>
 
           <!-- Meta Information -->
-          <div class="flex flex-wrap items-center gap-6 text-gray-400 mb-8">
+          <div class="flex flex-wrap items-center gap-6 text-gray-600 dark:text-gray-400 mb-8">
             <div class="flex items-center">
               <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
@@ -92,12 +92,12 @@
           </div>
 
           <!-- Source Information -->
-          <div class="bg-gray-800/50 border border-gray-700 rounded-lg p-6 mb-8">
+          <div class="bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-lg p-6 mb-8">
             <div class="flex items-center justify-between">
               <div class="flex-1">
-                <p class="text-sm text-gray-400 mb-2">Source:</p>
-                <p class="text-white font-medium text-lg">{{ article.source }}</p>
-                <p class="text-gray-400 text-sm mt-1">Want to read the original article?</p>
+                <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">Source:</p>
+                <p class="text-black dark:text-white font-medium text-lg">{{ article.source }}</p>
+                <p class="text-gray-600 dark:text-gray-400 text-sm mt-1">Want to read the original article?</p>
               </div>
               <div class="flex items-center space-x-3 ml-6">
                 <a 
@@ -118,19 +118,19 @@
 
         <!-- Article Content -->
         <div class="prose prose-lg max-w-none">
-          <div class="text-gray-300 leading-relaxed text-lg whitespace-pre-wrap">
+          <div class="text-gray-700 dark:text-gray-300 leading-relaxed text-lg whitespace-pre-wrap">
             {{ article.content }}
           </div>
         </div>
 
         <!-- Tags -->
-        <div v-if="article.tags && article.tags.length > 0" class="mt-12 pt-8 border-t border-gray-700">
-          <h3 class="text-lg font-semibold text-white mb-4">Tags</h3>
+        <div v-if="article.tags && article.tags.length > 0" class="mt-12 pt-8 border-t border-gray-200 dark:border-gray-700">
+          <h3 class="text-lg font-semibold text-black dark:text-white mb-4">Tags</h3>
           <div class="flex flex-wrap gap-2">
             <span 
               v-for="tag in article.tags" 
               :key="tag"
-              class="px-3 py-1 bg-gray-700 text-gray-300 rounded-full text-sm hover:bg-gray-600 transition-colors"
+              class="px-3 py-1 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full text-sm hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
             >
               #{{ tag }}
             </span>
@@ -149,12 +149,12 @@
 
     <!-- Share Modal -->
     <div v-if="showShareModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50" @click="closeShareModal">
-      <div class="bg-gray-800 rounded-lg p-6 max-w-md w-full mx-4" @click.stop>
+      <div class="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-md w-full mx-4" @click.stop>
         <div class="flex items-center justify-between mb-6">
-          <h3 class="text-xl font-semibold text-white">Share Article</h3>
+          <h3 class="text-xl font-semibold text-black dark:text-white">Share Article</h3>
           <button 
             @click="closeShareModal"
-            class="text-gray-400 hover:text-white transition-colors"
+            class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
           >
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -163,8 +163,8 @@
         </div>
 
         <div v-if="article" class="mb-6">
-          <h4 class="text-lg font-medium text-white mb-2">{{ article.title }}</h4>
-          <p class="text-gray-400 text-sm">{{ article.excerpt }}</p>
+          <h4 class="text-lg font-medium text-black dark:text-white mb-2">{{ article.title }}</h4>
+          <p class="text-gray-600 dark:text-gray-400 text-sm">{{ article.excerpt }}</p>
         </div>
 
         <!-- Share Options -->
@@ -403,7 +403,7 @@ onMounted(() => {
 }
 
 .prose {
-  @apply text-gray-300;
+  @apply text-gray-700 dark:text-gray-300;
 }
 
 .prose h1,
@@ -412,18 +412,18 @@ onMounted(() => {
 .prose h4,
 .prose h5,
 .prose h6 {
-  @apply text-white;
+  @apply text-black dark:text-white;
 }
 
 .prose a {
-  @apply text-primary-400 hover:text-primary-300;
+  @apply text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300;
 }
 
 .prose strong {
-  @apply text-white;
+  @apply text-black dark:text-white;
 }
 
 .prose blockquote {
-  @apply border-gray-600 text-gray-400;
+  @apply border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-400;
 }
 </style>

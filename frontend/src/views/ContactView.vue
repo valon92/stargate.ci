@@ -1,15 +1,15 @@
 <template>
   <div class="min-h-screen">
     <!-- Hero Section -->
-    <section class="relative overflow-hidden bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
-      <div class="absolute inset-0 bg-gradient-to-br from-primary-900/10 to-secondary-900/10"></div>
+    <section class="relative overflow-hidden bg-white dark:bg-gradient-to-br dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+      <div class="absolute inset-0 bg-gradient-to-br from-primary-900/10 to-secondary-900/10 dark:from-primary-900/10 dark:to-secondary-900/10"></div>
       
       <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
         <div class="text-center">
           <h1 class="text-4xl md:text-6xl font-bold mb-6">
             <span class="gradient-text">Contact stargate.ci Platform</span>
           </h1>
-          <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+          <p class="text-xl text-black dark:text-gray-300 max-w-3xl mx-auto">
             Connect with our platform team for inquiries about Stargate Project and Cristal Intelligence opportunities. We facilitate connections between companies and official project teams while maintaining legal compliance.
           </p>
         </div>
@@ -18,13 +18,13 @@
 
 
     <!-- Contact Form Section -->
-    <section class="py-24 bg-gray-800/50">
+    <section class="py-24 bg-gray-800/50 dark:bg-gray-800/50 bg-gray-50">
       <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-16">
           <h2 class="text-3xl md:text-4xl font-bold mb-4">
             <span class="gradient-text">Platform Contact Form</span>
           </h2>
-          <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+          <p class="text-xl text-gray-700 dark:text-gray-300 max-w-3xl mx-auto">
             Get in touch with our platform team for inquiries about Stargate and Cristal Intelligence opportunities
           </p>
         </div>
@@ -33,7 +33,7 @@
           <form @submit.prevent="submitForm" class="space-y-6">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label for="name" class="block text-sm font-medium text-gray-300 mb-2">
+                <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Full Name *
                 </label>
                 <input
@@ -41,12 +41,12 @@
                   id="name"
                   v-model="form.name"
                   required
-                  class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  class="w-full px-4 py-3 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                   placeholder="Your full name"
                 />
               </div>
               <div>
-                <label for="email" class="block text-sm font-medium text-gray-300 mb-2">
+                <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Email Address *
                 </label>
                 <input
@@ -54,7 +54,7 @@
                   id="email"
                   v-model="form.email"
                   required
-                  class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  class="w-full px-4 py-3 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                   placeholder="your.email@company.com"
                 />
               </div>
@@ -62,25 +62,25 @@
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label for="company" class="block text-sm font-medium text-gray-300 mb-2">
+                <label for="company" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Company Name
                 </label>
                 <input
                   type="text"
                   id="company"
                   v-model="form.company"
-                  class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  class="w-full px-4 py-3 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                   placeholder="Your company name"
                 />
               </div>
               <div>
-                <label for="projectType" class="block text-sm font-medium text-gray-300 mb-2">
+                <label for="projectType" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Project Interest
                 </label>
                 <select
                   id="projectType"
                   v-model="form.projectType"
-                  class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  class="w-full px-4 py-3 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                 >
                   <option value="">Select project type</option>
                   <option value="stargate">Stargate AI Infrastructure</option>
@@ -92,7 +92,7 @@
             </div>
             
             <div>
-              <label for="subject" class="block text-sm font-medium text-gray-300 mb-2">
+              <label for="subject" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Subject *
               </label>
               <input
@@ -100,13 +100,13 @@
                 id="subject"
                 v-model="form.subject"
                 required
-                class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                class="w-full px-4 py-3 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                 placeholder="Brief description of your inquiry"
               />
             </div>
             
             <div>
-              <label for="message" class="block text-sm font-medium text-gray-300 mb-2">
+              <label for="message" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Message
               </label>
               <textarea
@@ -114,7 +114,7 @@
                 v-model="form.message"
                 required
                 rows="6"
-                class="w-full px-4 py-3 bg-gray-700 border border-dark-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none"
+                class="w-full px-4 py-3 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none"
                 placeholder="Tell us about your project or questions..."
               ></textarea>
             </div>
@@ -137,10 +137,10 @@
             </div>
             
             <div v-if="submitMessage" class="text-center">
-              <div v-if="submitSuccess" class="text-green-400">
+              <div v-if="submitSuccess" class="text-green-600 dark:text-green-400">
                 Message sent successfully! We'll get back to you soon.
               </div>
-              <div v-else class="text-red-400">
+              <div v-else class="text-red-600 dark:text-red-400">
                 Failed to send message. Please try again.
               </div>
             </div>
@@ -156,7 +156,7 @@
           <h2 class="text-3xl md:text-4xl font-bold mb-4">
             <span class="gradient-text">Platform Resources</span>
           </h2>
-          <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+          <p class="text-xl text-gray-700 dark:text-gray-300 max-w-3xl mx-auto">
             Explore our platform resources and connect with official project teams
           </p>
         </div>
@@ -168,8 +168,8 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
               </svg>
             </div>
-            <h3 class="text-xl font-semibold mb-4 text-white">Platform Insights</h3>
-            <p class="text-gray-400 mb-4">
+            <h3 class="text-xl font-semibold mb-4 text-black dark:text-white">Platform Insights</h3>
+            <p class="text-gray-600 dark:text-gray-400 mb-4">
               Comprehensive analysis and insights about Stargate Project and Cristal Intelligence
             </p>
             <RouterLink to="/insights" class="text-primary-400 hover:text-primary-300 transition-colors duration-200">
@@ -178,13 +178,13 @@
           </div>
           
           <div class="card text-center">
-            <div class="w-16 h-16 bg-gradient-to-r from-secondary-500 to-primary-500 rounded-full flex items-center justify-center mx-auto mb-6">
+            <div class="w-16 h-16 bg-black rounded-full flex items-center justify-center mx-auto mb-6">
               <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
               </svg>
             </div>
-            <h3 class="text-xl font-semibold mb-4 text-white">News & Updates</h3>
-            <p class="text-gray-400 mb-4">
+            <h3 class="text-xl font-semibold mb-4 text-black dark:text-white">News & Updates</h3>
+            <p class="text-gray-600 dark:text-gray-400 mb-4">
               Stay updated with the latest news about Stargate Project and Cristal Intelligence
             </p>
             <RouterLink to="/news" class="text-primary-400 hover:text-primary-300 transition-colors duration-200">
@@ -198,8 +198,8 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
-            <h3 class="text-xl font-semibold mb-4 text-white">Platform FAQ</h3>
-            <p class="text-gray-400 mb-4">
+            <h3 class="text-xl font-semibold mb-4 text-black dark:text-white">Platform FAQ</h3>
+            <p class="text-gray-600 dark:text-gray-400 mb-4">
               Find answers to common questions about our platform and services
             </p>
             <RouterLink to="/faq" class="text-primary-400 hover:text-primary-300 transition-colors duration-200">
@@ -297,7 +297,7 @@ useHead({
 
 <style scoped>
 .card {
-  @apply bg-gray-800/50 border border-gray-700 rounded-lg p-6 hover:border-primary-500/50 transition-all duration-300;
+  @apply bg-gray-800/50 dark:bg-gray-800/50 bg-white border border-gray-700 dark:border-gray-700 border-gray-200 rounded-lg p-6 hover:border-primary-500/50 dark:hover:border-primary-500/50 hover:border-primary-300 transition-all duration-300;
 }
 
 .btn-primary {
@@ -305,6 +305,6 @@ useHead({
 }
 
 .gradient-text {
-  @apply text-white;
+  @apply text-black dark:text-white;
 }
 </style>

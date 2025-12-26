@@ -1,25 +1,25 @@
 <template>
   <div class="min-h-screen">
     <!-- Hero Section -->
-    <section class="relative overflow-hidden bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
-      <div class="absolute inset-0 bg-gradient-to-br from-primary-900/10 to-secondary-900/10"></div>
+    <section class="relative overflow-hidden bg-white dark:bg-gradient-to-br dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+      <div class="absolute inset-0 bg-gradient-to-br from-primary-900/10 to-secondary-900/10 dark:from-primary-900/10 dark:to-secondary-900/10"></div>
       
       <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
         <div class="text-center">
           <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold mb-6">
             <span class="gradient-text">Stargate.ci</span>
           </h1>
-          <p class="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto">
+          <p class="text-xl md:text-2xl text-black dark:text-gray-300 mb-8 max-w-3xl mx-auto font-medium">
             Your Gateway to the Future of AI
           </p>
-          <p class="text-lg text-gray-400 mb-8 max-w-4xl mx-auto leading-relaxed">
+          <p class="text-lg text-gray-700 dark:text-gray-400 mb-8 max-w-4xl mx-auto leading-relaxed">
             Explore the revolutionary Stargate Project and Cristal Intelligence through comprehensive educational resources, insights, and community discussions. Learn about the $500 billion AI infrastructure initiative that's reshaping the future of artificial intelligence.
           </p>
-          <div class="bg-yellow-900/20 border border-yellow-500/30 rounded-lg p-4 max-w-4xl mx-auto mb-8">
-            <p class="text-yellow-200 text-sm">
+          <div class="bg-yellow-900/20 dark:bg-yellow-900/20 bg-yellow-50 border border-yellow-500/30 dark:border-yellow-500/30 border-yellow-300 rounded-lg p-4 max-w-4xl mx-auto mb-8">
+            <p class="text-yellow-200 dark:text-yellow-200 text-yellow-900 text-sm">
               <strong>Legal Notice:</strong> This is an independent educational platform. We are not affiliated with OpenAI, SoftBank, or Arm. 
               We provide information only and do not charge fees or receive commissions. 
-              <RouterLink to="/legal-disclaimer" class="text-yellow-400 hover:text-yellow-300 underline">Read full legal disclaimer</RouterLink>
+              <RouterLink to="/legal-disclaimer" class="text-yellow-400 dark:text-yellow-400 text-yellow-700 hover:text-yellow-300 dark:hover:text-yellow-300 hover:text-yellow-800 underline">Read full legal disclaimer</RouterLink>
             </p>
           </div>
         </div>
@@ -27,13 +27,13 @@
     </section>
 
     <!-- Educational Video Section -->
-    <section class="py-24 bg-gradient-to-br from-primary-900/20 to-secondary-900/20">
+    <section class="py-24 bg-white dark:bg-gray-800/50">
       <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-12">
           <h2 class="text-3xl md:text-4xl font-bold mb-4">
             <span class="gradient-text">Welcome to Stargate.ci</span>
           </h2>
-          <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+          <p class="text-xl text-gray-700 dark:text-gray-300 max-w-3xl mx-auto">
             Watch these comprehensive educational videos to understand the scope, vision, technical aspects, implementation strategies, advanced AI paradigms, and future industry impact of the Stargate Project and Cristal Intelligence.
           </p>
         </div>
@@ -50,13 +50,13 @@
                 loading="lazy"
               ></iframe>
             </div>
-            <div class="p-4">
-              <h3 class="text-xl font-semibold text-white mb-2">Stargate Project - Introduction Video</h3>
-              <p class="text-gray-400 text-sm mb-4">An introduction video that explains the scope and vision of the Stargate Project and Cristal Intelligence, providing users with a comprehensive understanding of these revolutionary AI initiatives.</p>
+            <div class="p-4 bg-white dark:bg-gray-800">
+              <h3 class="text-xl font-semibold text-black dark:text-white mb-2">Stargate Project - Introduction Video</h3>
+              <p class="text-gray-700 dark:text-gray-400 text-sm mb-4">An introduction video that explains the scope and vision of the Stargate Project and Cristal Intelligence, providing users with a comprehensive understanding of these revolutionary AI initiatives.</p>
             </div>
             
             <!-- Interactive Content -->
-            <div class="p-4 pt-0">
+            <div class="p-4 pt-0 bg-white dark:bg-gray-800">
               <InteractiveContent
                 content-id="stargate-intro-video"
                 content-type="video"
@@ -75,13 +75,13 @@
                 loading="lazy"
               ></iframe>
             </div>
-            <div class="p-4">
-              <h3 class="text-xl font-semibold text-white mb-2">Stargate Project - Deep Dive Analysis</h3>
-              <p class="text-gray-400 text-sm mb-4">A comprehensive deep dive analysis of the Stargate Project, exploring the technical aspects, partnerships, and future implications of this groundbreaking AI infrastructure initiative.</p>
+            <div class="p-4 bg-white dark:bg-gray-800">
+              <h3 class="text-xl font-semibold text-black dark:text-white mb-2">Stargate Project - Deep Dive Analysis</h3>
+              <p class="text-gray-700 dark:text-gray-400 text-sm mb-4">A comprehensive deep dive analysis of the Stargate Project, exploring the technical aspects, partnerships, and future implications of this groundbreaking AI infrastructure initiative.</p>
             </div>
             
             <!-- Interactive Content -->
-            <div class="p-4 pt-0">
+            <div class="p-4 pt-0 bg-white dark:bg-gray-800">
               <InteractiveContent
                 content-id="stargate-deep-dive-video"
                 content-type="video"
@@ -100,13 +100,13 @@
                 loading="lazy"
               ></iframe>
             </div>
-            <div class="p-4">
-              <h3 class="text-xl font-semibold text-white mb-2">Stargate Project - Technical Implementation</h3>
-              <p class="text-gray-400 text-sm mb-4">A detailed technical implementation guide for the Stargate Project, covering infrastructure requirements, deployment strategies, and integration approaches for organizations looking to leverage this advanced AI technology.</p>
+            <div class="p-4 bg-white dark:bg-gray-800">
+              <h3 class="text-xl font-semibold text-black dark:text-white mb-2">Stargate Project - Technical Implementation</h3>
+              <p class="text-gray-700 dark:text-gray-400 text-sm mb-4">A detailed technical implementation guide for the Stargate Project, covering infrastructure requirements, deployment strategies, and integration approaches for organizations looking to leverage this advanced AI technology.</p>
             </div>
             
             <!-- Interactive Content -->
-            <div class="p-4 pt-0">
+            <div class="p-4 pt-0 bg-white dark:bg-gray-800">
               <InteractiveContent
                 content-id="stargate-technical-video"
                 content-type="video"
@@ -125,13 +125,13 @@
                 loading="lazy"
               ></iframe>
             </div>
-            <div class="p-4">
-              <h3 class="text-xl font-semibold text-white mb-2">Cristal Intelligence - Advanced AI Paradigm</h3>
-              <p class="text-gray-400 text-sm mb-4">An in-depth exploration of Cristal Intelligence, the revolutionary AI paradigm that emphasizes transparency, interpretability, and ethical alignment in artificial intelligence systems.</p>
+            <div class="p-4 bg-white dark:bg-gray-800">
+              <h3 class="text-xl font-semibold text-black dark:text-white mb-2">Cristal Intelligence - Advanced AI Paradigm</h3>
+              <p class="text-gray-700 dark:text-gray-400 text-sm mb-4">An in-depth exploration of Cristal Intelligence, the revolutionary AI paradigm that emphasizes transparency, interpretability, and ethical alignment in artificial intelligence systems.</p>
             </div>
             
             <!-- Interactive Content -->
-            <div class="p-4 pt-0">
+            <div class="p-4 pt-0 bg-white dark:bg-gray-800">
               <InteractiveContent
                 content-id="cristal-intelligence-video"
                 content-type="video"
@@ -150,13 +150,13 @@
                 loading="lazy"
               ></iframe>
             </div>
-            <div class="p-4">
-              <h3 class="text-xl font-semibold text-white mb-2">Future of AI - Industry Impact & Applications</h3>
-              <p class="text-gray-400 text-sm mb-4">A comprehensive analysis of how the Stargate Project and Cristal Intelligence will transform industries, examining real-world applications, market implications, and the future landscape of artificial intelligence.</p>
+            <div class="p-4 bg-white dark:bg-gray-800">
+              <h3 class="text-xl font-semibold text-black dark:text-white mb-2">Future of AI - Industry Impact & Applications</h3>
+              <p class="text-gray-700 dark:text-gray-400 text-sm mb-4">A comprehensive analysis of how the Stargate Project and Cristal Intelligence will transform industries, examining real-world applications, market implications, and the future landscape of artificial intelligence.</p>
             </div>
             
             <!-- Interactive Content -->
-            <div class="p-4 pt-0">
+            <div class="p-4 pt-0 bg-white dark:bg-gray-800">
               <InteractiveContent
                 content-id="future-ai-video"
                 content-type="video"
@@ -169,29 +169,29 @@
 
 
     <!-- Community Members Section -->
-    <section class="py-24 bg-gray-800/30">
+    <section class="py-24 bg-gray-800/30 dark:bg-gray-800/30 bg-gray-50">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-16">
           <h2 class="text-3xl md:text-4xl font-bold mb-4">
             <span class="gradient-text">Our Community</span>
           </h2>
-          <p class="text-xl text-gray-300 max-w-3xl mx-auto mb-8">
+          <p class="text-xl text-gray-300 dark:text-gray-300 text-gray-700 max-w-3xl mx-auto mb-8">
             Join our growing community of innovators, researchers, and technology enthusiasts.
           </p>
           
           <!-- Community Stats -->
           <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto mb-8">
-            <div class="bg-gray-800/50 border border-gray-700 rounded-lg p-6">
-              <div class="text-3xl font-bold text-primary-400 mb-2">{{ totalMembers.toLocaleString() }}</div>
-              <div class="text-gray-300">Total Members</div>
+            <div class="bg-white dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-lg p-6">
+              <div class="text-3xl font-bold text-primary-600 dark:text-primary-400 mb-2">{{ totalMembers.toLocaleString() }}</div>
+              <div class="text-gray-700 dark:text-gray-300">Total Members</div>
             </div>
-            <div class="bg-gray-800/50 border border-gray-700 rounded-lg p-6">
-              <div class="text-3xl font-bold text-secondary-400 mb-2">{{ activeMembersThisMonth.toLocaleString() }}</div>
-              <div class="text-gray-300">Active This Month</div>
+            <div class="bg-white dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-lg p-6">
+              <div class="text-3xl font-bold text-secondary-600 dark:text-secondary-400 mb-2">{{ activeMembersThisMonth.toLocaleString() }}</div>
+              <div class="text-gray-700 dark:text-gray-300">Active This Month</div>
             </div>
-            <div class="bg-gray-800/50 border border-gray-700 rounded-lg p-6">
-              <div class="text-3xl font-bold text-green-400 mb-2">{{ totalCountries }}</div>
-              <div class="text-gray-300">Countries</div>
+            <div class="bg-white dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-lg p-6">
+              <div class="text-3xl font-bold text-green-600 dark:text-green-400 mb-2">{{ totalCountries }}</div>
+              <div class="text-gray-700 dark:text-gray-300">Countries</div>
             </div>
           </div>
         </div>
@@ -211,8 +211,8 @@
               <div class="w-16 h-16 bg-black rounded-full flex items-center justify-center mx-auto mb-3 group-hover:shadow-lg">
                 <span class="text-white font-bold text-lg">{{ member.username.charAt(0).toUpperCase() }}</span>
               </div>
-              <div class="text-sm font-medium text-white truncate">{{ member.username }}</div>
-              <div class="text-xs text-gray-400">{{ member.role || 'Member' }}</div>
+              <div class="text-sm font-medium text-white dark:text-white text-gray-900 truncate">{{ member.username }}</div>
+              <div class="text-xs text-gray-400 dark:text-gray-400 text-gray-600">{{ member.role || 'Member' }}</div>
             </div>
           </div>
         </div>
@@ -247,8 +247,8 @@
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
             </svg>
           </div>
-          <h3 class="text-xl font-bold text-white mb-2">Be the First to Join!</h3>
-          <p class="text-gray-400 mb-6">Join our growing community of innovators and be among the first to receive updates about Stargate Project and Cristal Intelligence.</p>
+          <h3 class="text-xl font-bold text-white dark:text-white text-gray-900 mb-2">Be the First to Join!</h3>
+          <p class="text-gray-400 dark:text-gray-400 text-gray-600 mb-6">Join our growing community of innovators and be among the first to receive updates about Stargate Project and Cristal Intelligence.</p>
           <RouterLink to="/subscribe" class="btn-primary">
             Subscribe Now
           </RouterLink>
@@ -257,7 +257,7 @@
     </section>
 
     <!-- Domain Explanation Section -->
-    <section class="py-24 bg-gray-800/50">
+    <section class="py-24 bg-gray-50 dark:bg-gray-800/50">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-16">
           <h2 class="text-3xl md:text-4xl font-bold mb-4">
@@ -272,9 +272,9 @@
                 <div class="w-12 h-12 bg-black rounded-lg flex items-center justify-center mr-4">
                   <span class="text-white font-bold text-xl">S</span>
                 </div>
-                <h3 class="text-2xl font-bold text-white">Stargate</h3>
+                <h3 class="text-2xl font-bold text-black dark:text-white">Stargate</h3>
               </div>
-              <p class="text-gray-300 leading-relaxed">The revolutionary $500 billion AI infrastructure project by OpenAI, SoftBank, and Arm that's reshaping the future of artificial intelligence.</p>
+              <p class="text-gray-700 dark:text-white leading-relaxed">The revolutionary $500 billion AI infrastructure project by OpenAI, SoftBank, and Arm that's reshaping the future of artificial intelligence.</p>
             </div>
             
             <div class="card group hover:scale-105 transition-transform duration-300">
@@ -282,21 +282,21 @@
                 <div class="w-12 h-12 bg-black rounded-lg flex items-center justify-center mr-4">
                   <span class="text-white font-bold text-xl">.ci</span>
                 </div>
-                <h3 class="text-2xl font-bold text-white">Cristal Intelligence</h3>
+                <h3 class="text-2xl font-bold text-black dark:text-white">Cristal Intelligence</h3>
               </div>
-              <p class="text-gray-300 leading-relaxed">The next paradigm in AI development, emphasizing transparency, interpretability, and ethical alignment in artificial intelligence systems.</p>
+              <p class="text-gray-700 dark:text-white leading-relaxed">The next paradigm in AI development, emphasizing transparency, interpretability, and ethical alignment in artificial intelligence systems.</p>
             </div>
           </div>
           
-          <div class="card bg-black/50 border border-gray-700">
+          <div class="card">
             <div class="text-center">
               <div class="w-20 h-20 bg-black rounded-full flex items-center justify-center mx-auto mb-6">
                 <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
                 </svg>
               </div>
-              <h3 class="text-2xl font-bold text-white mb-4">Our Mission</h3>
-              <p class="text-gray-300 leading-relaxed">To provide independent, educational information about the Stargate project and Cristal Intelligence, helping individuals and organizations understand these groundbreaking developments in AI infrastructure.</p>
+              <h3 class="text-2xl font-bold text-black dark:text-white mb-4">Our Mission</h3>
+              <p class="text-gray-700 dark:text-white leading-relaxed">To provide independent, educational information about the Stargate project and Cristal Intelligence, helping individuals and organizations understand these groundbreaking developments in AI infrastructure.</p>
             </div>
           </div>
         </div>
@@ -470,9 +470,32 @@ useHead({
 <style scoped>
 .youtube-video-container {
   background-color: rgba(31, 41, 55, 1);
-  border-radius: 0.5rem;
+  border-radius: 0.75rem;
   overflow: hidden;
   border: 1px solid rgba(55, 65, 81, 1);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+}
+
+.dark .youtube-video-container {
+  background-color: rgba(31, 41, 55, 1);
+  border: 1px solid rgba(55, 65, 81, 1);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
+}
+
+:not(.dark) .youtube-video-container {
+  background-color: rgba(255, 255, 255, 1);
+  border: 1px solid rgba(229, 231, 235, 1);
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+}
+
+.youtube-video-container:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.dark .youtube-video-container:hover {
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
 }
 .aspect-w-16 {
   position: relative;
@@ -488,10 +511,18 @@ useHead({
 }
 
 .card {
-  background-color: rgba(31, 41, 55, 0.5);
-  border: 1px solid rgba(55, 65, 81, 1);
   border-radius: 0.5rem;
   overflow: hidden;
+}
+
+.dark .card {
+  background-color: rgb(0, 0, 0) !important;
+  border: 1px solid rgba(55, 65, 81, 1);
+}
+
+:not(.dark) .card {
+  background-color: rgba(255, 255, 255, 1);
+  border: 1px solid rgba(229, 231, 235, 1);
 }
 
 .btn-primary {
@@ -520,6 +551,6 @@ useHead({
 }
 
 .gradient-text {
-  color: white;
+  @apply text-white dark:text-white text-black;
 }
 </style>

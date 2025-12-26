@@ -1,15 +1,15 @@
 <template>
-  <div class="min-h-screen bg-gray-900">
+  <div class="min-h-screen bg-gray-900 dark:bg-gray-900 bg-white">
     <!-- Hero Section -->
-    <section class="relative overflow-hidden bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
-      <div class="absolute inset-0 bg-gradient-to-br from-primary-900/10 to-secondary-900/10"></div>
+    <section class="relative overflow-hidden bg-white dark:bg-gradient-to-br dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+      <div class="absolute inset-0 bg-gradient-to-br from-primary-900/10 to-secondary-900/10 dark:from-primary-900/10 dark:to-secondary-900/10"></div>
       
       <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
         <div class="text-center">
           <h1 class="text-4xl md:text-6xl font-bold mb-6">
             <span class="gradient-text">Latest News</span>
           </h1>
-          <p class="text-xl text-gray-300 max-w-3xl mx-auto mb-8">
+          <p class="text-xl text-black dark:text-gray-300 max-w-3xl mx-auto mb-8">
             Stay updated with the latest developments, announcements, and insights about the Stargate Project and Cristal Intelligence.
           </p>
         </div>
@@ -17,7 +17,7 @@
     </section>
 
     <!-- News Filter -->
-    <section class="py-16 bg-gray-800/30">
+    <section class="py-16 bg-gray-800/30 dark:bg-gray-800/30 bg-gray-50">
       <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-12 xl:px-16">
         <!-- Search Bar -->
         <div class="mb-8">
@@ -28,10 +28,10 @@
                 @keyup.enter="searchArticles"
                 type="text"
                 placeholder="Search news articles..."
-                class="w-full px-4 py-3 pl-12 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                class="w-full px-4 py-3 pl-12 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               >
               <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="h-5 w-5 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                 </svg>
               </div>
@@ -40,7 +40,7 @@
                 :disabled="isSearching"
                 class="absolute inset-y-0 right-0 pr-3 flex items-center"
               >
-                <svg v-if="!isSearching" class="h-5 w-5 text-gray-400 hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg v-if="!isSearching" class="h-5 w-5 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                 </svg>
                 <div v-else class="animate-spin rounded-full h-5 w-5 border-b-2 border-primary-500"></div>
@@ -58,15 +58,15 @@
               :class="[
                 'px-4 py-2 rounded-lg font-medium transition-all duration-200',
                 selectedCategory === category.id 
-                  ? 'bg-primary-500 text-white' 
-                  : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                  ? 'bg-primary-600 dark:bg-primary-500 text-white' 
+                  : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
               ]"
             >
               {{ category.name }}
             </button>
           </div>
           <div class="flex gap-2">
-            <select v-model="sortBy" @change="filterByCategory(selectedCategory)" class="bg-gray-800 border border-gray-600 text-white rounded-lg px-4 py-2">
+            <select v-model="sortBy" @change="filterByCategory(selectedCategory)" class="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg px-4 py-2">
               <option value="date">Latest First</option>
               <option value="title">Alphabetical</option>
               <option value="category">By Category</option>
@@ -94,7 +94,7 @@
         <!-- Loading State -->
         <div v-if="isLoading" class="text-center py-12">
           <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary-500"></div>
-          <p class="mt-4 text-gray-400">Loading latest news...</p>
+          <p class="mt-4 text-gray-600 dark:text-gray-400">Loading latest news...</p>
         </div>
 
         <!-- Error State -->
@@ -103,8 +103,8 @@
             <svg class="w-16 h-16 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
             </svg>
-            <h3 class="text-xl font-bold mb-2">Failed to Load News</h3>
-            <p class="text-gray-400 mb-4">{{ error }}</p>
+            <h3 class="text-xl font-bold text-black dark:text-white mb-2">Failed to Load News</h3>
+            <p class="text-gray-600 dark:text-gray-400 mb-4">{{ error }}</p>
             <button @click="loadNews()" class="btn-primary">
               Try Again
             </button>
@@ -120,12 +120,12 @@
           >
             <!-- News Content -->
             <div class="relative overflow-hidden rounded-lg">
-              <div class="aspect-w-16 aspect-h-9 bg-gradient-to-br from-gray-700 to-gray-800 flex items-center justify-center">
+              <div class="aspect-w-16 aspect-h-9 bg-white dark:bg-gradient-to-br dark:from-gray-700 dark:to-gray-800 border border-gray-200 dark:border-gray-700 flex items-center justify-center">
                 <div class="text-center">
-                  <div class="w-20 h-20 bg-black rounded-full flex items-center justify-center mx-auto mb-6">
+                  <div class="w-20 h-20 bg-black dark:bg-black rounded-full flex items-center justify-center mx-auto mb-6">
                     <span class="text-3xl">📰</span>
                   </div>
-                  <h3 class="text-2xl font-bold text-white">{{ article.title }}</h3>
+                  <h3 class="text-2xl font-bold text-black dark:text-white">{{ article.title }}</h3>
                 </div>
               </div>
               
@@ -138,7 +138,7 @@
               
               <!-- Date Badge -->
               <div class="absolute top-4 right-4">
-                <span class="px-3 py-1 bg-gray-800/80 text-white rounded-full text-xs font-medium">
+                <span class="px-3 py-1 bg-gray-900/80 dark:bg-gray-800/80 text-white rounded-full text-xs font-medium">
                   {{ formatDate(article.publishedAt) }}
                 </span>
               </div>
@@ -147,22 +147,22 @@
             <!-- News Content -->
             <div class="p-6">
               <div class="flex items-center justify-between mb-4">
-                <div class="flex items-center text-sm text-gray-400">
+                <div class="flex items-center text-sm text-gray-600 dark:text-gray-400">
                   <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
                   </svg>
                   By {{ article.author }}
                 </div>
-                <div class="text-sm text-gray-400">
+                <div class="text-sm text-gray-600 dark:text-gray-400">
                   5 min read
                 </div>
               </div>
 
-              <h3 class="text-2xl font-bold text-white mb-4 group-hover:text-primary-400 transition-colors">
+              <h3 class="text-2xl font-bold text-black dark:text-white mb-4 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
                 {{ article.title }}
               </h3>
               
-              <p class="text-gray-400 mb-6 text-lg leading-relaxed">
+              <p class="text-gray-700 dark:text-gray-400 mb-6 text-lg leading-relaxed">
                 {{ article.excerpt }}
               </p>
 
@@ -177,7 +177,7 @@
                 
                 <button 
                   @click="shareArticle(article)"
-                  class="px-4 py-3 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors"
+                  class="px-4 py-3 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-900 dark:text-white rounded-lg transition-colors"
                   title="Share Article"
                 >
                   <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -201,7 +201,7 @@
             <button 
               @click="currentPage = Math.max(1, currentPage - 1)"
               :disabled="currentPage === 1"
-              class="px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              class="px-4 py-2 bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-white rounded-lg hover:bg-gray-300 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
               Previous
             </button>
@@ -214,7 +214,7 @@
                 'px-4 py-2 rounded-lg transition-colors',
                 page === currentPage 
                   ? 'bg-primary-600 text-white' 
-                  : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                  : 'bg-gray-200 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-700'
               ]"
             >
               {{ page }}
@@ -223,7 +223,7 @@
             <button 
               @click="currentPage = Math.min(totalPages, currentPage + 1)"
               :disabled="currentPage === totalPages"
-              class="px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              class="px-4 py-2 bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-white rounded-lg hover:bg-gray-300 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
               Next
             </button>
@@ -233,13 +233,13 @@
     </section>
 
     <!-- Trending Topics -->
-    <section v-if="trendingTopics.length > 0" class="py-16 bg-gray-800/20">
+    <section v-if="trendingTopics.length > 0" class="py-16 bg-gray-50 dark:bg-gray-800/20">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-12">
           <h2 class="text-2xl md:text-3xl font-bold mb-4">
             <span class="gradient-text">Trending Topics</span>
           </h2>
-          <p class="text-gray-300">What's hot in AI and technology right now</p>
+          <p class="text-gray-700 dark:text-gray-300">What's hot in AI and technology right now</p>
         </div>
         
         <div class="flex flex-wrap justify-center gap-3">
@@ -260,7 +260,7 @@
         <h2 class="text-3xl md:text-4xl font-bold mb-6">
           <span class="gradient-text">Join Our Community</span>
         </h2>
-        <p class="text-xl text-gray-300 mb-8">
+        <p class="text-xl text-gray-700 dark:text-gray-300 mb-8">
           Stay informed about the latest developments in AI infrastructure, Stargate Project updates, and Cristal Intelligence breakthroughs. Be part of the future of artificial intelligence.
         </p>
         
@@ -270,7 +270,7 @@
               v-model="email"
               type="email" 
               placeholder="Your email address"
-              class="flex-1 px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              class="flex-1 px-4 py-3 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
             >
             <button 
               @click="subscribeNewsletter"
@@ -280,7 +280,7 @@
               {{ isSubscribing ? 'Joining...' : 'Join Now' }}
             </button>
           </div>
-          <p class="text-sm text-gray-400 mt-3">
+          <p class="text-sm text-gray-600 dark:text-gray-400 mt-3">
             Join thousands of AI enthusiasts. No spam, just valuable insights.
           </p>
         </div>
@@ -289,12 +289,12 @@
 
     <!-- Share Modal -->
     <div v-if="showShareModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50" @click="closeShareModal">
-      <div class="bg-gray-800 rounded-lg p-6 max-w-md w-full mx-4" @click.stop>
+      <div class="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-md w-full mx-4" @click.stop>
         <div class="flex items-center justify-between mb-6">
-          <h3 class="text-xl font-semibold text-white">Share Article</h3>
+          <h3 class="text-xl font-semibold text-black dark:text-white">Share Article</h3>
           <button 
             @click="closeShareModal"
-            class="text-gray-400 hover:text-white transition-colors"
+            class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
           >
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -303,8 +303,8 @@
         </div>
 
         <div v-if="articleToShare" class="mb-6">
-          <h4 class="text-lg font-medium text-white mb-2">{{ articleToShare.title }}</h4>
-          <p class="text-gray-400 text-sm">{{ articleToShare.excerpt }}</p>
+          <h4 class="text-lg font-medium text-black dark:text-white mb-2">{{ articleToShare.title }}</h4>
+          <p class="text-gray-600 dark:text-gray-400 text-sm">{{ articleToShare.excerpt }}</p>
         </div>
 
         <!-- Share Options -->
@@ -680,7 +680,7 @@ watch(sortBy, () => {
 
 <style scoped>
 .gradient-text {
-  color: white;
+  @apply text-black dark:text-white;
 }
 
 .card {
@@ -703,9 +703,14 @@ watch(sortBy, () => {
 }
 
 .news-container {
-  background-color: rgba(31, 41, 55, 1);
+  background-color: rgba(255, 255, 255, 1);
   border-radius: 0.5rem;
   overflow: hidden;
+  border: 1px solid rgba(229, 231, 235, 1);
+}
+
+.dark .news-container {
+  background-color: rgba(31, 41, 55, 1);
   border: 1px solid rgba(55, 65, 81, 1);
 }
 

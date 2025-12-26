@@ -1,0 +1,75 @@
+class s{cache=new Map;cacheExpiry=new Map;CACHE_DURATION=1800*1e3;async generateNews(e,t=10){try{const a=`news_${e||"all"}_${t}`;if(this.isCacheValid(a)){const r=this.cache.get(a);if(r)return console.log("📰 Using cached news data"),r}console.log("📰 Using static news data");const n=this.createStaticNews(e),i={success:!0,articles:n.slice(0,t),total:n.length};return this.cache.set(a,i),this.cacheExpiry.set(a,Date.now()+this.CACHE_DURATION),i}catch(a){console.error("📰 Error generating news:",a);const n=this.createFallbackNews(e);return{success:!0,articles:n,total:n.length}}}createStaticNews(e){const t=[{id:"stargate-announcement-2024",title:"OpenAI, SoftBank, and Arm Announce $500 Billion Stargate Project",content:`The Stargate Project represents a revolutionary $500 billion AI infrastructure initiative that will reshape the future of artificial intelligence. This massive undertaking brings together three industry giants to create next-generation AI computing capabilities.
+
+## The Vision
+
+The Stargate Project aims to create the world's most advanced AI computing infrastructure, capable of training models with trillions of parameters while maintaining unprecedented efficiency and scalability. This initiative represents the largest private investment in AI infrastructure in history.
+
+## Key Components
+
+The project will include:
+- Advanced data centers powered by next-generation ARM processors
+- Cutting-edge cooling systems for optimal performance
+- Renewable energy integration for sustainable computing
+- Global network infrastructure for seamless data processing
+
+## Impact on AI Development
+
+This infrastructure will enable:
+- Training of models 100x larger than current capabilities
+- Real-time AI applications at unprecedented scale
+- Breakthrough research in artificial general intelligence
+- Democratized access to world-class AI computing resources
+
+## Timeline and Milestones
+
+The project is expected to span over 5 years with key milestones including:
+- Phase 1: Infrastructure planning and design (2024-2025)
+- Phase 2: Initial data center construction (2025-2026)
+- Phase 3: Full-scale deployment (2026-2028)
+- Phase 4: Advanced AI model training (2028-2029)
+
+## Global Impact
+
+The Stargate Project will create thousands of high-tech jobs and establish new standards for AI infrastructure development worldwide. This initiative positions the participating companies at the forefront of the AI revolution.`,excerpt:"Revolutionary $500 billion AI infrastructure project announced by OpenAI, SoftBank, and Arm.",author:"AI Research Team",publishedAt:"2024-12-15T10:00:00Z",category:"stargate",source:"Official Announcement",url:"https://example.com/stargate-announcement",imageUrl:"https://example.com/stargate-image.jpg",tags:["stargate","openai","softbank","arm","ai-infrastructure"]},{id:"cristal-intelligence-breakthrough",title:"Cristal Intelligence: A New Paradigm in Transparent AI",content:`Cristal Intelligence represents a breakthrough in AI transparency and interpretability. This new paradigm focuses on creating AI systems that are as clear and understandable as crystal, enabling better decision-making and ethical AI development.
+
+## The Cristal Intelligence Framework
+
+The Cristal Intelligence framework introduces revolutionary concepts in AI transparency:
+
+### Core Principles
+- **Transparency**: Every decision made by AI systems must be explainable
+- **Accountability**: Clear responsibility chains for AI decisions
+- **Interpretability**: Human-understandable reasoning processes
+- **Ethics**: Built-in ethical considerations in AI decision-making
+
+### Technical Innovations
+
+The framework includes several groundbreaking technologies:
+
+1. **Neural Architecture Transparency**
+   - Real-time decision visualization
+   - Layer-by-layer reasoning explanation
+   - Attention mechanism transparency
+
+2. **Ethical Decision Trees**
+   - Built-in ethical reasoning modules
+   - Bias detection and correction
+   - Fairness metrics integration
+
+3. **Human-AI Collaboration**
+   - Seamless human oversight integration
+   - Collaborative decision-making processes
+   - Continuous learning from human feedback
+
+## Applications
+
+Cristal Intelligence is being applied across various sectors:
+
+- **Healthcare**: Transparent medical diagnosis systems
+- **Finance**: Explainable credit scoring and risk assessment
+- **Legal**: Transparent legal document analysis
+- **Education**: Personalized learning with clear reasoning
+
+## Impact on AI Development
+
+This paradigm shift will fundamentally change how we develop and deploy AI systems, ensuring they are not only powerful but also trustworthy and ethical.`,excerpt:"New paradigm in AI transparency and interpretability unveiled.",author:"Dr. Sarah Chen",publishedAt:"2024-12-10T14:30:00Z",category:"cristal",source:"AI Research Journal",url:"https://example.com/cristal-intelligence",imageUrl:"https://example.com/cristal-image.jpg",tags:["cristal-intelligence","ai-transparency","ethical-ai","interpretability"]},{id:"openai-gpt-5-development",title:"OpenAI Accelerates GPT-5 Development with Stargate Infrastructure",content:"OpenAI is leveraging the Stargate Project infrastructure to accelerate the development of GPT-5, their next-generation language model. This collaboration will enable unprecedented scale and capability in AI model training.",excerpt:"OpenAI uses Stargate infrastructure to accelerate GPT-5 development.",author:"Tech Reporter",publishedAt:"2024-12-08T09:15:00Z",category:"openai",source:"Tech News Daily",url:"https://example.com/openai-gpt5",imageUrl:"https://example.com/gpt5-image.jpg",tags:["openai","gpt-5","stargate","ai-models","machine-learning"]},{id:"softbank-ai-investment-strategy",title:"SoftBank Vision Fund Doubles Down on AI with Stargate Investment",content:"SoftBank Vision Fund announces a significant investment in the Stargate Project, reinforcing their commitment to AI technology and infrastructure development. This investment aligns with their long-term vision for AI transformation.",excerpt:"SoftBank Vision Fund makes major investment in Stargate Project.",author:"Investment Analyst",publishedAt:"2024-12-05T16:45:00Z",category:"softbank",source:"Financial Times",url:"https://example.com/softbank-investment",imageUrl:"https://example.com/softbank-image.jpg",tags:["softbank","investment","stargate","ai-funding","vision-fund"]},{id:"arm-ai-chip-architecture",title:"ARM Unveils Next-Generation AI Chip Architecture for Stargate",content:"ARM Holdings reveals their new AI-optimized chip architecture designed specifically for the Stargate Project. This breakthrough in chip design will enable unprecedented AI computing performance and efficiency.",excerpt:"ARM reveals AI-optimized chip architecture for Stargate Project.",author:"Hardware Engineer",publishedAt:"2024-12-03T11:20:00Z",category:"arm",source:"Hardware Weekly",url:"https://example.com/arm-ai-chips",imageUrl:"https://example.com/arm-image.jpg",tags:["arm","ai-chips","hardware","stargate","chip-architecture"]},{id:"ai-ethics-cristal-intelligence",title:"Cristal Intelligence Sets New Standards for AI Ethics",content:"The principles of Cristal Intelligence are being adopted by leading AI companies to ensure ethical AI development. This new framework emphasizes transparency, accountability, and human-centered AI design.",excerpt:"Cristal Intelligence principles adopted for ethical AI development.",author:"AI Ethics Researcher",publishedAt:"2024-12-01T13:10:00Z",category:"cristal",source:"AI Ethics Journal",url:"https://example.com/ai-ethics-cristal",imageUrl:"https://example.com/ethics-image.jpg",tags:["ai-ethics","cristal-intelligence","transparency","ethical-ai","ai-governance"]},{id:"stargate-infrastructure-update",title:"Stargate Project Infrastructure Development Reaches Milestone",content:"The Stargate Project infrastructure development has reached a significant milestone with the completion of the first phase of data centers. This achievement brings the project closer to its goal of creating the world's most advanced AI computing network.",excerpt:"Stargate Project infrastructure development reaches major milestone.",author:"Infrastructure Reporter",publishedAt:"2024-11-28T08:30:00Z",category:"stargate",source:"Infrastructure News",url:"https://example.com/stargate-infrastructure",imageUrl:"https://example.com/infrastructure-image.jpg",tags:["stargate","infrastructure","data-centers","ai-computing","milestone"]},{id:"ai-research-breakthrough",title:"Breakthrough in AI Research Enabled by Stargate Computing Power",content:"Researchers have achieved a major breakthrough in AI research using the computing power of the Stargate Project. This advancement opens new possibilities for AI model development and scientific discovery.",excerpt:"Major AI research breakthrough achieved using Stargate computing power.",author:"Research Scientist",publishedAt:"2024-11-25T15:45:00Z",category:"ai",source:"Science Daily",url:"https://example.com/ai-research-breakthrough",imageUrl:"https://example.com/research-image.jpg",tags:["ai-research","stargate","breakthrough","scientific-discovery","computing-power"]}];return e&&e!=="all"?t.filter(a=>a.category===e):t}createFallbackNews(e){return[{id:"fallback-news-1",title:"AI Technology Advances in 2024",content:"Artificial intelligence technology continues to advance rapidly in 2024, with new breakthroughs in machine learning and neural networks.",excerpt:"AI technology advances continue in 2024.",author:"Tech Reporter",publishedAt:"2024-12-15T10:00:00Z",category:"ai",source:"Tech News",url:"https://example.com",tags:["ai","technology","machine-learning"]},{id:"fallback-news-2",title:"Future of Artificial Intelligence",content:"The future of artificial intelligence looks promising with new developments in AI research and applications.",excerpt:"Future of AI looks promising with new developments.",author:"AI Researcher",publishedAt:"2024-12-10T14:30:00Z",category:"technology",source:"AI Journal",url:"https://example.com",tags:["ai","future","research"]}]}isCacheValid(e){const t=this.cacheExpiry.get(e);return t?Date.now()<t:!1}async getNewsByCategory(e,t=10){return this.generateNews(e,t)}async getAllNews(e=20){return this.generateNews("all",e)}async getLatestNews(e=10){const a=(await this.getAllNews(e)).articles.sort((n,i)=>new Date(i.publishedAt).getTime()-new Date(n.publishedAt).getTime());return{success:!0,articles:a.slice(0,e),total:a.length}}async searchNews(e,t=10){const n=(await this.getAllNews(50)).articles.filter(i=>i.title.toLowerCase().includes(e.toLowerCase())||i.content.toLowerCase().includes(e.toLowerCase())||i.excerpt.toLowerCase().includes(e.toLowerCase())||i.tags.some(r=>r.toLowerCase().includes(e.toLowerCase())));return{success:!0,articles:n.slice(0,t),total:n.length}}}const o=new s;export{o as n};

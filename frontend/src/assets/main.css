@@ -14,8 +14,35 @@
 }
 
 @layer base {
+  :root {
+    /* Light theme colors */
+    --bg-primary: #ffffff;
+    --bg-secondary: #f9fafb;
+    --bg-tertiary: #f3f4f6;
+    --text-primary: #111827;
+    --text-secondary: #6b7280;
+    --text-tertiary: #9ca3af;
+    --border-color: #e5e7eb;
+    --card-bg: rgba(255, 255, 255, 1);
+    --card-border: #e5e7eb;
+  }
+
+  .dark {
+    /* Dark theme colors */
+    --bg-primary: #111827;
+    --bg-secondary: #1f2937;
+    --bg-tertiary: #374151;
+    --text-primary: #f9fafb;
+    --text-secondary: #d1d5db;
+    --text-tertiary: #9ca3af;
+    --border-color: #374151;
+    --card-bg: rgba(31, 41, 55, 0.5);
+    --card-border: #374151;
+  }
+
   html {
     font-family: 'Inter', system-ui, sans-serif;
+    color-scheme: light dark;
   }
   
   html[dir="rtl"] {
@@ -23,7 +50,10 @@
   }
   
   body {
-    @apply bg-gray-900 text-gray-100 antialiased;
+    @apply antialiased;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
 }
 
@@ -37,10 +67,12 @@
   }
   
   .card {
-    @apply bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-xl p-6 shadow-xl;
+    @apply backdrop-blur-sm rounded-xl p-6 shadow-xl;
+    background-color: var(--card-bg);
+    border: 1px solid var(--card-border);
   }
   
   .gradient-text {
-    @apply text-white;
+    @apply text-white dark:text-white text-black;
   }
 }

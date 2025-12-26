@@ -1,22 +1,22 @@
 <template>
-  <div class="min-h-screen bg-gray-900 py-12">
+  <div class="min-h-screen bg-gray-900 dark:bg-gray-900 bg-white py-12">
     <div class="max-w-md mx-auto px-4 sm:px-6 lg:px-8">
       <!-- Header -->
       <div class="text-center mb-12">
         <h1 class="text-4xl font-bold gradient-text mb-4">
           Welcome Back
         </h1>
-        <p class="text-xl text-gray-300">
+        <p class="text-xl text-gray-300 dark:text-gray-300 text-gray-700">
           Log in to your Stargate.ci account
         </p>
       </div>
 
       <!-- Login Form -->
-      <div class="bg-gray-800 rounded-lg p-8 border border-gray-700">
+      <div class="bg-gray-800 dark:bg-gray-800 bg-white rounded-lg p-8 border border-gray-700 dark:border-gray-700 border-gray-200">
         <form @submit.prevent="handleLogin" class="space-y-6">
           <!-- Email -->
           <div>
-            <label for="email" class="block text-sm font-medium text-gray-300 mb-2">
+            <label for="email" class="block text-sm font-medium text-gray-300 dark:text-gray-300 text-gray-700 mb-2">
               Email Address *
             </label>
             <input
@@ -24,14 +24,14 @@
               id="email"
               v-model="form.email"
               required
-              class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              class="w-full px-4 py-3 bg-gray-700 dark:bg-gray-700 bg-white border border-gray-600 dark:border-gray-600 border-gray-300 rounded-lg text-white dark:text-white text-gray-900 placeholder-gray-400 dark:placeholder-gray-400 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               placeholder="Enter your email address"
             />
           </div>
 
           <!-- Password -->
           <div>
-            <label for="password" class="block text-sm font-medium text-gray-300 mb-2">
+            <label for="password" class="block text-sm font-medium text-gray-300 dark:text-gray-300 text-gray-700 mb-2">
               Password *
             </label>
             <input
@@ -39,7 +39,7 @@
               id="password"
               v-model="form.password"
               required
-              class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              class="w-full px-4 py-3 bg-gray-700 dark:bg-gray-700 bg-white border border-gray-600 dark:border-gray-600 border-gray-300 rounded-lg text-white dark:text-white text-gray-900 placeholder-gray-400 dark:placeholder-gray-400 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               placeholder="Enter your password"
             />
           </div>
@@ -48,7 +48,7 @@
           <button
             type="submit"
             :disabled="isSubmitting"
-            class="w-full bg-black text-white py-3 px-6 rounded-lg font-medium hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus:ring-offset-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+            class="w-full bg-black dark:bg-black bg-gray-900 text-white dark:text-white py-3 px-6 rounded-lg font-medium hover:bg-gray-900 dark:hover:bg-gray-900 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-offset-white disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
           >
             {{ isSubmitting ? 'Logging in...' : 'Log In' }}
           </button>
@@ -71,9 +71,9 @@
 
       <!-- Sign Up Link -->
       <div class="mt-8 text-center">
-        <p class="text-gray-400">
+        <p class="text-gray-400 dark:text-gray-400 text-gray-600">
           Don't have an account? 
-          <RouterLink to="/subscribe" class="text-primary-400 hover:text-primary-300 underline">
+          <RouterLink to="/subscribe" class="text-primary-400 dark:text-primary-400 text-primary-600 hover:text-primary-300 dark:hover:text-primary-300 hover:text-primary-700 underline">
             Subscribe to Stargate.ci
           </RouterLink>
         </p>
@@ -206,6 +206,6 @@ onMounted(() => {
 
 <style scoped>
 .gradient-text {
-  color: white;
+  @apply text-black dark:text-white;
 }
 </style>

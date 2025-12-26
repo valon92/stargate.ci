@@ -9,7 +9,17 @@
 
 ## 📋 Përmbledhje
 
-Gjatë integrimit të Voice Actions SDK në projektin Stargate.ci, u identifikuan disa probleme që pengonin funksionimin e plotë të librarisë. Ky dokument përshkruan problemet, zgjidhjet e implementuara, dhe sugjerime për përmirësime në librarinë.
+Gjatë integrimit të Voice Actions SDK në projektin Stargate.ci, u identifikuan **7 probleme kryesore** që pengonin funksionimin e plotë të librarisë:
+
+1. ❌ **API Endpoint Path** - SDK nuk përdorte prefix `/v1` që kërkonte backend-i
+2. ❌ **Network Error Handling** - Mesazhe të paqarta për Speech Recognition API errors
+3. ❌ **Microphone Permission** - Mungesë udhëzimesh specifike për browser
+4. ❌ **Wake Word Detection** - Mungesë funksionaliteti native
+5. ❌ **API URL Configuration** - Mungesë dokumentacioni për local/production setup
+6. ❌ **TypeScript Types** - Mungesë type definitions për `SpeechRecognition` dhe `onListeningStateChange`
+7. ❌ **Production Environment Variables** - Mungesë mbështetjeje për environment variables në production
+
+Ky dokument përshkruan problemet në detaje, zgjidhjet e implementuara në Stargate.ci, dhe sugjerime konkrete për përmirësime në librarinë.
 
 ---
 
@@ -313,6 +323,126 @@ detectApiUrl() {
 
 ---
 
+### 6. **TypeScript Type Definitions - Mungesë e Type Declarations**
+
+**Problemi:**
+- SDK-ja nuk ofronte type definitions për `SpeechRecognition` API
+- `onListeningStateChange` u përdor në kod por nuk ekzistonte në `VoiceActionsSDKOptions` interface
+- TypeScript errors gjatë build process
+
+**Error në Console:**
+```
+error TS2304: Cannot find name 'SpeechRecognition'.
+error TS2353: Object literal may only specify known properties, and 'onListeningStateChange' does not exist in type 'VoiceActionsSDKOptions'.
+```
+
+**Zgjidhja e Implementuar:**
+- Shtuar manual type declarations për `SpeechRecognition` në frontend:
+  ```typescript
+  // frontend/src/stores/voiceActions.ts
+  interface SpeechRecognition extends EventTarget {
+    continuous: boolean
+    interimResults: boolean
+    lang: string
+    start(): void
+    stop(): void
+    abort(): void
+    onresult: ((event: any) => void) | null
+    onerror: ((event: any) => void) | null
+    onend: (() => void) | null
+  }
+  ```
+- Hequr `onListeningStateChange` nga SDK options (nuk mbështetet)
+- Shtuar null checks për `wakeWordRecognition.value`
+
+**Sugjerim për Librarinë:**
+- ✅ Shtoni type definitions për `SpeechRecognition` në package
+- ✅ Ose dokumentoni qartë se cilat properties janë të disponueshme
+- ✅ Nëse `onListeningStateChange` nuk ekziston, dokumentoni se si të syncohet listening state
+- ✅ Ose shtoni `onListeningStateChange` callback në SDK options
+
+**Sugjerim i Përmirësuar:**
+```typescript
+// Në SDK type definitions
+export interface VoiceActionsSDKOptions {
+  apiKey?: string
+  apiUrl?: string
+  platform?: string
+  locale?: string
+  onCommand?: (command: VoiceCommand) => void
+  onError?: (error: Error) => void
+  onListeningStateChange?: (isListening: boolean) => void  // ✅ Shtoni këtë
+  debug?: boolean
+}
+
+// Në SDK implementation
+constructor(options = {}) {
+  // ...
+  this.onListeningStateChange = options.onListeningStateChange || null;
+  // ...
+}
+
+// Kur listening state ndryshon
+this.isListening = true;
+if (this.onListeningStateChange) {
+  this.onListeningStateChange(true);
+}
+```
+
+---
+
+### 7. **Production API URL Configuration - Environment Variables**
+
+**Problemi:**
+- Në production, API URL nuk mund të konfigurohej lehtë përmes environment variables
+- Build process nuk përdorte `VITE_API_URL` nga `.env.production`
+- Kjo shkaktonte "Unexpected token '<', "<!DOCTYPE "... is not valid JSON" errors
+
+**Error në Console:**
+```
+❌ Voice Actions SDK Error: Unexpected token '<', "<!DOCTYPE "... is not valid JSON
+```
+
+**Zgjidhja e Implementuar:**
+- Modifikuar `voiceActions.ts` për të përdorur `import.meta.env.VITE_API_URL`:
+  ```typescript
+  const envApiUrl = typeof import.meta !== 'undefined' && import.meta.env?.VITE_API_URL
+  let apiUrl: string
+  if (isLocalhost) {
+    apiUrl = 'http://localhost:8000/api'
+  } else if (envApiUrl) {
+    apiUrl = envApiUrl.endsWith('/api') ? envApiUrl : `${envApiUrl}/api`
+  } else if (typeof window !== 'undefined') {
+    apiUrl = `${window.location.origin}/api`
+  }
+  ```
+
+**Sugjerim për Librarinë:**
+- ✅ Dokumentoni qartë se si të konfigurohet `apiUrl` për production
+- ✅ Shtoni shembuj për environment variables (Vite, Webpack, etc.)
+- ✅ Ose shtoni auto-detection më të mirë për production environments
+
+**Sugjerim i Përmirësuar:**
+```javascript
+// Në SDK documentation
+/**
+ * API URL Configuration
+ * 
+ * For Vite projects:
+ * Create .env.production:
+ *   VITE_API_URL=https://api.example.com/api
+ * 
+ * For Webpack projects:
+ * Create .env.production:
+ *   REACT_APP_API_URL=https://api.example.com/api
+ * 
+ * Or pass directly:
+ *   new VoiceActionsSDK({ apiUrl: 'https://api.example.com/api' })
+ */
+```
+
+---
+
 ## ✅ Zgjidhjet e Implementuara në Stargate.ci
 
 ### 1. Backend Routes për Kompatibilitet
@@ -329,24 +459,36 @@ detectApiUrl() {
 - ✅ Aktivizim automatik i voice control kur detektohet wake word
 - ✅ Menaxhim i gjendjes midis wake word listening dhe voice control
 
+### 4. TypeScript Type Definitions
+- ✅ Shtuar manual type declarations për `SpeechRecognition` API
+- ✅ Hequr `onListeningStateChange` nga SDK options (nuk mbështetet)
+- ✅ Shtuar null checks për të gjitha references
+
+### 5. Production API URL Configuration
+- ✅ Modifikuar për të përdorur `import.meta.env.VITE_API_URL` për production builds
+- ✅ Shtuar fallback logic për localhost dhe production environments
+
 ---
 
 ## 📝 Sugjerime për Përmirësime në SDK
 
 ### Prioritet i Lartë:
-1. **API Version Support** - Shtoni `apiVersion` option për fleksibilitet
-2. **Error Types** - Klasifikoni gabimet me types dhe metadata
-3. **Permission Error Handling** - Mesazhe më të detajuara dhe browser-specific
+1. **TypeScript Type Definitions** - Shtoni type definitions për `SpeechRecognition` dhe të gjitha interfaces
+2. **onListeningStateChange Callback** - Shtoni callback për listening state changes
+3. **API Version Support** - Shtoni `apiVersion` option për fleksibilitet
+4. **Error Types** - Klasifikoni gabimet me types dhe metadata
+5. **Permission Error Handling** - Mesazhe më të detajuara dhe browser-specific
 
 ### Prioritet i Mesëm:
-4. **Wake Word Detection** - Shtoni si feature native
-5. **API URL Auto-detection** - Përmirëso default detection logic
-6. **Documentation** - Dokumentoni qartë local development setup
+6. **Wake Word Detection** - Shtoni si feature native
+7. **API URL Auto-detection** - Përmirëso default detection logic
+8. **Production Environment Variables** - Dokumentoni dhe mbështetni environment variables për production
+9. **Documentation** - Dokumentoni qartë local development setup dhe production deployment
 
 ### Prioritet i Ulët:
-7. **Retry Logic** - Shtoni automatic retry për network errors
-8. **Event System** - Shtoni më shumë events për debugging
-9. **TypeScript Types** - Përmirëso type definitions
+10. **Retry Logic** - Shtoni automatic retry për network errors
+11. **Event System** - Shtoni më shumë events për debugging
+12. **Null Safety** - Përmirëso null checks dhe error handling
 
 ---
 
@@ -361,10 +503,51 @@ detectApiUrl() {
 ## 📧 Kontakt
 
 Nëse keni pyetje ose nevojë për më shumë detaje, ju lutemi kontaktoni:
-- **Email:** [email i projektit]
-- **GitHub Issues:** [link për issues në repository]
+- **Projekti:** Stargate.ci (https://stargate.ci)
+- **GitHub Issues:** [Link për issues në repository të Voice Actions SDK]
+
+---
+
+## 📄 Si të Përdoret Ky Dokument
+
+Ky dokument është krijuar për të:
+1. **Identifikuar probleme** që u hasën gjatë integrimit të SDK-së
+2. **Dokumentuar zgjidhjet** që u implementuan në Stargate.ci
+3. **Sugjeruar përmirësime** për librarinë Voice Actions SDK
+
+**Për zhvilluesit e Voice Actions SDK:**
+- Përdoreni këtë dokument si referencë për issues dhe feature requests
+- Çdo problem ka sugjerime konkrete për zgjidhje
+- Kodi i sugjeruar është i gatshëm për implementim
+
+**Për përdoruesit e SDK-së:**
+- Ky dokument mund të shërbejë si guide për workarounds
+- Të gjitha zgjidhjet janë testuar dhe funksionojnë në production
+- Mund të përdorni këto zgjidhje derisa libraria të përmirësohet
+
+---
+
+## ✅ Status i Problemeve
+
+| # | Problemi | Status | Prioritet |
+|---|----------|--------|-----------|
+| 1 | API Endpoint Path | ⚠️ Workaround | 🔴 I Lartë |
+| 2 | Network Error Handling | ⚠️ Workaround | 🔴 I Lartë |
+| 3 | Microphone Permission | ⚠️ Workaround | 🔴 I Lartë |
+| 4 | Wake Word Detection | ⚠️ Workaround | 🟡 Mesëm |
+| 5 | API URL Configuration | ⚠️ Workaround | 🟡 Mesëm |
+| 6 | TypeScript Types | ⚠️ Workaround | 🔴 I Lartë |
+| 7 | Production Environment Variables | ⚠️ Workaround | 🟡 Mesëm |
+
+**Legjenda:**
+- ✅ **Fixed** - Problemi është zgjidhur në SDK
+- ⚠️ **Workaround** - Ka zgjidhje në aplikacion, por duhet fix në SDK
+- ❌ **Open** - Problemi ende nuk është zgjidhur
 
 ---
 
 **Faleminderit për librarinë e shkëlqyer!** 🚀
+
+**Version i dokumentit:** 2.0  
+**Data e përditësimit:** 2025-11-23
 

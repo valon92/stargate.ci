@@ -11,13 +11,13 @@
         @blur="handleBlur"
         type="text"
         :placeholder="placeholder"
-        class="w-full px-4 py-3 pl-12 pr-12 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200"
+        class="w-full px-4 py-3 pl-12 pr-12 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200"
         :class="{ 'rounded-b-none': showSuggestions && (suggestions.length > 0 || popularSearches.length > 0) }"
       >
       
       <!-- Search Icon -->
       <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-        <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg class="h-5 w-5 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
         </svg>
       </div>
@@ -26,7 +26,7 @@
       <button
         v-if="query"
         @click="clearSearch"
-        class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-white transition-colors"
+        class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
       >
         <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -42,22 +42,22 @@
     <!-- Suggestions Dropdown -->
     <div
       v-if="showSuggestions && (suggestions.length > 0 || popularSearches.length > 0)"
-      class="absolute top-full left-0 right-0 bg-gray-800 border border-gray-600 border-t-0 rounded-b-lg shadow-lg z-50 max-h-96 overflow-y-auto"
+      class="absolute top-full left-0 right-0 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 border-t-0 rounded-b-lg shadow-lg z-50 max-h-96 overflow-y-auto"
     >
       <!-- Search Suggestions -->
       <div v-if="suggestions.length > 0" class="p-2">
-        <div class="text-xs font-semibold text-gray-400 uppercase tracking-wider px-2 py-1 mb-2">
+        <div class="text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider px-2 py-1 mb-2">
           Suggestions
         </div>
         <button
           v-for="(suggestion, index) in suggestions"
           :key="index"
           @click="selectSuggestion(suggestion)"
-          class="w-full text-left px-3 py-2 text-sm text-gray-300 hover:bg-gray-700 rounded-md transition-colors"
-          :class="{ 'bg-gray-700': selectedIndex === index }"
+          class="w-full text-left px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-colors"
+          :class="{ 'bg-gray-100 dark:bg-gray-700': selectedIndex === index }"
         >
           <div class="flex items-center gap-2">
-            <svg class="h-4 w-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="h-4 w-4 text-gray-600 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
             </svg>
             {{ suggestion }}
@@ -67,17 +67,17 @@
 
       <!-- Popular Searches -->
       <div v-if="popularSearches.length > 0 && suggestions.length === 0" class="p-2">
-        <div class="text-xs font-semibold text-gray-400 uppercase tracking-wider px-2 py-1 mb-2">
+        <div class="text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider px-2 py-1 mb-2">
           Popular Searches
         </div>
         <button
           v-for="(search, index) in popularSearches.slice(0, 5)"
           :key="index"
           @click="selectSuggestion(search)"
-          class="w-full text-left px-3 py-2 text-sm text-gray-300 hover:bg-gray-700 rounded-md transition-colors"
+          class="w-full text-left px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-colors"
         >
           <div class="flex items-center gap-2">
-            <svg class="h-4 w-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="h-4 w-4 text-gray-600 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
             </svg>
             {{ search }}
@@ -87,17 +87,17 @@
 
       <!-- Trending Searches -->
       <div v-if="trendingSearches.length > 0 && suggestions.length === 0 && popularSearches.length === 0" class="p-2">
-        <div class="text-xs font-semibold text-gray-400 uppercase tracking-wider px-2 py-1 mb-2">
+        <div class="text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider px-2 py-1 mb-2">
           Trending
         </div>
         <button
           v-for="(search, index) in trendingSearches.slice(0, 5)"
           :key="index"
           @click="selectSuggestion(search)"
-          class="w-full text-left px-3 py-2 text-sm text-gray-300 hover:bg-gray-700 rounded-md transition-colors"
+          class="w-full text-left px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-colors"
         >
           <div class="flex items-center gap-2">
-            <svg class="h-4 w-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="h-4 w-4 text-gray-600 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
             </svg>
             {{ search }}

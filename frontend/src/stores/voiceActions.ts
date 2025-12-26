@@ -3,6 +3,30 @@ import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import VoiceActionsSDK from '@valon92/voice-actions-sdk'
 
+// Type declaration for Web Speech API
+interface SpeechRecognition extends EventTarget {
+  continuous: boolean
+  interimResults: boolean
+  lang: string
+  start(): void
+  stop(): void
+  abort(): void
+  onresult: ((event: any) => void) | null
+  onerror: ((event: any) => void) | null
+  onend: (() => void) | null
+}
+
+interface SpeechRecognitionConstructor {
+  new (): SpeechRecognition
+}
+
+declare global {
+  interface Window {
+    SpeechRecognition?: SpeechRecognitionConstructor
+    webkitSpeechRecognition?: SpeechRecognitionConstructor
+  }
+}
+
 export interface VoiceCommand {
   id: string
   action: string
@@ -53,9 +77,24 @@ export const useVoiceActionsStore = defineStore('voiceActions', () => {
 
       // Determine API URL - use local backend or demo mode
       const isLocalhost = typeof window !== 'undefined' && window.location.hostname === 'localhost'
-      const apiUrl = isLocalhost 
-        ? 'http://localhost:8000/api' 
-        : (typeof window !== 'undefined' ? `${window.location.origin}/api` : 'http://localhost:8000/api')
+      
+      // Check for environment variable first (for production builds)
+      const envApiUrl = typeof import.meta !== 'undefined' && import.meta.env?.VITE_API_URL
+      
+      let apiUrl: string
+      if (isLocalhost) {
+        apiUrl = 'http://localhost:8000/api'
+      } else if (envApiUrl) {
+        // Use environment variable if set (for production)
+        apiUrl = envApiUrl.endsWith('/api') ? envApiUrl : `${envApiUrl}/api`
+      } else if (typeof window !== 'undefined') {
+        // Fallback to same origin (assumes API is at /api on same domain)
+        apiUrl = `${window.location.origin}/api`
+      } else {
+        apiUrl = 'http://localhost:8000/api'
+      }
+      
+      console.log('🔧 Voice Actions API URL:', apiUrl)
 
       // Initialize SDK with local API URL or demo mode
       sdk.value = new VoiceActionsSDK({
@@ -75,16 +114,6 @@ export const useVoiceActionsStore = defineStore('voiceActions', () => {
           lastCommand.value = command
           handleCommand(command)
         },
-        onListeningStateChange: (listeningState: boolean) => {
-          // Sync listening state with store when wake word is detected or listening is toggled
-          console.log(`🎤 onListeningStateChange called with: ${listeningState}`)
-          console.log(`🎤 Current isListening.value before update: ${isListening.value}`)
-          isListening.value = listeningState
-          console.log(`🎤 Updated isListening.value to: ${isListening.value}`)
-          if (import.meta.env.DEV) {
-            console.log(`✅ Listening state changed in store: ${listeningState ? 'ON' : 'OFF'}`)
-          }
-        },
         onError: (err: Error) => {
           // Process error message to provide better instructions
           const errorMessage = err.message
@@ -95,6 +124,27 @@ export const useVoiceActionsStore = defineStore('voiceActions', () => {
             name: err.name,
             stack: err.stack
           })
+          
+          // Check if error is about JSON parsing (HTML response instead of JSON)
+          if (errorMessage.includes('Unexpected token') || errorMessage.includes('JSON') || errorMessage.includes('<!DOCTYPE')) {
+            console.error('⚠️ API returned HTML instead of JSON. This usually means:')
+            console.error('   1. API endpoint does not exist (404)')
+            console.error('   2. API URL is incorrect')
+            console.error('   3. Server is returning error page instead of JSON')
+            console.error('   Current API URL:', apiUrl)
+            
+            error.value = `API Configuration Error: The voice control service cannot connect to the API.\n\n` +
+              `This usually happens when:\n` +
+              `1. API endpoint is not configured correctly\n` +
+              `2. API is not accessible from this domain\n` +
+              `3. CORS is blocking the request\n\n` +
+              `Please check:\n` +
+              `- API URL: ${apiUrl}\n` +
+              `- Backend is running and accessible\n` +
+              `- CORS settings allow requests from this domain`
+            isListening.value = false
+            return
+          }
           
           // Handle network errors from Speech Recognition API
           if (errorMessage.includes('Network error') || errorMessage.includes('network')) {
@@ -205,6 +255,11 @@ export const useVoiceActionsStore = defineStore('voiceActions', () => {
       }
 
       wakeWordRecognition.value = new SpeechRecognition()
+      if (!wakeWordRecognition.value) {
+        console.warn('⚠️ Failed to create SpeechRecognition instance')
+        return
+      }
+      
       wakeWordRecognition.value.continuous = true
       wakeWordRecognition.value.interimResults = true
       wakeWordRecognition.value.lang = locale.value
@@ -269,25 +324,27 @@ export const useVoiceActionsStore = defineStore('voiceActions', () => {
         }
       }
 
-      wakeWordRecognition.value.onerror = (event: any) => {
-        // Don't show errors for wake word recognition - it's optional
-        if (import.meta.env.DEV) {
-          console.warn('⚠️ Wake word recognition error:', event.error)
+      if (wakeWordRecognition.value) {
+        wakeWordRecognition.value.onerror = (event: any) => {
+          // Don't show errors for wake word recognition - it's optional
+          if (import.meta.env.DEV) {
+            console.warn('⚠️ Wake word recognition error:', event.error)
+          }
+          // Try to restart wake word listening
+          if (wakeWordEnabled.value && !isListening.value) {
+            setTimeout(() => {
+              startWakeWordListening()
+            }, 1000)
+          }
         }
-        // Try to restart wake word listening
-        if (wakeWordEnabled.value && !isListening.value) {
-          setTimeout(() => {
-            startWakeWordListening()
-          }, 1000)
-        }
-      }
 
-      wakeWordRecognition.value.onend = () => {
-        // Auto-restart wake word listening if it's enabled and voice control is not active
-        if (wakeWordEnabled.value && !isListening.value && !isWakeWordListening.value) {
-          setTimeout(() => {
-            startWakeWordListening()
-          }, 500)
+        wakeWordRecognition.value.onend = () => {
+          // Auto-restart wake word listening if it's enabled and voice control is not active
+          if (wakeWordEnabled.value && !isListening.value && !isWakeWordListening.value) {
+            setTimeout(() => {
+              startWakeWordListening()
+            }, 500)
+          }
         }
       }
 

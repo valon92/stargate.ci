@@ -1,15 +1,15 @@
 <template>
-  <div class="min-h-screen bg-gray-900">
+  <div class="min-h-screen bg-gray-900 dark:bg-gray-900 bg-white">
     <!-- Hero Section -->
-    <section class="relative overflow-hidden bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
-      <div class="absolute inset-0 bg-gradient-to-br from-primary-900/10 to-secondary-900/10"></div>
+    <section class="relative overflow-hidden bg-white dark:bg-gradient-to-br dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+      <div class="absolute inset-0 bg-gradient-to-br from-primary-900/10 to-secondary-900/10 dark:from-primary-900/10 dark:to-secondary-900/10"></div>
       
       <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
         <div class="text-center">
           <h1 class="text-4xl md:text-6xl font-bold mb-6">
             <span class="gradient-text">Upcoming Events</span>
           </h1>
-          <p class="text-xl text-gray-300 max-w-3xl mx-auto mb-8">
+          <p class="text-xl text-black dark:text-gray-300 max-w-3xl mx-auto mb-8">
             Stay informed about upcoming events, meetings, conferences, and important dates related to the Stargate Project and Cristal Intelligence.
           </p>
         </div>
@@ -17,7 +17,7 @@
     </section>
 
     <!-- Events Filter -->
-    <section class="py-16 bg-gray-800/30">
+    <section class="py-16 bg-gray-800/30 dark:bg-gray-800/30 bg-gray-50">
       <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-12 xl:px-16">
         <!-- Search Bar -->
         <div class="mb-8">
@@ -28,10 +28,10 @@
                 @keyup.enter="searchEvents(searchQuery)"
                 type="text"
                 placeholder="Search events..."
-                class="w-full px-4 py-3 pl-12 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                class="w-full px-4 py-3 pl-12 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               >
               <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="h-5 w-5 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                 </svg>
               </div>
@@ -40,7 +40,7 @@
                 :disabled="isLoading"
                 class="absolute inset-y-0 right-0 pr-3 flex items-center"
               >
-                <svg v-if="!isLoading" class="h-5 w-5 text-gray-400 hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg v-if="!isLoading" class="h-5 w-5 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                 </svg>
                 <div v-else class="animate-spin rounded-full h-5 w-5 border-b-2 border-primary-500"></div>
@@ -58,15 +58,15 @@
               :class="[
                 'px-4 py-2 rounded-lg font-medium transition-all duration-200',
                 selectedCategory === category.id 
-                  ? 'bg-primary-500 text-white' 
-                  : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                  ? 'bg-primary-600 dark:bg-primary-500 text-white' 
+                  : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
               ]"
             >
               {{ category.name }}
             </button>
           </div>
           <div class="flex gap-2">
-            <select v-model="selectedTimeframe" @change="filterByTimeframe" class="bg-gray-800 border border-gray-600 text-white rounded-lg px-4 py-2">
+            <select v-model="selectedTimeframe" @change="filterByTimeframe" class="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg px-4 py-2">
               <option value="all">All Time</option>
               <option value="upcoming">Upcoming</option>
               <option value="this-month">This Month</option>
@@ -95,16 +95,16 @@
     <section class="py-24">
       <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-12 xl:px-16">
         <!-- API Events Notice -->
-        <div v-if="!isLoading && events.length > 0" class="mb-8 p-4 bg-blue-900/20 border border-blue-500/30 rounded-lg">
+        <div v-if="!isLoading && events.length > 0" class="mb-8 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-500/30 rounded-lg">
           <div class="flex items-center gap-3">
             <div class="flex-shrink-0">
-              <svg class="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
               </svg>
             </div>
             <div>
-              <h3 class="text-blue-300 font-medium">Live Events from External APIs</h3>
-              <p class="text-blue-200/80 text-sm">These events are fetched from external APIs including OpenAI, SoftBank, Oracle, and MGX. Data is automatically synced and updated.</p>
+              <h3 class="text-blue-800 dark:text-blue-300 font-medium">Live Events from External APIs</h3>
+              <p class="text-blue-700 dark:text-blue-200/80 text-sm">These events are fetched from external APIs including OpenAI, SoftBank, Oracle, and MGX. Data is automatically synced and updated.</p>
             </div>
           </div>
         </div>
@@ -112,7 +112,7 @@
         <!-- Loading State -->
         <div v-if="isLoading" class="text-center py-12">
           <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary-500"></div>
-          <p class="mt-4 text-gray-400">Searching for real events...</p>
+          <p class="mt-4 text-gray-600 dark:text-gray-400">Searching for real events...</p>
         </div>
 
         <!-- Events Display - Single Card Style (like videos on home page) -->
@@ -134,12 +134,12 @@
                   loading="lazy"
                 ></iframe>
               </div>
-              <div v-else class="aspect-w-16 aspect-h-9 bg-gradient-to-br from-primary-900/20 to-secondary-900/20 flex items-center justify-center">
+              <div v-else class="aspect-w-16 aspect-h-9 bg-white dark:bg-gradient-to-br dark:from-primary-900/20 dark:to-secondary-900/20 border border-gray-200 dark:border-gray-700 flex items-center justify-center">
                 <div class="text-center">
-                  <div class="w-20 h-20 bg-black rounded-full flex items-center justify-center mx-auto mb-6">
+                  <div class="w-20 h-20 bg-black dark:bg-black rounded-full flex items-center justify-center mx-auto mb-6">
                     <span class="text-3xl">{{ event.icon }}</span>
                   </div>
-                  <h3 class="text-2xl font-bold text-white">{{ event.title }}</h3>
+                  <h3 class="text-2xl font-bold text-black dark:text-white">{{ event.title }}</h3>
                 </div>
               </div>
               
@@ -152,7 +152,7 @@
               
               <!-- Event Source Badge -->
               <div class="absolute top-4 right-4 flex items-center gap-2">
-                <span class="px-3 py-1 bg-gray-800/80 text-white rounded-full text-xs font-medium">
+                <span class="px-3 py-1 bg-gray-900/80 dark:bg-gray-800/80 text-white rounded-full text-xs font-medium">
                   {{ event.type }}
                 </span>
                 <span class="px-2 py-1 text-xs font-medium rounded-full"
@@ -168,13 +168,13 @@
             <!-- Event Content -->
             <div class="p-6">
               <div class="flex items-center justify-between mb-4">
-                <div class="flex items-center text-sm text-gray-400">
+                <div class="flex items-center text-sm text-gray-600 dark:text-gray-400">
                   <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                   </svg>
                   {{ formatDate(event.event_date) }}
                 </div>
-                <div v-if="event.event_time" class="flex items-center text-sm text-gray-400">
+                <div v-if="event.event_time" class="flex items-center text-sm text-gray-600 dark:text-gray-400">
                   <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                   </svg>
@@ -182,23 +182,23 @@
                 </div>
               </div>
 
-              <h3 class="text-2xl font-bold text-white mb-4 group-hover:text-primary-400 transition-colors">
+              <h3 class="text-2xl font-bold text-black dark:text-white mb-4 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
                 {{ event.title }}
               </h3>
               
-              <p class="text-gray-400 mb-6 text-lg leading-relaxed">
+              <p class="text-gray-700 dark:text-gray-400 mb-6 text-lg leading-relaxed">
                 {{ event.description }}
               </p>
 
               <div class="flex items-center justify-between mb-6">
-                <div class="flex items-center text-sm text-gray-400">
+                <div class="flex items-center text-sm text-gray-600 dark:text-gray-400">
                   <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
                   </svg>
                   {{ event.location }}
                 </div>
-                <div v-if="event.organizer" class="flex items-center text-sm text-gray-400">
+                <div v-if="event.organizer" class="flex items-center text-sm text-gray-600 dark:text-gray-400">
                   <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
                   </svg>
@@ -258,13 +258,13 @@
 
         <!-- No Events Message -->
         <div v-if="!isLoading && filteredEvents.length === 0" class="text-center py-12">
-          <div class="w-24 h-24 bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-6">
-            <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div class="w-24 h-24 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-6">
+            <svg class="w-12 h-12 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
             </svg>
           </div>
-          <h3 class="text-xl font-bold text-white mb-2">No Events Found</h3>
-          <p class="text-gray-400 mb-6">No events match your current filters. Try adjusting your search criteria.</p>
+          <h3 class="text-xl font-bold text-black dark:text-white mb-2">No Events Found</h3>
+          <p class="text-gray-600 dark:text-gray-400 mb-6">No events match your current filters. Try adjusting your search criteria.</p>
           <button @click="clearFilters" class="btn-primary">
             Clear Filters
           </button>
@@ -273,13 +273,13 @@
     </section>
 
     <!-- Event Categories Info -->
-    <section class="py-24 bg-gray-800/30">
+    <section class="py-24 bg-gray-50 dark:bg-gray-800/30">
       <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-12 xl:px-16">
         <div class="text-center mb-16">
           <h2 class="text-3xl md:text-4xl font-bold mb-4">
             <span class="gradient-text">Event Categories</span>
           </h2>
-          <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+          <p class="text-xl text-gray-700 dark:text-gray-300 max-w-3xl mx-auto">
             Explore different types of events related to the Stargate Project and Cristal Intelligence ecosystem.
           </p>
         </div>
@@ -293,9 +293,9 @@
             <div class="w-16 h-16 bg-black rounded-full flex items-center justify-center mx-auto mb-6">
               <span class="text-2xl">{{ category.icon }}</span>
             </div>
-            <h3 class="text-xl font-bold mb-4">{{ category.name }}</h3>
-            <p class="text-gray-400 mb-4">{{ category.description }}</p>
-            <div class="text-sm text-gray-500">
+            <h3 class="text-xl font-bold text-black dark:text-white mb-4">{{ category.name }}</h3>
+            <p class="text-gray-600 dark:text-gray-400 mb-4">{{ category.description }}</p>
+            <div class="text-sm text-gray-500 dark:text-gray-500">
               {{ getEventsCountByCategory(category.id) }} events
             </div>
           </div>
@@ -309,7 +309,7 @@
         <h2 class="text-3xl md:text-4xl font-bold mb-6">
           <span class="gradient-text">Join Our Community</span>
         </h2>
-        <p class="text-xl text-gray-300 mb-8">
+        <p class="text-xl text-gray-700 dark:text-gray-300 mb-8">
           Stay informed about the latest developments in AI infrastructure, Stargate Project updates, and Cristal Intelligence breakthroughs. Be part of the future of artificial intelligence.
         </p>
         
@@ -319,7 +319,7 @@
               v-model="email"
               type="email" 
               placeholder="Your email address"
-              class="flex-1 px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              class="flex-1 px-4 py-3 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
             >
             <button 
               @click="subscribeToEvents"
@@ -329,7 +329,7 @@
               {{ isSubscribing ? 'Joining...' : 'Join Now' }}
             </button>
           </div>
-          <p class="text-sm text-gray-400 mt-3">
+          <p class="text-sm text-gray-600 dark:text-gray-400 mt-3">
             Join thousands of AI enthusiasts. No spam, just valuable insights.
           </p>
         </div>
@@ -338,14 +338,14 @@
 
     <!-- Auth Modal (Login/Register) -->
     <div v-if="showAuthModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50" @click="showAuthModal = false">
-      <div class="bg-gray-800 rounded-lg p-6 max-w-md w-full mx-4" @click.stop>
+      <div class="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-md w-full mx-4" @click.stop>
         <div class="flex items-center justify-between mb-6">
-          <h3 class="text-xl font-semibold text-white">
+          <h3 class="text-xl font-semibold text-black dark:text-white">
             {{ authModalMode === 'login' ? 'Sign In Required' : 'Create Account' }}
           </h3>
           <button 
             @click="showAuthModal = false"
-            class="text-gray-400 hover:text-white transition-colors"
+            class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
           >
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -354,7 +354,7 @@
         </div>
 
         <div class="mb-6">
-          <p class="text-gray-300 mb-4">
+          <p class="text-gray-700 dark:text-gray-300 mb-4">
             {{ authModalMode === 'login' 
               ? 'You need to sign in to watch this event video.' 
               : 'Create a free account to access event videos and stay updated.' }}
@@ -364,13 +364,13 @@
         <div class="flex gap-3">
           <button 
             @click="showAuthModal = false"
-            class="flex-1 bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg transition-colors"
+            class="flex-1 bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-700 text-gray-900 dark:text-white px-4 py-2 rounded-lg transition-colors"
           >
             Cancel
           </button>
           <button 
             @click="switchAuthMode"
-            class="flex-1 bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition-colors"
+            class="flex-1 bg-gray-300 dark:bg-gray-700 hover:bg-gray-400 dark:hover:bg-gray-600 text-gray-900 dark:text-white px-4 py-2 rounded-lg transition-colors"
           >
             {{ authModalMode === 'login' ? 'Sign Up Instead' : 'Sign In Instead' }}
           </button>
@@ -425,12 +425,12 @@
 
     <!-- Past Event Modal -->
     <div v-if="showPastEventModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50" @click="showPastEventModal = false">
-      <div class="bg-gray-800 rounded-lg p-6 max-w-md w-full mx-4" @click.stop>
+      <div class="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-md w-full mx-4" @click.stop>
         <div class="flex items-center justify-between mb-6">
-          <h3 class="text-xl font-semibold text-white">Event Recording</h3>
+          <h3 class="text-xl font-semibold text-black dark:text-white">Event Recording</h3>
           <button 
             @click="showPastEventModal = false"
-            class="text-gray-400 hover:text-white transition-colors"
+            class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
           >
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -451,9 +451,9 @@
             </div>
           </div>
 
-          <div class="p-4 bg-gray-700 rounded-lg">
-            <p class="text-gray-300 text-sm mb-3">This event has already passed on {{ formatDate(currentPastEvent?.event_date) }}.</p>
-            <div class="text-xs text-gray-400 space-y-1">
+          <div class="p-4 bg-gray-100 dark:bg-gray-700 rounded-lg">
+            <p class="text-gray-700 dark:text-gray-300 text-sm mb-3">This event has already passed on {{ formatDate(currentPastEvent?.event_date) }}.</p>
+            <div class="text-xs text-gray-600 dark:text-gray-400 space-y-1">
               <p><strong>Event Details:</strong></p>
               <p>📅 Date: {{ formatDate(currentPastEvent?.event_date) }}</p>
               <p>🕐 Time: {{ currentPastEvent?.event_time ? formatTime(currentPastEvent.event_time) : 'TBD' }}</p>
@@ -467,7 +467,7 @@
           <div class="flex gap-3">
             <button 
               @click="showPastEventModal = false"
-              class="flex-1 bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg transition-colors"
+              class="flex-1 bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-700 text-gray-900 dark:text-white px-4 py-2 rounded-lg transition-colors"
             >
               Close
             </button>
@@ -484,12 +484,12 @@
 
     <!-- Registration Modal -->
     <div v-if="showRegistrationModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50" @click="showRegistrationModal = false">
-      <div class="bg-gray-800 rounded-lg p-6 max-w-md w-full mx-4" @click.stop>
+      <div class="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-md w-full mx-4" @click.stop>
         <div class="flex items-center justify-between mb-6">
-          <h3 class="text-xl font-semibold text-white">Registration Information</h3>
+          <h3 class="text-xl font-semibold text-black dark:text-white">Registration Information</h3>
           <button 
             @click="showRegistrationModal = false"
-            class="text-gray-400 hover:text-white transition-colors"
+            class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
           >
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -510,15 +510,15 @@
             </div>
           </div>
 
-          <div class="p-4 bg-gray-700 rounded-lg">
-            <p class="text-gray-300 text-sm mb-2">Registration URL:</p>
-            <code class="text-blue-300 text-xs break-all">{{ currentRegistrationUrl }}</code>
+          <div class="p-4 bg-gray-100 dark:bg-gray-700 rounded-lg">
+            <p class="text-gray-700 dark:text-gray-300 text-sm mb-2">Registration URL:</p>
+            <code class="text-blue-600 dark:text-blue-300 text-xs break-all">{{ currentRegistrationUrl }}</code>
           </div>
 
           <div class="flex gap-3">
             <button 
               @click="showRegistrationModal = false"
-              class="flex-1 bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg transition-colors"
+              class="flex-1 bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-700 text-gray-900 dark:text-white px-4 py-2 rounded-lg transition-colors"
             >
               Close
             </button>
@@ -1120,9 +1120,14 @@ onMounted(async () => {
 }
 
 .event-container {
-  background-color: rgba(31, 41, 55, 1);
+  background-color: rgba(255, 255, 255, 1);
   border-radius: 0.5rem;
   overflow: hidden;
+  border: 1px solid rgba(229, 231, 235, 1);
+}
+
+.dark .event-container {
+  background-color: rgba(31, 41, 55, 1);
   border: 1px solid rgba(55, 65, 81, 1);
 }
 

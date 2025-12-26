@@ -1,15 +1,15 @@
 <template>
   <div class="min-h-screen">
     <!-- Hero Section -->
-    <section class="relative overflow-hidden bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
-      <div class="absolute inset-0 bg-gradient-to-br from-primary-900/10 to-secondary-900/10"></div>
+    <section class="relative overflow-hidden bg-white dark:bg-gradient-to-br dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+      <div class="absolute inset-0 bg-gradient-to-br from-primary-900/10 to-secondary-900/10 dark:from-primary-900/10 dark:to-secondary-900/10"></div>
       
       <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
         <div class="text-center">
           <h1 class="text-4xl md:text-6xl font-bold mb-6">
             <span class="gradient-text">Frequently Asked Questions</span>
           </h1>
-          <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+          <p class="text-xl text-black dark:text-gray-300 max-w-3xl mx-auto">
             Everything you need to know about stargate.ci platform, Stargate Project, and Cristal Intelligence initiatives. Get answers to common questions about our services and official project information.
           </p>
         </div>
@@ -18,7 +18,7 @@
 
 
     <!-- FAQ Filter -->
-    <section class="py-16 bg-gray-800/30">
+    <section class="py-16 bg-gray-800/30 dark:bg-gray-800/30 bg-gray-50">
       <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-12 xl:px-16">
         <!-- Search Bar -->
         <div class="mb-8">
@@ -29,10 +29,10 @@
                 @keyup.enter="searchFAQs"
                 type="text"
                 placeholder="Search FAQ questions..."
-                class="w-full px-4 py-3 pl-12 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                class="w-full px-4 py-3 pl-12 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               >
               <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="h-5 w-5 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                 </svg>
               </div>
@@ -41,7 +41,7 @@
                 :disabled="isSearching"
                 class="absolute inset-y-0 right-0 pr-3 flex items-center"
               >
-                <svg v-if="!isSearching" class="h-5 w-5 text-gray-400 hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg v-if="!isSearching" class="h-5 w-5 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                 </svg>
                 <div v-else class="animate-spin rounded-full h-5 w-5 border-b-2 border-primary-500"></div>
@@ -59,22 +59,22 @@
               :class="[
                 'px-4 py-2 rounded-lg font-medium transition-all duration-200',
                 selectedCategory === category.id 
-                  ? 'bg-primary-500 text-white' 
-                  : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                  ? 'bg-primary-600 dark:bg-primary-500 text-white' 
+                  : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
               ]"
             >
               {{ category.name }}
             </button>
           </div>
           <div class="flex gap-2">
-            <select v-model="sortBy" @change="filterByCategory(selectedCategory)" class="bg-gray-800 border border-gray-600 text-white rounded-lg px-4 py-2">
+            <select v-model="sortBy" @change="filterByCategory(selectedCategory)" class="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg px-4 py-2">
               <option value="relevance">Most Relevant</option>
               <option value="alphabetical">Alphabetical</option>
               <option value="category">By Category</option>
             </select>
             <button
               @click="clearFilters"
-              class="px-4 py-2 bg-gray-600 hover:bg-gray-500 text-white rounded-lg font-medium transition-all duration-200 flex items-center gap-2"
+              class="px-4 py-2 bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500 text-gray-900 dark:text-white rounded-lg font-medium transition-all duration-200 flex items-center gap-2"
             >
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -95,13 +95,13 @@
             <div class="relative overflow-hidden rounded-lg">
               <div class="p-6">
                 <div class="flex items-center justify-between mb-4">
-                  <div class="flex items-center text-sm text-gray-400">
+                  <div class="flex items-center text-sm text-gray-600 dark:text-gray-400">
                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>
                     FAQ {{ index + 1 }}
                   </div>
-                  <div class="text-sm text-gray-400">
+                  <div class="text-sm text-gray-600 dark:text-gray-400">
                     {{ faq.category || 'General' }}
                   </div>
                 </div>
@@ -110,16 +110,16 @@
                   @click="toggleFAQ(index)"
                   class="w-full text-left focus:outline-none"
                 >
-                  <h3 class="text-xl font-bold text-white mb-4 group-hover:text-primary-400 transition-colors">
+                  <h3 class="text-xl font-bold text-black dark:text-white mb-4 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
                     {{ faq.question }}
                   </h3>
                 </button>
                 
                 <div
                   v-if="openFAQs.includes(index)"
-                  class="mt-4 pt-4 border-t border-gray-700"
+                  class="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700"
                 >
-                  <p class="text-gray-300 leading-relaxed text-lg">{{ faq.answer }}</p>
+                  <p class="text-gray-700 dark:text-gray-300 leading-relaxed text-lg">{{ faq.answer }}</p>
                 </div>
 
                 <!-- FAQ Actions -->
@@ -133,7 +133,7 @@
                   
                   <button 
                     @click="shareFAQ(faq)"
-                    class="px-4 py-3 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors"
+                    class="px-4 py-3 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-900 dark:text-white rounded-lg transition-colors"
                     title="Share FAQ"
                   >
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -150,13 +150,13 @@
 
 
     <!-- Additional Resources -->
-    <section class="py-24 bg-gray-800/30">
+    <section class="py-24 bg-gray-50 dark:bg-gray-800/30">
       <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-12 xl:px-16">
         <div class="text-center mb-16">
           <h2 class="text-3xl md:text-4xl font-bold mb-4">
             <span class="gradient-text">Need More Information?</span>
           </h2>
-          <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+          <p class="text-xl text-gray-700 dark:text-gray-300 max-w-3xl mx-auto">
             Explore our platform resources or connect with official project teams
           </p>
         </div>
@@ -168,8 +168,8 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
               </svg>
             </div>
-            <h3 class="text-xl font-semibold mb-4 text-white">Platform Insights</h3>
-            <p class="text-gray-400 mb-6">
+            <h3 class="text-xl font-semibold mb-4 text-black dark:text-white">Platform Insights</h3>
+            <p class="text-gray-600 dark:text-gray-400 mb-6">
               Comprehensive analysis and insights about Stargate Project and Cristal Intelligence
             </p>
             <RouterLink to="/news" class="btn-secondary">
@@ -178,13 +178,13 @@
           </div>
           
           <div class="card text-center">
-            <div class="w-16 h-16 bg-gradient-to-r from-secondary-500 to-primary-500 rounded-full flex items-center justify-center mx-auto mb-6">
+            <div class="w-16 h-16 bg-black rounded-full flex items-center justify-center mx-auto mb-6">
               <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
               </svg>
             </div>
-            <h3 class="text-xl font-semibold mb-4 text-white">Contact Platform</h3>
-            <p class="text-gray-400 mb-6">
+            <h3 class="text-xl font-semibold mb-4 text-black dark:text-white">Contact Platform</h3>
+            <p class="text-gray-600 dark:text-gray-400 mb-6">
               Get in touch with our platform team for specific questions about our services
             </p>
             <RouterLink to="/contact" class="btn-secondary">
@@ -197,12 +197,12 @@
 
     <!-- Share Modal -->
     <div v-if="showShareModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50" @click="closeShareModal">
-      <div class="bg-gray-800 rounded-lg p-6 max-w-md w-full mx-4" @click.stop>
+      <div class="bg-gray-800 dark:bg-gray-800 bg-white rounded-lg p-6 max-w-md w-full mx-4 border border-gray-700 dark:border-gray-700 border-gray-200" @click.stop>
         <div class="flex items-center justify-between mb-6">
-          <h3 class="text-xl font-semibold text-white">Share FAQ</h3>
+          <h3 class="text-xl font-semibold text-black dark:text-white">Share FAQ</h3>
           <button 
             @click="closeShareModal"
-            class="text-gray-400 hover:text-white transition-colors"
+            class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
           >
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -211,8 +211,8 @@
         </div>
 
         <div v-if="faqToShare" class="mb-6">
-          <h4 class="text-lg font-medium text-white mb-2">Q: {{ faqToShare.question }}</h4>
-          <p class="text-gray-400 text-sm">A: {{ faqToShare.answer }}</p>
+          <h4 class="text-lg font-medium text-black dark:text-white mb-2">Q: {{ faqToShare.question }}</h4>
+          <p class="text-gray-600 dark:text-gray-400 text-sm">A: {{ faqToShare.answer }}</p>
         </div>
 
         <!-- Share Options -->
@@ -532,7 +532,7 @@ useHead({
 
 <style scoped>
 .card {
-  @apply bg-gray-800/50 border border-gray-700 rounded-lg p-6 hover:border-primary-500/50 transition-all duration-300;
+  @apply bg-gray-800/50 dark:bg-gray-800/50 bg-white border border-gray-700 dark:border-gray-700 border-gray-200 rounded-lg p-6 hover:border-primary-500/50 dark:hover:border-primary-500/50 hover:border-primary-300 transition-all duration-300;
 }
 
 .btn-secondary {
@@ -544,13 +544,18 @@ useHead({
 }
 
 .gradient-text {
-  @apply text-white;
+  @apply text-black dark:text-white;
 }
 
 .faq-container {
-  background-color: rgba(31, 41, 55, 1);
+  background-color: rgba(255, 255, 255, 1);
   border-radius: 0.5rem;
   overflow: hidden;
+  border: 1px solid rgba(229, 231, 235, 1);
+}
+
+.dark .faq-container {
+  background-color: rgba(31, 41, 55, 1);
   border: 1px solid rgba(55, 65, 81, 1);
 }
 </style>
