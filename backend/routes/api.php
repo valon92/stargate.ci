@@ -15,6 +15,7 @@ use App\Http\Controllers\Api\EventsController;
 use App\Http\Controllers\Api\EventRegistrationController;
 use App\Http\Controllers\Api\VoiceActionsController;
 use App\Http\Controllers\Api\ProfileController;
+use App\Http\Controllers\Api\CommunityController;
 
 /*
 |--------------------------------------------------------------------------
@@ -140,6 +141,20 @@ Route::prefix('v1')->middleware('api.throttle:1000,1')->group(function () {
     Route::get('/events/sync-status', [EventsController::class, 'syncStatus']);
     
     Route::get('/events/{id}', [EventsController::class, 'show']);
+    
+    // Community routes (public read, authenticated write)
+    Route::get('/community/posts', [CommunityController::class, 'index']);
+    Route::get('/community/posts/{id}', [CommunityController::class, 'show']);
+    Route::get('/community/categories', [CommunityController::class, 'categories']);
+    
+    // Authenticated community routes
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::post('/community/posts', [CommunityController::class, 'store']);
+        Route::put('/community/posts/{id}', [CommunityController::class, 'update']);
+        Route::delete('/community/posts/{id}', [CommunityController::class, 'destroy']);
+        Route::post('/community/posts/{id}/like', [CommunityController::class, 'like']);
+        Route::post('/community/posts/{id}/comments', [CommunityController::class, 'addComment']);
+    });
     
     // Events sync routes (with rate limiting)
     Route::middleware('api.throttle:10,1')->group(function () {

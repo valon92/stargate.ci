@@ -26,6 +26,11 @@ const router = createRouter({
       component: () => import('../views/NewsView.vue'),
     },
     {
+      path: '/community',
+      name: 'community',
+      component: () => import('../views/CommunityView.vue'),
+    },
+    {
       path: '/faq',
       name: 'faq',
       component: () => import('../views/FAQView.vue'),

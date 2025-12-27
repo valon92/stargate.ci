@@ -70,6 +70,30 @@ class Subscriber extends Model
     }
 
     /**
+     * Get the community posts for this subscriber
+     */
+    public function communityPosts(): HasMany
+    {
+        return $this->hasMany(CommunityPost::class);
+    }
+
+    /**
+     * Get the community comments for this subscriber
+     */
+    public function communityComments(): HasMany
+    {
+        return $this->hasMany(CommunityComment::class);
+    }
+
+    /**
+     * Get the community likes for this subscriber
+     */
+    public function communityLikes(): HasMany
+    {
+        return $this->hasMany(CommunityLike::class);
+    }
+
+    /**
      * Scope for active subscribers
      */
     public function scopeActive($query)

@@ -116,10 +116,73 @@
           </div>
         </header>
 
-        <!-- Article Content -->
-        <div class="prose prose-lg max-w-none">
-          <div class="text-gray-700 dark:text-gray-300 leading-relaxed text-lg whitespace-pre-wrap">
-            {{ article.content }}
+        <!-- Reading Progress Bar -->
+        <div class="fixed top-0 left-0 right-0 h-1 bg-gray-200 dark:bg-gray-700 z-50">
+          <div 
+            ref="progressBar"
+            class="h-full bg-black dark:bg-white transition-all duration-150"
+            :style="{ width: readingProgress + '%' }"
+          ></div>
+        </div>
+
+        <!-- Article Content - Modern Reading Experience -->
+        <div class="article-content-wrapper">
+          <article 
+            ref="articleContent"
+            class="prose prose-xl max-w-3xl mx-auto"
+            :class="{ 'reading-mode': isReadingMode }"
+          >
+            <!-- Content with enhanced typography -->
+            <div 
+              v-if="article"
+              class="article-text"
+              :style="{ fontSize: fontSize + 'px', lineHeight: lineHeight }"
+            >
+              <div 
+                v-html="formatArticleContent(article.content)"
+                class="article-body"
+              ></div>
+            </div>
+          </article>
+
+          <!-- Reading Controls (Floating) -->
+          <div class="fixed bottom-8 right-8 z-40 flex flex-col gap-3">
+            <!-- Font Size Controls -->
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 p-3 flex flex-col gap-2">
+              <button
+                @click="increaseFontSize"
+                class="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors"
+                title="Increase font size"
+              >
+                <svg class="w-5 h-5 text-gray-700 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                </svg>
+              </button>
+              <button
+                @click="decreaseFontSize"
+                class="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors"
+                title="Decrease font size"
+              >
+                <svg class="w-5 h-5 text-gray-700 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4" />
+                </svg>
+              </button>
+            </div>
+
+            <!-- Reading Mode Toggle -->
+            <button
+              @click="toggleReadingMode"
+              class="bg-black dark:bg-white text-white dark:text-black p-3 rounded-lg shadow-xl hover:bg-gray-900 dark:hover:bg-gray-100 transition-colors"
+              :title="isReadingMode ? 'Exit reading mode' : 'Enter reading mode'"
+            >
+              <svg v-if="!isReadingMode" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+              </svg>
+              <svg v-else class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
+              </svg>
+            </button>
           </div>
         </div>
 
@@ -241,7 +304,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onUnmounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useHead } from '@vueuse/head'
 import { newsApiService, type NewsArticle } from '@/services/newsApiService'
@@ -253,6 +316,14 @@ const router = useRouter()
 const article = ref<NewsArticle | null>(null)
 const isLoading = ref(true)
 const error = ref<string | null>(null)
+const articleContent = ref<HTMLElement | null>(null)
+const progressBar = ref<HTMLElement | null>(null)
+
+// Reading experience controls
+const fontSize = ref(18)
+const lineHeight = ref('1.8')
+const isReadingMode = ref(false)
+const readingProgress = ref(0)
 
 // Load article data
 const loadArticle = async () => {
@@ -391,9 +462,113 @@ const copyLink = async () => {
   }
 }
 
+// Reading experience functions
+const increaseFontSize = () => {
+  if (fontSize.value < 24) {
+    fontSize.value += 2
+    saveReadingPreferences()
+  }
+}
+
+const decreaseFontSize = () => {
+  if (fontSize.value > 14) {
+    fontSize.value -= 2
+    saveReadingPreferences()
+  }
+}
+
+const toggleReadingMode = () => {
+  isReadingMode.value = !isReadingMode.value
+  saveReadingPreferences()
+  if (isReadingMode.value) {
+    document.body.style.overflow = 'hidden'
+  } else {
+    document.body.style.overflow = ''
+  }
+}
+
+const formatArticleContent = (content: string): string => {
+  if (!content) return ''
+  
+  // Convert plain text to formatted HTML with paragraphs
+  let formatted = content
+    .split('\n\n')
+    .map(paragraph => {
+      const trimmed = paragraph.trim()
+      if (!trimmed) return ''
+      
+      // Check if it's a heading (starts with #)
+      if (trimmed.startsWith('#')) {
+        const level = trimmed.match(/^#+/)?.[0].length || 1
+        const text = trimmed.replace(/^#+\s*/, '')
+        return `<h${Math.min(level, 6)}>${text}</h${Math.min(level, 6)}>`
+      }
+      
+      // Regular paragraph
+      return `<p>${trimmed}</p>`
+    })
+    .filter(p => p)
+    .join('')
+  
+  return formatted
+}
+
+const calculateReadingProgress = () => {
+  if (!articleContent.value) return
+  
+  const articleElement = articleContent.value
+  const articleTop = articleElement.offsetTop
+  const articleHeight = articleElement.offsetHeight
+  const windowHeight = window.innerHeight
+  const scrollTop = window.pageYOffset || document.documentElement.scrollTop
+  
+  const scrolled = scrollTop + windowHeight - articleTop
+  const progress = Math.min(100, Math.max(0, (scrolled / articleHeight) * 100))
+  
+  readingProgress.value = progress
+}
+
+const saveReadingPreferences = () => {
+  localStorage.setItem('article-reading-preferences', JSON.stringify({
+    fontSize: fontSize.value,
+    lineHeight: lineHeight.value,
+    isReadingMode: isReadingMode.value
+  }))
+}
+
+const loadReadingPreferences = () => {
+  const saved = localStorage.getItem('article-reading-preferences')
+  if (saved) {
+    try {
+      const prefs = JSON.parse(saved)
+      if (prefs.fontSize) fontSize.value = prefs.fontSize
+      if (prefs.lineHeight) lineHeight.value = prefs.lineHeight
+      if (prefs.isReadingMode !== undefined) isReadingMode.value = prefs.isReadingMode
+    } catch (e) {
+      console.error('Failed to load reading preferences:', e)
+    }
+  }
+}
+
 // Load article on mount
 onMounted(() => {
   loadArticle()
+  loadReadingPreferences()
+  
+  // Set up scroll listener for reading progress
+  window.addEventListener('scroll', calculateReadingProgress)
+  window.addEventListener('resize', calculateReadingProgress)
+  
+  // Calculate initial progress
+  setTimeout(() => {
+    calculateReadingProgress()
+  }, 100)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', calculateReadingProgress)
+  window.removeEventListener('resize', calculateReadingProgress)
+  document.body.style.overflow = ''
 })
 </script>
 
@@ -402,8 +577,18 @@ onMounted(() => {
   @apply bg-black text-white px-6 py-3 rounded-lg font-medium transition-all duration-200;
 }
 
+/* Modern Article Reading Styles */
+.article-content-wrapper {
+  position: relative;
+  min-height: 100vh;
+  padding-bottom: 4rem;
+}
+
 .prose {
   @apply text-gray-700 dark:text-gray-300;
+  max-width: 65ch;
+  margin: 0 auto;
+  padding: 2rem 1rem;
 }
 
 .prose h1,
@@ -413,17 +598,148 @@ onMounted(() => {
 .prose h5,
 .prose h6 {
   @apply text-black dark:text-white;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-top: 2em;
+  margin-bottom: 1em;
+}
+
+.prose h1 {
+  font-size: 2.5em;
+}
+
+.prose h2 {
+  font-size: 2em;
+}
+
+.prose h3 {
+  font-size: 1.5em;
+}
+
+.prose p {
+  margin-bottom: 1.5em;
+  text-align: justify;
+  hyphens: auto;
+  word-break: break-word;
 }
 
 .prose a {
   @apply text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300;
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
 
 .prose strong {
   @apply text-black dark:text-white;
+  font-weight: 700;
 }
 
 .prose blockquote {
-  @apply border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-400;
+  @apply border-l-4 border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-400;
+  padding-left: 1.5em;
+  margin: 2em 0;
+  font-style: italic;
+}
+
+.prose ul,
+.prose ol {
+  margin: 1.5em 0;
+  padding-left: 2em;
+}
+
+.prose li {
+  margin: 0.5em 0;
+}
+
+.prose code {
+  @apply bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100;
+  padding: 0.2em 0.4em;
+  border-radius: 0.25rem;
+  font-size: 0.9em;
+}
+
+.prose pre {
+  @apply bg-gray-100 dark:bg-gray-800;
+  padding: 1em;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+  margin: 1.5em 0;
+}
+
+.prose img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+  margin: 2em 0;
+}
+
+/* Article Body Enhanced Typography */
+.article-text {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  letter-spacing: 0.01em;
+  word-spacing: 0.05em;
+}
+
+.article-body {
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.article-body ::selection {
+  @apply bg-black dark:bg-white text-white dark:text-black;
+}
+
+/* Reading Mode */
+.reading-mode {
+  @apply bg-white dark:bg-gray-900;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 30;
+  overflow-y: auto;
+  padding: 2rem;
+}
+
+.reading-mode .prose {
+  max-width: 60ch;
+  margin: 0 auto;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .prose {
+    padding: 1rem 0.5rem;
+    font-size: 1rem;
+  }
+  
+  .reading-mode .prose {
+    max-width: 100%;
+    padding: 1rem;
+  }
+  
+  /* Hide floating controls on mobile or make them smaller */
+  .fixed.bottom-8.right-8 {
+    bottom: 1rem;
+    right: 1rem;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .fixed {
+    display: none;
+  }
+  
+  .prose {
+    max-width: 100%;
+    padding: 0;
+  }
+  
+  .article-content-wrapper {
+    padding-bottom: 0;
+  }
 }
 </style>
