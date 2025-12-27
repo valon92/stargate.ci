@@ -6,7 +6,7 @@
         <h1 class="text-4xl font-bold gradient-text mb-4">
           Sign Up
         </h1>
-        <p class="text-xl text-gray-300 dark:text-gray-300 text-gray-700">
+        <p class="text-xl text-gray-700 dark:text-gray-300">
           Create your Stargate.ci account
         </p>
       </div>
@@ -16,7 +16,7 @@
         <form @submit.prevent="handleSignUp" class="space-y-6">
           <!-- Username -->
           <div>
-            <label for="username" class="block text-sm font-medium text-gray-300 dark:text-gray-300 text-gray-700 mb-2">
+            <label for="username" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               Username *
             </label>
             <input
@@ -24,14 +24,14 @@
               id="username"
               v-model="form.username"
               required
-              class="w-full px-4 py-3 bg-gray-700 dark:bg-gray-700 bg-white border border-gray-600 dark:border-gray-600 border-gray-300 rounded-lg text-white dark:text-white text-gray-900 placeholder-gray-400 dark:placeholder-gray-400 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              class="w-full px-4 py-3 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               placeholder="Choose a username"
             />
           </div>
 
           <!-- Email -->
           <div>
-            <label for="email" class="block text-sm font-medium text-gray-300 dark:text-gray-300 text-gray-700 mb-2">
+            <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               Email Address *
             </label>
             <input
@@ -39,14 +39,14 @@
               id="email"
               v-model="form.email"
               required
-              class="w-full px-4 py-3 bg-gray-700 dark:bg-gray-700 bg-white border border-gray-600 dark:border-gray-600 border-gray-300 rounded-lg text-white dark:text-white text-gray-900 placeholder-gray-400 dark:placeholder-gray-400 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              class="w-full px-4 py-3 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               placeholder="Enter your email address"
             />
           </div>
 
           <!-- Password -->
           <div>
-            <label for="password" class="block text-sm font-medium text-gray-300 dark:text-gray-300 text-gray-700 mb-2">
+            <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               Password *
             </label>
             <input
@@ -54,14 +54,14 @@
               id="password"
               v-model="form.password"
               required
-              class="w-full px-4 py-3 bg-gray-700 dark:bg-gray-700 bg-white border border-gray-600 dark:border-gray-600 border-gray-300 rounded-lg text-white dark:text-white text-gray-900 placeholder-gray-400 dark:placeholder-gray-400 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              class="w-full px-4 py-3 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               placeholder="Create a password"
             />
           </div>
 
           <!-- Confirm Password -->
           <div>
-            <label for="confirmPassword" class="block text-sm font-medium text-gray-300 dark:text-gray-300 text-gray-700 mb-2">
+            <label for="confirmPassword" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               Confirm Password *
             </label>
             <input
@@ -69,20 +69,20 @@
               id="confirmPassword"
               v-model="form.confirmPassword"
               required
-              class="w-full px-4 py-3 bg-gray-700 dark:bg-gray-700 bg-white border border-gray-600 dark:border-gray-600 border-gray-300 rounded-lg text-white dark:text-white text-gray-900 placeholder-gray-400 dark:placeholder-gray-400 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              class="w-full px-4 py-3 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               placeholder="Confirm your password"
             />
           </div>
 
           <!-- Country -->
           <div>
-            <label for="country" class="block text-sm font-medium text-gray-300 dark:text-gray-300 text-gray-700 mb-2">
+            <label for="country" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               Country
             </label>
             <select
               id="country"
               v-model="form.country"
-              class="w-full px-4 py-3 bg-gray-700 dark:bg-gray-700 bg-white border border-gray-600 dark:border-gray-600 border-gray-300 rounded-lg text-white dark:text-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              class="w-full px-4 py-3 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
             >
               <option value="">Select your country</option>
               <option value="Kosovo">Kosovo</option>
@@ -99,7 +99,7 @@
 
           <!-- Interests -->
           <div>
-            <label class="block text-sm font-medium text-gray-300 dark:text-gray-300 text-gray-700 mb-2">
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               Interests (Optional)
             </label>
             <div class="grid grid-cols-2 gap-2">
@@ -108,9 +108,9 @@
                   type="checkbox"
                   :value="interest"
                   v-model="form.interests"
-                  class="h-4 w-4 text-primary-600 dark:text-primary-600 text-primary-600 focus:ring-primary-500 border-gray-300 dark:border-gray-300 border-gray-300 rounded"
+                  class="h-4 w-4 text-primary-600 dark:text-primary-600 focus:ring-primary-500 border-gray-300 dark:border-gray-300 rounded"
                 />
-                <span class="ml-2 text-sm text-gray-300 dark:text-gray-300 text-gray-700">{{ interest }}</span>
+                <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">{{ interest }}</span>
               </label>
             </div>
           </div>
@@ -124,11 +124,11 @@
               required
               class="h-4 w-4 text-primary-600 dark:text-primary-600 text-primary-600 focus:ring-primary-500 border-gray-300 dark:border-gray-300 border-gray-300 rounded"
             />
-            <label for="terms" class="ml-2 block text-sm text-gray-300 dark:text-gray-300 text-gray-700">
+            <label for="terms" class="ml-2 block text-sm text-gray-700 dark:text-gray-300">
               I agree to the 
-              <a href="/terms" class="text-primary-400 dark:text-primary-400 text-primary-600 hover:text-primary-300 dark:hover:text-primary-300 hover:text-primary-700 underline">Terms of Service</a>
+              <a href="/terms" class="text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 underline">Terms of Service</a>
               and 
-              <a href="/privacy" class="text-primary-400 dark:text-primary-400 text-primary-600 hover:text-primary-300 dark:hover:text-primary-300 hover:text-primary-700 underline">Privacy Policy</a>
+              <a href="/privacy" class="text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 underline">Privacy Policy</a>
             </label>
           </div>
 
@@ -159,9 +159,9 @@
 
       <!-- Sign In Link -->
       <div class="mt-8 text-center">
-        <p class="text-gray-400">
+        <p class="text-gray-600 dark:text-gray-400">
           Already have an account? 
-          <RouterLink to="/signin" class="text-primary-400 hover:text-primary-300 underline">
+          <RouterLink to="/signin" class="text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 underline">
             Sign in to Stargate.ci
           </RouterLink>
         </p>
@@ -175,8 +175,8 @@
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
             </svg>
           </div>
-          <h3 class="text-lg font-semibold text-white mb-2">Latest Updates</h3>
-          <p class="text-gray-400">Get notified about new developments in Stargate Project and Cristal Intelligence</p>
+          <h3 class="text-lg font-semibold text-black dark:text-white mb-2">Latest Updates</h3>
+          <p class="text-gray-600 dark:text-gray-400">Get notified about new developments in Stargate Project and Cristal Intelligence</p>
         </div>
 
         <div class="text-center">
@@ -185,8 +185,8 @@
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
             </svg>
           </div>
-          <h3 class="text-lg font-semibold text-white mb-2">Educational Content</h3>
-          <p class="text-gray-400">Access to exclusive educational materials and insights</p>
+          <h3 class="text-lg font-semibold text-black dark:text-white mb-2">Educational Content</h3>
+          <p class="text-gray-600 dark:text-gray-400">Access to exclusive educational materials and insights</p>
         </div>
 
         <div class="text-center">
@@ -195,8 +195,8 @@
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
             </svg>
           </div>
-          <h3 class="text-lg font-semibold text-white mb-2">Community Access</h3>
-          <p class="text-gray-400">Join our community of AI enthusiasts and researchers</p>
+          <h3 class="text-lg font-semibold text-black dark:text-white mb-2">Community Access</h3>
+          <p class="text-gray-600 dark:text-gray-400">Join our community of AI enthusiasts and researchers</p>
         </div>
       </div>
     </div>

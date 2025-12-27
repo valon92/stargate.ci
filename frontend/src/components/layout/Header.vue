@@ -88,16 +88,22 @@
                 Sign Up
               </RouterLink>
             </template>
-            <div v-else class="flex items-center gap-2">
-              <span class="text-sm text-gray-300 dark:text-gray-300 text-gray-700">
-                Welcome, {{ currentUser?.name || 'User' }}
-              </span>
+            <div v-else class="flex items-center gap-3">
+              <RouterLink
+                to="/profile"
+                class="text-gray-300 dark:text-gray-300 text-gray-700 hover:text-white dark:hover:text-white hover:text-gray-900 px-3 py-1.5 rounded-md text-sm font-medium transition-colors duration-150 hover:bg-gray-800/40 dark:hover:bg-gray-800/40 hover:bg-gray-100 flex items-center gap-2"
+              >
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+                Profile
+              </RouterLink>
               <button
                 @click="unsubscribe"
-                class="bg-gradient-to-r from-gray-600 to-gray-700 text-white px-3 py-1.5 rounded-md text-sm font-medium hover:from-gray-700 hover:to-gray-800 transition-all duration-150 shadow-md hover:shadow-lg pointer-events-auto relative z-10 flex items-center gap-2"
+                class="bg-black dark:bg-white text-white dark:text-black px-3 py-1.5 rounded-md text-sm font-medium hover:bg-gray-900 dark:hover:bg-gray-100 transition-all duration-150 shadow-md hover:shadow-lg pointer-events-auto relative z-10 flex items-center gap-2"
               >
-                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                 </svg>
                 Logout
               </button>
@@ -180,16 +186,27 @@
                 Sign Up
               </RouterLink>
             </template>
-            <button
-              v-else
-              @click="unsubscribe"
-              class="bg-gradient-to-r from-gray-600 to-gray-700 text-white block px-2 py-2 rounded-md text-sm font-medium text-center hover:from-gray-700 hover:to-gray-800 transition-all duration-150 w-full flex items-center justify-center gap-2"
-            >
-              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/>
-              </svg>
-              Logout
-            </button>
+            <template v-else>
+              <RouterLink
+                to="/profile"
+                @click="closeMenu"
+                class="text-gray-300 dark:text-gray-300 text-gray-700 hover:text-white dark:hover:text-white hover:text-gray-900 block px-2 py-2 rounded-md text-sm font-medium text-center transition-colors duration-150 hover:bg-gray-800/40 dark:hover:bg-gray-800/40 hover:bg-gray-100 flex items-center justify-center gap-2"
+              >
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+                Profile
+              </RouterLink>
+              <button
+                @click="unsubscribe"
+                class="bg-black dark:bg-white text-white dark:text-black block px-2 py-2 rounded-md text-sm font-medium text-center hover:bg-gray-900 dark:hover:bg-gray-100 transition-all duration-150 w-full flex items-center justify-center gap-2"
+              >
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                </svg>
+                Logout
+              </button>
+            </template>
           </div>
         </div>
       </div>

@@ -19,6 +19,7 @@ class Subscriber extends Model
         'country',
         'profession',
         'company',
+        'bio',
         'interests',
         'avatar',
         'is_active',

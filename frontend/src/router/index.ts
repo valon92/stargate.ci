@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { useAuthStore } from '../stores/auth'
 import HomeView from '../views/HomeView.vue'
 
 const router = createRouter({
@@ -80,6 +81,12 @@ const router = createRouter({
       component: () => import('../views/SignUpView.vue'),
     },
     {
+      path: '/profile',
+      name: 'profile',
+      component: () => import('../views/ProfileView.vue'),
+      meta: { requiresAuth: true }
+    },
+    {
       path: '/search',
       name: 'search',
       component: () => import('../views/SearchView.vue'),
@@ -103,6 +110,26 @@ const router = createRouter({
     // Otherwise, scroll to top
     return { top: 0, behavior: 'smooth' }
   },
+})
+
+// Navigation guard for protected routes
+router.beforeEach((to, from, next) => {
+  const authStore = useAuthStore()
+  
+  // Initialize auth store if not already initialized
+  if (!authStore.isInitialized) {
+    authStore.initialize()
+  }
+  
+  // Check if route requires authentication
+  if (to.meta.requiresAuth && !authStore.isAuthenticated) {
+    // Save the intended destination
+    sessionStorage.setItem('return_url', to.fullPath)
+    // Redirect to sign in
+    next('/signin')
+  } else {
+    next()
+  }
 })
 
 export default router

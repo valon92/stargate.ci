@@ -6,7 +6,7 @@
         <h1 class="text-4xl font-bold gradient-text mb-4">
           Sign In
         </h1>
-        <p class="text-xl text-gray-300 dark:text-gray-300 text-gray-700">
+        <p class="text-xl text-gray-700 dark:text-gray-300">
           Sign in to your Stargate.ci account
         </p>
       </div>
@@ -16,7 +16,7 @@
         <form @submit.prevent="handleSignIn" class="space-y-6">
           <!-- Email -->
           <div>
-            <label for="email" class="block text-sm font-medium text-gray-300 dark:text-gray-300 text-gray-700 mb-2">
+            <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               Email Address *
             </label>
             <input
@@ -24,14 +24,14 @@
               id="email"
               v-model="form.email"
               required
-              class="w-full px-4 py-3 bg-gray-700 dark:bg-gray-700 bg-white border border-gray-600 dark:border-gray-600 border-gray-300 rounded-lg text-white dark:text-white text-gray-900 placeholder-gray-400 dark:placeholder-gray-400 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              class="w-full px-4 py-3 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               placeholder="Enter your email address"
             />
           </div>
 
           <!-- Password -->
           <div>
-            <label for="password" class="block text-sm font-medium text-gray-300 dark:text-gray-300 text-gray-700 mb-2">
+            <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               Password *
             </label>
             <input
@@ -39,7 +39,7 @@
               id="password"
               v-model="form.password"
               required
-              class="w-full px-4 py-3 bg-gray-700 dark:bg-gray-700 bg-white border border-gray-600 dark:border-gray-600 border-gray-300 rounded-lg text-white dark:text-white text-gray-900 placeholder-gray-400 dark:placeholder-gray-400 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              class="w-full px-4 py-3 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               placeholder="Enter your password"
             />
           </div>
@@ -53,11 +53,11 @@
                 v-model="form.remember"
                 class="h-4 w-4 text-primary-600 dark:text-primary-600 text-primary-600 focus:ring-primary-500 border-gray-300 dark:border-gray-300 border-gray-300 rounded"
               />
-              <label for="remember" class="ml-2 block text-sm text-gray-300 dark:text-gray-300 text-gray-700">
+              <label for="remember" class="ml-2 block text-sm text-gray-700 dark:text-gray-300">
                 Remember me
               </label>
             </div>
-            <a href="#" class="text-sm text-primary-400 dark:text-primary-400 text-primary-600 hover:text-primary-300 dark:hover:text-primary-300 hover:text-primary-700">
+            <a href="#" class="text-sm text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300">
               Forgot password?
             </a>
           </div>
@@ -89,9 +89,9 @@
 
       <!-- Sign Up Link -->
       <div class="mt-8 text-center">
-        <p class="text-gray-400">
+        <p class="text-gray-600 dark:text-gray-400">
           Don't have an account? 
-          <RouterLink to="/signup" class="text-primary-400 hover:text-primary-300 underline">
+          <RouterLink to="/signup" class="text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 underline">
             Sign up for Stargate.ci
           </RouterLink>
         </p>
@@ -105,8 +105,8 @@
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
             </svg>
           </div>
-          <h3 class="text-lg font-semibold text-white mb-2">Access Your Content</h3>
-          <p class="text-gray-400">Continue where you left off with your personalized experience</p>
+          <h3 class="text-lg font-semibold text-black dark:text-white mb-2">Access Your Content</h3>
+          <p class="text-gray-600 dark:text-gray-400">Continue where you left off with your personalized experience</p>
         </div>
       </div>
     </div>
@@ -212,8 +212,8 @@ const handleSignIn = async () => {
           // Redirect to events page to open video
           router.push('/events')
         } else {
-          // Redirect to home page
-          router.push('/')
+          // Redirect to profile page after successful login
+          router.push('/profile')
         }
       }, 1500)
     } else {

@@ -14,6 +14,7 @@ use App\Http\Controllers\Api\SearchController;
 use App\Http\Controllers\Api\EventsController;
 use App\Http\Controllers\Api\EventRegistrationController;
 use App\Http\Controllers\Api\VoiceActionsController;
+use App\Http\Controllers\Api\ProfileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,6 +33,14 @@ Route::prefix('v1')->group(function () {
     Route::post('/auth/login', [AuthController::class, 'login']);
     Route::post('/auth/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
     Route::get('/auth/me', [AuthController::class, 'me'])->middleware('auth:sanctum');
+    
+    // Profile routes (require authentication)
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::get('/profile', [ProfileController::class, 'getProfile']);
+        Route::put('/profile', [ProfileController::class, 'updateProfile']);
+        Route::get('/profile/stats', [ProfileController::class, 'getStats']);
+        Route::put('/profile/password', [ProfileController::class, 'updatePassword']);
+    });
     
     // Test route
     Route::get('/auth/test', function() {
