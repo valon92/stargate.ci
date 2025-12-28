@@ -643,14 +643,22 @@ const toggleLike = async (post: CommunityPost) => {
     if (response.success) {
       post.is_liked = response.data.is_liked
       post.likes_count = response.data.likes_count
+    } else {
+      alert('Failed to like post. Please try again.')
     }
-  } catch (error) {
+  } catch (error: any) {
     console.error('Failed to like post:', error)
+    alert(error.message || 'Failed to like post. Please try again.')
   }
 }
 
 const addComment = async () => {
   if (!selectedPost.value || !newComment.value.trim()) return
+
+  if (!isAuthenticated.value) {
+    router.push('/signin')
+    return
+  }
 
   isAddingComment.value = true
   try {
@@ -661,21 +669,50 @@ const addComment = async () => {
       newComment.value = ''
       // Reload post to get updated comments
       await viewPost(selectedPost.value.id)
+    } else {
+      alert('Failed to add comment. Please try again.')
     }
-  } catch (error) {
+  } catch (error: any) {
     console.error('Failed to add comment:', error)
+    alert(error.message || 'Failed to add comment. Please try again.')
   } finally {
     isAddingComment.value = false
   }
 }
 
 const toggleCommentLike = async (comment: CommunityComment) => {
-  // TODO: Implement comment like functionality
-  console.log('Like comment:', comment.id)
+  if (!isAuthenticated.value) {
+    router.push('/signin')
+    return
+  }
+
+  try {
+    const response = await communityService.likeComment(comment.id)
+    if (response.success) {
+      comment.is_liked = response.data.is_liked
+      comment.likes_count = response.data.likes_count
+    } else {
+      alert('Failed to like comment. Please try again.')
+    }
+  } catch (error: any) {
+    console.error('Failed to like comment:', error)
+    alert(error.message || 'Failed to like comment. Please try again.')
+  }
 }
 
-const sharePost = (post: CommunityPost) => {
+const sharePost = async (post: CommunityPost) => {
   const url = `${window.location.origin}/community/post/${post.id}`
+  
+  // Track share in backend
+  try {
+    await communityService.sharePost(post.id)
+    post.shares_count = (post.shares_count || 0) + 1
+  } catch (error) {
+    console.error('Failed to track share:', error)
+    // Continue with sharing even if tracking fails
+  }
+  
+  // Use Web Share API if available
   if (navigator.share) {
     navigator.share({
       title: post.title,

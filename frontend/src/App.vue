@@ -4,6 +4,7 @@ import { RouterView } from 'vue-router'
 import Header from './components/layout/Header.vue'
 import Footer from './components/layout/Footer.vue'
 import VoiceControl from './components/VoiceControl.vue'
+import ScrollToTop from './components/ScrollToTop.vue'
 import { useTheme } from './composables/useTheme'
 
 // Initialize theme system
@@ -29,5 +30,8 @@ onMounted(() => {
     
     <!-- Voice Control -->
     <VoiceControl />
+    
+    <!-- Scroll to Top Button -->
+    <ScrollToTop />
   </div>
 </template>

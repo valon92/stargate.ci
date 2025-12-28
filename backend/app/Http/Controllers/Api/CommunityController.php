@@ -170,8 +170,8 @@ class CommunityController extends Controller
                 ->published()
                 ->findOrFail($id);
 
-            // Increment views
-            $post->incrementViews();
+            // Increment views using DB facade
+            DB::table('community_posts')->where('id', $post->id)->increment('views_count');
 
             // Get subscriber ID if authenticated
             $subscriberId = null;
@@ -346,25 +346,29 @@ class CommunityController extends Controller
             if ($like) {
                 // Unlike
                 $like->delete();
-                $post->decrement('likes_count');
+                // Use DB facade to ensure column exists
+                DB::table('community_posts')->where('id', $post->id)->decrement('likes_count');
                 $isLiked = false;
             } else {
                 // Like
                 CommunityLike::create([
                     'subscriber_id' => $subscriber->id,
+                    'user_id' => $user->id, // Required by existing table structure
                     'likeable_id' => $post->id,
                     'likeable_type' => CommunityPost::class
                 ]);
-                $post->increment('likes_count');
+                // Use DB facade to ensure column exists
+                DB::table('community_posts')->where('id', $post->id)->increment('likes_count');
                 $isLiked = true;
             }
 
+            $post->refresh();
             return response()->json([
                 'success' => true,
                 'message' => $isLiked ? 'Post liked' : 'Post unliked',
                 'data' => [
                     'is_liked' => $isLiked,
-                    'likes_count' => $post->fresh()->likes_count
+                    'likes_count' => $post->likes_count
                 ]
             ]);
         } catch (\Exception $e) {
@@ -415,13 +419,15 @@ class CommunityController extends Controller
 
             $comment = CommunityComment::create([
                 'community_post_id' => $post->id,
+                'post_id' => $post->id, // Required by existing table structure
                 'subscriber_id' => $subscriber->id,
+                'user_id' => $user->id, // Required by existing table structure
                 'parent_id' => $request->parent_id,
                 'content' => $request->content,
                 'status' => 'published'
             ]);
 
-            $post->increment('comments_count');
+            DB::table('community_posts')->where('id', $post->id)->increment('comments_count');
             $comment->load('subscriber');
 
             return response()->json([
@@ -433,6 +439,95 @@ class CommunityController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to add comment',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Share a post
+     */
+    public function share(Request $request, string $id)
+    {
+        try {
+            $post = CommunityPost::findOrFail($id);
+            DB::table('community_posts')->where('id', $post->id)->increment('shares_count');
+            $post->refresh();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Post shared successfully',
+                'data' => [
+                    'shares_count' => $post->shares_count
+                ]
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to share post',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Like/Unlike a comment
+     */
+    public function likeComment(Request $request, string $id)
+    {
+        try {
+            $user = $request->user();
+            if (!$user) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Authentication required'
+                ], 401);
+            }
+
+            $subscriber = Subscriber::where('email', $user->email)->first();
+            if (!$subscriber) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Subscriber not found'
+                ], 404);
+            }
+
+            $comment = CommunityComment::findOrFail($id);
+            $like = CommunityLike::where('subscriber_id', $subscriber->id)
+                ->where('likeable_id', $comment->id)
+                ->where('likeable_type', CommunityComment::class)
+                ->first();
+
+            if ($like) {
+                // Unlike
+                $like->delete();
+                DB::table('community_comments')->where('id', $comment->id)->decrement('likes_count');
+                $isLiked = false;
+            } else {
+                // Like
+                CommunityLike::create([
+                    'subscriber_id' => $subscriber->id,
+                    'user_id' => $user->id, // Required by existing table structure
+                    'likeable_id' => $comment->id,
+                    'likeable_type' => CommunityComment::class
+                ]);
+                DB::table('community_comments')->where('id', $comment->id)->increment('likes_count');
+                $isLiked = true;
+            }
+
+            $comment->refresh();
+            return response()->json([
+                'success' => true,
+                'message' => $isLiked ? 'Comment liked' : 'Comment unliked',
+                'data' => [
+                    'is_liked' => $isLiked,
+                    'likes_count' => $comment->likes_count
+                ]
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to like comment',
                 'error' => $e->getMessage()
             ], 500);
         }

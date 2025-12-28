@@ -113,6 +113,14 @@ class CommunityService {
     return apiClient.post(`${this.baseUrl}/posts/${postId}/comments`, data)
   }
 
+  async sharePost(id: number): Promise<{ success: boolean; data: { shares_count: number }; message: string }> {
+    return apiClient.post(`${this.baseUrl}/posts/${id}/share`)
+  }
+
+  async likeComment(commentId: number): Promise<{ success: boolean; data: { is_liked: boolean; likes_count: number }; message: string }> {
+    return apiClient.post(`${this.baseUrl}/comments/${commentId}/like`)
+  }
+
   async getCategories(): Promise<{ success: boolean; data: Array<{ id: string; name: string; icon: string }> }> {
     return apiClient.get(`${this.baseUrl}/categories`)
   }

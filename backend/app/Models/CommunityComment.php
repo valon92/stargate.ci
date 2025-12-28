@@ -48,9 +48,25 @@ class CommunityComment extends Model
         parent::boot();
         
         static::creating(function ($comment) {
+            // Map community_post_id to post_id if needed
+            if (!$comment->post_id && $comment->community_post_id) {
+                $comment->post_id = $comment->community_post_id;
+            }
+            
             // Map post_id to community_post_id if needed
             if (!$comment->community_post_id && $comment->post_id) {
                 $comment->community_post_id = $comment->post_id;
+            }
+            
+            // Map subscriber_id to user_id if needed
+            if (!$comment->user_id && $comment->subscriber_id) {
+                $subscriber = Subscriber::find($comment->subscriber_id);
+                if ($subscriber) {
+                    $user = \App\Models\User::where('email', $subscriber->email)->first();
+                    if ($user) {
+                        $comment->user_id = $user->id;
+                    }
+                }
             }
             
             // Map user_id to subscriber_id if needed

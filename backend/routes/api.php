@@ -146,6 +146,7 @@ Route::prefix('v1')->middleware('api.throttle:1000,1')->group(function () {
     Route::get('/community/posts', [CommunityController::class, 'index']);
     Route::get('/community/posts/{id}', [CommunityController::class, 'show']);
     Route::get('/community/categories', [CommunityController::class, 'categories']);
+    Route::post('/community/posts/{id}/share', [CommunityController::class, 'share']); // Public share route
     
     // Authenticated community routes
     Route::middleware('auth:sanctum')->group(function () {
@@ -154,6 +155,7 @@ Route::prefix('v1')->middleware('api.throttle:1000,1')->group(function () {
         Route::delete('/community/posts/{id}', [CommunityController::class, 'destroy']);
         Route::post('/community/posts/{id}/like', [CommunityController::class, 'like']);
         Route::post('/community/posts/{id}/comments', [CommunityController::class, 'addComment']);
+        Route::post('/community/comments/{id}/like', [CommunityController::class, 'likeComment']);
     });
     
     // Events sync routes (with rate limiting)

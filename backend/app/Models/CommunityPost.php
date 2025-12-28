@@ -105,7 +105,11 @@ class CommunityPost extends Model
      */
     public function getViewsCountAttribute($value)
     {
-        return $value ?? $this->attributes['view_count'] ?? 0;
+        // Prioritize new column, fallback to old column
+        if (isset($this->attributes['views_count'])) {
+            return $this->attributes['views_count'];
+        }
+        return $this->attributes['view_count'] ?? 0;
     }
 
     /**
@@ -113,7 +117,11 @@ class CommunityPost extends Model
      */
     public function getLikesCountAttribute($value)
     {
-        return $value ?? $this->attributes['like_count'] ?? 0;
+        // Prioritize new column, fallback to old column
+        if (isset($this->attributes['likes_count'])) {
+            return $this->attributes['likes_count'];
+        }
+        return $this->attributes['like_count'] ?? 0;
     }
 
     /**
@@ -121,7 +129,11 @@ class CommunityPost extends Model
      */
     public function getCommentsCountAttribute($value)
     {
-        return $value ?? $this->attributes['comment_count'] ?? 0;
+        // Prioritize new column, fallback to old column
+        if (isset($this->attributes['comments_count'])) {
+            return $this->attributes['comments_count'];
+        }
+        return $this->attributes['comment_count'] ?? 0;
     }
 
     /**
@@ -129,7 +141,11 @@ class CommunityPost extends Model
      */
     public function getSharesCountAttribute($value)
     {
-        return $value ?? $this->attributes['share_count'] ?? 0;
+        // Prioritize new column, fallback to old column
+        if (isset($this->attributes['shares_count'])) {
+            return $this->attributes['shares_count'];
+        }
+        return $this->attributes['share_count'] ?? 0;
     }
 
     /**
@@ -227,6 +243,7 @@ class CommunityPost extends Model
      */
     public function incrementViews()
     {
+        // Always use the new column name (views_count) as it now exists
         $this->increment('views_count');
     }
 }
