@@ -20,7 +20,13 @@ export interface EventRegistrationRequest {
   email: string
   name?: string
   phone?: string
-  preferences?: any
+  timezone?: string
+  notes?: string
+  preferences?: {
+    email_notifications?: boolean
+    sms_notifications?: boolean
+    [key: string]: any
+  }
 }
 
 export interface EventRegistrationResponse {

@@ -19,6 +19,15 @@ class DatabaseSeeder extends Seeder
             // Video system seeders
             VideoSeeder::class,
             SubscriberSeeder::class,
+            
+            // Job postings
+            JobPostSeeder::class,
+            
+            // Community posts
+            CommunityPostSeeder::class,
+            
+            // Events
+            EventSeeder::class,
         ]);
     }
 }

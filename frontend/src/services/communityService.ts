@@ -5,6 +5,9 @@ export interface CommunityPost {
   subscriber_id: number
   title: string
   content: string
+  images?: string[]
+  videos?: string[]
+  media_type?: 'image' | 'video' | 'mixed' | null
   category: string
   tags?: string[]
   is_pinned: boolean
@@ -54,6 +57,9 @@ export interface CreatePostRequest {
   content: string
   category: string
   tags?: string[]
+  images?: string[]
+  videos?: string[]
+  media_type?: 'image' | 'video' | 'mixed'
 }
 
 export interface CreateCommentRequest {

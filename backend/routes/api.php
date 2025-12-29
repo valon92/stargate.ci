@@ -16,6 +16,7 @@ use App\Http\Controllers\Api\EventRegistrationController;
 use App\Http\Controllers\Api\VoiceActionsController;
 use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\CommunityController;
+use App\Http\Controllers\Api\JobPostController;
 
 /*
 |--------------------------------------------------------------------------
@@ -148,6 +149,14 @@ Route::prefix('v1')->middleware('api.throttle:1000,1')->group(function () {
     Route::get('/community/categories', [CommunityController::class, 'categories']);
     Route::post('/community/posts/{id}/share', [CommunityController::class, 'share']); // Public share route
     
+    // Jobs routes (public read, authenticated write)
+    // IMPORTANT: Specific routes must come before parameterized routes
+    Route::get('/jobs/categories', [JobPostController::class, 'categories']);
+    Route::get('/jobs/types', [JobPostController::class, 'jobTypes']);
+    Route::get('/jobs/experience-levels', [JobPostController::class, 'experienceLevels']);
+    Route::get('/jobs', [JobPostController::class, 'index']);
+    Route::get('/jobs/{id}', [JobPostController::class, 'show']);
+    
     // Authenticated community routes
     Route::middleware('auth:sanctum')->group(function () {
         Route::post('/community/posts', [CommunityController::class, 'store']);
@@ -156,6 +165,11 @@ Route::prefix('v1')->middleware('api.throttle:1000,1')->group(function () {
         Route::post('/community/posts/{id}/like', [CommunityController::class, 'like']);
         Route::post('/community/posts/{id}/comments', [CommunityController::class, 'addComment']);
         Route::post('/community/comments/{id}/like', [CommunityController::class, 'likeComment']);
+        
+        // Authenticated jobs routes
+        Route::post('/jobs', [JobPostController::class, 'store']);
+        Route::put('/jobs/{id}', [JobPostController::class, 'update']);
+        Route::delete('/jobs/{id}', [JobPostController::class, 'destroy']);
     });
     
     // Events sync routes (with rate limiting)
@@ -172,6 +186,14 @@ Route::prefix('v1')->middleware('api.throttle:1000,1')->group(function () {
     
     // Test reminder route (for testing)
     Route::post('/events/test-reminder/{registrationId}', [EventRegistrationController::class, 'sendTestReminder']);
+    
+    // Organizer routes (authenticated)
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::post('/events', [EventsController::class, 'store']);
+        Route::put('/events/{id}', [EventsController::class, 'update']);
+        Route::delete('/events/{id}', [EventsController::class, 'destroy']);
+        Route::get('/events/my-events', [EventsController::class, 'myEvents']);
+    });
     
     // Voice Actions SDK routes (public)
     Route::get('/commands', [VoiceActionsController::class, 'getCommands']);

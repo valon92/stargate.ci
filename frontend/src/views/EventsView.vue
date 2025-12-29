@@ -1,101 +1,185 @@
 <template>
-  <div class="min-h-screen bg-gray-900 dark:bg-gray-900 bg-white">
-    <!-- Hero Section -->
-    <section class="relative overflow-hidden bg-white dark:bg-gradient-to-br dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
-      <div class="absolute inset-0 bg-gradient-to-br from-primary-900/10 to-secondary-900/10 dark:from-primary-900/10 dark:to-secondary-900/10"></div>
+  <div class="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <!-- Modern Hero Section -->
+    <section class="relative overflow-hidden bg-gradient-to-br from-gray-50 via-white to-gray-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+      <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmOWZhZmIiIGZpbGwtb3BhY2l0eT0iMC40Ij48Y2lyY2xlIGN4PSIzMCIgY3k9IjMwIiByPSIxLjUiLz48L2c+PC9nPjwvc3ZnPg==')] opacity-40 dark:opacity-20"></div>
       
-      <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
+      <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
         <div class="text-center">
-          <h1 class="text-4xl md:text-6xl font-bold mb-6">
-            <span class="gradient-text">Upcoming Events</span>
+          <div class="inline-flex items-center gap-2 px-4 py-2 bg-black/5 dark:bg-white/5 rounded-full mb-6 backdrop-blur-sm">
+            <svg class="w-5 h-5 text-black dark:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+            <span class="text-sm font-medium text-black dark:text-white">Upcoming Events</span>
+          </div>
+          <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 tracking-tight">
+            <span class="bg-gradient-to-r from-black to-gray-700 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">
+              Discover Events
+            </span>
           </h1>
-          <p class="text-xl text-black dark:text-gray-300 max-w-3xl mx-auto mb-8">
+          <p class="text-xl md:text-2xl text-gray-700 dark:text-gray-300 max-w-3xl mx-auto mb-8 leading-relaxed">
             Stay informed about upcoming events, meetings, conferences, and important dates related to the Stargate Project and Cristal Intelligence.
           </p>
+          <div class="flex flex-wrap items-center justify-center gap-4 text-sm text-gray-600 dark:text-gray-400 mb-8">
+            <div class="flex items-center gap-2">
+              <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+              <span>Live Events</span>
+            </div>
+            <span>•</span>
+            <div class="flex items-center gap-2">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span>Real-time Updates</span>
+            </div>
+            <span>•</span>
+            <div class="flex items-center gap-2">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+              </svg>
+              <span>Global Access</span>
+            </div>
+          </div>
+          
+          <!-- Create Event Button for Organizers -->
+          <div v-if="isAuthenticated" class="flex justify-center">
+            <button
+              @click="openCreateEventModal"
+              class="group inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-black to-gray-800 dark:from-white dark:to-gray-200 text-white dark:text-black rounded-2xl font-semibold text-lg shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
+            >
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+              </svg>
+              <span>Create New Event</span>
+            </button>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- Events Filter -->
-    <section class="py-16 bg-gray-800/30 dark:bg-gray-800/30 bg-gray-50">
-      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-12 xl:px-16">
-        <!-- Search Bar -->
-        <div class="mb-8">
-          <div class="max-w-2xl mx-auto">
+    <!-- Advanced Filter Section -->
+    <section class="sticky top-0 z-40 bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg border-b border-gray-200 dark:border-gray-800 shadow-sm">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div class="flex flex-col lg:flex-row gap-4 items-center justify-between">
+          <!-- Search Bar -->
+          <div class="flex-1 max-w-2xl w-full">
             <div class="relative">
               <input
                 v-model="searchQuery"
                 @keyup.enter="searchEvents(searchQuery)"
+                @input="handleSearchInput"
                 type="text"
-                placeholder="Search events..."
-                class="w-full px-4 py-3 pl-12 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                placeholder="Search events by title, description, location..."
+                class="w-full px-4 py-3 pl-12 pr-12 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white focus:border-transparent transition-all"
               >
-              <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <svg class="h-5 w-5 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                 </svg>
               </div>
               <button
-                @click="searchEvents(searchQuery)"
-                :disabled="isLoading"
-                class="absolute inset-y-0 right-0 pr-3 flex items-center"
+                v-if="searchQuery"
+                @click="clearSearch"
+                class="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
               >
-                <svg v-if="!isLoading" class="h-5 w-5 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                 </svg>
-                <div v-else class="animate-spin rounded-full h-5 w-5 border-b-2 border-primary-500"></div>
               </button>
             </div>
           </div>
-        </div>
 
-        <div class="flex flex-col md:flex-row gap-4 justify-center items-center mb-12">
-          <div class="flex flex-wrap gap-2">
-            <button 
-              v-for="category in eventCategories" 
-              :key="category.id"
-              @click="filterByCategory(category.id)"
+          <!-- View Toggle -->
+          <div class="flex items-center gap-2 bg-gray-100 dark:bg-gray-800 rounded-xl p-1">
+            <button
+              @click="viewMode = 'grid'"
               :class="[
-                'px-4 py-2 rounded-lg font-medium transition-all duration-200',
-                selectedCategory === category.id 
-                  ? 'bg-primary-600 dark:bg-primary-500 text-white' 
-                  : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
+                'px-4 py-2 rounded-lg transition-all',
+                viewMode === 'grid'
+                  ? 'bg-white dark:bg-gray-700 text-black dark:text-white shadow-sm'
+                  : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
               ]"
+              title="Grid View"
             >
-              {{ category.name }}
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+              </svg>
+            </button>
+            <button
+              @click="viewMode = 'list'"
+              :class="[
+                'px-4 py-2 rounded-lg transition-all',
+                viewMode === 'list'
+                  ? 'bg-white dark:bg-gray-700 text-black dark:text-white shadow-sm'
+                  : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+              ]"
+              title="List View"
+            >
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
             </button>
           </div>
-          <div class="flex gap-2">
-            <select v-model="selectedTimeframe" @change="filterByTimeframe" class="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg px-4 py-2">
-              <option value="all">All Time</option>
-              <option value="upcoming">Upcoming</option>
-              <option value="this-month">This Month</option>
-              <option value="next-month">Next Month</option>
-            </select>
-            <button
-              @click="refreshEvents"
-              :disabled="isLoading"
-              class="px-4 py-2 bg-primary-600 hover:bg-primary-700 disabled:bg-gray-600 text-white rounded-lg font-medium transition-all duration-200 flex items-center gap-2"
-            >
-              <svg v-if="!isLoading" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
-              </svg>
-              <div v-else class="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-              {{ isLoading ? 'Searching...' : 'Search Real Events' }}
-            </button>
-            
-            
-            
+
+          <!-- Refresh Button -->
+          <button
+            @click="refreshEvents"
+            :disabled="isLoading"
+            class="px-4 py-3 bg-black dark:bg-white text-white dark:text-black rounded-xl font-medium hover:bg-gray-900 dark:hover:bg-gray-100 transition-all duration-200 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <svg v-if="!isLoading" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+            </svg>
+            <div v-else class="animate-spin rounded-full h-5 w-5 border-2 border-current border-t-transparent"></div>
+            <span class="hidden sm:inline">{{ isLoading ? 'Syncing...' : 'Refresh' }}</span>
+          </button>
+        </div>
+
+        <!-- Category Filters -->
+        <div class="mt-6 flex flex-wrap gap-2">
+          <button 
+            v-for="category in eventCategories" 
+            :key="category.id"
+            @click="filterByCategory(category.id)"
+            :class="[
+              'px-4 py-2 rounded-lg font-medium transition-all duration-200 flex items-center gap-2',
+              selectedCategory === category.id 
+                ? 'bg-black dark:bg-white text-white dark:text-black shadow-lg scale-105' 
+                : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
+            ]"
+          >
+            <span class="text-lg">{{ category.icon }}</span>
+            <span>{{ category.name }}</span>
+            <span v-if="getEventsCountByCategory(category.id) > 0" class="ml-1 px-2 py-0.5 bg-black/10 dark:bg-white/10 rounded-full text-xs">
+              {{ getEventsCountByCategory(category.id) }}
+            </span>
+          </button>
+        </div>
+
+        <!-- Timeframe Filter -->
+        <div class="mt-4 flex items-center gap-4">
+          <select 
+            v-model="selectedTimeframe" 
+            @change="filterByTimeframe" 
+            class="px-4 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white"
+          >
+            <option value="all">All Time</option>
+            <option value="upcoming">Upcoming</option>
+            <option value="this-month">This Month</option>
+            <option value="next-month">Next Month</option>
+          </select>
+          <div class="text-sm text-gray-600 dark:text-gray-400">
+            Showing <strong class="text-black dark:text-white">{{ filteredEvents.length }}</strong> of <strong class="text-black dark:text-white">{{ events.length }}</strong> events
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Events Grid -->
-    <section class="py-24">
-      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-12 xl:px-16">
+    <!-- Events Display Section -->
+    <section class="py-12 bg-gray-50 dark:bg-gray-900/50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <!-- API Events Notice -->
-        <div v-if="!isLoading && events.length > 0" class="mb-8 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-500/30 rounded-lg">
+        <div v-if="!isLoading && events.length > 0" class="mb-8 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-500/30 rounded-xl">
           <div class="flex items-center gap-3">
             <div class="flex-shrink-0">
               <svg class="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -110,162 +194,350 @@
         </div>
 
         <!-- Loading State -->
-        <div v-if="isLoading" class="text-center py-12">
-          <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary-500"></div>
-          <p class="mt-4 text-gray-600 dark:text-gray-400">Searching for real events...</p>
+        <div v-if="isLoading" class="text-center py-20">
+          <div class="inline-block animate-spin rounded-full h-16 w-16 border-4 border-gray-200 dark:border-gray-700 border-t-black dark:border-t-white"></div>
+          <p class="mt-6 text-lg text-gray-600 dark:text-gray-400">Loading events...</p>
         </div>
 
-        <!-- Events Display - Single Card Style (like videos on home page) -->
-        <div v-else class="space-y-8">
+        <!-- Grid View -->
+        <div v-else-if="viewMode === 'grid'" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <div 
             v-for="event in filteredEvents" 
             :key="event.id"
-            class="event-container group hover:scale-[1.02] transition-all duration-300"
+            class="group bg-white dark:bg-gray-800 rounded-2xl overflow-hidden border border-gray-200 dark:border-gray-700 hover:shadow-2xl hover:scale-[1.02] transition-all duration-300"
           >
-            <!-- Event Video/Content -->
-            <div class="relative overflow-hidden rounded-lg">
-              <div v-if="event.type === 'video'" class="aspect-w-16 aspect-h-9">
+            <!-- Event Image/Video Header -->
+            <div class="relative h-48 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800 overflow-hidden">
+              <div v-if="event.type === 'video' && event.video_url" class="absolute inset-0">
                 <iframe
-                  :src="event.video_url"
-                  :title="event.title"
+                  :src="getYouTubeEmbedUrl(event.video_url)"
+                  class="w-full h-full"
                   frameborder="0"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowfullscreen
                   loading="lazy"
                 ></iframe>
               </div>
-              <div v-else class="aspect-w-16 aspect-h-9 bg-white dark:bg-gradient-to-br dark:from-primary-900/20 dark:to-secondary-900/20 border border-gray-200 dark:border-gray-700 flex items-center justify-center">
+              <div v-else class="absolute inset-0 flex items-center justify-center">
                 <div class="text-center">
-                  <div class="w-20 h-20 bg-black dark:bg-black rounded-full flex items-center justify-center mx-auto mb-6">
+                  <div class="w-16 h-16 bg-black dark:bg-white rounded-full flex items-center justify-center mx-auto mb-3 shadow-lg">
                     <span class="text-3xl">{{ event.icon }}</span>
                   </div>
-                  <h3 class="text-2xl font-bold text-black dark:text-white">{{ event.title }}</h3>
                 </div>
               </div>
               
-              <!-- Event Badge -->
-              <div class="absolute top-4 left-4">
-                <span :class="getEventBadgeClass(event.category)" class="px-3 py-1 rounded-full text-xs font-medium">
+              <!-- Badges -->
+              <div class="absolute top-4 left-4 flex flex-col gap-2">
+                <span :class="getEventBadgeClass(event.category)" class="px-3 py-1 rounded-full text-xs font-semibold backdrop-blur-sm">
                   {{ getCategoryName(event.category) }}
+                </span>
+                <span v-if="event.is_featured" class="px-2 py-1 bg-yellow-500/90 text-yellow-900 rounded-full text-xs font-semibold backdrop-blur-sm">
+                  ⭐ Featured
                 </span>
               </div>
               
-              <!-- Event Source Badge -->
-              <div class="absolute top-4 right-4 flex items-center gap-2">
-                <span class="px-3 py-1 bg-gray-900/80 dark:bg-gray-800/80 text-white rounded-full text-xs font-medium">
-                  {{ event.type }}
-                </span>
-                <span class="px-2 py-1 text-xs font-medium rounded-full"
-                      :class="getSourceBadgeClass(event.source)">
+              <div class="absolute top-4 right-4">
+                <span :class="getSourceBadgeClass(event.source)" class="px-2 py-1 rounded-full text-xs font-medium backdrop-blur-sm">
                   {{ getSourceName(event.source) }}
-                </span>
-                <span v-if="event.is_featured" class="px-2 py-1 text-xs font-medium bg-yellow-500/20 text-yellow-300 rounded-full">
-                  ⭐
                 </span>
               </div>
             </div>
 
             <!-- Event Content -->
             <div class="p-6">
-              <div class="flex items-center justify-between mb-4">
-                <div class="flex items-center text-sm text-gray-600 dark:text-gray-400">
-                  <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div class="flex items-center gap-3 text-xs text-gray-500 dark:text-gray-400 mb-3">
+                <div class="flex items-center gap-1">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                   </svg>
-                  {{ formatDate(event.event_date) }}
+                  <span>{{ formatDate(event.event_date) }}</span>
                 </div>
-                <div v-if="event.event_time" class="flex items-center text-sm text-gray-600 dark:text-gray-400">
-                  <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <span v-if="event.event_time" class="flex items-center gap-1">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                   </svg>
-                  {{ formatTime(event.event_time) }}
-                </div>
+                  <span>{{ formatTime(event.event_time) }}</span>
+                </span>
               </div>
 
-              <h3 class="text-2xl font-bold text-black dark:text-white mb-4 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+              <h3 class="text-xl font-bold text-black dark:text-white mb-2 line-clamp-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
                 {{ event.title }}
               </h3>
               
-              <p class="text-gray-700 dark:text-gray-400 mb-6 text-lg leading-relaxed">
+              <p class="text-gray-600 dark:text-gray-400 mb-4 text-sm line-clamp-2">
                 {{ event.description }}
               </p>
 
-              <div class="flex items-center justify-between mb-6">
-                <div class="flex items-center text-sm text-gray-600 dark:text-gray-400">
-                  <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                  </svg>
-                  {{ event.location }}
-                </div>
-                <div v-if="event.organizer" class="flex items-center text-sm text-gray-600 dark:text-gray-400">
-                  <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-                  </svg>
-                  {{ event.organizer }}
-                </div>
+              <div class="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400 mb-4">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                </svg>
+                <span class="truncate">{{ event.location }}</span>
               </div>
 
-              <!-- Event Actions -->
-              <div class="flex gap-3 mb-6">
-                <!-- Video Events: Only show Watch Video button -->
-                <button 
-                  v-if="event.type === 'video' && event.video_url"
-                  @click="openVideo(event.video_url)"
-                  class="flex-1 btn-primary"
+              <!-- Action Button -->
+              <button
+                @click="handleEventAction(event)"
+                :class="[
+                  'w-full px-4 py-3 rounded-xl font-medium transition-all duration-200 mb-4',
+                  isEventPast(event.event_date)
+                    ? 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+                    : 'bg-black dark:bg-white text-white dark:text-black hover:bg-gray-900 dark:hover:bg-gray-100'
+                ]"
+              >
+                {{ getEventActionText(event) }}
+              </button>
+
+              <!-- Modern Interactive Actions -->
+              <div class="flex items-center gap-2 pt-4 border-t border-gray-200 dark:border-gray-700">
+                <button
+                  @click="toggleEventLike(event)"
+                  :class="[
+                    'flex items-center gap-2 px-3 py-2 rounded-lg font-medium transition-all duration-200 flex-1',
+                    eventLikes[event.id]?.isLiked
+                      ? 'bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400'
+                      : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+                  ]"
                 >
-                  Watch Video
+                  <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                  </svg>
+                  <span class="text-sm">{{ eventLikes[event.id]?.count || 0 }}</span>
                 </button>
-                
-                <!-- Events with vendor registration URL: Show Register Now (opens vendor URL) -->
-                <button 
-                  v-else-if="event.registration_url && !isEventPast(event.event_date)"
-                  @click="() => event.registration_url && openUrl(event.registration_url)"
-                  class="flex-1 btn-primary"
+                <button
+                  @click="toggleEventComments(event)"
+                  class="flex items-center gap-2 px-3 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-all duration-200 flex-1"
                 >
-                  Register Now
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                  </svg>
+                  <span class="text-sm">{{ eventComments[event.id]?.count || 0 }}</span>
                 </button>
-                
-                <!-- Past Events: Show Watch Recording -->
-                <button 
-                  v-else-if="isEventPast(event.event_date)"
-                  @click="openPastEvent(event)"
-                  class="flex-1 btn-primary"
+                <button
+                  @click="shareEvent(event)"
+                  class="flex items-center gap-2 px-3 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-all duration-200"
+                  title="Share Event"
                 >
-                  Watch Recording
-                </button>
-                
-                <!-- Events without registration URL (not video): Show Subscribe button -->
-                <button 
-                  v-else
-                  @click="scrollToSubscribe"
-                  class="flex-1 btn-primary"
-                >
-                  Get Notified
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z"/>
+                  </svg>
                 </button>
               </div>
 
-              <!-- Interactive Content -->
-              <InteractiveContent
-                :content-id="event.id"
-                content-type="event"
-                :initial-likes="0"
-                :initial-comments="[]"
-              />
             </div>
           </div>
         </div>
 
-        <!-- No Events Message -->
-        <div v-if="!isLoading && filteredEvents.length === 0" class="text-center py-12">
+        <!-- List View -->
+        <div v-else class="space-y-4">
+          <div 
+            v-for="event in filteredEvents" 
+            :key="event.id"
+            class="group bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-all duration-300 overflow-hidden"
+          >
+            <div class="flex flex-col md:flex-row">
+              <!-- Event Image/Video -->
+              <div class="relative w-full md:w-64 h-48 md:h-auto bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800 flex-shrink-0">
+                <div v-if="event.type === 'video' && event.video_url" class="absolute inset-0">
+                  <iframe
+                    :src="getYouTubeEmbedUrl(event.video_url)"
+                    class="w-full h-full"
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen
+                    loading="lazy"
+                  ></iframe>
+                </div>
+                <div v-else class="absolute inset-0 flex items-center justify-center">
+                  <div class="text-center">
+                    <div class="w-16 h-16 bg-black dark:bg-white rounded-full flex items-center justify-center mx-auto shadow-lg">
+                      <span class="text-3xl">{{ event.icon }}</span>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- Badges -->
+                <div class="absolute top-3 left-3 flex flex-col gap-2">
+                  <span :class="getEventBadgeClass(event.category)" class="px-2 py-1 rounded-full text-xs font-semibold backdrop-blur-sm">
+                    {{ getCategoryName(event.category) }}
+                  </span>
+                </div>
+              </div>
+
+              <!-- Event Content -->
+              <div class="flex-1 p-6">
+                <div class="flex items-start justify-between mb-3">
+                  <div class="flex-1">
+                    <div class="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400 mb-2">
+                      <div class="flex items-center gap-1">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                        </svg>
+                        <span>{{ formatDate(event.event_date) }}</span>
+                      </div>
+                      <span v-if="event.event_time" class="flex items-center gap-1">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        <span>{{ formatTime(event.event_time) }}</span>
+                      </span>
+                      <div class="flex items-center gap-1">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                        </svg>
+                        <span>{{ event.location }}</span>
+                      </div>
+                    </div>
+                    <h3 class="text-2xl font-bold text-black dark:text-white mb-3 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+                      {{ event.title }}
+                    </h3>
+                    <p class="text-gray-600 dark:text-gray-400 mb-4 line-clamp-2">
+                      {{ event.description }}
+                    </p>
+                  </div>
+                  <div class="ml-4 flex flex-col items-end gap-2">
+                    <span :class="getSourceBadgeClass(event.source)" class="px-3 py-1 rounded-full text-xs font-medium">
+                      {{ getSourceName(event.source) }}
+                    </span>
+                    <span v-if="event.is_featured" class="px-2 py-1 bg-yellow-500/20 text-yellow-800 dark:text-yellow-200 rounded-full text-xs">
+                      ⭐ Featured
+                    </span>
+                  </div>
+                </div>
+
+                <div class="flex items-center gap-3 flex-wrap">
+                  <button
+                    @click="handleEventAction(event)"
+                    :class="[
+                      'px-6 py-2 rounded-lg font-medium transition-all duration-200',
+                      isEventPast(event.event_date)
+                        ? 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+                        : 'bg-black dark:bg-white text-white dark:text-black hover:bg-gray-900 dark:hover:bg-gray-100'
+                    ]"
+                  >
+                    {{ getEventActionText(event) }}
+                  </button>
+                  
+                  <!-- Modern Interactive Actions -->
+                  <button
+                    @click="toggleEventLike(event)"
+                    :class="[
+                      'flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all duration-200',
+                      eventLikes[event.id]?.isLiked
+                        ? 'bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400'
+                        : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+                    ]"
+                  >
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                    </svg>
+                    <span class="text-sm">{{ eventLikes[event.id]?.count || 0 }}</span>
+                  </button>
+                  
+                  <button
+                    @click="toggleEventComments(event)"
+                    class="flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-all duration-200"
+                  >
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                    </svg>
+                    <span class="text-sm">{{ eventComments[event.id]?.count || 0 }}</span>
+                  </button>
+                  
+                  <button
+                    @click="shareEvent(event)"
+                    class="px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+                    title="Share Event"
+                  >
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" />
+                    </svg>
+                  </button>
+                  
+                  <button
+                    @click="addToCalendar(event)"
+                    class="px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+                    title="Add to Calendar"
+                  >
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                  </button>
+                </div>
+
+                <!-- Comments Section for List View -->
+                <div v-if="eventComments[event.id]?.show" class="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                  <div class="space-y-3">
+                    <!-- Comment Form -->
+                    <div v-if="isAuthenticated" class="flex items-start gap-3">
+                      <div class="w-8 h-8 bg-black dark:bg-white rounded-full flex items-center justify-center text-white dark:text-black font-bold text-sm flex-shrink-0">
+                        {{ getInitials(authStore.currentUser?.name || authStore.currentUser?.email || 'U') }}
+                      </div>
+                      <div class="flex-1">
+                        <textarea
+                          v-model="eventComments[event.id].newComment"
+                          placeholder="Write a comment..."
+                          rows="2"
+                          class="w-full px-4 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white resize-none text-sm"
+                        ></textarea>
+                        <button
+                          @click="addEventComment(event)"
+                          :disabled="!eventComments[event.id].newComment.trim()"
+                          class="mt-2 px-4 py-2 bg-black dark:bg-white text-white dark:text-black rounded-lg hover:bg-gray-900 dark:hover:bg-gray-100 transition-colors disabled:opacity-50 text-sm font-medium"
+                        >
+                          Post Comment
+                        </button>
+                      </div>
+                    </div>
+                    <div v-else class="text-center py-4">
+                      <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">Sign in to comment</p>
+                      <button
+                        @click="router.push('/signin')"
+                        class="px-4 py-2 bg-black dark:bg-white text-white dark:text-black rounded-lg hover:bg-gray-900 dark:hover:bg-gray-100 transition-colors text-sm font-medium"
+                      >
+                        Sign In
+                      </button>
+                    </div>
+
+                    <!-- Comments List -->
+                    <div class="space-y-3 max-h-64 overflow-y-auto">
+                      <div
+                        v-for="comment in eventComments[event.id].comments"
+                        :key="comment.id"
+                        class="flex items-start gap-3 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg"
+                      >
+                        <div class="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-xs flex-shrink-0">
+                          {{ getInitials(comment.user || 'U') }}
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <div class="flex items-center gap-2 mb-1">
+                            <span class="font-semibold text-sm text-black dark:text-white">{{ comment.user || 'Anonymous' }}</span>
+                            <span class="text-xs text-gray-500 dark:text-gray-400">{{ formatCommentDate(comment.date) }}</span>
+                          </div>
+                          <p class="text-sm text-gray-700 dark:text-gray-300">{{ comment.text }}</p>
+                        </div>
+                      </div>
+                      <div v-if="eventComments[event.id].comments.length === 0" class="text-center py-4 text-sm text-gray-500 dark:text-gray-400">
+                        No comments yet. Be the first to comment!
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Empty State -->
+        <div v-if="!isLoading && filteredEvents.length === 0" class="text-center py-20">
           <div class="w-24 h-24 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-6">
-            <svg class="w-12 h-12 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
             </svg>
           </div>
-          <h3 class="text-xl font-bold text-black dark:text-white mb-2">No Events Found</h3>
+          <h3 class="text-2xl font-bold text-black dark:text-white mb-2">No Events Found</h3>
           <p class="text-gray-600 dark:text-gray-400 mb-6">No events match your current filters. Try adjusting your search criteria.</p>
-          <button @click="clearFilters" class="btn-primary">
+          <button @click="clearFilters" class="px-6 py-3 bg-black dark:bg-white text-white dark:text-black rounded-lg hover:bg-gray-900 dark:hover:bg-gray-100 transition-colors font-medium">
             Clear Filters
           </button>
         </div>
@@ -273,30 +545,35 @@
     </section>
 
     <!-- Event Categories Info -->
-    <section class="py-24 bg-gray-50 dark:bg-gray-800/30">
-      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-12 xl:px-16">
+    <section class="py-20 bg-white dark:bg-gray-800/50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-16">
-          <h2 class="text-3xl md:text-4xl font-bold mb-4">
-            <span class="gradient-text">Event Categories</span>
+          <h2 class="text-4xl md:text-5xl font-bold mb-4">
+            <span class="bg-gradient-to-r from-black to-gray-700 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">
+              Event Categories
+            </span>
           </h2>
           <p class="text-xl text-gray-700 dark:text-gray-300 max-w-3xl mx-auto">
             Explore different types of events related to the Stargate Project and Cristal Intelligence ecosystem.
           </p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <div 
             v-for="category in eventCategories" 
             :key="category.id"
-            class="card text-center group hover:scale-105 transition-transform duration-300"
+            @click="filterByCategory(category.id)"
+            class="group bg-white dark:bg-gray-800 rounded-2xl p-8 border border-gray-200 dark:border-gray-700 hover:shadow-xl hover:scale-105 transition-all duration-300 cursor-pointer"
           >
-            <div class="w-16 h-16 bg-black rounded-full flex items-center justify-center mx-auto mb-6">
-              <span class="text-2xl">{{ category.icon }}</span>
+            <div class="w-16 h-16 bg-black dark:bg-white rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform">
+              <span class="text-3xl">{{ category.icon }}</span>
             </div>
-            <h3 class="text-xl font-bold text-black dark:text-white mb-4">{{ category.name }}</h3>
-            <p class="text-gray-600 dark:text-gray-400 mb-4">{{ category.description }}</p>
-            <div class="text-sm text-gray-500 dark:text-gray-500">
-              {{ getEventsCountByCategory(category.id) }} events
+            <h3 class="text-xl font-bold text-black dark:text-white mb-3 text-center">{{ category.name }}</h3>
+            <p class="text-gray-600 dark:text-gray-400 mb-4 text-center text-sm">{{ category.description }}</p>
+            <div class="text-center">
+              <span class="text-sm font-semibold text-black dark:text-white">
+                {{ getEventsCountByCategory(category.id) }} events
+              </span>
             </div>
           </div>
         </div>
@@ -304,47 +581,625 @@
     </section>
 
     <!-- Newsletter Subscription -->
-    <section class="py-24">
+    <section class="py-20 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
       <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <h2 class="text-3xl md:text-4xl font-bold mb-6">
-          <span class="gradient-text">Join Our Community</span>
+        <h2 class="text-4xl md:text-5xl font-bold mb-6">
+          <span class="bg-gradient-to-r from-black to-gray-700 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">
+            Stay Connected
+          </span>
         </h2>
         <p class="text-xl text-gray-700 dark:text-gray-300 mb-8">
-          Stay informed about the latest developments in AI infrastructure, Stargate Project updates, and Cristal Intelligence breakthroughs. Be part of the future of artificial intelligence.
+          Get notified about the latest events, updates, and announcements related to the Stargate Project and Cristal Intelligence.
         </p>
         
         <div class="max-w-md mx-auto">
-          <div class="flex gap-4">
+          <div class="flex gap-3">
             <input 
               v-model="email"
               type="email" 
-              placeholder="Your email address"
-              class="flex-1 px-4 py-3 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              placeholder="Enter your email address"
+              class="flex-1 px-5 py-4 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white focus:border-transparent"
             >
             <button 
               @click="subscribeToEvents"
               :disabled="!email || isSubscribing"
-              class="px-6 py-3 bg-black text-white rounded-lg font-medium hover:bg-gray-900 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+              class="px-8 py-4 bg-black dark:bg-white text-white dark:text-black rounded-xl font-medium hover:bg-gray-900 dark:hover:bg-gray-100 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {{ isSubscribing ? 'Joining...' : 'Join Now' }}
+              {{ isSubscribing ? 'Joining...' : 'Subscribe' }}
             </button>
           </div>
-          <p class="text-sm text-gray-600 dark:text-gray-400 mt-3">
+          <p class="text-sm text-gray-600 dark:text-gray-400 mt-4">
             Join thousands of AI enthusiasts. No spam, just valuable insights.
           </p>
         </div>
       </div>
     </section>
 
-    <!-- Auth Modal (Login/Register) -->
-    <div v-if="showAuthModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50" @click="showAuthModal = false">
-      <div class="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-md w-full mx-4" @click.stop>
+    <!-- Comments Modal -->
+    <div v-if="showCommentsModal && currentCommentsEvent" class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4" @click="closeCommentsModal">
+      <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 max-w-3xl w-full shadow-2xl max-h-[90vh] flex flex-col" @click.stop>
+        <!-- Header -->
+        <div class="flex items-center justify-between mb-6 pb-4 border-b border-gray-200 dark:border-gray-700">
+          <div class="flex-1">
+            <h3 class="text-2xl font-bold text-black dark:text-white">Comments</h3>
+            <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">{{ currentCommentsEvent.title }}</p>
+          </div>
+          <button
+            @click="closeCommentsModal"
+            class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors ml-4"
+          >
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Comments List -->
+        <div class="flex-1 overflow-y-auto space-y-4 mb-6 pr-2 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200 dark:scrollbar-thumb-gray-600 dark:scrollbar-track-gray-700">
+          <div v-if="commentsLoading" class="flex items-center justify-center py-12">
+            <div class="animate-spin rounded-full h-8 w-8 border-2 border-black dark:border-white border-t-transparent"></div>
+          </div>
+          
+          <div v-else-if="eventComments[currentCommentsEvent.id]?.comments && eventComments[currentCommentsEvent.id].comments.length > 0" class="space-y-4">
+            <div
+              v-for="comment in eventComments[currentCommentsEvent.id].comments"
+              :key="comment.id"
+              class="group flex items-start gap-4 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors border border-gray-200 dark:border-gray-600"
+            >
+              <!-- Avatar -->
+              <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0 shadow-lg">
+                {{ getInitials(comment.user || 'U') }}
+              </div>
+              
+              <!-- Comment Content -->
+              <div class="flex-1 min-w-0">
+                <div class="flex items-start justify-between gap-3 mb-2">
+                  <div class="flex items-center gap-2 flex-wrap">
+                    <span class="font-semibold text-sm text-black dark:text-white">{{ comment.user || 'Anonymous' }}</span>
+                    <span v-if="comment.isPinned" class="px-2 py-0.5 bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300 rounded text-xs font-medium">
+                      📌 Pinned
+                    </span>
+                    <span v-if="comment.isEdited" class="text-xs text-gray-500 dark:text-gray-400 italic">(edited)</span>
+                  </div>
+                  <span class="text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap">{{ formatCommentDate(comment.date) }}</span>
+                </div>
+                
+                <p class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-wrap break-words">{{ comment.text }}</p>
+                
+                <!-- Comment Actions -->
+                <div class="flex items-center gap-4 mt-3 pt-3 border-t border-gray-200 dark:border-gray-600">
+                  <button
+                    class="flex items-center gap-1.5 text-xs text-gray-600 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 transition-colors"
+                  >
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                    </svg>
+                    <span>{{ comment.likes || 0 }}</span>
+                  </button>
+                  <button
+                    class="flex items-center gap-1.5 text-xs text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                  >
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"/>
+                    </svg>
+                    <span>Reply</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div v-else class="text-center py-12">
+            <div class="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+              </svg>
+            </div>
+            <p class="text-gray-500 dark:text-gray-400 font-medium mb-1">No comments yet</p>
+            <p class="text-sm text-gray-400 dark:text-gray-500">Be the first to share your thoughts!</p>
+          </div>
+        </div>
+
+        <!-- Comment Form -->
+        <div class="border-t border-gray-200 dark:border-gray-700 pt-4">
+          <div v-if="isAuthenticated" class="space-y-3">
+            <div class="flex items-start gap-3">
+              <div class="w-10 h-10 bg-black dark:bg-white rounded-full flex items-center justify-center text-white dark:text-black font-bold text-sm flex-shrink-0 shadow-lg">
+                {{ getInitials(authStore.currentUser?.name || authStore.currentUser?.email || 'U') }}
+              </div>
+              <div class="flex-1">
+                <textarea
+                  v-model="newCommentText"
+                  placeholder="Write a comment..."
+                  rows="3"
+                  class="w-full px-4 py-3 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white resize-none text-sm transition-all"
+                  @keydown.ctrl.enter="addEventComment"
+                  @keydown.meta.enter="addEventComment"
+                ></textarea>
+                <div class="flex items-center justify-between mt-2">
+                  <p class="text-xs text-gray-500 dark:text-gray-400">Press Ctrl+Enter or Cmd+Enter to submit</p>
+                  <button
+                    @click="addEventComment"
+                    :disabled="!newCommentText.trim() || isPostingComment"
+                    class="px-6 py-2 bg-black dark:bg-white text-white dark:text-black rounded-xl hover:bg-gray-900 dark:hover:bg-gray-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium flex items-center gap-2"
+                  >
+                    <div v-if="isPostingComment" class="animate-spin rounded-full h-4 w-4 border-2 border-current border-t-transparent"></div>
+                    <span>{{ isPostingComment ? 'Posting...' : 'Post Comment' }}</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div v-else class="text-center py-6">
+            <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">Sign in to join the conversation</p>
+            <button
+              @click="router.push('/signin')"
+              class="px-6 py-2 bg-black dark:bg-white text-white dark:text-black rounded-xl hover:bg-gray-900 dark:hover:bg-gray-100 transition-colors text-sm font-medium"
+            >
+              Sign In
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Create Event Modal -->
+    <Transition name="modal">
+      <div v-if="showCreateEventModal" class="fixed inset-0 bg-black/60 backdrop-blur-md flex items-center justify-center z-50 p-4" @click="closeCreateEventModal">
+        <div class="bg-white dark:bg-gray-800 rounded-3xl p-8 max-w-4xl w-full shadow-2xl max-h-[90vh] overflow-y-auto" @click.stop>
+          <!-- Header -->
+          <div class="flex items-center justify-between mb-8 pb-6 border-b-2 border-gray-100 dark:border-gray-700">
+            <div class="flex items-center gap-4">
+              <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                </svg>
+              </div>
+              <div>
+                <h3 class="text-3xl font-bold bg-gradient-to-r from-black to-gray-700 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">Create New Event</h3>
+                <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Share your event with the Stargate community</p>
+              </div>
+            </div>
+            <button
+              @click="closeCreateEventModal"
+              class="w-10 h-10 flex items-center justify-center rounded-xl bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-all duration-200 hover:rotate-90"
+            >
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+              </svg>
+            </button>
+          </div>
+
+          <!-- Form -->
+          <form @submit.prevent="submitCreateEvent" class="space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <!-- Title -->
+              <div class="md:col-span-2">
+                <label class="block text-sm font-semibold text-black dark:text-white mb-2">
+                  Event Title <span class="text-red-500">*</span>
+                </label>
+                <input
+                  v-model="createEventForm.title"
+                  type="text"
+                  required
+                  :disabled="isCreatingEvent"
+                  :class="[
+                    'w-full px-5 py-4 bg-white dark:bg-gray-700 border-2 rounded-2xl text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white transition-all text-lg',
+                    createEventErrors.title ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'
+                  ]"
+                  placeholder="e.g., Stargate Project Infrastructure Launch"
+                >
+                <p v-if="createEventErrors.title" class="mt-2 text-sm text-red-600 dark:text-red-400">{{ createEventErrors.title }}</p>
+              </div>
+
+              <!-- Category -->
+              <div>
+                <label class="block text-sm font-semibold text-black dark:text-white mb-2">
+                  Category <span class="text-red-500">*</span>
+                </label>
+                <select
+                  v-model="createEventForm.category"
+                  required
+                  :disabled="isCreatingEvent"
+                  class="w-full px-5 py-4 bg-white dark:bg-gray-700 border-2 border-gray-300 dark:border-gray-600 rounded-2xl text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white transition-all"
+                >
+                  <option value="stargate">🚀 Stargate Project</option>
+                  <option value="cristal">💎 Cristal Intelligence</option>
+                  <option value="conferences">🎤 Conferences</option>
+                  <option value="meetings">🤝 Meetings</option>
+                  <option value="announcements">📢 Announcements</option>
+                </select>
+              </div>
+
+              <!-- Type -->
+              <div>
+                <label class="block text-sm font-semibold text-black dark:text-white mb-2">
+                  Event Type <span class="text-red-500">*</span>
+                </label>
+                <select
+                  v-model="createEventForm.type"
+                  required
+                  :disabled="isCreatingEvent"
+                  class="w-full px-5 py-4 bg-white dark:bg-gray-700 border-2 border-gray-300 dark:border-gray-600 rounded-2xl text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white transition-all"
+                >
+                  <option value="conference">Conference</option>
+                  <option value="meeting">Meeting</option>
+                  <option value="workshop">Workshop</option>
+                  <option value="announcement">Announcement</option>
+                  <option value="video">Video Event</option>
+                </select>
+              </div>
+
+              <!-- Date -->
+              <div>
+                <label class="block text-sm font-semibold text-black dark:text-white mb-2">
+                  Event Date <span class="text-red-500">*</span>
+                </label>
+                <input
+                  v-model="createEventForm.event_date"
+                  type="date"
+                  required
+                  :disabled="isCreatingEvent"
+                  :min="new Date().toISOString().split('T')[0]"
+                  class="w-full px-5 py-4 bg-white dark:bg-gray-700 border-2 border-gray-300 dark:border-gray-600 rounded-2xl text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white transition-all"
+                >
+              </div>
+
+              <!-- Time -->
+              <div>
+                <label class="block text-sm font-semibold text-black dark:text-white mb-2">
+                  Event Time
+                </label>
+                <input
+                  v-model="createEventForm.event_time"
+                  type="time"
+                  :disabled="isCreatingEvent"
+                  class="w-full px-5 py-4 bg-white dark:bg-gray-700 border-2 border-gray-300 dark:border-gray-600 rounded-2xl text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white transition-all"
+                >
+              </div>
+
+              <!-- Location -->
+              <div class="md:col-span-2">
+                <label class="block text-sm font-semibold text-black dark:text-white mb-2">
+                  Location <span class="text-red-500">*</span>
+                </label>
+                <input
+                  v-model="createEventForm.location"
+                  type="text"
+                  required
+                  :disabled="isCreatingEvent"
+                  class="w-full px-5 py-4 bg-white dark:bg-gray-700 border-2 border-gray-300 dark:border-gray-600 rounded-2xl text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white transition-all"
+                  placeholder="e.g., San Francisco, CA & Virtual"
+                >
+              </div>
+
+              <!-- Organizer -->
+              <div class="md:col-span-2">
+                <label class="block text-sm font-semibold text-black dark:text-white mb-2">
+                  Organizer Name <span class="text-red-500">*</span>
+                </label>
+                <input
+                  v-model="createEventForm.organizer"
+                  type="text"
+                  required
+                  :disabled="isCreatingEvent"
+                  class="w-full px-5 py-4 bg-white dark:bg-gray-700 border-2 border-gray-300 dark:border-gray-600 rounded-2xl text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white transition-all"
+                  placeholder="e.g., Your Organization Name"
+                >
+              </div>
+
+              <!-- Icon -->
+              <div>
+                <label class="block text-sm font-semibold text-black dark:text-white mb-2">
+                  Icon Emoji
+                </label>
+                <input
+                  v-model="createEventForm.icon"
+                  type="text"
+                  maxlength="2"
+                  :disabled="isCreatingEvent"
+                  class="w-full px-5 py-4 bg-white dark:bg-gray-700 border-2 border-gray-300 dark:border-gray-600 rounded-2xl text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white transition-all text-center text-2xl"
+                  placeholder="📅"
+                >
+              </div>
+
+              <!-- Featured -->
+              <div class="flex items-center justify-center">
+                <label class="flex items-center gap-3 cursor-pointer p-4 bg-gray-50 dark:bg-gray-700/50 rounded-2xl border-2 border-gray-200 dark:border-gray-600 w-full">
+                  <input
+                    v-model="createEventForm.is_featured"
+                    type="checkbox"
+                    :disabled="isCreatingEvent"
+                    class="w-6 h-6 text-black dark:text-white border-gray-300 dark:border-gray-600 rounded focus:ring-2 focus:ring-black dark:focus:ring-white"
+                  >
+                  <div>
+                    <span class="font-semibold text-black dark:text-white block">Feature this event</span>
+                    <span class="text-xs text-gray-500 dark:text-gray-400">Show prominently on the events page</span>
+                  </div>
+                </label>
+              </div>
+
+              <!-- Registration URL -->
+              <div>
+                <label class="block text-sm font-semibold text-black dark:text-white mb-2">
+                  Registration URL
+                </label>
+                <input
+                  v-model="createEventForm.registration_url"
+                  type="url"
+                  :disabled="isCreatingEvent"
+                  class="w-full px-5 py-4 bg-white dark:bg-gray-700 border-2 border-gray-300 dark:border-gray-600 rounded-2xl text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white transition-all"
+                  placeholder="https://..."
+                >
+              </div>
+
+              <!-- Video URL -->
+              <div>
+                <label class="block text-sm font-semibold text-black dark:text-white mb-2">
+                  Video URL (YouTube)
+                </label>
+                <input
+                  v-model="createEventForm.video_url"
+                  type="url"
+                  :disabled="isCreatingEvent"
+                  class="w-full px-5 py-4 bg-white dark:bg-gray-700 border-2 border-gray-300 dark:border-gray-600 rounded-2xl text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white transition-all"
+                  placeholder="https://youtube.com/..."
+                >
+              </div>
+
+              <!-- Description -->
+              <div class="md:col-span-2">
+                <label class="block text-sm font-semibold text-black dark:text-white mb-2">
+                  Description <span class="text-red-500">*</span>
+                </label>
+                <textarea
+                  v-model="createEventForm.description"
+                  required
+                  rows="6"
+                  :disabled="isCreatingEvent"
+                  class="w-full px-5 py-4 bg-white dark:bg-gray-700 border-2 border-gray-300 dark:border-gray-600 rounded-2xl text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white resize-none"
+                  placeholder="Describe your event in detail..."
+                ></textarea>
+                <p class="mt-2 text-xs text-gray-500 dark:text-gray-400">{{ createEventForm.description.length }}/5000 characters</p>
+              </div>
+            </div>
+
+            <!-- Error Messages -->
+            <div v-if="Object.keys(createEventErrors).length > 0" class="p-4 bg-red-50 dark:bg-red-900/20 border-2 border-red-200 dark:border-red-500/30 rounded-2xl">
+              <p class="text-sm text-red-800 dark:text-red-300 font-semibold mb-2">Please fix the following errors:</p>
+              <ul class="list-disc list-inside text-sm text-red-700 dark:text-red-400">
+                <li v-for="(error, field) in createEventErrors" :key="field">{{ error }}</li>
+              </ul>
+            </div>
+
+            <!-- Submit Buttons -->
+            <div class="flex items-center gap-4 pt-6 border-t-2 border-gray-100 dark:border-gray-700">
+              <button
+                type="button"
+                @click="closeCreateEventModal"
+                :disabled="isCreatingEvent"
+                class="flex-1 px-6 py-4 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-2xl font-semibold hover:bg-gray-200 dark:hover:bg-gray-600 transition-all duration-200 disabled:opacity-50"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                :disabled="isCreatingEvent"
+                class="flex-1 px-6 py-4 bg-gradient-to-r from-black to-gray-800 dark:from-white dark:to-gray-200 text-white dark:text-black rounded-2xl font-semibold hover:shadow-xl transform hover:scale-105 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              >
+                <div v-if="isCreatingEvent" class="animate-spin rounded-full h-5 w-5 border-2 border-current border-t-transparent"></div>
+                <span>{{ isCreatingEvent ? 'Creating Event...' : 'Create Event' }}</span>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </Transition>
+
+    <!-- Share Modal - Modern Design -->
+    <Transition name="modal">
+      <div v-if="showShareModal && currentShareEvent" class="fixed inset-0 bg-black/60 backdrop-blur-md flex items-center justify-center z-50 p-4" @click="closeShareModal">
+        <div class="bg-white dark:bg-gray-800 rounded-3xl p-8 max-w-2xl w-full shadow-2xl transform transition-all" @click.stop>
+          <!-- Header with Gradient -->
+          <div class="flex items-center justify-between mb-8 pb-6 border-b-2 border-gray-100 dark:border-gray-700">
+            <div class="flex items-center gap-4">
+              <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z"/>
+                </svg>
+              </div>
+              <div>
+                <h3 class="text-3xl font-bold bg-gradient-to-r from-black to-gray-700 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">Share Event</h3>
+                <p class="text-sm text-gray-500 dark:text-gray-400 mt-1 line-clamp-1">{{ currentShareEvent.title }}</p>
+              </div>
+            </div>
+            <button
+              @click="closeShareModal"
+              class="w-10 h-10 flex items-center justify-center rounded-xl bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-all duration-200 hover:rotate-90"
+            >
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+              </svg>
+            </button>
+          </div>
+
+          <!-- Event Preview Card -->
+          <div class="mb-8 p-5 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-700/50 dark:to-gray-800/50 rounded-2xl border border-gray-200 dark:border-gray-600 shadow-inner">
+            <div class="flex items-start gap-4">
+              <div class="w-16 h-16 bg-black dark:bg-white rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg transform hover:scale-110 transition-transform">
+                <span class="text-3xl">{{ currentShareEvent.icon }}</span>
+              </div>
+              <div class="flex-1 min-w-0">
+                <h4 class="font-bold text-lg text-black dark:text-white mb-2 line-clamp-2">{{ currentShareEvent.title }}</h4>
+                <p class="text-sm text-gray-600 dark:text-gray-400 line-clamp-2 mb-3">{{ currentShareEvent.description }}</p>
+                <div class="flex items-center gap-4 text-xs text-gray-500 dark:text-gray-400">
+                  <span class="flex items-center gap-1">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                    </svg>
+                    {{ formatDate(currentShareEvent.event_date) }}
+                  </span>
+                  <span class="flex items-center gap-1">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                    </svg>
+                    {{ currentShareEvent.location }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Share Options -->
+          <div class="space-y-6">
+            <!-- Social Media Platforms -->
+            <div>
+              <p class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4 uppercase tracking-wide">Share on Social Media</p>
+              <div class="grid grid-cols-3 gap-3">
+                <!-- Facebook -->
+                <button
+                  @click="shareToPlatform('facebook')"
+                  class="group relative flex flex-col items-center justify-center gap-2 p-5 bg-[#1877F2] hover:bg-[#166FE5] text-white rounded-2xl transition-all duration-300 transform hover:scale-105 hover:-translate-y-1 shadow-lg hover:shadow-2xl overflow-hidden"
+                >
+                  <div class="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                  <svg class="w-7 h-7 relative z-10" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                  </svg>
+                  <span class="text-xs font-semibold relative z-10">Facebook</span>
+                </button>
+
+                <!-- Twitter/X -->
+                <button
+                  @click="shareToPlatform('twitter')"
+                  class="group relative flex flex-col items-center justify-center gap-2 p-5 bg-black dark:bg-white hover:bg-gray-900 dark:hover:bg-gray-100 text-white dark:text-black rounded-2xl transition-all duration-300 transform hover:scale-105 hover:-translate-y-1 shadow-lg hover:shadow-2xl overflow-hidden"
+                >
+                  <div class="absolute inset-0 bg-white/10 dark:bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                  <svg class="w-7 h-7 relative z-10" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                  </svg>
+                  <span class="text-xs font-semibold relative z-10">Twitter/X</span>
+                </button>
+
+                <!-- LinkedIn -->
+                <button
+                  @click="shareToPlatform('linkedin')"
+                  class="group relative flex flex-col items-center justify-center gap-2 p-5 bg-[#0077B5] hover:bg-[#006399] text-white rounded-2xl transition-all duration-300 transform hover:scale-105 hover:-translate-y-1 shadow-lg hover:shadow-2xl overflow-hidden"
+                >
+                  <div class="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                  <svg class="w-7 h-7 relative z-10" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                  </svg>
+                  <span class="text-xs font-semibold relative z-10">LinkedIn</span>
+                </button>
+
+                <!-- WhatsApp -->
+                <button
+                  @click="shareToPlatform('whatsapp')"
+                  class="group relative flex flex-col items-center justify-center gap-2 p-5 bg-[#25D366] hover:bg-[#20BA5A] text-white rounded-2xl transition-all duration-300 transform hover:scale-105 hover:-translate-y-1 shadow-lg hover:shadow-2xl overflow-hidden"
+                >
+                  <div class="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                  <svg class="w-7 h-7 relative z-10" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+                  </svg>
+                  <span class="text-xs font-semibold relative z-10">WhatsApp</span>
+                </button>
+
+                <!-- Telegram -->
+                <button
+                  @click="shareToPlatform('telegram')"
+                  class="group relative flex flex-col items-center justify-center gap-2 p-5 bg-[#0088cc] hover:bg-[#0077b5] text-white rounded-2xl transition-all duration-300 transform hover:scale-105 hover:-translate-y-1 shadow-lg hover:shadow-2xl overflow-hidden"
+                >
+                  <div class="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                  <svg class="w-7 h-7 relative z-10" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+                  </svg>
+                  <span class="text-xs font-semibold relative z-10">Telegram</span>
+                </button>
+
+                <!-- Email -->
+                <button
+                  @click="shareToPlatform('email')"
+                  class="group relative flex flex-col items-center justify-center gap-2 p-5 bg-gradient-to-br from-gray-600 to-gray-700 hover:from-gray-700 hover:to-gray-800 text-white rounded-2xl transition-all duration-300 transform hover:scale-105 hover:-translate-y-1 shadow-lg hover:shadow-2xl overflow-hidden"
+                >
+                  <div class="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                  <svg class="w-7 h-7 relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
+                  <span class="text-xs font-semibold relative z-10">Email</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Copy Link Section -->
+            <div class="pt-6 border-t-2 border-gray-100 dark:border-gray-700">
+              <p class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4 uppercase tracking-wide">Copy Link</p>
+              <div class="flex items-center gap-3">
+                <div class="flex-1 relative">
+                  <input
+                    :value="getEventShareUrl(currentShareEvent)"
+                    readonly
+                    class="w-full px-5 py-4 pr-12 bg-gray-50 dark:bg-gray-700/50 border-2 border-gray-200 dark:border-gray-600 rounded-2xl text-gray-900 dark:text-white text-sm focus:outline-none focus:border-black dark:focus:border-white transition-all font-mono"
+                    id="share-url-input"
+                  >
+                  <div class="absolute right-3 top-1/2 -translate-y-1/2">
+                    <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
+                    </svg>
+                  </div>
+                </div>
+                <button
+                  @click="copyEventLink"
+                  :class="[
+                    'px-8 py-4 bg-black dark:bg-white text-white dark:text-black rounded-2xl hover:bg-gray-900 dark:hover:bg-gray-100 transition-all duration-200 font-semibold text-sm flex items-center gap-2 min-w-[140px] justify-center shadow-lg hover:shadow-xl transform hover:scale-105',
+                    linkCopied && 'bg-green-600 dark:bg-green-500'
+                  ]"
+                >
+                  <svg v-if="!linkCopied" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                  </svg>
+                  <svg v-else class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                  </svg>
+                  <span>{{ linkCopied ? 'Copied!' : 'Copy Link' }}</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- QR Code Section -->
+            <div v-if="qrCodeUrl" class="pt-6 border-t-2 border-gray-100 dark:border-gray-700">
+              <p class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4 uppercase tracking-wide">QR Code</p>
+              <div class="flex items-center justify-center p-6 bg-gray-50 dark:bg-gray-700/50 rounded-2xl">
+                <img :src="qrCodeUrl" alt="QR Code" class="w-48 h-48 rounded-xl shadow-lg">
+              </div>
+            </div>
+
+            <!-- QR Code Generate Button -->
+            <div v-else class="pt-6 border-t-2 border-gray-100 dark:border-gray-700">
+              <button
+                @click="generateQRCode"
+                class="w-full flex items-center justify-center gap-3 px-6 py-4 bg-gradient-to-r from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-600 hover:from-gray-200 hover:to-gray-300 dark:hover:from-gray-600 dark:hover:to-gray-500 text-gray-700 dark:text-gray-300 rounded-2xl transition-all duration-200 font-semibold text-sm shadow-md hover:shadow-lg transform hover:scale-105"
+              >
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/>
+                </svg>
+                <span>Generate QR Code</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Transition>
+
+    <!-- Registration Modal -->
+    <div v-if="showRegistrationModal && currentRegistrationEvent" class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4" @click="closeRegistrationModal">
+      <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 max-w-2xl w-full shadow-2xl max-h-[90vh] overflow-y-auto" @click.stop>
         <div class="flex items-center justify-between mb-6">
-          <h3 class="text-xl font-semibold text-black dark:text-white">
-            {{ authModalMode === 'login' ? 'Sign In Required' : 'Create Account' }}
-          </h3>
-          <button 
-            @click="showAuthModal = false"
+          <div>
+            <h3 class="text-2xl font-bold text-black dark:text-white">Register for Event</h3>
+            <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">{{ currentRegistrationEvent.title }}</p>
+          </div>
+          <button
+            @click="closeRegistrationModal"
             class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
           >
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -353,40 +1208,151 @@
           </button>
         </div>
 
-        <div class="mb-6">
-          <p class="text-gray-700 dark:text-gray-300 mb-4">
-            {{ authModalMode === 'login' 
-              ? 'You need to sign in to watch this event video.' 
-              : 'Create a free account to access event videos and stay updated.' }}
-          </p>
+        <!-- Event Info -->
+        <div class="mb-6 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-xl border border-gray-200 dark:border-gray-600">
+          <div class="grid grid-cols-2 gap-4 text-sm">
+            <div>
+              <span class="text-gray-600 dark:text-gray-400">Date:</span>
+              <p class="font-semibold text-black dark:text-white">{{ formatDate(currentRegistrationEvent.event_date) }}</p>
+            </div>
+            <div v-if="currentRegistrationEvent.event_time">
+              <span class="text-gray-600 dark:text-gray-400">Time:</span>
+              <p class="font-semibold text-black dark:text-white">{{ formatTime(currentRegistrationEvent.event_time) }}</p>
+            </div>
+            <div class="col-span-2">
+              <span class="text-gray-600 dark:text-gray-400">Location:</span>
+              <p class="font-semibold text-black dark:text-white">{{ currentRegistrationEvent.location }}</p>
+            </div>
+          </div>
         </div>
 
-        <div class="flex gap-3">
-          <button 
-            @click="showAuthModal = false"
-            class="flex-1 bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-700 text-gray-900 dark:text-white px-4 py-2 rounded-lg transition-colors"
-          >
-            Cancel
-          </button>
-          <button 
-            @click="switchAuthMode"
-            class="flex-1 bg-gray-300 dark:bg-gray-700 hover:bg-gray-400 dark:hover:bg-gray-600 text-gray-900 dark:text-white px-4 py-2 rounded-lg transition-colors"
-          >
-            {{ authModalMode === 'login' ? 'Sign Up Instead' : 'Sign In Instead' }}
-          </button>
-          <button 
-            @click="authModalMode === 'login' ? goToSignIn() : goToSignUp()"
-            class="flex-1 bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg transition-colors"
-          >
-            {{ authModalMode === 'login' ? 'Sign In' : 'Sign Up' }}
-          </button>
-        </div>
+        <!-- Registration Form -->
+        <form @submit.prevent="submitRegistration" class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-black dark:text-white mb-2">
+              Email Address <span class="text-red-500">*</span>
+            </label>
+            <input
+              v-model="registrationForm.email"
+              type="email"
+              required
+              :disabled="isRegistering"
+              :class="[
+                'w-full px-4 py-3 bg-white dark:bg-gray-700 border rounded-xl text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white transition-all',
+                registrationErrors.email ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'
+              ]"
+              placeholder="your.email@example.com"
+            >
+            <p v-if="registrationErrors.email" class="mt-1 text-sm text-red-600 dark:text-red-400">{{ registrationErrors.email }}</p>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-black dark:text-white mb-2">
+              Full Name
+            </label>
+            <input
+              v-model="registrationForm.name"
+              type="text"
+              :disabled="isRegistering"
+              class="w-full px-4 py-3 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white transition-all"
+              placeholder="John Doe"
+            >
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-black dark:text-white mb-2">
+              Phone Number
+            </label>
+            <input
+              v-model="registrationForm.phone"
+              type="tel"
+              :disabled="isRegistering"
+              class="w-full px-4 py-3 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white transition-all"
+              placeholder="+1 (555) 123-4567"
+            >
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-black dark:text-white mb-2">
+              Timezone
+            </label>
+            <select
+              v-model="registrationForm.timezone"
+              :disabled="isRegistering"
+              class="w-full px-4 py-3 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white transition-all"
+            >
+              <option v-for="tz in timezones" :key="tz" :value="tz">{{ tz }}</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-black dark:text-white mb-2">
+              Additional Notes (Optional)
+            </label>
+            <textarea
+              v-model="registrationForm.notes"
+              rows="3"
+              :disabled="isRegistering"
+              class="w-full px-4 py-3 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white resize-none"
+              placeholder="Any special requirements or questions..."
+            ></textarea>
+          </div>
+
+          <!-- Notification Preferences -->
+          <div class="space-y-3 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-xl border border-gray-200 dark:border-gray-600">
+            <p class="text-sm font-medium text-black dark:text-white mb-3">Notification Preferences</p>
+            <label class="flex items-center gap-3 cursor-pointer">
+              <input
+                v-model="registrationForm.emailNotifications"
+                type="checkbox"
+                :disabled="isRegistering"
+                class="w-5 h-5 text-black dark:text-white border-gray-300 dark:border-gray-600 rounded focus:ring-2 focus:ring-black dark:focus:ring-white"
+              >
+              <span class="text-sm text-gray-700 dark:text-gray-300">Email notifications about event updates</span>
+            </label>
+            <label class="flex items-center gap-3 cursor-pointer">
+              <input
+                v-model="registrationForm.smsNotifications"
+                type="checkbox"
+                :disabled="isRegistering"
+                class="w-5 h-5 text-black dark:text-white border-gray-300 dark:border-gray-600 rounded focus:ring-2 focus:ring-black dark:focus:ring-white"
+              >
+              <span class="text-sm text-gray-700 dark:text-gray-300">SMS reminders (if phone provided)</span>
+            </label>
+          </div>
+
+          <!-- Error Messages -->
+          <div v-if="Object.keys(registrationErrors).length > 0" class="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-500/30 rounded-xl">
+            <p class="text-sm text-red-800 dark:text-red-300">Please fix the errors above to continue.</p>
+          </div>
+
+          <!-- Submit Button -->
+          <div class="flex items-center gap-3 pt-4">
+            <button
+              type="button"
+              @click="closeRegistrationModal"
+              :disabled="isRegistering"
+              class="flex-1 px-6 py-3 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-xl font-medium hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors disabled:opacity-50"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              :disabled="isRegistering || !registrationForm.email.trim()"
+              class="flex-1 px-6 py-3 bg-black dark:bg-white text-white dark:text-black rounded-xl font-medium hover:bg-gray-900 dark:hover:bg-gray-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            >
+              <div v-if="isRegistering" class="animate-spin rounded-full h-5 w-5 border-2 border-current border-t-transparent"></div>
+              <span>{{ isRegistering ? 'Registering...' : 'Register Now' }}</span>
+            </button>
+          </div>
+        </form>
       </div>
     </div>
 
+    <!-- Modals (keep existing modals) -->
     <!-- Video Modal -->
-    <div v-if="showVideoModal" class="fixed inset-0 bg-black/90 flex items-center justify-center z-50" @click="closeVideoModal">
-      <div class="bg-gray-900 rounded-lg p-4 max-w-6xl w-full mx-4 max-h-[90vh] overflow-y-auto" @click.stop>
+    <div v-if="showVideoModal" class="fixed inset-0 bg-black/90 flex items-center justify-center z-50 p-4" @click="closeVideoModal">
+      <div class="bg-gray-900 rounded-xl p-4 max-w-6xl w-full max-h-[90vh] overflow-y-auto" @click.stop>
         <div class="flex items-center justify-between mb-4">
           <h3 class="text-xl font-semibold text-white">Event Video</h3>
           <button 
@@ -403,132 +1369,11 @@
           <iframe
             v-if="currentVideoUrl"
             :src="getYouTubeEmbedUrl(currentVideoUrl)"
-            class="absolute top-0 left-0 w-full h-full"
+            class="absolute top-0 left-0 w-full h-full rounded-lg"
             frameborder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowfullscreen
           ></iframe>
-        </div>
-        
-        <div class="mt-4 text-center">
-          <a 
-            :href="currentVideoUrl || '#'"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="text-primary-400 hover:text-primary-300 underline"
-          >
-            Watch on YouTube
-          </a>
-        </div>
-      </div>
-    </div>
-
-    <!-- Past Event Modal -->
-    <div v-if="showPastEventModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50" @click="showPastEventModal = false">
-      <div class="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-md w-full mx-4" @click.stop>
-        <div class="flex items-center justify-between mb-6">
-          <h3 class="text-xl font-semibold text-black dark:text-white">Event Recording</h3>
-          <button 
-            @click="showPastEventModal = false"
-            class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
-          >
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-            </svg>
-          </button>
-        </div>
-
-        <div class="space-y-4">
-          <div class="p-4 bg-blue-500/20 border border-blue-500/30 rounded-lg">
-            <div class="flex items-center">
-              <svg class="w-5 h-5 text-blue-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
-              </svg>
-              <div>
-                <h4 class="text-blue-300 font-medium">{{ currentPastEvent?.title }}</h4>
-                <p class="text-blue-200/80 text-sm">This event has already passed on {{ formatDate(currentPastEvent?.event_date) }}</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="p-4 bg-gray-100 dark:bg-gray-700 rounded-lg">
-            <p class="text-gray-700 dark:text-gray-300 text-sm mb-3">This event has already passed on {{ formatDate(currentPastEvent?.event_date) }}.</p>
-            <div class="text-xs text-gray-600 dark:text-gray-400 space-y-1">
-              <p><strong>Event Details:</strong></p>
-              <p>📅 Date: {{ formatDate(currentPastEvent?.event_date) }}</p>
-              <p>🕐 Time: {{ currentPastEvent?.event_time ? formatTime(currentPastEvent.event_time) : 'TBD' }}</p>
-              <p>📍 Location: {{ currentPastEvent?.location }}</p>
-              <p>👤 Organizer: {{ currentPastEvent?.organizer }}</p>
-              <p>🏷️ Category: {{ currentPastEvent?.category }}</p>
-              <p>📝 Type: {{ currentPastEvent?.type }}</p>
-            </div>
-          </div>
-
-          <div class="flex gap-3">
-            <button 
-              @click="showPastEventModal = false"
-              class="flex-1 bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-700 text-gray-900 dark:text-white px-4 py-2 rounded-lg transition-colors"
-            >
-              Close
-            </button>
-            <button 
-              @click="addToCalendar(currentPastEvent); showPastEventModal = false"
-              class="flex-1 bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg transition-colors"
-            >
-              Add to Calendar
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Registration Modal -->
-    <div v-if="showRegistrationModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50" @click="showRegistrationModal = false">
-      <div class="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-md w-full mx-4" @click.stop>
-        <div class="flex items-center justify-between mb-6">
-          <h3 class="text-xl font-semibold text-black dark:text-white">Registration Information</h3>
-          <button 
-            @click="showRegistrationModal = false"
-            class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
-          >
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-            </svg>
-          </button>
-        </div>
-
-        <div class="space-y-4">
-          <div class="p-4 bg-yellow-500/20 border border-yellow-500/30 rounded-lg">
-            <div class="flex items-center">
-              <svg class="w-5 h-5 text-yellow-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
-              </svg>
-              <div>
-                <h4 class="text-yellow-300 font-medium">Demo Registration URL</h4>
-                <p class="text-yellow-200/80 text-sm">This is a demonstration URL. In a real application, this would redirect to the actual event registration page.</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="p-4 bg-gray-100 dark:bg-gray-700 rounded-lg">
-            <p class="text-gray-700 dark:text-gray-300 text-sm mb-2">Registration URL:</p>
-            <code class="text-blue-600 dark:text-blue-300 text-xs break-all">{{ currentRegistrationUrl }}</code>
-          </div>
-
-          <div class="flex gap-3">
-            <button 
-              @click="showRegistrationModal = false"
-              class="flex-1 bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-700 text-gray-900 dark:text-white px-4 py-2 rounded-lg transition-colors"
-            >
-              Close
-            </button>
-            <button 
-              @click="() => { openUrl(currentRegistrationUrl); showRegistrationModal = false }"
-              class="flex-1 bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg transition-colors"
-            >
-              Open Anyway
-            </button>
-          </div>
         </div>
       </div>
     </div>
@@ -541,7 +1386,8 @@ import { useHead } from '@vueuse/head'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '../stores/auth'
 import { eventsApiService, type Event } from '../services/eventsApiService'
-import InteractiveContent from '../components/InteractiveContent.vue'
+import { eventRegistrationService } from '../services/eventRegistrationService'
+import { videoApiService } from '../services/videoApiService'
 
 // Meta tags
 useHead({
@@ -555,38 +1401,11 @@ useHead({
 const authStore = useAuthStore()
 const router = useRouter()
 
-// Initialize auth store
-onMounted(() => {
-  authStore.initialize()
-  
-  // Check if there's a pending video URL from sessionStorage
-  const savedVideoUrl = sessionStorage.getItem('pending_video_url')
-  if (savedVideoUrl && authStore.isAuthenticated) {
-    // User is authenticated and has pending video, show it in modal
-    currentVideoUrl.value = savedVideoUrl
-    showVideoModal.value = true
-    sessionStorage.removeItem('pending_video_url')
-    pendingVideoUrl.value = null
-  } else if (savedVideoUrl) {
-    // Video URL exists but user is not authenticated, restore it
-    pendingVideoUrl.value = savedVideoUrl
-  }
-  
-  // Listen for auth changes
-  window.addEventListener('auth-changed', () => {
-    if (authStore.isAuthenticated && pendingVideoUrl.value) {
-      handleAuthSuccess()
-      sessionStorage.removeItem('pending_video_url')
-    }
-  })
-})
+// Computed
+const isAuthenticated = computed(() => authStore.isAuthenticated)
 
-// Watch for auth changes
-watch(() => authStore.isAuthenticated, (isAuthenticated) => {
-  if (isAuthenticated && pendingVideoUrl.value && showAuthModal.value) {
-    handleAuthSuccess()
-  }
-})
+// View mode
+const viewMode = ref<'grid' | 'list'>('grid')
 
 // Reactive data
 const selectedCategory = ref('all')
@@ -596,30 +1415,61 @@ const isSubscribing = ref(false)
 const isLoading = ref(false)
 const searchQuery = ref('')
 
-// Registration modal state
-const showRegistrationModal = ref(false)
-const currentRegistrationUrl = ref('')
-
-// Past event modal state
-const showPastEventModal = ref(false)
-const currentPastEvent = ref<any>(null)
-
-// Auth modal state
-const showAuthModal = ref(false)
-const pendingVideoUrl = ref<string | null>(null)
-const authModalMode = ref<'login' | 'register'>('login')
-
-// Helper functions
-const openUrl = (url: string) => {
-  if (typeof window !== 'undefined') {
-    window.open(url, '_blank')
-  }
-}
-
 // Video modal state
 const showVideoModal = ref(false)
 const currentVideoUrl = ref<string | null>(null)
 
+// Event interactions state
+const eventLikes = ref<Record<string, { isLiked: boolean; count: number }>>({})
+const eventComments = ref<Record<string, { show: boolean; count: number; comments: Array<{ id: string; user: string; text: string; date: string }>; newComment: string }>>({})
+const showShareModal = ref(false)
+const currentShareEvent = ref<Event | null>(null)
+
+// Registration modal state
+const showRegistrationModal = ref(false)
+const currentRegistrationEvent = ref<Event | null>(null)
+const isRegistering = ref(false)
+const registrationForm = ref({
+  name: '',
+  email: '',
+  phone: '',
+  timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+  notes: '',
+  emailNotifications: true,
+  smsNotifications: false
+})
+const registrationErrors = ref<Record<string, string>>({})
+const isRegistered = ref<Record<string, boolean>>({})
+
+// Comments modal state
+const showCommentsModal = ref(false)
+const currentCommentsEvent = ref<Event | null>(null)
+const isPostingComment = ref(false)
+const newCommentText = ref('')
+const commentsLoading = ref(false)
+
+// Share modal state
+const linkCopied = ref(false)
+const qrCodeUrl = ref<string | null>(null)
+
+// Create Event modal state
+const showCreateEventModal = ref(false)
+const isCreatingEvent = ref(false)
+const createEventForm = ref({
+  title: '',
+  description: '',
+  category: 'stargate',
+  type: 'conference',
+  event_date: '',
+  event_time: '',
+  location: '',
+  organizer: '',
+  icon: '📅',
+  registration_url: '',
+  video_url: '',
+  is_featured: false
+})
+const createEventErrors = ref<Record<string, string>>({})
 
 // Event categories
 const eventCategories = ref([
@@ -661,16 +1511,13 @@ const eventCategories = ref([
   }
 ])
 
-// Events data - start empty, will be populated by API
+// Events data
 const events = ref<Event[]>([])
 
 // Computed properties
 const filteredEvents = computed(() => {
   let filtered = events.value
   
-  console.log('🔍 FilteredEvents computed - Input events:', events.value.length)
-  console.log('🔍 FilteredEvents computed - Events:', events.value.map(e => e.title))
-
   // Filter by category
   if (selectedCategory.value !== 'all') {
     filtered = filtered.filter(event => event.category === selectedCategory.value)
@@ -702,16 +1549,30 @@ const filteredEvents = computed(() => {
       break
   }
 
+  // Filter by search query
+  if (searchQuery.value.trim()) {
+    const query = searchQuery.value.toLowerCase()
+    filtered = filtered.filter(event => 
+      event.title.toLowerCase().includes(query) ||
+      event.description.toLowerCase().includes(query) ||
+      event.location.toLowerCase().includes(query) ||
+      event.organizer.toLowerCase().includes(query)
+    )
+  }
+
   // Sort by date
-  const sorted = filtered.sort((a, b) => new Date(a.event_date).getTime() - new Date(b.event_date).getTime())
-  
-  console.log('🔍 FilteredEvents computed - Output events:', sorted.length)
-  console.log('🔍 FilteredEvents computed - Output titles:', sorted.map(e => e.title))
-  
-  return sorted
+  return filtered.sort((a, b) => new Date(a.event_date).getTime() - new Date(b.event_date).getTime())
 })
 
 // Methods
+const handleSearchInput = () => {
+  // Search happens automatically via computed property
+}
+
+const clearSearch = () => {
+  searchQuery.value = ''
+}
+
 const filterByCategory = async (categoryId: string) => {
   selectedCategory.value = categoryId
   if (categoryId === 'all') {
@@ -736,16 +1597,15 @@ const getCategoryName = (categoryId: string) => {
 
 const getEventBadgeClass = (category: string) => {
   const classes = {
-    stargate: 'bg-blue-500/20 text-blue-400 border border-blue-500/30',
-    cristal: 'bg-purple-500/20 text-purple-400 border border-purple-500/30',
-    conferences: 'bg-green-500/20 text-green-400 border border-green-500/30',
-    meetings: 'bg-orange-500/20 text-orange-400 border border-orange-500/30',
-    announcements: 'bg-red-500/20 text-red-400 border border-red-500/30'
+    stargate: 'bg-blue-500/90 text-white',
+    cristal: 'bg-purple-500/90 text-white',
+    conferences: 'bg-green-500/90 text-white',
+    meetings: 'bg-orange-500/90 text-white',
+    announcements: 'bg-red-500/90 text-white'
   }
-  return classes[category as keyof typeof classes] || 'bg-gray-500/20 text-gray-400 border border-gray-500/30'
+  return classes[category as keyof typeof classes] || 'bg-gray-500/90 text-white'
 }
 
-// Get source name
 const getSourceName = (source: string): string => {
   const sourceNames: Record<string, string> = {
     internal: 'Internal',
@@ -759,7 +1619,6 @@ const getSourceName = (source: string): string => {
   return sourceNames[source] || 'Unknown'
 }
 
-// Get source badge class
 const getSourceBadgeClass = (source: string): string => {
   const sourceClasses: Record<string, string> = {
     internal: 'bg-blue-500/20 text-blue-300',
@@ -781,12 +1640,11 @@ const getEventsCountByCategory = (categoryId: string) => {
 const formatDate = (dateString: string) => {
   return new Date(dateString).toLocaleDateString('en-US', {
     year: 'numeric',
-    month: 'long',
+    month: 'short',
     day: 'numeric'
   })
 }
 
-// Format time
 const formatTime = (timeString: string): string => {
   try {
     const time = new Date(`2000-01-01T${timeString}`)
@@ -800,49 +1658,174 @@ const formatTime = (timeString: string): string => {
   }
 }
 
-// Check if event is in the past
 const isEventPast = (eventDate: string) => {
   const event = new Date(eventDate)
   const today = new Date()
-  today.setHours(0, 0, 0, 0) // Reset time to start of day
+  today.setHours(0, 0, 0, 0)
   return event < today
 }
 
-const openPastEvent = (event: any) => {
-  // Check if event has video URL
-  if (event.video_url) {
-    window.open(event.video_url, '_blank')
+// Timezones list
+const timezones = ref([
+  'America/New_York',
+  'America/Chicago',
+  'America/Denver',
+  'America/Los_Angeles',
+  'America/Phoenix',
+  'America/Anchorage',
+  'Pacific/Honolulu',
+  'Europe/London',
+  'Europe/Paris',
+  'Europe/Berlin',
+  'Europe/Rome',
+  'Europe/Madrid',
+  'Europe/Amsterdam',
+  'Europe/Stockholm',
+  'Europe/Zurich',
+  'Asia/Tokyo',
+  'Asia/Shanghai',
+  'Asia/Hong_Kong',
+  'Asia/Singapore',
+  'Asia/Dubai',
+  'Asia/Kolkata',
+  'Australia/Sydney',
+  'Australia/Melbourne',
+  'Pacific/Auckland',
+  'UTC'
+])
+
+const getEventActionText = (event: Event): string => {
+  if (event.type === 'video' && event.video_url) {
+    return 'Watch Video'
+  }
+  if (isRegistered.value[event.id]) {
+    return '✓ Registered'
+  }
+  if (!isEventPast(event.event_date)) {
+    return 'Register Now'
+  }
+  if (isEventPast(event.event_date)) {
+    return 'View Details'
+  }
+  return 'Get Notified'
+}
+
+const handleEventAction = (event: Event) => {
+  if (event.type === 'video' && event.video_url) {
+    openVideo(event.video_url)
+  } else if (!isEventPast(event.event_date)) {
+    // Show registration modal for upcoming events
+    openRegistrationModal(event)
+  } else if (isEventPast(event.event_date)) {
+    // Show event details for past events
+    alert(`Event: ${event.title}\nDate: ${formatDate(event.event_date)}\nLocation: ${event.location}`)
+  } else {
+    scrollToSubscribe()
+  }
+}
+
+const openRegistrationModal = async (event: Event) => {
+  currentRegistrationEvent.value = event
+  
+  // Pre-fill form if user is authenticated
+  if (isAuthenticated.value && authStore.currentUser) {
+    registrationForm.value.email = authStore.currentUser.email || ''
+    registrationForm.value.name = authStore.currentUser.name || ''
+  }
+  
+  // Check if already registered
+  if (isAuthenticated.value && authStore.currentUser?.email) {
+    try {
+      const checkResponse = await eventRegistrationService.checkRegistration(
+        parseInt(event.id),
+        authStore.currentUser.email
+      )
+      if (checkResponse.success && checkResponse.data?.is_registered) {
+        isRegistered.value[event.id] = true
+      }
+    } catch (error) {
+      console.error('Error checking registration:', error)
+    }
+  }
+  
+  showRegistrationModal.value = true
+}
+
+const closeRegistrationModal = () => {
+  showRegistrationModal.value = false
+  currentRegistrationEvent.value = null
+  registrationForm.value = {
+    name: '',
+    email: '',
+    phone: '',
+    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+    notes: '',
+    emailNotifications: true,
+    smsNotifications: false
+  }
+  registrationErrors.value = {}
+}
+
+const submitRegistration = async () => {
+  if (!currentRegistrationEvent.value) return
+  
+  registrationErrors.value = {}
+  
+  // Validation
+  if (!registrationForm.value.email.trim()) {
+    registrationErrors.value.email = 'Email is required'
     return
   }
   
-  // If no video URL, show modal with options
-  showPastEventModal.value = true
-  currentPastEvent.value = event
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(registrationForm.value.email)) {
+    registrationErrors.value.email = 'Please enter a valid email address'
+    return
+  }
+  
+  isRegistering.value = true
+  
+  try {
+    const response = await eventRegistrationService.registerForEvent({
+      event_id: parseInt(currentRegistrationEvent.value.id),
+      email: registrationForm.value.email.trim(),
+      name: registrationForm.value.name.trim() || undefined,
+      phone: registrationForm.value.phone.trim() || undefined,
+      timezone: registrationForm.value.timezone,
+      notes: registrationForm.value.notes.trim() || undefined,
+      preferences: {
+        email_notifications: registrationForm.value.emailNotifications,
+        sms_notifications: registrationForm.value.smsNotifications
+      }
+    })
+    
+    if (response.success) {
+      isRegistered.value[currentRegistrationEvent.value.id] = true
+      showToast('Successfully registered for the event!', 'success')
+      closeRegistrationModal()
+      
+      // Reload events to update registration status
+      await loadEvents(selectedCategory.value === 'all' ? undefined : selectedCategory.value)
+    } else {
+      if (response.errors) {
+        registrationErrors.value = response.errors
+      }
+      showToast(response.message || 'Registration failed', 'error')
+    }
+  } catch (error: any) {
+    console.error('Registration error:', error)
+    showToast(error.message || 'Failed to register for event', 'error')
+  } finally {
+    isRegistering.value = false
+  }
 }
 
 const openVideo = (videoUrl: string) => {
-  // Check if user is authenticated
   if (!authStore.isAuthenticated) {
-    // User is not authenticated, show auth modal
-    pendingVideoUrl.value = videoUrl
-    showAuthModal.value = true
-    authModalMode.value = 'login'
+    router.push('/signin')
     return
   }
-  
-  // User is authenticated, show video in modal
   currentVideoUrl.value = videoUrl
   showVideoModal.value = true
-}
-
-const handleAuthSuccess = () => {
-  // After successful authentication, show video in modal
-  if (pendingVideoUrl.value) {
-    currentVideoUrl.value = pendingVideoUrl.value
-    showVideoModal.value = true
-    pendingVideoUrl.value = null
-  }
-  showAuthModal.value = false
 }
 
 const closeVideoModal = () => {
@@ -853,117 +1836,41 @@ const closeVideoModal = () => {
 const getYouTubeEmbedUrl = (url: string): string => {
   if (!url) return ''
   
-  // Extract video ID from YouTube URL
-  // Supports formats:
-  // - https://www.youtube.com/watch?v=VIDEO_ID
-  // - https://youtube.com/watch?v=VIDEO_ID
-  // - https://youtu.be/VIDEO_ID
-  // - youtube.com/watch?v=VIDEO_ID
-  
   let videoId = ''
-  
-  // Check for watch?v= format
   const watchMatch = url.match(/[?&]v=([^&]+)/)
   if (watchMatch) {
     videoId = watchMatch[1]
   } else {
-    // Check for youtu.be format
     const shortMatch = url.match(/youtu\.be\/([^?]+)/)
     if (shortMatch) {
       videoId = shortMatch[1]
-    } else {
-      // Try to extract from URL path
-      const pathMatch = url.match(/\/([a-zA-Z0-9_-]{11})/)
-      if (pathMatch) {
-        videoId = pathMatch[1]
-      }
     }
   }
   
-  if (!videoId) {
-    // If we can't extract video ID, return original URL (will open in new tab)
-    return url
-  }
-  
+  if (!videoId) return url
   return `https://www.youtube.com/embed/${videoId}?autoplay=1`
 }
 
-const switchAuthMode = () => {
-  // Save pending video URL to sessionStorage
-  if (pendingVideoUrl.value) {
-    sessionStorage.setItem('pending_video_url', pendingVideoUrl.value)
-  }
-  
-  // Save current page URL and scroll position
-  sessionStorage.setItem('return_url', window.location.pathname + window.location.search)
-  sessionStorage.setItem('return_scroll', window.scrollY.toString())
-  
-  // Redirect to appropriate page
-  if (authModalMode.value === 'login') {
-    // Currently showing login, redirect to signup
-    router.push('/signup')
-  } else {
-    // Currently showing register, redirect to signin
-    router.push('/signin')
-  }
-  
-  showAuthModal.value = false
-}
 
-const goToSignIn = () => {
-  // Save pending video URL to sessionStorage
-  if (pendingVideoUrl.value) {
-    sessionStorage.setItem('pending_video_url', pendingVideoUrl.value)
-  }
-  
-  // Save current page URL and scroll position
-  sessionStorage.setItem('return_url', window.location.pathname + window.location.search)
-  sessionStorage.setItem('return_scroll', window.scrollY.toString())
-  
-  showAuthModal.value = false
-  router.push('/signin')
-}
-
-const goToSignUp = () => {
-  // Save pending video URL to sessionStorage
-  if (pendingVideoUrl.value) {
-    sessionStorage.setItem('pending_video_url', pendingVideoUrl.value)
-  }
-  
-  // Save current page URL and scroll position
-  sessionStorage.setItem('return_url', window.location.pathname + window.location.search)
-  sessionStorage.setItem('return_scroll', window.scrollY.toString())
-  
-  showAuthModal.value = false
-  router.push('/signup')
-}
-
-const scrollToSubscribe = () => {
-  const subscribeSection = document.querySelector('section:has(.max-w-md.mx-auto)')
-  if (subscribeSection) {
-    subscribeSection.scrollIntoView({ behavior: 'smooth', block: 'center' })
-  } else {
-    // Fallback: scroll to bottom
-    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })
-  }
-}
-
-
-
-const addToCalendar = (event: any) => {
-  // Create calendar event URL
+const addToCalendar = (event: Event) => {
   const startDate = new Date(`${event.event_date}T${event.event_time || '00:00'}`)
-  const endDate = new Date(startDate.getTime() + 2 * 60 * 60 * 1000) // 2 hours duration
+  const endDate = new Date(startDate.getTime() + 2 * 60 * 60 * 1000)
   
-  // Include registration URL in details if available
   let details = event.description
   if (event.registration_url) {
     details += `\n\nRegistration: ${event.registration_url}`
   }
   
   const calendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(event.title)}&dates=${startDate.toISOString().replace(/[-:]/g, '').split('.')[0]}Z/${endDate.toISOString().replace(/[-:]/g, '').split('.')[0]}Z&details=${encodeURIComponent(details)}&location=${encodeURIComponent(event.location)}`
-
+  
   window.open(calendarUrl, '_blank')
+}
+
+const scrollToSubscribe = () => {
+  const subscribeSection = document.querySelector('section:has(.max-w-md.mx-auto)')
+  if (subscribeSection) {
+    subscribeSection.scrollIntoView({ behavior: 'smooth', block: 'center' })
+  }
 }
 
 const subscribeToEvents = async () => {
@@ -972,9 +1879,7 @@ const subscribeToEvents = async () => {
   isSubscribing.value = true
   
   try {
-    // Simulate API call
     await new Promise(resolve => setTimeout(resolve, 2000))
-    
     alert('Successfully subscribed to event notifications!')
     email.value = ''
   } catch (error) {
@@ -988,77 +1893,9 @@ const subscribeToEvents = async () => {
 const clearFilters = () => {
   selectedCategory.value = 'all'
   selectedTimeframe.value = 'upcoming'
+  searchQuery.value = ''
 }
 
-// Load events from API
-const loadEvents = async (category?: string) => {
-  isLoading.value = true
-  try {
-    const filters = {
-      category: category === 'all' ? undefined : category,
-      upcoming: selectedTimeframe.value === 'upcoming' ? true : undefined
-    }
-    
-    console.log('🔍 Loading events with filters:', filters)
-    console.log('🔍 Selected timeframe:', selectedTimeframe.value)
-    
-    // Try to get events from real API first
-    const response = await eventsApiService.getAllEvents(15, filters)
-    
-    console.log('🔍 API Response:', response)
-    
-    if (response.success && response.data.length > 0) {
-      events.value = response.data
-      console.log('✅ Loaded real events from API:', response.data.length)
-      console.log('✅ Events:', response.data.map(e => e.title))
-      console.log('✅ API Sources:', response.meta?.sources)
-      console.log('✅ Events array after assignment:', events.value)
-      console.log('✅ Events length after assignment:', events.value.length)
-    } else {
-      console.log('⚠️ No events from API, using fallback')
-      // Fallback to generated events
-      const fallbackResponse = await eventsApiService.generateEvents(category, 15)
-      if (fallbackResponse.success) {
-        events.value = fallbackResponse.data
-        console.log('📅 Loaded fallback events:', fallbackResponse.data.length)
-      } else {
-        console.error('Error loading events:', fallbackResponse.error)
-      }
-    }
-  } catch (error) {
-    console.error('Error loading events:', error)
-    // Final fallback to static data
-    try {
-      const fallbackResponse = await eventsApiService.generateEvents(category, 15)
-      events.value = fallbackResponse.data
-      console.log('📅 Using static fallback events:', fallbackResponse.data.length)
-    } catch (fallbackError) {
-      console.error('Fallback error:', fallbackError)
-    }
-  } finally {
-    isLoading.value = false
-  }
-}
-
-// Load upcoming events
-const loadUpcomingEvents = async () => {
-  isLoading.value = true
-  try {
-    const response = await eventsApiService.getUpcomingEvents(10)
-    if (response.success) {
-      events.value = response.data
-      console.log('📅 Loaded upcoming events from API:', response.data.length)
-    } else {
-      console.error('Error loading upcoming events:', response.error)
-    }
-  } catch (error) {
-    console.error('Error loading upcoming events:', error)
-  } finally {
-    isLoading.value = false
-  }
-}
-
-// Search events
 const searchEvents = async (query: string) => {
   if (!query.trim()) {
     await loadEvents()
@@ -1070,9 +1907,6 @@ const searchEvents = async (query: string) => {
     const response = await eventsApiService.searchEvents(query, 10)
     if (response.success) {
       events.value = response.data
-      console.log('🔍 Search results from API:', response.data.length)
-    } else {
-      console.error('Error searching events:', response.error)
     }
   } catch (error) {
     console.error('Error searching events:', error)
@@ -1081,77 +1915,554 @@ const searchEvents = async (query: string) => {
   }
 }
 
-// Refresh events from external APIs
+// Initialize event interactions
+const initializeEventInteractions = (event: Event) => {
+  if (!eventLikes.value[event.id]) {
+    eventLikes.value[event.id] = { isLiked: false, count: 0 }
+  }
+  if (!eventComments.value[event.id]) {
+    eventComments.value[event.id] = {
+      show: false,
+      count: 0,
+      comments: [],
+      newComment: ''
+    }
+  }
+}
+
+const toggleEventLike = async (event: Event) => {
+  if (!isAuthenticated.value) {
+    router.push('/signin')
+    return
+  }
+
+  initializeEventInteractions(event)
+  
+  try {
+    // Toggle like state
+    eventLikes.value[event.id].isLiked = !eventLikes.value[event.id].isLiked
+    eventLikes.value[event.id].count += eventLikes.value[event.id].isLiked ? 1 : -1
+    
+    // In a real app, you would call an API here
+    // await eventApiService.toggleLike(event.id)
+    
+    // Show toast notification
+    showToast(eventLikes.value[event.id].isLiked ? 'Event liked!' : 'Event unliked!', 'success')
+  } catch (error) {
+    console.error('Error toggling like:', error)
+    // Revert on error
+    eventLikes.value[event.id].isLiked = !eventLikes.value[event.id].isLiked
+    eventLikes.value[event.id].count += eventLikes.value[event.id].isLiked ? 1 : -1
+    showToast('Failed to update like', 'warning')
+  }
+}
+
+const toggleEventComments = async (event: Event) => {
+  await openCommentsModal(event)
+}
+
+const openCommentsModal = async (event: Event) => {
+  currentCommentsEvent.value = event
+  showCommentsModal.value = true
+  
+  // Load comments
+  await loadEventComments(event)
+}
+
+const closeCommentsModal = () => {
+  showCommentsModal.value = false
+  currentCommentsEvent.value = null
+  newCommentText.value = ''
+}
+
+const loadEventComments = async (event: Event) => {
+  if (!event) return
+  
+  commentsLoading.value = true
+  try {
+    initializeEventInteractions(event)
+    
+    // Use videoApiService for comments (reusing existing infrastructure)
+    const contentId = String(event.id)
+    const commentsResponse = await videoApiService.getComments(contentId)
+    
+    if (commentsResponse.success) {
+      eventComments.value[event.id] = {
+        show: true,
+        count: commentsResponse.data.length,
+        comments: commentsResponse.data.map(comment => ({
+          id: comment.id.toString(),
+          user: comment.author_name || 'Anonymous',
+          text: comment.content,
+          date: comment.created_at,
+          likes: comment.likes_count || 0,
+          isLiked: false,
+          isEdited: comment.is_edited || false,
+          isPinned: comment.is_pinned || false
+        })),
+        newComment: ''
+      }
+    }
+  } catch (error) {
+    console.error('Error loading comments:', error)
+  } finally {
+    commentsLoading.value = false
+  }
+}
+
+const addEventComment = async () => {
+  if (!currentCommentsEvent.value) return
+  
+  const event = currentCommentsEvent.value
+  
+  if (!isAuthenticated.value) {
+    router.push('/signin')
+    return
+  }
+
+  const commentText = newCommentText.value.trim()
+  
+  if (!commentText) return
+
+  isPostingComment.value = true
+  
+  try {
+    initializeEventInteractions(event)
+    
+    // Use videoApiService for adding comments
+    const contentId = String(event.id)
+    const subscriberId = authStore.currentUser?.subscriber_id
+    const sessionId = videoApiService.getSessionId()
+    
+    const response = await videoApiService.addComment(
+      contentId,
+      commentText,
+      subscriberId,
+      sessionId
+    )
+    
+    if (response.success) {
+      const newComment = {
+        id: response.data.id.toString(),
+        user: authStore.currentUser?.name || authStore.currentUser?.email || 'Anonymous',
+        text: response.data.content,
+        date: response.data.created_at,
+        likes: 0,
+        isLiked: false,
+        isEdited: false,
+        isPinned: false
+      }
+      
+      if (!eventComments.value[event.id]) {
+        eventComments.value[event.id] = {
+          show: true,
+          count: 0,
+          comments: [],
+          newComment: ''
+        }
+      }
+      
+      eventComments.value[event.id].comments.unshift(newComment)
+      eventComments.value[event.id].count++
+      newCommentText.value = ''
+      
+      showToast('Comment added successfully!', 'success')
+    } else {
+      showToast('Failed to add comment', 'error')
+    }
+  } catch (error) {
+    console.error('Error adding comment:', error)
+    showToast('Failed to add comment', 'error')
+  } finally {
+    isPostingComment.value = false
+  }
+}
+
+const shareEvent = async (event: Event) => {
+  currentShareEvent.value = event
+  
+  // Try native share first (mobile devices)
+  if (navigator.share && navigator.canShare && navigator.canShare({
+    title: event.title,
+    text: event.description,
+    url: getEventShareUrl(event)
+  })) {
+    try {
+      await navigator.share({
+        title: event.title,
+        text: event.description,
+        url: getEventShareUrl(event)
+      })
+      showToast('Event shared successfully!', 'success')
+      
+      // Track share event (optional - for analytics)
+      // await trackShareEvent(event.id, 'native')
+      return
+    } catch (error) {
+      // User cancelled or error occurred
+      if ((error as Error).name !== 'AbortError') {
+        showShareModal.value = true
+      }
+      return
+    }
+  }
+  
+  // Fallback to custom share modal
+  showShareModal.value = true
+}
+
+const closeShareModal = () => {
+  showShareModal.value = false
+  currentShareEvent.value = null
+  linkCopied.value = false
+  qrCodeUrl.value = null
+}
+
+const getEventShareUrl = (event: Event): string => {
+  return `${window.location.origin}/events#${event.id}`
+}
+
+const shareToPlatform = (platform: string) => {
+  if (!currentShareEvent.value) return
+  
+  const url = encodeURIComponent(getEventShareUrl(currentShareEvent.value))
+  const title = encodeURIComponent(currentShareEvent.value.title)
+  const text = encodeURIComponent(currentShareEvent.value.description || '')
+  const description = encodeURIComponent(currentShareEvent.value.description?.substring(0, 200) || '')
+  
+  const shareUrls: Record<string, string> = {
+    facebook: `https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${description}`,
+    twitter: `https://twitter.com/intent/tweet?url=${url}&text=${title}&hashtags=StargateProject,AI`,
+    linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${url}`,
+    whatsapp: `https://wa.me/?text=${title}%20${url}`,
+    telegram: `https://t.me/share/url?url=${url}&text=${title}`,
+    email: `mailto:?subject=${title}&body=${description}%0A%0A${url}`
+  }
+  
+  if (shareUrls[platform]) {
+    const shareWindow = window.open(shareUrls[platform], '_blank', 'width=600,height=400')
+    
+    if (shareWindow) {
+      showToast(`Opening ${platform}...`, 'success')
+      
+      // Track share event (optional - for analytics)
+      // await trackShareEvent(currentShareEvent.value.id, platform)
+    } else {
+      showToast('Please allow popups to share', 'warning')
+    }
+  }
+  
+  // Don't close modal immediately - let user see the action
+  setTimeout(() => {
+    showShareModal.value = false
+  }, 1000)
+}
+
+const copyEventLink = async () => {
+  if (!currentShareEvent.value) return
+  
+  const url = getEventShareUrl(currentShareEvent.value)
+  
+  try {
+    // Modern clipboard API
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      await navigator.clipboard.writeText(url)
+    } else {
+      // Fallback for older browsers
+      const input = document.getElementById('share-url-input') as HTMLInputElement
+      if (input) {
+        input.select()
+        input.setSelectionRange(0, 99999)
+        document.execCommand('copy')
+      }
+    }
+    
+    linkCopied.value = true
+    showToast('Link copied to clipboard!', 'success')
+    
+    // Reset copied state after 2 seconds
+    setTimeout(() => {
+      linkCopied.value = false
+    }, 2000)
+    
+    // Track copy event (optional - for analytics)
+    // await trackShareEvent(currentShareEvent.value.id, 'copy')
+  } catch (error) {
+    console.error('Failed to copy link:', error)
+    showToast('Failed to copy link', 'error')
+  }
+}
+
+const generateQRCode = () => {
+  if (!currentShareEvent.value) return
+  
+  const url = getEventShareUrl(currentShareEvent.value)
+  // Using a QR code API service with modern styling
+  const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&margin=20&data=${encodeURIComponent(url)}&color=000000&bgcolor=ffffff`
+  
+  qrCodeUrl.value = qrApiUrl
+  showToast('QR Code generated!', 'success')
+  
+  // Track QR code generation (optional - for analytics)
+  // await trackShareEvent(currentShareEvent.value.id, 'qr_code')
+}
+
+const formatCommentDate = (dateString: string): string => {
+  const date = new Date(dateString)
+  const now = new Date()
+  const diffInHours = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60))
+  
+  if (diffInHours < 1) return 'Just now'
+  if (diffInHours < 24) return `${diffInHours}h ago`
+  if (diffInHours < 168) return `${Math.floor(diffInHours / 24)}d ago`
+  return date.toLocaleDateString()
+}
+
+const getInitials = (name: string): string => {
+  if (!name) return 'U'
+  const parts = name.split(' ')
+  if (parts.length >= 2) {
+    return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase()
+  }
+  return name.substring(0, 2).toUpperCase()
+}
+
+const showToast = (message: string, type: 'success' | 'error' | 'warning' = 'success') => {
+  // Simple toast implementation
+  const toast = document.createElement('div')
+  toast.className = `fixed top-4 right-4 z-50 px-6 py-3 rounded-lg shadow-lg transition-all duration-300 ${
+    type === 'success' ? 'bg-green-600 text-white' :
+    type === 'error' ? 'bg-red-600 text-white' :
+    'bg-yellow-600 text-white'
+  }`
+  toast.textContent = message
+  document.body.appendChild(toast)
+  
+  setTimeout(() => {
+    toast.style.opacity = '0'
+    setTimeout(() => document.body.removeChild(toast), 300)
+  }, 3000)
+}
+
+const loadEvents = async (category?: string) => {
+  isLoading.value = true
+  try {
+    const filters: Record<string, any> = {}
+    
+    if (category && category !== 'all') {
+      filters.category = category
+    }
+    
+    if (selectedTimeframe.value === 'upcoming') {
+      filters.upcoming = true
+    }
+    
+    const response = await eventsApiService.getAllEvents(15, filters)
+    
+    if (response.success && response.data.length > 0) {
+      events.value = response.data
+    } else {
+      const fallbackResponse = await eventsApiService.generateEvents(category, 15)
+      if (fallbackResponse.success) {
+        events.value = fallbackResponse.data
+      }
+    }
+  } catch (error) {
+    console.error('Error loading events:', error)
+    try {
+      const fallbackResponse = await eventsApiService.generateEvents(category, 15)
+      events.value = fallbackResponse.data
+    } catch (fallbackError) {
+      console.error('Fallback error:', fallbackError)
+    }
+  } finally {
+    isLoading.value = false
+  }
+}
+
+const loadUpcomingEvents = async () => {
+  isLoading.value = true
+  try {
+    const response = await eventsApiService.getUpcomingEvents(10)
+    if (response.success) {
+      events.value = response.data
+    }
+  } catch (error) {
+    console.error('Error loading upcoming events:', error)
+  } finally {
+    isLoading.value = false
+  }
+}
+
 const refreshEvents = async () => {
   isLoading.value = true
   try {
-    // Sync events from external APIs
     const syncResponse = await eventsApiService.syncEvents(true)
-    console.log('🔄 Events sync completed:', syncResponse.data?.total_synced || 0)
-    
-    // Reload events after sync
     await loadEvents(selectedCategory.value === 'all' ? undefined : selectedCategory.value)
-    
-    console.log('🔄 Refreshed events from external APIs')
   } catch (error) {
     console.error('Error refreshing events:', error)
-    // Fallback to regular load
     await loadEvents(selectedCategory.value === 'all' ? undefined : selectedCategory.value)
   } finally {
     isLoading.value = false
   }
 }
 
+// Initialize interactions for all events after loading
+watch(() => events.value, (newEvents) => {
+  newEvents.forEach(event => {
+    initializeEventInteractions(event)
+  })
+}, { immediate: true })
 
+// Create Event Functions
+const openCreateEventModal = () => {
+  if (!isAuthenticated.value) {
+    router.push('/signin')
+    return
+  }
+  
+  // Pre-fill organizer name if available
+  if (authStore.currentUser) {
+    createEventForm.value.organizer = authStore.currentUser.name || authStore.currentUser.email || ''
+  }
+  
+  // Set default date to tomorrow
+  const tomorrow = new Date()
+  tomorrow.setDate(tomorrow.getDate() + 1)
+  createEventForm.value.event_date = tomorrow.toISOString().split('T')[0]
+  
+  showCreateEventModal.value = true
+}
 
+const closeCreateEventModal = () => {
+  showCreateEventModal.value = false
+  createEventForm.value = {
+    title: '',
+    description: '',
+    category: 'stargate',
+    type: 'conference',
+    event_date: '',
+    event_time: '',
+    location: '',
+    organizer: '',
+    icon: '📅',
+    registration_url: '',
+    video_url: '',
+    is_featured: false
+  }
+  createEventErrors.value = {}
+}
 
-// Lifecycle
-onMounted(async () => {
-  await loadEvents()
+const submitCreateEvent = async () => {
+  createEventErrors.value = {}
+  
+  // Validation
+  if (!createEventForm.value.title.trim()) {
+    createEventErrors.value.title = 'Title is required'
+    return
+  }
+  
+  if (!createEventForm.value.description.trim()) {
+    createEventErrors.value.description = 'Description is required'
+    return
+  }
+  
+  if (createEventForm.value.description.length > 5000) {
+    createEventErrors.value.description = 'Description must be less than 5000 characters'
+    return
+  }
+  
+  if (!createEventForm.value.event_date) {
+    createEventErrors.value.event_date = 'Event date is required'
+    return
+  }
+  
+  if (!createEventForm.value.location.trim()) {
+    createEventErrors.value.location = 'Location is required'
+    return
+  }
+  
+  if (!createEventForm.value.organizer.trim()) {
+    createEventErrors.value.organizer = 'Organizer name is required'
+    return
+  }
+  
+  isCreatingEvent.value = true
+  
+  try {
+    const response = await eventsApiService.createEvent({
+      title: createEventForm.value.title.trim(),
+      description: createEventForm.value.description.trim(),
+      category: createEventForm.value.category,
+      type: createEventForm.value.type,
+      event_date: createEventForm.value.event_date,
+      event_time: createEventForm.value.event_time || undefined,
+      location: createEventForm.value.location.trim(),
+      organizer: createEventForm.value.organizer.trim(),
+      icon: createEventForm.value.icon || '📅',
+      registration_url: createEventForm.value.registration_url.trim() || undefined,
+      video_url: createEventForm.value.video_url.trim() || undefined,
+      is_featured: createEventForm.value.is_featured
+    })
+    
+    if (response.success) {
+      showToast('Event created successfully!', 'success')
+      closeCreateEventModal()
+      
+      // Reload events to show the new one
+      await loadEvents(selectedCategory.value === 'all' ? undefined : selectedCategory.value)
+    } else {
+      if (response.errors) {
+        // Convert Laravel validation errors format
+        Object.keys(response.errors).forEach(key => {
+          const errors = response.errors![key]
+          createEventErrors.value[key] = Array.isArray(errors) ? errors[0] : errors
+        })
+      }
+      showToast(response.message || 'Failed to create event', 'error')
+    }
+  } catch (error: any) {
+    console.error('Error creating event:', error)
+    showToast(error.message || 'Failed to create event', 'error')
+  } finally {
+    isCreatingEvent.value = false
+  }
+}
+
+// Initialize auth store
+onMounted(() => {
+  authStore.initialize()
+  loadEvents()
 })
 </script>
 
 <style scoped>
-.line-clamp-3 {
+.line-clamp-2 {
   display: -webkit-box;
-  -webkit-line-clamp: 3;
+  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
 
-.event-container {
-  background-color: rgba(255, 255, 255, 1);
-  border-radius: 0.5rem;
-  overflow: hidden;
-  border: 1px solid rgba(229, 231, 235, 1);
+/* Modal Transitions */
+.modal-enter-active,
+.modal-leave-active {
+  transition: opacity 0.3s ease;
 }
 
-.dark .event-container {
-  background-color: rgba(31, 41, 55, 1);
-  border: 1px solid rgba(55, 65, 81, 1);
+.modal-enter-from,
+.modal-leave-to {
+  opacity: 0;
 }
 
-.aspect-w-16 {
-  position: relative;
-  width: 100%;
-  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+.modal-enter-active > div,
+.modal-leave-active > div {
+  transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
-.aspect-h-9 {
-  position: absolute;
-  height: 100%;
-  width: 100%;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-}
-
-.aspect-w-16 iframe {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
+.modal-enter-from > div,
+.modal-leave-to > div {
+  transform: scale(0.9) translateY(-20px);
+  opacity: 0;
 }
 </style>

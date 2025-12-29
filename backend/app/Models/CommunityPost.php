@@ -18,6 +18,9 @@ class CommunityPost extends Model
         'title',
         'slug',
         'content',
+        'images', // Array of image URLs
+        'videos', // Array of video URLs
+        'media_type', // 'image', 'video', 'mixed', null
         'category',
         'category_id', // For backward compatibility
         'type', // Required by existing table structure
@@ -37,6 +40,8 @@ class CommunityPost extends Model
 
     protected $casts = [
         'tags' => 'array',
+        'images' => 'array',
+        'videos' => 'array',
         'is_pinned' => 'boolean',
         'is_locked' => 'boolean',
         'views_count' => 'integer',

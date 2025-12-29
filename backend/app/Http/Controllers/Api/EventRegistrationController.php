@@ -30,7 +30,9 @@ class EventRegistrationController extends Controller
             'email' => 'required|email|max:255',
             'name' => 'nullable|string|max:255',
             'phone' => 'nullable|string|max:20',
-            'preferences' => 'nullable|array'
+            'preferences' => 'nullable|array',
+            'timezone' => 'nullable|string|max:50',
+            'notes' => 'nullable|string|max:1000'
         ]);
 
         if ($validator->fails()) {
@@ -42,18 +44,64 @@ class EventRegistrationController extends Controller
         }
 
         try {
+            // Check if user is authenticated
+            $user = $request->user();
+            $subscriberId = null;
+            
+            if ($user) {
+                $subscriber = \App\Models\Subscriber::where('email', $user->email)->first();
+                $subscriberId = $subscriber?->id;
+            }
+
+            // Check if already registered
+            $existingRegistration = EventRegistration::where('event_id', $request->event_id)
+                ->where('email', $request->email)
+                ->first();
+                
+            if ($existingRegistration) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'You are already registered for this event.',
+                    'data' => [
+                        'registration_id' => $existingRegistration->id,
+                        'status' => $existingRegistration->status
+                    ]
+                ], 409);
+            }
+
+            // Prepare registration data
+            $registrationData = $request->only(['email', 'name', 'phone', 'preferences']);
+            $registrationData['subscriber_id'] = $subscriberId;
+            
+            if ($request->timezone) {
+                $registrationData['preferences'] = array_merge(
+                    $registrationData['preferences'] ?? [],
+                    ['timezone' => $request->timezone]
+                );
+            }
+            
+            if ($request->notes) {
+                $registrationData['preferences'] = array_merge(
+                    $registrationData['preferences'] ?? [],
+                    ['notes' => $request->notes]
+                );
+            }
+
             $registration = $this->registrationService->registerForEvent(
                 $request->event_id,
-                $request->only(['email', 'name', 'phone', 'preferences'])
+                $registrationData
             );
+
+            $registration->load('event');
 
             return response()->json([
                 'success' => true,
-                'message' => 'Successfully registered for the event! You will receive a reminder email before the event.',
+                'message' => 'Successfully registered for the event! You will receive a confirmation email shortly.',
                 'data' => [
                     'registration_id' => $registration->id,
                     'event' => $registration->event,
-                    'registered_at' => $registration->registered_at
+                    'registered_at' => $registration->registered_at,
+                    'status' => $registration->status
                 ]
             ], 201);
 

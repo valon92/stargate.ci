@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\Models\Subscriber;
 use Carbon\Carbon;
 
 class EventRegistration extends Model
@@ -12,8 +13,16 @@ class EventRegistration extends Model
     use HasFactory;
 
     protected $fillable = [
-        'event_id', 'email', 'name', 'phone', 'status', 
-        'preferences', 'registered_at', 'reminder_sent_at', 'confirmed_at'
+        'event_id', 
+        'subscriber_id', // Link to subscriber if authenticated
+        'email', 
+        'name', 
+        'phone', 
+        'status', 
+        'preferences', 
+        'registered_at', 
+        'reminder_sent_at', 
+        'confirmed_at'
     ];
 
     protected $casts = [
@@ -29,6 +38,14 @@ class EventRegistration extends Model
     public function event(): BelongsTo
     {
         return $this->belongsTo(Event::class);
+    }
+
+    /**
+     * Get the subscriber (if authenticated user)
+     */
+    public function subscriber(): BelongsTo
+    {
+        return $this->belongsTo(Subscriber::class);
     }
 
     /**

@@ -30,6 +30,7 @@ class EventRegistrationService
         // Create new registration
         $registration = EventRegistration::create([
             'event_id' => $eventId,
+            'subscriber_id' => $userData['subscriber_id'] ?? null,
             'email' => $userData['email'],
             'name' => $userData['name'] ?? null,
             'phone' => $userData['phone'] ?? null,

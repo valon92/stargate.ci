@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\Models\Subscriber;
 use Carbon\Carbon;
 
 class Event extends Model
@@ -21,6 +23,7 @@ class Event extends Model
         'event_time',
         'location',
         'organizer',
+        'organizer_id',
         'icon',
         'registration_url',
         'video_url',
@@ -89,6 +92,11 @@ class Event extends Model
     public function registrations(): HasMany
     {
         return $this->hasMany(EventRegistration::class);
+    }
+
+    public function organizerUser(): BelongsTo
+    {
+        return $this->belongsTo(Subscriber::class, 'organizer_id');
     }
 
     // Methods

@@ -253,6 +253,7 @@ const secondaryNavigation = computed(() => [
   { name: 'Events', href: '/events' },
   { name: 'News', href: '/news' },
   { name: 'Community', href: '/community' },
+  { name: 'Jobs', href: '/jobs' },
   { name: 'FAQ', href: '/faq' },
   { name: 'Contact', href: '/contact' },
 ])

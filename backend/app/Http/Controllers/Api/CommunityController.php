@@ -83,7 +83,12 @@ class CommunityController extends Controller
             'content' => 'required|string|min:10',
             'category' => 'required|string|in:general,experience,question,idea,discussion',
             'tags' => 'sometimes|array',
-            'tags.*' => 'string|max:50'
+            'tags.*' => 'string|max:50',
+            'images' => 'sometimes|array',
+            'images.*' => 'url|max:500',
+            'videos' => 'sometimes|array',
+            'videos.*' => 'url|max:500',
+            'media_type' => 'sometimes|string|in:image,video,mixed'
         ]);
 
         if ($validator->fails()) {
@@ -131,12 +136,27 @@ class CommunityController extends Controller
             // Get user_id from subscriber
             $userId = $user->id;
             
+            // Determine media type
+            $hasImages = !empty($request->images) && is_array($request->images) && count($request->images) > 0;
+            $hasVideos = !empty($request->videos) && is_array($request->videos) && count($request->videos) > 0;
+            $mediaType = null;
+            if ($hasImages && $hasVideos) {
+                $mediaType = 'mixed';
+            } elseif ($hasImages) {
+                $mediaType = 'image';
+            } elseif ($hasVideos) {
+                $mediaType = 'video';
+            }
+
             $post = CommunityPost::create([
                 'subscriber_id' => $subscriber->id,
                 'user_id' => $userId, // Required by existing table structure
                 'title' => $request->title,
                 'slug' => $slug,
                 'content' => $request->content,
+                'images' => $request->images ?? null,
+                'videos' => $request->videos ?? null,
+                'media_type' => $mediaType ?? $request->media_type,
                 'category' => $request->category,
                 'category_id' => $categoryId,
                 'type' => 'post', // Required by existing table structure

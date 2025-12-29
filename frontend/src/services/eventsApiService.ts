@@ -55,6 +55,28 @@ export interface EventCategoriesResponse {
   }
 }
 
+export interface CreateEventRequest {
+  title: string
+  description: string
+  category: 'stargate' | 'cristal' | 'conferences' | 'meetings' | 'announcements'
+  type: 'conference' | 'meeting' | 'announcement' | 'workshop' | 'video'
+  event_date: string
+  event_time?: string
+  location: string
+  organizer: string
+  icon?: string
+  registration_url?: string
+  video_url?: string
+  is_featured?: boolean
+}
+
+export interface CreateEventResponse {
+  success: boolean
+  message: string
+  data?: Event
+  errors?: Record<string, string[]>
+}
+
 export interface SyncResponse {
   success: boolean
   message: string
@@ -138,16 +160,16 @@ class EventsApiService {
     // }
 
     try {
-      const params = new URLSearchParams({
-        limit: limit.toString(),
-        ...filters
-      })
+      const params = new URLSearchParams()
+      params.append('limit', limit.toString())
       
-      // Remove undefined values from params
-      for (const [key, value] of params.entries()) {
-        if (value === 'undefined' || value === 'null') {
-          params.delete(key)
-        }
+      // Only add defined filter values
+      if (filters) {
+        Object.entries(filters).forEach(([key, value]) => {
+          if (value !== undefined && value !== null && value !== 'undefined' && value !== 'null') {
+            params.append(key, String(value))
+          }
+        })
       }
 
       console.log('🔍 API URL:', `${this.baseUrl}/events?${params}`)
@@ -640,6 +662,81 @@ class EventsApiService {
   async forceRefreshEvents(limit: number = 20, filters: any = {}): Promise<EventsResponse> {
     this.clearCache()
     return this.getAllEvents(limit, filters)
+  }
+
+  /**
+   * Create a new event (for organizers)
+   */
+  async createEvent(eventData: CreateEventRequest): Promise<CreateEventResponse> {
+    try {
+      const response = await apiClient.post('/api/v1/events', eventData)
+      return response as CreateEventResponse
+    } catch (error: any) {
+      console.error('Create event failed:', error)
+      const errorData = error.responseData
+      return {
+        success: false,
+        message: errorData?.message || error.message || 'Failed to create event',
+        errors: errorData?.errors
+      }
+    }
+  }
+
+  /**
+   * Update an event (for organizers)
+   */
+  async updateEvent(eventId: string, eventData: Partial<CreateEventRequest>): Promise<CreateEventResponse> {
+    try {
+      const response = await apiClient.put(`/api/v1/events/${eventId}`, eventData)
+      return response as CreateEventResponse
+    } catch (error: any) {
+      console.error('Update event failed:', error)
+      const errorData = error.responseData
+      return {
+        success: false,
+        message: errorData?.message || error.message || 'Failed to update event',
+        errors: errorData?.errors
+      }
+    }
+  }
+
+  /**
+   * Delete an event (for organizers)
+   */
+  async deleteEvent(eventId: string): Promise<{ success: boolean; message: string }> {
+    try {
+      const response = await apiClient.delete(`/api/v1/events/${eventId}`)
+      return response.data
+    } catch (error: any) {
+      console.error('Delete event failed:', error)
+      return {
+        success: false,
+        message: error.responseData?.message || error.message || 'Failed to delete event'
+      }
+    }
+  }
+
+  /**
+   * Get organizer's events
+   */
+  async getMyEvents(): Promise<EventsResponse> {
+    try {
+      const response = await apiClient.get('/api/v1/events/my-events')
+      return {
+        success: true,
+        data: response.data || [],
+        meta: {
+          total: response.data?.length || 0
+        }
+      }
+    } catch (error: any) {
+      console.error('Get my events failed:', error)
+      return {
+        success: false,
+        data: [],
+        meta: { total: 0 }
+      }
+    }
   }
 }
 

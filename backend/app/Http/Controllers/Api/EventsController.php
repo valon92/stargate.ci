@@ -397,6 +397,253 @@ class EventsController extends Controller
     }
 
     /**
+     * Create a new event (for organizers)
+     */
+    public function store(Request $request): JsonResponse
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                'title' => 'required|string|max:255',
+                'description' => 'required|string|max:5000',
+                'category' => 'required|string|in:stargate,cristal,conferences,meetings,announcements',
+                'type' => 'required|string|in:conference,meeting,announcement,workshop,video',
+                'event_date' => 'required|date|after_or_equal:today',
+                'event_time' => 'nullable|date_format:H:i',
+                'location' => 'required|string|max:255',
+                'organizer' => 'required|string|max:255',
+                'icon' => 'nullable|string|max:10',
+                'registration_url' => 'nullable|url|max:500',
+                'video_url' => 'nullable|url|max:500',
+                'is_featured' => 'sometimes|boolean'
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Validation failed',
+                    'errors' => $validator->errors()
+                ], 422);
+            }
+
+            // Get authenticated user (subscriber)
+            $user = $request->user();
+            $subscriberId = null;
+            
+            if ($user) {
+                $subscriber = \App\Models\Subscriber::where('email', $user->email)->first();
+                $subscriberId = $subscriber?->id;
+            }
+
+            $event = Event::create([
+                'title' => $request->title,
+                'description' => $request->description,
+                'category' => $request->category,
+                'type' => $request->type,
+                'event_date' => $request->event_date,
+                'event_time' => $request->event_time,
+                'location' => $request->location,
+                'organizer' => $request->organizer,
+                'organizer_id' => $subscriberId,
+                'icon' => $request->icon ?? '📅',
+                'registration_url' => $request->registration_url,
+                'video_url' => $request->video_url,
+                'source' => 'internal',
+                'is_featured' => $request->is_featured ?? false,
+                'is_active' => true
+            ]);
+
+            Log::info('Event created by organizer', [
+                'event_id' => $event->id,
+                'organizer_id' => $subscriberId,
+                'title' => $event->title
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Event created successfully',
+                'data' => $event->load('organizerUser')
+            ], 201);
+
+        } catch (\Exception $e) {
+            Log::error('Event Creation Error: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to create event',
+                'error' => config('app.debug') ? $e->getMessage() : 'Internal server error'
+            ], 500);
+        }
+    }
+
+    /**
+     * Update an event (for organizers)
+     */
+    public function update(Request $request, string $id): JsonResponse
+    {
+        try {
+            $event = Event::findOrFail($id);
+            
+            // Check if user is the organizer
+            $user = $request->user();
+            if ($user) {
+                $subscriber = \App\Models\Subscriber::where('email', $user->email)->first();
+                if ($event->organizer_id && $event->organizer_id !== $subscriber?->id) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'You are not authorized to update this event'
+                    ], 403);
+                }
+            }
+
+            $validator = Validator::make($request->all(), [
+                'title' => 'sometimes|string|max:255',
+                'description' => 'sometimes|string|max:5000',
+                'category' => 'sometimes|string|in:stargate,cristal,conferences,meetings,announcements',
+                'type' => 'sometimes|string|in:conference,meeting,announcement,workshop,video',
+                'event_date' => 'sometimes|date',
+                'event_time' => 'nullable|date_format:H:i',
+                'location' => 'sometimes|string|max:255',
+                'organizer' => 'sometimes|string|max:255',
+                'icon' => 'nullable|string|max:10',
+                'registration_url' => 'nullable|url|max:500',
+                'video_url' => 'nullable|url|max:500',
+                'is_featured' => 'sometimes|boolean',
+                'is_active' => 'sometimes|boolean'
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Validation failed',
+                    'errors' => $validator->errors()
+                ], 422);
+            }
+
+            $event->update($request->only([
+                'title', 'description', 'category', 'type', 'event_date', 'event_time',
+                'location', 'organizer', 'icon', 'registration_url', 'video_url',
+                'is_featured', 'is_active'
+            ]));
+
+            Log::info('Event updated by organizer', [
+                'event_id' => $event->id,
+                'organizer_id' => $event->organizer_id
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Event updated successfully',
+                'data' => $event->load('organizerUser')
+            ]);
+
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Event not found'
+            ], 404);
+        } catch (\Exception $e) {
+            Log::error('Event Update Error: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to update event',
+                'error' => config('app.debug') ? $e->getMessage() : 'Internal server error'
+            ], 500);
+        }
+    }
+
+    /**
+     * Delete an event (for organizers)
+     */
+    public function destroy(Request $request, string $id): JsonResponse
+    {
+        try {
+            $event = Event::findOrFail($id);
+            
+            // Check if user is the organizer
+            $user = $request->user();
+            if ($user) {
+                $subscriber = \App\Models\Subscriber::where('email', $user->email)->first();
+                if ($event->organizer_id && $event->organizer_id !== $subscriber?->id) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'You are not authorized to delete this event'
+                    ], 403);
+                }
+            }
+
+            $event->delete();
+
+            Log::info('Event deleted by organizer', [
+                'event_id' => $id,
+                'organizer_id' => $event->organizer_id
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Event deleted successfully'
+            ]);
+
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Event not found'
+            ], 404);
+        } catch (\Exception $e) {
+            Log::error('Event Delete Error: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to delete event',
+                'error' => config('app.debug') ? $e->getMessage() : 'Internal server error'
+            ], 500);
+        }
+    }
+
+    /**
+     * Get organizer's events
+     */
+    public function myEvents(Request $request): JsonResponse
+    {
+        try {
+            $user = $request->user();
+            if (!$user) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Authentication required'
+                ], 401);
+            }
+
+            $subscriber = \App\Models\Subscriber::where('email', $user->email)->first();
+            if (!$subscriber) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Subscriber not found'
+                ], 404);
+            }
+
+            $events = Event::where('organizer_id', $subscriber->id)
+                ->orderBy('event_date', 'desc')
+                ->get();
+
+            return response()->json([
+                'success' => true,
+                'data' => $events,
+                'meta' => [
+                    'total' => $events->count(),
+                    'upcoming' => $events->filter(fn($e) => $e->is_upcoming)->count(),
+                    'past' => $events->filter(fn($e) => !$e->is_upcoming)->count()
+                ]
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('My Events API Error: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to fetch your events',
+                'error' => config('app.debug') ? $e->getMessage() : 'Internal server error'
+            ], 500);
+        }
+    }
+
+    /**
      * Get source information
      */
     private function getSourceInfo(string $source): array
