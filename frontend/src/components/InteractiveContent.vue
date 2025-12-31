@@ -1132,12 +1132,6 @@ const trackEngagement = (action: string, contentType: string) => {
             const displayName = isCurrentUserComment ? user.name : (comment.author_name || 'Guest User')
             const displayAvatar = isCurrentUserComment ? user.name.charAt(0).toUpperCase() : (comment.author_avatar || 'G')
             
-            console.log('Loading comment - comment.subscriber_id:', (comment as any).subscriber_id)
-            console.log('Loading comment - user.id:', user?.id)
-            console.log('Loading comment - isCurrentUserComment:', isCurrentUserComment)
-            console.log('Loading comment - displayName:', displayName)
-            console.log('Loading comment - comment.author_name:', comment.author_name)
-            
             return {
               id: comment.id.toString(),
               user: displayName,
@@ -1151,10 +1145,6 @@ const trackEngagement = (action: string, contentType: string) => {
                 const isCurrentUserReply = user && (reply as any).subscriber_id === user.id
                 const replyDisplayName = isCurrentUserReply ? user.name : (reply.author_name || 'Guest User')
                 const replyDisplayAvatar = isCurrentUserReply ? user.name.charAt(0).toUpperCase() : (reply.author_avatar || 'G')
-                
-                console.log('Loading reply - reply.subscriber_id:', (reply as any).subscriber_id)
-                console.log('Loading reply - isCurrentUserReply:', isCurrentUserReply)
-                console.log('Loading reply - replyDisplayName:', replyDisplayName)
                 
                 return {
                   id: reply.id.toString(),

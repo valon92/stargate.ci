@@ -17,6 +17,7 @@ use App\Http\Controllers\Api\VoiceActionsController;
 use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\CommunityController;
 use App\Http\Controllers\Api\JobPostController;
+use App\Http\Controllers\Api\ProductController;
 
 /*
 |--------------------------------------------------------------------------
@@ -157,6 +158,10 @@ Route::prefix('v1')->middleware('api.throttle:1000,1')->group(function () {
     Route::get('/jobs', [JobPostController::class, 'index']);
     Route::get('/jobs/{id}', [JobPostController::class, 'show']);
     
+    // Products routes (public read, authenticated write)
+    Route::get('/products', [ProductController::class, 'index']);
+    Route::get('/products/{id}', [ProductController::class, 'show']);
+    
     // Authenticated community routes
     Route::middleware('auth:sanctum')->group(function () {
         Route::post('/community/posts', [CommunityController::class, 'store']);
@@ -170,6 +175,12 @@ Route::prefix('v1')->middleware('api.throttle:1000,1')->group(function () {
         Route::post('/jobs', [JobPostController::class, 'store']);
         Route::put('/jobs/{id}', [JobPostController::class, 'update']);
         Route::delete('/jobs/{id}', [JobPostController::class, 'destroy']);
+        
+        // Authenticated products routes
+        Route::post('/products', [ProductController::class, 'store']);
+        Route::put('/products/{id}', [ProductController::class, 'update']);
+        Route::delete('/products/{id}', [ProductController::class, 'destroy']);
+        Route::get('/products/my/list', [ProductController::class, 'myProducts']);
     });
     
     // Events sync routes (with rate limiting)

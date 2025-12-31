@@ -200,7 +200,7 @@ class EventRegistrationController extends Controller
     public function checkRegistration(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
-            'event_id' => 'required|integer|exists:events,id',
+            'event_id' => 'required|integer',
             'email' => 'required|email'
         ]);
 
@@ -210,6 +210,15 @@ class EventRegistrationController extends Controller
                 'message' => 'Validation failed',
                 'errors' => $validator->errors()
             ], 422);
+        }
+
+        // Check if event exists
+        $event = Event::find($request->event_id);
+        if (!$event) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Event not found'
+            ], 404);
         }
 
         $registration = EventRegistration::where('event_id', $request->event_id)

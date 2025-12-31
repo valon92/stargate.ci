@@ -28,6 +28,9 @@ class DatabaseSeeder extends Seeder
             
             // Events
             EventSeeder::class,
+            
+            // Products
+            ProductSeeder::class,
         ]);
     }
 }
