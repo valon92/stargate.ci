@@ -1,7 +1,7 @@
 <template>
-  <div class="min-h-screen bg-gray-900 dark:bg-gray-900 bg-white">
+  <div class="min-h-screen bg-white dark:bg-gray-900">
     <!-- Header -->
-    <div class="bg-gray-800/50 dark:bg-gray-800/50 bg-gray-50 border-b border-gray-700 dark:border-gray-700 border-gray-200">
+    <div class="bg-gray-50 dark:bg-gray-800/50 border-b border-gray-200 dark:border-gray-700">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <div class="flex flex-col lg:flex-row gap-6">
           <!-- Search Box -->
@@ -21,32 +21,32 @@
             <select
               v-model="filters.type"
               @change="applyFilters"
-              class="px-3 py-2 bg-gray-700 dark:bg-gray-700 bg-white border border-gray-600 dark:border-gray-600 border-gray-300 rounded-lg text-white dark:text-white text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+              class="px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white transition-colors"
             >
-              <option value="all">All Types</option>
-              <option value="articles">Articles</option>
-              <option value="videos">Videos</option>
-              <option value="faqs">FAQs</option>
-              <option value="users">Users</option>
-              <option value="comments">Comments</option>
+              <option value="all" class="bg-white dark:bg-gray-700 text-gray-900 dark:text-white">All Types</option>
+              <option value="articles" class="bg-white dark:bg-gray-700 text-gray-900 dark:text-white">Articles</option>
+              <option value="videos" class="bg-white dark:bg-gray-700 text-gray-900 dark:text-white">Videos</option>
+              <option value="faqs" class="bg-white dark:bg-gray-700 text-gray-900 dark:text-white">FAQs</option>
+              <option value="users" class="bg-white dark:bg-gray-700 text-gray-900 dark:text-white">Users</option>
+              <option value="comments" class="bg-white dark:bg-gray-700 text-gray-900 dark:text-white">Comments</option>
             </select>
 
             <!-- Sort Filter -->
             <select
               v-model="filters.sort"
               @change="applyFilters"
-              class="px-3 py-2 bg-gray-700 dark:bg-gray-700 bg-white border border-gray-600 dark:border-gray-600 border-gray-300 rounded-lg text-white dark:text-white text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+              class="px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white transition-colors"
             >
-              <option value="relevance">Relevance</option>
-              <option value="date">Date</option>
-              <option value="title">Title</option>
-              <option value="author">Author</option>
+              <option value="relevance" class="bg-white dark:bg-gray-700 text-gray-900 dark:text-white">Relevance</option>
+              <option value="date" class="bg-white dark:bg-gray-700 text-gray-900 dark:text-white">Date</option>
+              <option value="title" class="bg-white dark:bg-gray-700 text-gray-900 dark:text-white">Title</option>
+              <option value="author" class="bg-white dark:bg-gray-700 text-gray-900 dark:text-white">Author</option>
             </select>
 
             <!-- Clear Filters -->
             <button
               @click="clearFilters"
-              class="px-3 py-2 text-gray-400 dark:text-gray-400 text-gray-600 hover:text-white dark:hover:text-white hover:text-gray-900 text-sm transition-colors"
+              class="px-3 py-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white text-sm transition-colors font-medium"
             >
               Clear Filters
             </button>
@@ -61,12 +61,12 @@
       <div v-if="hasSearched">
         <!-- Results Header -->
         <div class="mb-6">
-          <h1 class="text-2xl font-bold text-white dark:text-white text-gray-900 mb-2">
+          <h1 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">
             Search Results
           </h1>
-          <p class="text-gray-400 dark:text-gray-400 text-gray-600">
+          <p class="text-gray-600 dark:text-gray-400">
             {{ totalResults }} results for "{{ currentQuery }}"
-            <span v-if="isLoading" class="ml-2 text-primary-500 dark:text-primary-500 text-primary-600">Searching...</span>
+            <span v-if="isLoading" class="ml-2 text-primary-600 dark:text-primary-500">Searching...</span>
           </p>
         </div>
 
@@ -77,14 +77,14 @@
 
         <!-- No Results -->
         <div v-else-if="results.length === 0" class="text-center py-12">
-          <div class="text-gray-400 dark:text-gray-400 text-gray-600 mb-4">
+          <div class="text-gray-600 dark:text-gray-400 mb-4">
             <svg class="mx-auto h-12 w-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
             </svg>
           </div>
-          <h3 class="text-lg font-medium text-white mb-2">No results found</h3>
-          <p class="text-gray-400 mb-4">Try different keywords or check your spelling</p>
-          <div class="text-sm text-gray-500">
+          <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">No results found</h3>
+          <p class="text-gray-600 dark:text-gray-400 mb-4">Try different keywords or check your spelling</p>
+          <div class="text-sm text-gray-600 dark:text-gray-500">
             <p>Search tips:</p>
             <ul class="list-disc list-inside mt-2 space-y-1">
               <li>Use more general keywords</li>
@@ -120,25 +120,25 @@
 
       <!-- Initial State -->
       <div v-else class="text-center py-12">
-        <div class="text-gray-400 mb-4">
+        <div class="text-gray-600 dark:text-gray-400 mb-4">
           <svg class="mx-auto h-16 w-16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
           </svg>
         </div>
-        <h2 class="text-2xl font-bold text-white mb-4">Search Stargate.ci</h2>
-        <p class="text-gray-400 mb-8 max-w-2xl mx-auto">
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Search Stargate.ci</h2>
+        <p class="text-gray-600 dark:text-gray-400 mb-8 max-w-2xl mx-auto">
           Find articles, videos, FAQs, and more across our platform. Use the search box above to get started.
         </p>
         
         <!-- Popular Searches -->
         <div v-if="popularSearches.length > 0" class="max-w-2xl mx-auto">
-          <h3 class="text-lg font-medium text-white mb-4">Popular Searches</h3>
+          <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Popular Searches</h3>
           <div class="flex flex-wrap gap-2 justify-center">
             <button
               v-for="search in popularSearches.slice(0, 8)"
               :key="search"
               @click="searchForTerm(search)"
-              class="px-4 py-2 bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white rounded-lg text-sm transition-colors"
+              class="px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white rounded-lg text-sm transition-colors"
             >
               {{ search }}
             </button>
