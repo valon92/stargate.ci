@@ -116,6 +116,7 @@
           <article 
             v-for="article in paginatedNews" 
             :key="article.id"
+            :data-article-id="article.id"
             class="news-container group hover:scale-[1.02] transition-all duration-300"
           >
             <!-- News Content -->
@@ -170,6 +171,7 @@
               <div class="flex gap-3 mb-6">
                 <RouterLink 
                   :to="`/article/${article.id}`"
+                  @click="saveScrollPosition(article.id)"
                   class="flex-1 btn-primary"
                 >
                   Read Full Article
@@ -441,17 +443,40 @@ const filteredNews = computed(() => {
     filtered = filtered.filter(article => article.category === selectedCategory.value)
   }
 
-  // Sort
+  // Sort - Always sort by date first (newest first), then apply additional sorting if needed
+  filtered = filtered.sort((a, b) => {
+    const dateA = new Date(a.publishedAt).getTime()
+    const dateB = new Date(b.publishedAt).getTime()
+    return dateB - dateA // Descending order (newest first)
+  })
+
+  // Apply additional sorting if specified
   switch (sortBy.value) {
     case 'title':
-      filtered = filtered.sort((a, b) => a.title.localeCompare(b.title))
+      // Sort by title, but keep date as secondary sort
+      filtered = filtered.sort((a, b) => {
+        const dateA = new Date(a.publishedAt).getTime()
+        const dateB = new Date(b.publishedAt).getTime()
+        if (dateB !== dateA) {
+          return dateB - dateA // Keep date sorting
+        }
+        return a.title.localeCompare(b.title)
+      })
       break
     case 'category':
-      filtered = filtered.sort((a, b) => a.category.localeCompare(b.category))
+      // Sort by category, but keep date as secondary sort
+      filtered = filtered.sort((a, b) => {
+        const dateA = new Date(a.publishedAt).getTime()
+        const dateB = new Date(b.publishedAt).getTime()
+        if (dateB !== dateA) {
+          return dateB - dateA // Keep date sorting
+        }
+        return a.category.localeCompare(b.category)
+      })
       break
     case 'date':
     default:
-      filtered = filtered.sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
+      // Already sorted by date (newest first)
       break
   }
 
@@ -477,6 +502,54 @@ const visiblePages = computed(() => {
   
   return pages
 })
+
+// Save scroll position and article ID before navigating
+const saveScrollPosition = (articleId: string) => {
+  const scrollPosition = window.pageYOffset || document.documentElement.scrollTop
+  sessionStorage.setItem('news_scroll_position', scrollPosition.toString())
+  sessionStorage.setItem('news_selected_article', articleId)
+}
+
+// Restore scroll position and highlight article
+const restoreScrollPosition = () => {
+  const savedScroll = sessionStorage.getItem('news_scroll_position')
+  const selectedArticleId = sessionStorage.getItem('news_selected_article')
+  
+  if (savedScroll && selectedArticleId) {
+    // Wait for DOM to be ready and articles to be rendered
+    const tryRestore = () => {
+      // Find the article element
+      const articleElement = document.querySelector(`[data-article-id="${selectedArticleId}"]`)
+      
+      if (articleElement) {
+        // Scroll to the article with offset
+        const elementPosition = articleElement.getBoundingClientRect().top
+        const offsetPosition = elementPosition + window.pageYOffset - 120 // 120px offset from top
+        
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
+        })
+        
+        // Highlight the article briefly
+        articleElement.classList.add('ring-4', 'ring-primary-500', 'ring-opacity-50', 'rounded-lg')
+        setTimeout(() => {
+          articleElement.classList.remove('ring-4', 'ring-primary-500', 'ring-opacity-50', 'rounded-lg')
+        }, 2000)
+        
+        // Clear saved data
+        sessionStorage.removeItem('news_scroll_position')
+        sessionStorage.removeItem('news_selected_article')
+      } else {
+        // If element not found yet, try again after a short delay
+        setTimeout(tryRestore, 100)
+      }
+    }
+    
+    // Start trying to restore after initial delay
+    setTimeout(tryRestore, 500)
+  }
+}
 
 // Methods
 const loadNews = async (category?: string) => {
@@ -665,6 +738,15 @@ const copyLink = async () => {
 onMounted(async () => {
   await loadNews()
   await loadTrendingTopics()
+  
+  // Check if we're returning from an article
+  const isReturningFromArticle = sessionStorage.getItem('news_scroll_position')
+  if (isReturningFromArticle) {
+    // Restore scroll position after a short delay to ensure DOM is ready
+    setTimeout(() => {
+      restoreScrollPosition()
+    }, 500)
+  }
 })
 
 // Watch for category changes to reset pagination

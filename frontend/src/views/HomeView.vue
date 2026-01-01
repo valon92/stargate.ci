@@ -39,130 +39,77 @@
         </div>
 
         <div class="space-y-8">
-          <div class="youtube-video-container">
-            <div class="aspect-w-16 aspect-h-9">
-              <iframe
-                src="https://www.youtube.com/embed/GhIJs4zbH0o?rel=0&modestbranding=1"
-                title="Stargate Project - Introduction Video"
-                frameborder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowfullscreen
-                loading="lazy"
-              ></iframe>
+          <TransitionGroup name="video-list" tag="div">
+            <div 
+              v-for="video in sortedVideos" 
+              :key="video.id"
+              class="youtube-video-container group"
+            >
+              <div class="relative">
+                <div class="aspect-w-16 aspect-h-9 overflow-hidden rounded-t-lg">
+                  <iframe
+                    :src="`https://www.youtube.com/embed/${video.videoId}?rel=0&modestbranding=1&enablejsapi=1`"
+                    :title="video.title"
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen
+                    loading="lazy"
+                    class="w-full h-full"
+                  ></iframe>
+                </div>
+                
+                <!-- Published Date Badge -->
+                <div class="absolute top-4 right-4">
+                  <span class="px-3 py-1.5 bg-black/80 dark:bg-gray-900/80 backdrop-blur-sm text-white rounded-full text-xs font-medium">
+                    {{ formatVideoDate(video.publishedAt) }}
+                  </span>
+                </div>
+              </div>
+              
+              <div class="p-6 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
+                <div class="flex items-start justify-between gap-4 mb-3">
+                  <h3 class="text-xl font-bold text-black dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors flex-1">
+                    {{ video.title }}
+                  </h3>
+                  <a 
+                    :href="`https://www.youtube.com/watch?v=${video.videoId}`"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="flex-shrink-0 p-2 text-gray-500 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-500 transition-colors"
+                    title="Watch on YouTube"
+                  >
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                    </svg>
+                  </a>
+                </div>
+                <p class="text-gray-700 dark:text-gray-400 text-sm leading-relaxed mb-4">
+                  {{ video.description }}
+                </p>
+                
+                <!-- Video Metadata -->
+                <div class="flex items-center gap-4 text-xs text-gray-500 dark:text-gray-500 mb-4">
+                  <span class="flex items-center gap-1.5">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                    </svg>
+                    {{ formatVideoDate(video.publishedAt) }}
+                  </span>
+                  <span v-if="video.category" class="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-gray-700 dark:text-gray-300">
+                    {{ video.category }}
+                  </span>
+                </div>
+              </div>
+              
+              <!-- Interactive Content -->
+              <div class="px-6 pb-6 bg-white dark:bg-gray-800">
+                <InteractiveContent
+                  :content-id="video.contentId"
+                  content-type="video"
+                />
+              </div>
             </div>
-            <div class="p-4 bg-white dark:bg-gray-800">
-              <h3 class="text-xl font-semibold text-black dark:text-white mb-2">Stargate Project - Introduction Video</h3>
-              <p class="text-gray-700 dark:text-gray-400 text-sm mb-4">An introduction video that explains the scope and vision of the Stargate Project and Cristal Intelligence, providing users with a comprehensive understanding of these revolutionary AI initiatives.</p>
-            </div>
-            
-            <!-- Interactive Content -->
-            <div class="p-4 pt-0 bg-white dark:bg-gray-800">
-              <InteractiveContent
-                content-id="stargate-intro-video"
-                content-type="video"
-              />
-            </div>
-          </div>
-          
-          <div class="youtube-video-container">
-            <div class="aspect-w-16 aspect-h-9">
-              <iframe
-                src="https://www.youtube.com/embed/JPcxiWOOj2E?rel=0&modestbranding=1"
-                title="Stargate Project - Deep Dive Analysis"
-                frameborder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowfullscreen
-                loading="lazy"
-              ></iframe>
-            </div>
-            <div class="p-4 bg-white dark:bg-gray-800">
-              <h3 class="text-xl font-semibold text-black dark:text-white mb-2">Stargate Project - Deep Dive Analysis</h3>
-              <p class="text-gray-700 dark:text-gray-400 text-sm mb-4">A comprehensive deep dive analysis of the Stargate Project, exploring the technical aspects, partnerships, and future implications of this groundbreaking AI infrastructure initiative.</p>
-            </div>
-            
-            <!-- Interactive Content -->
-            <div class="p-4 pt-0 bg-white dark:bg-gray-800">
-              <InteractiveContent
-                content-id="stargate-deep-dive-video"
-                content-type="video"
-              />
-            </div>
-          </div>
-          
-          <div class="youtube-video-container">
-            <div class="aspect-w-16 aspect-h-9">
-              <iframe
-                src="https://www.youtube.com/embed/1oYSZ-naJVo?rel=0&modestbranding=1"
-                title="Stargate Project - Technical Implementation"
-                frameborder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowfullscreen
-                loading="lazy"
-              ></iframe>
-            </div>
-            <div class="p-4 bg-white dark:bg-gray-800">
-              <h3 class="text-xl font-semibold text-black dark:text-white mb-2">Stargate Project - Technical Implementation</h3>
-              <p class="text-gray-700 dark:text-gray-400 text-sm mb-4">A detailed technical implementation guide for the Stargate Project, covering infrastructure requirements, deployment strategies, and integration approaches for organizations looking to leverage this advanced AI technology.</p>
-            </div>
-            
-            <!-- Interactive Content -->
-            <div class="p-4 pt-0 bg-white dark:bg-gray-800">
-              <InteractiveContent
-                content-id="stargate-technical-video"
-                content-type="video"
-              />
-            </div>
-          </div>
-          
-          <div class="youtube-video-container">
-            <div class="aspect-w-16 aspect-h-9">
-              <iframe
-                src="https://www.youtube.com/embed/DHiX4_jetjs?rel=0&modestbranding=1"
-                title="Cristal Intelligence - Advanced AI Paradigm"
-                frameborder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowfullscreen
-                loading="lazy"
-              ></iframe>
-            </div>
-            <div class="p-4 bg-white dark:bg-gray-800">
-              <h3 class="text-xl font-semibold text-black dark:text-white mb-2">Cristal Intelligence - Advanced AI Paradigm</h3>
-              <p class="text-gray-700 dark:text-gray-400 text-sm mb-4">An in-depth exploration of Cristal Intelligence, the revolutionary AI paradigm that emphasizes transparency, interpretability, and ethical alignment in artificial intelligence systems.</p>
-            </div>
-            
-            <!-- Interactive Content -->
-            <div class="p-4 pt-0 bg-white dark:bg-gray-800">
-              <InteractiveContent
-                content-id="cristal-intelligence-video"
-                content-type="video"
-              />
-            </div>
-          </div>
-          
-          <div class="youtube-video-container">
-            <div class="aspect-w-16 aspect-h-9">
-              <iframe
-                src="https://www.youtube.com/embed/po3TG3oSsSI?rel=0&modestbranding=1"
-                title="Future of AI - Industry Impact & Applications"
-                frameborder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowfullscreen
-                loading="lazy"
-              ></iframe>
-            </div>
-            <div class="p-4 bg-white dark:bg-gray-800">
-              <h3 class="text-xl font-semibold text-black dark:text-white mb-2">Future of AI - Industry Impact & Applications</h3>
-              <p class="text-gray-700 dark:text-gray-400 text-sm mb-4">A comprehensive analysis of how the Stargate Project and Cristal Intelligence will transform industries, examining real-world applications, market implications, and the future landscape of artificial intelligence.</p>
-            </div>
-            
-            <!-- Interactive Content -->
-            <div class="p-4 pt-0 bg-white dark:bg-gray-800">
-              <InteractiveContent
-                content-id="future-ai-video"
-                content-type="video"
-              />
-            </div>
-          </div>
+          </TransitionGroup>
         </div>
       </div>
     </section>
@@ -318,9 +265,107 @@
 import { ref, onMounted, computed } from 'vue'
 import { RouterLink } from 'vue-router'
 import { useHead } from '@vueuse/head'
+import { TransitionGroup } from 'vue'
 import InteractiveContent from '../components/InteractiveContent.vue'
 import { videoApiService } from '../services/videoApiService'
 // Email notification service removed - using localStorage for subscribers
+
+// Video data structure
+interface VideoItem {
+  id: string
+  videoId: string
+  title: string
+  description: string
+  publishedAt: string
+  category?: string
+  contentId: string
+}
+
+// Educational videos - sorted by publication date (newest first)
+const videos = ref<VideoItem[]>([
+  {
+    id: 'stargate-video-1',
+    videoId: 'Y7SBWzAyDkE',
+    title: 'Stargate Project - Latest Updates and Developments',
+    description: 'Comprehensive coverage of the latest Stargate Project updates, including infrastructure developments, partnerships, and strategic initiatives shaping the future of AI.',
+    publishedAt: '2025-03-15T10:00:00Z',
+    category: 'Stargate',
+    contentId: 'stargate-latest-video'
+  },
+  {
+    id: 'stargate-video-2',
+    videoId: 'pe11mJ8mCHU',
+    title: 'Cristal Intelligence - Enterprise Solutions and Applications',
+    description: 'In-depth exploration of Cristal Intelligence enterprise solutions, showcasing how businesses can leverage transparent AI systems for ethical and effective decision-making.',
+    publishedAt: '2025-03-10T14:00:00Z',
+    category: 'Cristal Intelligence',
+    contentId: 'cristal-enterprise-video'
+  },
+  {
+    id: 'stargate-intro-video',
+    videoId: 'GhIJs4zbH0o',
+    title: 'Stargate Project - Introduction Video',
+    description: 'An introduction video that explains the scope and vision of the Stargate Project and Cristal Intelligence, providing users with a comprehensive understanding of these revolutionary AI initiatives.',
+    publishedAt: '2024-12-20T10:00:00Z',
+    category: 'Stargate',
+    contentId: 'stargate-intro-video'
+  },
+  {
+    id: 'stargate-deep-dive-video',
+    videoId: 'JPcxiWOOj2E',
+    title: 'Stargate Project - Deep Dive Analysis',
+    description: 'A comprehensive deep dive analysis of the Stargate Project, exploring the technical aspects, partnerships, and future implications of this groundbreaking AI infrastructure initiative.',
+    publishedAt: '2024-12-18T14:00:00Z',
+    category: 'Stargate',
+    contentId: 'stargate-deep-dive-video'
+  },
+  {
+    id: 'stargate-technical-video',
+    videoId: '1oYSZ-naJVo',
+    title: 'Stargate Project - Technical Implementation',
+    description: 'A detailed technical implementation guide for the Stargate Project, covering infrastructure requirements, deployment strategies, and integration approaches for organizations looking to leverage this advanced AI technology.',
+    publishedAt: '2024-12-15T09:00:00Z',
+    category: 'Stargate',
+    contentId: 'stargate-technical-video'
+  },
+  {
+    id: 'cristal-intelligence-video',
+    videoId: 'DHiX4_jetjs',
+    title: 'Cristal Intelligence - Advanced AI Paradigm',
+    description: 'An in-depth exploration of Cristal Intelligence, the revolutionary AI paradigm that emphasizes transparency, interpretability, and ethical alignment in artificial intelligence systems.',
+    publishedAt: '2024-12-12T11:00:00Z',
+    category: 'Cristal Intelligence',
+    contentId: 'cristal-intelligence-video'
+  },
+  {
+    id: 'future-ai-video',
+    videoId: 'po3TG3oSsSI',
+    title: 'Future of AI - Industry Impact & Applications',
+    description: 'A comprehensive analysis of how the Stargate Project and Cristal Intelligence will transform industries, examining real-world applications, market implications, and the future landscape of artificial intelligence.',
+    publishedAt: '2024-12-10T08:00:00Z',
+    category: 'AI Future',
+    contentId: 'future-ai-video'
+  }
+])
+
+// Sort videos by publication date (newest first)
+const sortedVideos = computed(() => {
+  return [...videos.value].sort((a, b) => {
+    const dateA = new Date(a.publishedAt).getTime()
+    const dateB = new Date(b.publishedAt).getTime()
+    return dateB - dateA // Descending order (newest first)
+  })
+})
+
+// Format video publication date
+const formatVideoDate = (dateString: string): string => {
+  const date = new Date(dateString)
+  return date.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric'
+  })
+}
 
 
 // Members data
@@ -469,12 +514,12 @@ useHead({
 
 <style scoped>
 .youtube-video-container {
-  background-color: rgba(31, 41, 55, 1);
-  border-radius: 0.75rem;
+  background-color: rgba(255, 255, 255, 1);
+  border-radius: 1rem;
   overflow: hidden;
-  border: 1px solid rgba(55, 65, 81, 1);
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  transition: all 0.3s ease;
+  border: 1px solid rgba(229, 231, 235, 1);
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .dark .youtube-video-container {
@@ -483,19 +528,34 @@ useHead({
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
 }
 
-:not(.dark) .youtube-video-container {
-  background-color: rgba(255, 255, 255, 1);
-  border: 1px solid rgba(229, 231, 235, 1);
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-}
-
 .youtube-video-container:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  transform: translateY(-4px);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
 }
 
 .dark .youtube-video-container:hover {
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.3);
+  border-color: rgba(75, 85, 99, 1);
+}
+
+/* Video list transitions */
+.video-list-enter-active,
+.video-list-leave-active {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.video-list-enter-from {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.video-list-leave-to {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+
+.video-list-move {
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .aspect-w-16 {
   position: relative;
